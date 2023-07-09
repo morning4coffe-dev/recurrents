@@ -1,0 +1,10 @@
+{
+  "profiles": {
+	"ProjectSBS.Windows (Package)": {
+	  "commandName": "MsixPackage"
+	},
+	"ProjectSBS.Windows (Unpackaged)": {
+	  "commandName": "Project"
+	}
+  }
+}

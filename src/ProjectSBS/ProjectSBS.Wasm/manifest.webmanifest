@@ -1,0 +1,10 @@
+{
+  "background_color": "#ffffff",
+  "description": "ProjectSBS",
+  "display": "standalone",
+  "name": "ProjectSBS",
+  "short_name": "ProjectSBS",
+  "start_url": "/index.html",
+  "theme_color": "#ffffff",
+  "scope": "/"
+}
