@@ -7,6 +7,7 @@
 		<DebugSymbols>True</DebugSymbols>
 
 		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+		<AccelerateBuildsInVisualStudio>true</AccelerateBuildsInVisualStudio>
 
 		<NoWarn>$(NoWarn);CA1416;NU1507</NoWarn>
 
