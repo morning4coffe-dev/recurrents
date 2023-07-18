@@ -1,23 +1,25 @@
 ﻿#if !HAS_UNO
+using CommunityToolkit.WinUI;
+using Microsoft.UI;
+using Microsoft.UI.Composition.SystemBackdrops;
 using Microsoft.UI.Dispatching;
+using Microsoft.UI.Windowing;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using Windows.ApplicationModel.Core;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
-using CommunityToolkit.WinUI;
-using Windows.ApplicationModel.Core;
+using WinRT.Interop;
 
 namespace ProjectSBS.Services.Interop;
 
 public class WindowsInteropService : IInteropService
 {
     private ApplicationTheme _appTheme;
-    private DispatcherQueue _dispatcher;
 
     public WindowsInteropService()
     {
-        _dispatcher = DispatcherQueue.GetForCurrentThread();
-
         UISettings uiSettings = new UISettings();
         uiSettings.ColorValuesChanged += HandleSystemThemeChange;
     }
@@ -26,7 +28,7 @@ public class WindowsInteropService : IInteropService
     {
         if (Window.Current.Content is FrameworkElement frameworkElement)
         {
-            UpdateTitleBar(frameworkElement.RequestedTheme);
+            //UpdateTitleBar(frameworkElement.RequestedTheme);
         }
     }
 
@@ -43,45 +45,63 @@ public class WindowsInteropService : IInteropService
 
     private async Task SetRequestedThemeAsync(ElementTheme theme)
     {
-        await CoreApplication.MainView.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+        if ((Application.Current as App)!.MainWindow!.Content is FrameworkElement frameworkElement)
         {
-            if (CoreApplication.GetCurrentView().CoreWindow.Content is FrameworkElement frameworkElement)
-            {
-                frameworkElement.RequestedTheme = theme;
-                UpdateTitleBar(theme);
-            }
-        });
+            frameworkElement.RequestedTheme = theme;
+
+            //UpdateTitleBar(theme);
+
+            SetCaptionButtonColors((Application.Current as App)!.MainWindow!, Colors.DarkRed);
+
+            //TODO UpdateTitleBar(theme); on Windows
+        }
     }
 
-    private void UpdateTitleBar(ElementTheme theme)
+    public static void SetCaptionButtonColors(Window window, Windows.UI.Color color)
     {
-        Color? color = null;
-        _appTheme = Application.Current.RequestedTheme;
+        var res = Application.Current.Resources;
+        res["WindowCaptionForeground"] = color;
+        TriggerTitleBarRepaint(window);
+    }
 
-        switch (theme)
+    //TODO More this into separate file
+    // https://github.com/microsoft/WinUI-Gallery/blob/9b0d8f6fa5062450163cd90277cc212e96064a86/WinUIGallery/Common/Win32.cs
+
+    [DllImport("user32.dll", CharSet = CharSet.Auto)]
+    public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, IntPtr lParam);
+
+    [DllImport("user32.dll")]
+    public static extern IntPtr GetActiveWindow();
+
+    public const int WM_ACTIVATE = 0x0006;
+    public const int WA_ACTIVE = 0x01;
+    //static int WA_CLICKACTIVE = 0x02;
+    public const int WA_INACTIVE = 0x00;
+
+    public const int WM_SETICON = 0x0080;
+    public const int ICON_SMALL = 0;
+    public const int ICON_BIG = 1;
+
+    private static void TriggerTitleBarRepaint(Window window)
+    {
+        // to trigger repaint tracking task id 38044406
+        var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(window);
+        var activeWindow = GetActiveWindow();
+        if (hwnd == activeWindow)
         {
-            case ElementTheme.Default:
-                color = (Color)Application.Current.Resources["SystemBaseHighColor"];
-                break;
-            case ElementTheme.Light:
-                if (_appTheme == ApplicationTheme.Light)
-                { color = ((Color)Application.Current.Resources["SystemBaseHighColor"]); }
-                else
-                { color = (Color)Application.Current.Resources["SystemAltHighColor"]; }
-                break;
-            case ElementTheme.Dark:
-                if (_appTheme == ApplicationTheme.Light)
-                { color = ((Color)Application.Current.Resources["SystemAltHighColor"]); }
-                else
-                { color = (Color)Application.Current.Resources["SystemBaseHighColor"]; }
-                break;
-            default:
-                break;
+            SendMessage(hwnd, WM_ACTIVATE, WA_INACTIVE, IntPtr.Zero);
+            SendMessage(hwnd, WM_ACTIVATE, WA_ACTIVE, IntPtr.Zero);
+        }
+        else
+        {
+            SendMessage(hwnd, WM_ACTIVATE, WA_ACTIVE, IntPtr.Zero);
+            SendMessage(hwnd, WM_ACTIVATE, WA_INACTIVE, IntPtr.Zero);
         }
 
-        var titleBar = ApplicationView.GetForCurrentView().TitleBar;
-        titleBar.ForegroundColor = color;
     }
+
+    //
+
 
     public async Task OpenStoreReviewUrlAsync()
     {
