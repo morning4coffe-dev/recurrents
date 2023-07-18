@@ -1,111 +1,140 @@
+using ProjectSBS.Services.Interop;
+using ProjectSBS.Services.Items.Billing;
 using ProjectSBS.Services.Notifications;
 using ProjectSBS.Services.Storage;
+using Microsoft.UI.Windowing;
 
-namespace ProjectSBS
+#if !HAS_UNO
+using Microsoft.UI.Composition.SystemBackdrops;
+using Microsoft.UI.Xaml;
+using System.Runtime.InteropServices; // For DllImport
+using WinRT; // required to support Window.As<ICompositionSupportsSystemBackdrop>()
+#endif
+
+namespace ProjectSBS;
+
+public class App : Application
 {
-    public class App : Application
+    public Window? MainWindow { get; private set; }
+
+    public IHost? Host { get; private set; }
+
+    protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
-        protected Window? MainWindow { get; private set; }
-
-        public IHost? Host { get; private set; }
-
-        protected override void OnLaunched(LaunchActivatedEventArgs args)
-        {
-            var builder = this.CreateBuilder(args)
-                .Configure(host => host
+        var builder = this.CreateBuilder(args)
+            .Configure(host => host
 #if DEBUG
-				// Switch to Development environment when running in DEBUG
-				.UseEnvironment(Environments.Development)
+                // Switch to Development environment when running in DEBUG
+                .UseEnvironment(Environments.Development)
 #endif
-                    .UseLogging(configure: (context, logBuilder) =>
-                    {
-                        // Configure log levels for different categories of logging
-                        logBuilder
-                            .SetMinimumLevel(
-                                context.HostingEnvironment.IsDevelopment() ?
-                                    LogLevel.Information :
-                                    LogLevel.Warning)
+                .UseLogging(configure: (context, logBuilder) =>
+                {
+                    // Configure log levels for different categories of logging
+                    logBuilder
+                        .SetMinimumLevel(
+                            context.HostingEnvironment.IsDevelopment() ?
+                                LogLevel.Information :
+                                LogLevel.Warning)
 
-                            // Default filters for core Uno Platform namespaces
-                            .CoreLogLevel(LogLevel.Warning);
+                        // Default filters for core Uno Platform namespaces
+                        .CoreLogLevel(LogLevel.Warning);
 
-                        // Uno Platform namespace filter groups
-                        // Uncomment individual methods to see more detailed logging
-                        //// Generic Xaml events
-                        //logBuilder.XamlLogLevel(LogLevel.Debug);
-                        //// Layouter specific messages
-                        //logBuilder.XamlLayoutLogLevel(LogLevel.Debug);
-                        //// Storage messages
-                        //logBuilder.StorageLogLevel(LogLevel.Debug);
-                        //// Binding related messages
-                        //logBuilder.XamlBindingLogLevel(LogLevel.Debug);
-                        //// Binder memory references tracking
-                        //logBuilder.BinderMemoryReferenceLogLevel(LogLevel.Debug);
-                        //// RemoteControl and HotReload related
-                        //logBuilder.HotReloadCoreLogLevel(LogLevel.Information);
-                        //// Debug JS interop
-                        //logBuilder.WebAssemblyLogLevel(LogLevel.Debug);
+                    // Uno Platform namespace filter groups
+                    // Uncomment individual methods to see more detailed logging
+                    //// Generic Xaml events
+                    //logBuilder.XamlLogLevel(LogLevel.Debug);
+                    //// Layouter specific messages
+                    //logBuilder.XamlLayoutLogLevel(LogLevel.Debug);
+                    //// Storage messages
+                    //logBuilder.StorageLogLevel(LogLevel.Debug);
+                    //// Binding related messages
+                    //logBuilder.XamlBindingLogLevel(LogLevel.Debug);
+                    //// Binder memory references tracking
+                    //logBuilder.BinderMemoryReferenceLogLevel(LogLevel.Debug);
+                    //// RemoteControl and HotReload related
+                    //logBuilder.HotReloadCoreLogLevel(LogLevel.Information);
+                    //// Debug JS interop
+                    //logBuilder.WebAssemblyLogLevel(LogLevel.Debug);
 
-                    }, enableUnoLogging: true)
-                    .UseConfiguration(configure: configBuilder =>
-                        configBuilder
-                            .EmbeddedSource<App>()
-                            .Section<AppConfig>()
-                    )
-                    // Enable localization (see appsettings.json for supported languages)
-                    .UseLocalization()
-                    // Register Json serializers (ISerializer and ISerializer)
-                    .UseSerialization((context, services) => services
-                        .AddContentSerializer(context))
-                    .UseHttp((context, services) => services
-                            // Register HttpClient
+                }, enableUnoLogging: true)
+                .UseConfiguration(configure: configBuilder =>
+                    configBuilder
+                        .EmbeddedSource<App>()
+                        .Section<AppConfig>()
+                )
+                // Enable localization (see appsettings.json for supported languages)
+                .UseLocalization()
+                // Register Json serializers (ISerializer and ISerializer)
+                //.UseAuthentication(builder =>
+                //{
+                //    builder.AddMsal();
+                //})
+                .UseSerialization((context, services) => services
+                    .AddContentSerializer(context))
+                .UseHttp((context, services) => services
 #if DEBUG
-						// DelegatingHandler will be automatically injected into Refit Client
-						.AddTransient<DelegatingHandler, DebugHttpHandler>()
+                        // DelegatingHandler will be automatically injected into Refit Client
+                        .AddTransient<DelegatingHandler, DebugHttpHandler>()
 #endif
-                            .AddSingleton<ICurrencyCache, CurrencyCache>()
-                            .AddRefitClient<IApiClient>(context))
-                    .ConfigureServices((context, services) =>
-                    {
-                        services.AddSingleton<IFileWriter, FileWriter>();
+                        .AddSingleton<ICurrencyCache, CurrencyCache>()
+                        .AddRefitClient<IApiClient>(context))
+                .ConfigureServices((context, services) =>
+                {
+                    services.AddSingleton<IFileWriter, FileWriter>();
+                    services.AddSingleton<IBillingService, BillingService>();
+
+#if !HAS_UNO
+                    services.AddSingleton<IInteropService, WindowsInteropService>();
+#else
+                    services.AddSingleton<IInteropService, InteropService>();
+#endif
 
 #if __ANDROID__
-                        services.AddSingleton<INotificationService, NotificationService>();
+                    services.AddSingleton<INotificationService, NotificationService>();
 #elif __WASM__
-                        services.AddSingleton<INotificationService, WebNotificationService>();
+                    services.AddSingleton<INotificationService, WebNotificationService>();
 #elif !HAS_UNO
-                        services.AddSingleton<INotificationService, WindowsNotificationService>();
+                    services.AddSingleton<INotificationService, WindowsNotificationService>();
 #else
-                        services.AddSingleton<INotificationService, NotificationServiceBase>();
+                    services.AddSingleton<INotificationService, NotificationServiceBase>();
 #endif
-                        //ViewModels
-                        services.AddTransient<ShellViewModel>();
-                    })
-                );
-            MainWindow = builder.Window;
+                    //ViewModels
+                    services.AddTransient<ShellViewModel>();
+                })
+            );
+        MainWindow = builder.Window;
 
-            Host = builder.Build();
+        Host = builder.Build();
 
-            // Do not repeat app initialization when the Window already has content,
-            // just ensure that the window is active
-            if (MainWindow.Content is not Frame rootFrame)
-            {
-                // Create a Frame to act as the navigation context and navigate to the first page
-                rootFrame = new Frame();
+        // Do not repeat app initialization when the Window already has content,
+        // just ensure that the window is active
+        if (MainWindow.Content is not Frame rootFrame)
+        {
+            // Create a Frame to act as the navigation context and navigate to the first page
+            rootFrame = new Frame();
 
-                // Place the frame in the current Window
-                MainWindow.Content = rootFrame;
-            }
+            // Place the frame in the current Window
+            MainWindow.Content = rootFrame;
+        }
+
+#if !HAS_UNO
+        if (MicaController.IsSupported())
+        {
+            MainWindow.SystemBackdrop = new MicaBackdrop() { Kind = MicaKind.Base };
+        }
+
+        //TODO Log MicaController.IsSupported()
+#endif
 
             if (rootFrame.Content == null)
-            {
-                // When the navigation stack isn't restored navigate to the first page,
-                // configuring the new page by passing required information as a navigation
-                // parameter
-                rootFrame.Navigate(typeof(ShellPage), args.Arguments);
-            }
-            // Ensure the current window is active
-            MainWindow.Activate();
+        {
+            // When the navigation stack isn't restored navigate to the first page,
+            // configuring the new page by passing required information as a navigation
+            // parameter
+            rootFrame.Navigate(typeof(ShellPage), args.Arguments);
         }
+        // Ensure the current window is active
+        MainWindow.Activate();
+
     }
 }
