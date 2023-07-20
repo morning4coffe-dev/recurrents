@@ -10,6 +10,8 @@
     <!-- <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.2.230313.1" /> -->
     <PackageVersion Include="SkiaSharp.Skottie" Version="2.88.3" />
     <PackageVersion Include="SkiaSharp.Views.Uno.WinUI" Version="2.88.3" />
+	<!--<PackageVersion Include="Uno.WindowsStateTriggers" Version="1.1.1-uno.132" />-->
+	  <PackageVersion Include="WinUIEx" Version="2.2.0" />
     <PackageVersion Include="Uno.Core.Extensions.Logging.Singleton" Version="4.0.1" />
     <PackageVersion Include="Uno.Extensions.Configuration" Version="2.4.2" />
     <PackageVersion Include="Uno.Extensions.Hosting" Version="2.4.2" />
@@ -38,6 +40,5 @@
     <PackageVersion Include="Uno.WinUI.WebAssembly" Version="4.9.26" />
     <PackageVersion Include="Xamarin.Google.Android.Material" Version="1.8.0" />
     <PackageVersion Include="CommunityToolkit.WinUI.Notifications" Version="7.1.2" />
-    <PackageVersion Include="RtfPipe" Version="2.0.7677.4303" />
   </ItemGroup>
 </Project>

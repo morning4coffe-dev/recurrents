@@ -1,14 +1,12 @@
+using Microsoft.UI.Composition.SystemBackdrops;
+using ProjectSBS.Infrastructure.Helpers;
+using ProjectSBS.Services.FileManagement.Data;
 using ProjectSBS.Services.Interop;
 using ProjectSBS.Services.Items.Billing;
 using ProjectSBS.Services.Notifications;
 using ProjectSBS.Services.Storage;
-using Microsoft.UI.Windowing;
-
-#if !HAS_UNO
-using Microsoft.UI.Composition.SystemBackdrops;
-using Microsoft.UI.Xaml;
-using System.Runtime.InteropServices; // For DllImport
-using WinRT; // required to support Window.As<ICompositionSupportsSystemBackdrop>()
+#if WINDOWS
+using WinUIEx;
 #endif
 
 namespace ProjectSBS;
@@ -65,10 +63,6 @@ public class App : Application
                 // Enable localization (see appsettings.json for supported languages)
                 .UseLocalization()
                 // Register Json serializers (ISerializer and ISerializer)
-                //.UseAuthentication(builder =>
-                //{
-                //    builder.AddMsal();
-                //})
                 .UseSerialization((context, services) => services
                     .AddContentSerializer(context))
                 .UseHttp((context, services) => services
@@ -80,14 +74,10 @@ public class App : Application
                         .AddRefitClient<IApiClient>(context))
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddSingleton<IFileWriter, FileWriter>();
+                    services.AddSingleton<IStorageService, StorageService>();
+                    services.AddSingleton<IDataService, DataService>();
                     services.AddSingleton<IBillingService, BillingService>();
-
-#if !HAS_UNO
-                    services.AddSingleton<IInteropService, WindowsInteropService>();
-#else
                     services.AddSingleton<IInteropService, InteropService>();
-#endif
 
 #if __ANDROID__
                     services.AddSingleton<INotificationService, NotificationService>();
@@ -101,7 +91,23 @@ public class App : Application
                     //ViewModels
                     services.AddTransient<ShellViewModel>();
                 })
+                //.UseAuthentication(builder =>
+                //{
+                //    builder.AddMsal();
+                //})
             );
+
+#if WINDOWS
+        var manager = WindowManager.Get(builder.Window);
+
+        manager.PersistenceId = "MainWindowPersistanceId"; // Remember window position and size across runs
+        manager.MinWidth = 500;
+        manager.MinHeight = 500;
+
+        builder.Window.CenterOnScreen(1224, 940);
+        builder.Window.Title = "Project SBS";
+#endif
+
         MainWindow = builder.Window;
 
         Host = builder.Build();
@@ -123,10 +129,12 @@ public class App : Application
             MainWindow.SystemBackdrop = new MicaBackdrop() { Kind = MicaKind.Base };
         }
 
+        Win32.SetTitleBackgroundTransparent(MainWindow);
+
         //TODO Log MicaController.IsSupported()
 #endif
 
-            if (rootFrame.Content == null)
+        if (rootFrame.Content == null)
         {
             // When the navigation stack isn't restored navigate to the first page,
             // configuring the new page by passing required information as a navigation
