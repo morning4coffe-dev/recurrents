@@ -6,6 +6,6 @@ public enum Period
     Weekly,
     Monthly,
     Quarterly,
-    Yearly,
+    Annually,
     Decade
 }

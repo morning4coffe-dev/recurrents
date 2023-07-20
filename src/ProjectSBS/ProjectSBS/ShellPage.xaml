@@ -12,21 +12,20 @@
             <RowDefinition Height="auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <win:Grid x:Name="AppTitleBar"
-              Background="Transparent" Height="48">
-            <Image Source="Assets/Icons/back.svg"
-                   Grid.Column="1"
+
+        <win:StackPanel x:Name="AppTitleBar"
+                        Orientation="Horizontal"
+                        Background="Transparent"
+                        Height="48">
+            <Image Source="Assets/Icons/app-icon.png"
                    HorizontalAlignment="Left"
                    Width="16"
-                   Height="16"
+                   Height="30"
                    Margin="16,0" />
-            <TextBlock x:Name="AppTitleTextBlock"
-                       Text="App title"
+            <TextBlock Text="App title"
                        Style="{StaticResource CaptionTextBlockStyle}"
-                       Grid.Column="1"
-                       VerticalAlignment="Center"
-                       Margin="28,0,0,0" />
-        </win:Grid>
+                       VerticalAlignment="Center"/>
+        </win:StackPanel>
 
         <NavigationView Grid.Row="1"
                         IsBackButtonVisible="Collapsed"

@@ -40,6 +40,6 @@ class BillingService : IBillingService
         { Period.Weekly, (date, recurEvery) => date.AddDays(recurEvery * 7) },
         { Period.Monthly, (date, recurEvery) => date.AddMonths(recurEvery) },
         { Period.Quarterly, (date, recurEvery) => date.AddMonths(recurEvery * 3) },
-        { Period.Yearly, (date, recurEvery) => date.AddYears(recurEvery) }
+        { Period.Annually, (date, recurEvery) => date.AddYears(recurEvery) }
     };
 }

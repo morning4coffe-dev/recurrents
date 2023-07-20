@@ -4,7 +4,7 @@
     {
         Version GetAppVersion();
         Task OpenStoreReviewUrlAsync();
-        Task SetThemeAsync(ElementTheme theme);
+        void SetTheme(ElementTheme theme);
         void UpdateAppTitle(string title);
     }
 }

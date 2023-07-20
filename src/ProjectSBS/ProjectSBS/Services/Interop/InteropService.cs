@@ -1,20 +1,15 @@
-﻿using System.Reflection;
-using Windows.UI;
-using Windows.UI.Core;
+﻿using Microsoft.UI;
+using ProjectSBS.Infrastructure.Helpers;
+using System.Reflection;
 using Windows.UI.ViewManagement;
 
 namespace ProjectSBS.Services.Interop;
 
 public class InteropService : IInteropService
 {
-    private ApplicationTheme _appTheme;
-    private CoreDispatcher _dispatcher;
-
     public InteropService()
     {
-        _dispatcher = Window.Current.Dispatcher;
-
-        UISettings uiSettings = new UISettings();
+        UISettings uiSettings = new();
         uiSettings.ColorValuesChanged += HandleSystemThemeChange;
     }
 
@@ -22,13 +17,8 @@ public class InteropService : IInteropService
     {
         if (Window.Current.Content is FrameworkElement frameworkElement)
         {
-            UpdateTitleBar(frameworkElement.RequestedTheme);
+            UpdateTitleBarTheme(frameworkElement.RequestedTheme);
         }
-    }
-
-    public async Task SetThemeAsync(ElementTheme theme)
-    {
-        await SetRequestedThemeAsync(theme);
     }
 
     public Version GetAppVersion()
@@ -37,52 +27,38 @@ public class InteropService : IInteropService
         return AssemblyName.GetAssemblyName(assembly.Location).Version ?? new Version(1, 0);
     }
 
-    private async Task SetRequestedThemeAsync(ElementTheme theme)
+    public void SetTheme(ElementTheme theme)
     {
-        await _dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+        if ((Application.Current as App)!.MainWindow!.Content is FrameworkElement frameworkElement)
         {
-            if (Window.Current.Content is FrameworkElement frameworkElement)
-            {
-                frameworkElement.RequestedTheme = theme;
-                UpdateTitleBar(theme);
-            }
-        });
+            frameworkElement.RequestedTheme = theme;
+
+            UpdateTitleBarTheme(theme);
+        }
     }
 
-    private void UpdateTitleBar(ElementTheme theme)
+    private void UpdateTitleBarTheme(ElementTheme theme)
     {
-        Color? color = null;
-        _appTheme = Application.Current.RequestedTheme;
-
-        switch (theme)
-        {
-            case ElementTheme.Default:
-                color = (Color)Application.Current.Resources["SystemBaseHighColor"];
-                break;
-            case ElementTheme.Light:
-                if (_appTheme == ApplicationTheme.Light)
-                { color = ((Color)Application.Current.Resources["SystemBaseHighColor"]); }
-                else
-                { color = (Color)Application.Current.Resources["SystemAltHighColor"]; }
-                break;
-            case ElementTheme.Dark:
-                if (_appTheme == ApplicationTheme.Light)
-                { color = ((Color)Application.Current.Resources["SystemAltHighColor"]); }
-                else
-                { color = (Color)Application.Current.Resources["SystemBaseHighColor"]; }
-                break;
-            default:
-                break;
-        }
-
-        var titleBar = ApplicationView.GetForCurrentView().TitleBar;
-        titleBar.ForegroundColor = color;
+#if !HAS_UNO
+            if(theme == ElementTheme.Light)
+            {
+                Win32.SetCaptionButtonColors((Application.Current as App)!.MainWindow!, Colors.Black);
+            }
+            else
+            {
+                Win32.SetCaptionButtonColors((Application.Current as App)!.MainWindow!, Colors.White);
+            }
+#endif
     }
 
     public async Task OpenStoreReviewUrlAsync()
     {
-        // TODO: Packaged version
+#if !HAS_UNO
         await Windows.System.Launcher.LaunchUriAsync(new Uri("ms-windows-store://review/?ProductId=9PN77P9WJ3CX"));
+#else
+        throw new NotImplementedException("OpenStoreReviewUrlAsync is not yet implemented on this platform!");
+#endif
+
     }
 
     public void UpdateAppTitle(string title)

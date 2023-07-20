@@ -23,7 +23,7 @@
 		<PackageReference Include="Uno.Extensions.Localization.WinUI" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Console" />
 		<PackageReference Include="CommunityToolkit.WinUI.Notifications" />
-		<PackageReference Include="RtfPipe" />
+		<PackageReference Include="WinUIEx" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" />
 	</ItemGroup>
 
 	<Choose>
@@ -67,6 +67,14 @@
 		<EmbeddedResource Include="appsettings.json" />
 		<EmbeddedResource Include="appsettings.*.json" DependentUpon="appsettings.json" />
 		<UpToDateCheckInput Include="**\*.xaml" Exclude="bin\**\*.xaml;obj\**\*.xaml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Remove="Assets\Icons\app_icon.svg" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Assets\Icons\app_icon.svg" />
 	</ItemGroup>
 
 	<ItemGroup>

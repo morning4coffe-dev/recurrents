@@ -1,6 +1,6 @@
 ﻿namespace ProjectSBS.Models;
 
-public record BillingService
+public record BillingDetails
 {
 
     /// <summary>
@@ -19,7 +19,7 @@ public record BillingService
 
     public short RecurEvery { get; }
 
-    public BillingService(decimal basePrice, DateOnly initialDate,
+    public BillingDetails(decimal basePrice, DateOnly initialDate,
         string currencyId = "EUR",
         Period periodType = Period.Monthly, short recurEvery = 1)
     {

@@ -31,7 +31,6 @@ public class WindowsNotificationService : NotificationServiceBase
             .AddInlineImage(new Uri("file:///" + assetUri + "/Icon_Exclamation.png"))
             .AddText(title)
             .AddText(text)
-            //.AddProgressBar()
             .Schedule(day.Add(notificationTime), toast =>
             {
                 toast.Id = day.ToString("yyyy-MM-dd");
