@@ -100,7 +100,7 @@ public class App : Application
 #if WINDOWS
         var manager = WindowManager.Get(builder.Window);
 
-        manager.PersistenceId = "MainWindowPersistanceId"; // Remember window position and size across runs
+        manager.PersistenceId = "SBSMainWindowPersistanceId";
         manager.MinWidth = 500;
         manager.MinHeight = 500;
 

@@ -6,10 +6,18 @@ class BillingService : IBillingService
     {
         List<DateOnly> paymentList = new();
 
+        DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now.Date);
+        DateOnly nextBillingDate = GetNextBillingDate(initialDate, periodType, recurEvery);
+
+        while (nextBillingDate <= currentDate)
+        {
+            nextBillingDate = GetNextBillingDate(nextBillingDate, periodType, recurEvery);
+        }
+
         for (int i = 0; i < numberOfPayments; i++)
         {
-            DateOnly date = CalculateNextBillingDate(initialDate, periodType, recurEvery);
-            paymentList.Add(date);
+            paymentList.Add(nextBillingDate);
+            nextBillingDate = GetNextBillingDate(nextBillingDate, periodType, recurEvery);
         }
 
         return paymentList;

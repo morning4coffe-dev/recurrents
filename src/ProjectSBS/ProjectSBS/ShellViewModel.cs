@@ -2,10 +2,11 @@
 using ProjectSBS.Services.FileManagement.Data;
 using ProjectSBS.Services.Interop;
 using ProjectSBS.Services.Notifications;
+using System.Collections.ObjectModel;
 
 namespace ProjectSBS;
 
-public class ShellViewModel : ObservableObject
+public partial class ShellViewModel : ObservableObject
 {
     private readonly ICurrencyCache _api;
     private readonly INotificationService _notifications;
@@ -19,12 +20,20 @@ public class ShellViewModel : ObservableObject
         _interopService = interop;
         _dataService = data;
 
+        Title = Package.Current.DisplayName;
         Init();
     }
+
+    public ObservableCollection<Item> Items { get; set; }
+
+    [ObservableProperty]
+    public string _title;
 
     public async void Init()
     {
         var c = await _api.GetCurrency(new CancellationToken());
+
+        //TODO clean planned notifications
 
         //_notifications.ShowBasicToastNotification("CZK is currently", c.Rates["CZK"].ToString() + " Kč");
 
@@ -97,7 +106,14 @@ public class ShellViewModel : ObservableObject
 
         await _dataService.SaveLocalAsync(sampleItems);
 
-        var result = await _dataService.InitializeDatabaseAsync();
+        var results = await _dataService.InitializeDatabaseAsync();
+
+        Items = new ObservableCollection<Item>();
+
+        foreach (var item in results)
+        {
+            Items.Add(item);
+        }
 
         _interopService.SetTheme(ElementTheme.Light);
 

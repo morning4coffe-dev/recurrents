@@ -22,7 +22,7 @@
                    Width="16"
                    Height="30"
                    Margin="16,0" />
-            <TextBlock Text="App title"
+            <TextBlock Text="{Binding Title, Mode=OneWay}"
                        Style="{StaticResource CaptionTextBlockStyle}"
                        VerticalAlignment="Center"/>
         </win:StackPanel>
@@ -35,6 +35,8 @@
                 <TextBlock AutomationProperties.AutomationId="HelloTextBlock"
                            Text="Hello Uno Platform"
                            Grid.Row="1" />
+
+                <ListView ItemsSource="{Binding Items, Mode=OneWay}"/>
             </Grid>
         </NavigationView>
     </Grid>
