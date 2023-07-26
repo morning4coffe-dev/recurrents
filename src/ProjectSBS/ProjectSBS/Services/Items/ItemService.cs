@@ -3,7 +3,7 @@ using ProjectSBS.Services.Notifications;
 
 namespace ProjectSBS.Services.Items;
 
-internal class ItemService
+public class ItemService : IItemService
 {
     private readonly IBillingService _billing;
     private readonly INotificationService _notification;
@@ -11,18 +11,19 @@ internal class ItemService
     public ItemService(IBillingService billing, INotificationService notification)
     {
         _billing = billing;
-        _notification = notification;    
-
-
+        _notification = notification;
     }
 
-    public void ScheduleBilling(Item item)
+    public ItemViewModel ScheduleBilling(ItemViewModel itemVM)
     {
-        var payments = _billing.GetFuturePayments(item.Billing.InitialDate, item.Billing.PeriodType, item.Billing.RecurEvery);
+        var item = itemVM.Item;
+        var paymentDates = _billing.GetFuturePayments(item.Billing.InitialDate, item.Billing.PeriodType, item.Billing.RecurEvery);
 
-        foreach (var payment in payments)
+        foreach (var date in paymentDates)
         {
-            //TODO _notification.Schedule...
+            _notification.ScheduleNotification(item.Id, item.Name, DateTime.Now.ToString(), date, new TimeOnly(8, 00));
         }
+
+        return itemVM; //TODO with paymentDates to display
     }
 }

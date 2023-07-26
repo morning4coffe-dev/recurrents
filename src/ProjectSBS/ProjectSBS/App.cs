@@ -1,11 +1,14 @@
+using CommunityToolkit.WinUI.Notifications;
 using Microsoft.UI.Composition.SystemBackdrops;
-using ProjectSBS.Infrastructure.Helpers;
 using ProjectSBS.Services.FileManagement.Data;
 using ProjectSBS.Services.Interop;
+using ProjectSBS.Services.Items;
 using ProjectSBS.Services.Items.Billing;
 using ProjectSBS.Services.Notifications;
 using ProjectSBS.Services.Storage;
+using Windows.Foundation.Collections;
 #if WINDOWS
+using ProjectSBS.Infrastructure.Helpers;
 using WinUIEx;
 #endif
 
@@ -19,6 +22,8 @@ public class App : Application
 
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
+        var startTime = DateTime.Now;
+
         var builder = this.CreateBuilder(args)
             .Configure(host => host
 #if DEBUG
@@ -74,6 +79,7 @@ public class App : Application
                         .AddRefitClient<IApiClient>(context))
                 .ConfigureServices((context, services) =>
                 {
+                    services.AddSingleton<IItemService, ItemService>();
                     services.AddSingleton<IStorageService, StorageService>();
                     services.AddSingleton<IDataService, DataService>();
                     services.AddSingleton<IBillingService, BillingService>();
@@ -81,12 +87,10 @@ public class App : Application
 
 #if __ANDROID__
                     services.AddSingleton<INotificationService, NotificationService>();
-#elif __WASM__
+#elif __WASM__ || HAS_UNO_SKIA
                     services.AddSingleton<INotificationService, WebNotificationService>();
 #elif !HAS_UNO
                     services.AddSingleton<INotificationService, WindowsNotificationService>();
-#else
-                    services.AddSingleton<INotificationService, NotificationServiceBase>();
 #endif
                     //ViewModels
                     services.AddTransient<ShellViewModel>();
@@ -106,6 +110,17 @@ public class App : Application
 
         builder.Window.CenterOnScreen(1224, 940);
         builder.Window.Title = "Project SBS";
+
+        ToastNotificationManagerCompat.OnActivated += toastArgs =>
+        {
+            // Obtain the arguments from the notification
+            ToastArguments args = ToastArguments.Parse(toastArgs.Argument);
+
+            // Obtain any user input (text boxes, menu selections) from the notification
+            ValueSet userInput = toastArgs.UserInput;
+
+            //TODO work with args
+        };
 #endif
 
         MainWindow = builder.Window;
@@ -144,5 +159,6 @@ public class App : Application
         // Ensure the current window is active
         MainWindow.Activate();
 
+        var completeStartTime = (DateTime.Now - startTime).TotalSeconds;
     }
 }

@@ -1,6 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	<application android:allowBackup="true" android:supportsRtl="true"></application>
-	<uses-sdk />
+	<uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+	<uses-permission android:name="android.permission.SET_ALARM" />
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+	<!--TODO <receiver android:name="ProjectSBS.Services.Notifications.NotificationReceiver"
+    android:enabled="true"
+    android:exported="true" />-->
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+	
+	<application android:allowBackup="true" android:supportsRtl="true">
+		<receiver android:name=".NotificationReceiver" />
+	</application>
+	<uses-sdk android:minSdkVersion="23" android:targetSdkVersion="33"/>
 </manifest>

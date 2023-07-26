@@ -1,6 +1,7 @@
 ﻿using ProjectSBS.Models;
 using ProjectSBS.Services.FileManagement.Data;
 using ProjectSBS.Services.Interop;
+using ProjectSBS.Services.Items;
 using ProjectSBS.Services.Notifications;
 using System.Collections.ObjectModel;
 
@@ -12,22 +13,39 @@ public partial class ShellViewModel : ObservableObject
     private readonly INotificationService _notifications;
     private readonly IInteropService _interopService;
     private readonly IDataService _dataService;
+    private readonly IItemService _itemService;
 
-    public ShellViewModel(ICurrencyCache api, INotificationService notifications, IInteropService interop, IDataService data)
+    public ShellViewModel(ICurrencyCache api, INotificationService notifications, IInteropService interop, IDataService data, IItemService item)
     {
         _api = api;
         _notifications = notifications;
         _interopService = interop;
         _dataService = data;
+        _itemService = item;
+
+        Items = new ObservableCollection<ItemViewModel>();
 
         Title = Package.Current.DisplayName;
         Init();
     }
 
-    public ObservableCollection<Item> Items { get; set; }
+    public ObservableCollection<ItemViewModel> Items { get; set; }
 
     [ObservableProperty]
     public string _title;
+
+    [RelayCommand]
+    private void Theme()
+    {
+        var random = new Random();
+
+        if (random.Next(0, 2) == 1)
+        {
+            _interopService.SetTheme(ElementTheme.Light);
+            return;
+        }
+        _interopService.SetTheme(ElementTheme.Dark);
+    }
 
     public async void Init()
     {
@@ -35,16 +53,20 @@ public partial class ShellViewModel : ObservableObject
 
         //TODO clean planned notifications
 
-        //_notifications.ShowBasicToastNotification("CZK is currently", c.Rates["CZK"].ToString() + " Kč");
+        //_notifications.ShowBasicToastNotification("CZK is currently", " Kč");
+
+        //_notifications.RemoveScheduledNotifications();
+
+        _notifications.ScheduleNotification("someidto", "CZK is currently", /*c.Rates["CZK"].ToString() +*/ " Kč" + $" {DateTime.Now}", DateOnly.FromDateTime(DateTime.Now), TimeOnly.FromDateTime(DateTime.Now).Add(TimeSpan.FromSeconds(5))/*.Add(TimeSpan.FromMinutes(2))*/);
 
         var currentDate = DateTime.Now;
 
         // Sample BillingDetails for Item 1
         var billingDetails1 = new BillingDetails(
             basePrice: 50.00m,
-            initialDate: DateOnly.FromDateTime(currentDate),
+            initialDate: new DateOnly(2023, 8, 1),
             currencyId: "USD",
-            periodType: Period.Monthly,
+            periodType: Period.Daily,
             recurEvery: 1
         );
 
@@ -61,9 +83,9 @@ public partial class ShellViewModel : ObservableObject
         // Sample BillingDetails for Item 2
         var billingDetails2 = new BillingDetails(
             basePrice: 30.00m,
-            initialDate: DateOnly.FromDateTime(currentDate),
+            initialDate: new DateOnly(2019, 4, 16),
             currencyId: "EUR",
-            periodType: Period.Quarterly,
+            periodType: Period.Daily,
             recurEvery: 2
         );
 
@@ -80,9 +102,9 @@ public partial class ShellViewModel : ObservableObject
         // Sample BillingDetails for Item 3
         var billingDetails3 = new BillingDetails(
             basePrice: 100.00m,
-            initialDate: DateOnly.FromDateTime(currentDate),
+            initialDate: new DateOnly(2022, 12, 1),
             currencyId: "GBP",
-            periodType: Period.Annually,
+            periodType: Period.Weekly,
             recurEvery: 1
         );
 
@@ -108,11 +130,13 @@ public partial class ShellViewModel : ObservableObject
 
         var results = await _dataService.InitializeDatabaseAsync();
 
-        Items = new ObservableCollection<Item>();
-
         foreach (var item in results)
         {
-            Items.Add(item);
+            var itemVM = new ItemViewModel(item);
+
+            //_itemService.ScheduleBilling(itemVM);
+
+            Items.Add(itemVM);
         }
 
         _interopService.SetTheme(ElementTheme.Light);

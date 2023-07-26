@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿#if WINDOWS
+using System.Runtime.InteropServices;
 
 namespace ProjectSBS.Infrastructure.Helpers;
 
@@ -54,3 +55,4 @@ internal class Win32
 
     }
 }
+#endif

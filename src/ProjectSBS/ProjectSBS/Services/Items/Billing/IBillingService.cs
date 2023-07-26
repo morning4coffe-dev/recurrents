@@ -1,6 +1,6 @@
 ﻿namespace ProjectSBS.Services.Items.Billing;
 
-interface IBillingService
+public interface IBillingService
 {
 
     List<DateOnly> GetFuturePayments(DateOnly initialDate, Period periodType, int recurEvery, int numberOfPayments = 20);

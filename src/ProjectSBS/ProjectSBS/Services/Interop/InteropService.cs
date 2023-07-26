@@ -1,7 +1,10 @@
 ﻿using Microsoft.UI;
-using ProjectSBS.Infrastructure.Helpers;
 using System.Reflection;
 using Windows.UI.ViewManagement;
+
+#if !HAS_UNO
+using ProjectSBS.Infrastructure.Helpers;
+#endif
 
 namespace ProjectSBS.Services.Interop;
 
@@ -39,7 +42,7 @@ public class InteropService : IInteropService
 
     private void UpdateTitleBarTheme(ElementTheme theme)
     {
-#if !HAS_UNO
+#if WINDOWS
             if(theme == ElementTheme.Light)
             {
                 Win32.SetCaptionButtonColors((Application.Current as App)!.MainWindow!, Colors.Black);
@@ -63,6 +66,8 @@ public class InteropService : IInteropService
 
     public void UpdateAppTitle(string title)
     {
+#if !HAS_UNO
         ApplicationView.GetForCurrentView().Title = title;
+#endif
     }
 }

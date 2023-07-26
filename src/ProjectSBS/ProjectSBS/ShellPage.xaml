@@ -24,20 +24,26 @@
                    Margin="16,0" />
             <TextBlock Text="{Binding Title, Mode=OneWay}"
                        Style="{StaticResource CaptionTextBlockStyle}"
-                       VerticalAlignment="Center"/>
+                       VerticalAlignment="Center" />
         </win:StackPanel>
 
         <NavigationView Grid.Row="1"
-                        IsBackButtonVisible="Collapsed"
-                        IsSettingsVisible="False">
-            <Grid HorizontalAlignment="Center"
-                  VerticalAlignment="Center">
+                        IsBackButtonVisible="Visible"
+                        IsSettingsVisible="False"
+                        Header="Hello">
+            <StackPanel HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Spacing="20">
+
+                <Button Command="{Binding ThemeCommand}"
+                        Content="Theme Text" />
+
                 <TextBlock AutomationProperties.AutomationId="HelloTextBlock"
-                           Text="Hello Uno Platform"
+                           Text="@ Uno Platform"
                            Grid.Row="1" />
 
-                <ListView ItemsSource="{Binding Items, Mode=OneWay}"/>
-            </Grid>
+                <ListView ItemsSource="{Binding Items, Mode=OneWay}" />
+            </StackPanel>
         </NavigationView>
     </Grid>
 </Page>

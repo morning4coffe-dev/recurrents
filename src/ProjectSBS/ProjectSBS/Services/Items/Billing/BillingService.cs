@@ -5,19 +5,23 @@ class BillingService : IBillingService
     public List<DateOnly> GetFuturePayments(DateOnly initialDate, Period periodType, int recurEvery, int numberOfPayments = 20)
     {
         List<DateOnly> paymentList = new();
-
-        DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now.Date);
         DateOnly nextBillingDate = GetNextBillingDate(initialDate, periodType, recurEvery);
 
-        while (nextBillingDate <= currentDate)
+        while (nextBillingDate <= DateOnly.FromDateTime(DateTime.Now.Date))
         {
             nextBillingDate = GetNextBillingDate(nextBillingDate, periodType, recurEvery);
         }
 
         for (int i = 0; i < numberOfPayments; i++)
         {
-            paymentList.Add(nextBillingDate);
-            nextBillingDate = GetNextBillingDate(nextBillingDate, periodType, recurEvery);
+            DateOnly billingDate = nextBillingDate;
+            if (billingDate < initialDate)
+            {
+                billingDate = billingDate.AddMonths(1);
+            }
+
+            paymentList.Add(billingDate);
+            nextBillingDate = GetNextBillingDate(billingDate, periodType, recurEvery);
         }
 
         return paymentList;
@@ -25,22 +29,8 @@ class BillingService : IBillingService
 
     public DateOnly GetNextBillingDate(DateOnly initialDate, Period periodType, int recurEvery)
     {
-        DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now.Date);
-        DateOnly date = initialDate;
-
-        while (date <= currentDate)
-        {
-            date = CalculateNextBillingDate(date, periodType, recurEvery);
-        }
-
-        return date;
+        return PeriodToTimeSpanMap[periodType](initialDate, recurEvery);
     }
-
-    private DateOnly CalculateNextBillingDate(DateOnly date, Period periodType, int recurEvery)
-    {
-        return PeriodToTimeSpanMap[periodType](date, recurEvery);
-    }
-
 
     private readonly Dictionary<Period, Func<DateOnly, int, DateOnly>> PeriodToTimeSpanMap = new()
     {

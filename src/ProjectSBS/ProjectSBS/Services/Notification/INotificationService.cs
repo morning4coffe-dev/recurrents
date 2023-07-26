@@ -10,8 +10,8 @@ public interface INotificationService
 
     //void ShowErrorNotification(Exception ex);
 
-    void ScheduleNotification(string title, string text, DateTime day, TimeSpan notificationTime);
-    void RemoveScheduledNotifications(bool onlyRemoveToday = false);
+    void ScheduleNotification(string id, string title, string text, DateOnly day, TimeOnly time);
+    void RemoveScheduledNotifications(string id = "");
 }
 
 public abstract class NotificationServiceBase : INotificationService
@@ -28,6 +28,6 @@ public abstract class NotificationServiceBase : INotificationService
 
     public abstract void ShowBasicToastNotification(string title, string description);
     public abstract void ShowInAppNotification(string notification, bool autoHide = true);
-    public abstract void ScheduleNotification(string title, string text, DateTime day, TimeSpan notificationTime);
-    public abstract void RemoveScheduledNotifications(bool onlyRemoveToday = false);
+    public abstract void ScheduleNotification(string id, string title, string text, DateOnly day, TimeOnly time);
+    public abstract void RemoveScheduledNotifications(string id = "");
 }
