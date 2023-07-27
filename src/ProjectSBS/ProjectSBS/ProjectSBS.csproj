@@ -26,7 +26,6 @@
 		<!--<PackageReference Include="Microsoft.Identity.Client" />-->
 		<!--<PackageReference Include="Uno.Extensions.Authentication.WinUI" />-->
 		<!--<PackageReference Include="Uno.Extensions.Authentication.Msal.WinUI" />-->
-		<PackageReference Include="Plugin.LocalNotification" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'mobile'" />
 		<PackageReference Include="WinUIEx" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" />
 	</ItemGroup>
 

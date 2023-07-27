@@ -4,6 +4,7 @@ using ProjectSBS.Services.Interop;
 using ProjectSBS.Services.Items;
 using ProjectSBS.Services.Notifications;
 using System.Collections.ObjectModel;
+using Windows.UI.Core;
 
 namespace ProjectSBS;
 
@@ -49,15 +50,15 @@ public partial class ShellViewModel : ObservableObject
 
     public async void Init()
     {
-        var c = await _api.GetCurrency(new CancellationToken());
+        //var c = await _api.GetCurrency(new CancellationToken());
 
         //TODO clean planned notifications
 
-        //_notifications.ShowBasicToastNotification("CZK is currently", " Kč");
+        _notifications.RemoveScheduledNotifications();
 
-        //_notifications.RemoveScheduledNotifications();
-
+#if !WINDOWS
         _notifications.ScheduleNotification("someidto", "CZK is currently", /*c.Rates["CZK"].ToString() +*/ " Kč" + $" {DateTime.Now}", DateOnly.FromDateTime(DateTime.Now), TimeOnly.FromDateTime(DateTime.Now).Add(TimeSpan.FromSeconds(5))/*.Add(TimeSpan.FromMinutes(2))*/);
+#endif
 
         var currentDate = DateTime.Now;
 
@@ -134,7 +135,9 @@ public partial class ShellViewModel : ObservableObject
         {
             var itemVM = new ItemViewModel(item);
 
-            //_itemService.ScheduleBilling(itemVM);
+#if WINDOWS
+            _itemService.ScheduleBilling(itemVM);
+#endif
 
             Items.Add(itemVM);
         }
@@ -147,7 +150,6 @@ public partial class ShellViewModel : ObservableObject
         await Task.Delay(10000);
         _interopService.SetTheme(ElementTheme.Default);
 
-
-        //_ = _interopService.OpenStoreReviewUrlAsync();
-    }
+            //_ = _interopService.OpenStoreReviewUrlAsync();
+        }
 }

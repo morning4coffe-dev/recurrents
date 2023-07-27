@@ -10,12 +10,17 @@ public sealed partial class ShellPage : Page
         DataContext = (Application.Current as App)?.Host?.Services.GetService<ShellViewModel>();
 
 
-#if WINDOWS
+#if !HAS_UNO
         //TODO Make this a func somewhere
         if (AppWindowTitleBar.IsCustomizationSupported())
         {
             (Application.Current as App)!.MainWindow!.ExtendsContentIntoTitleBar = true;
             (Application.Current as App)!.MainWindow!.SetTitleBar(AppTitleBar);
+        }
+        else
+        {
+            AppTitleBar.Visibility = Visibility.Collapsed;
+            //TODO Log
         }
 #endif
     }

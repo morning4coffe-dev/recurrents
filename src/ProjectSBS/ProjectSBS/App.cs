@@ -104,11 +104,13 @@ public class App : Application
 #if WINDOWS
         var manager = WindowManager.Get(builder.Window);
 
-        manager.PersistenceId = "SBSMainWindowPersistanceId";
+        //manager.PersistenceId = "SBSMainWindowPersistanceId";
         manager.MinWidth = 500;
         manager.MinHeight = 500;
 
-        builder.Window.CenterOnScreen(1224, 940);
+        var size = builder.Window.AppWindow.Size;
+
+        builder.Window.CenterOnScreen(size.Width / 1.55, size.Height / 1.1);
         builder.Window.Title = "Project SBS";
 
         ToastNotificationManagerCompat.OnActivated += toastArgs =>
@@ -138,7 +140,7 @@ public class App : Application
             MainWindow.Content = rootFrame;
         }
 
-#if !HAS_UNO
+#if WINDOWS
         if (MicaController.IsSupported())
         {
             MainWindow.SystemBackdrop = new MicaBackdrop() { Kind = MicaKind.Base };

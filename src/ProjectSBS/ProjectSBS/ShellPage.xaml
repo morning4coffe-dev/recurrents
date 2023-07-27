@@ -29,7 +29,6 @@
 
         <NavigationView Grid.Row="1"
                         IsBackButtonVisible="Visible"
-                        IsSettingsVisible="False"
                         Header="Hello">
             <StackPanel HorizontalAlignment="Center"
                         VerticalAlignment="Center"
