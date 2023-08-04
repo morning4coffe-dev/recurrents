@@ -33,6 +33,13 @@ public class WindowsNotificationService : NotificationServiceBase
             return;
         }
 
+
+        ToastNotifierCompat notifier = ToastNotificationManagerCompat.CreateToastNotifier();
+        //TODO add a method to show to the user that notifications are disabled
+        var c = notifier.Setting;
+
+
+
         new ToastContentBuilder()
             //.AddArgument("action", "viewItemsDueToday")
             .AddInlineImage(new Uri("ms-appx:///Assets/app-icon.png"))
