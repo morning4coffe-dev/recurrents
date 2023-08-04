@@ -108,9 +108,9 @@ public class App : Application
         manager.MinWidth = 500;
         manager.MinHeight = 500;
 
-        var size = builder.Window.AppWindow.Size;
+        //var size = builder.Window.AppWindow.Size;
 
-        builder.Window.CenterOnScreen(size.Width / 1.55, size.Height / 1.1);
+        //builder.Window.CenterOnScreen(size.Width / 1.55, size.Height / 1.1);
         builder.Window.Title = "Project SBS";
 
         ToastNotificationManagerCompat.OnActivated += toastArgs =>
