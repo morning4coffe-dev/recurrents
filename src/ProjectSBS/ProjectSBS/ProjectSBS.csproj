@@ -78,9 +78,11 @@
 
 	<ItemGroup>
 	  <None Remove="Assets\Icons\app_icon.svg" />
+	  <None Remove="MainPage.xaml" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <UpToDateCheckInput Remove="MainPage.xaml" />
 	  <UpToDateCheckInput Remove="ShellPage.xaml" />
 	</ItemGroup>
 </Project>

@@ -28,9 +28,14 @@ public partial class ShellViewModel : ObservableObject
 
         Title = Package.Current.DisplayName;
         Init();
+
+        _page = typeof(MainPage);
     }
 
     public ObservableCollection<ItemViewModel> Items { get; set; }
+
+    [ObservableProperty]
+    public Type _page;
 
     [ObservableProperty]
     public string _title;
@@ -50,15 +55,15 @@ public partial class ShellViewModel : ObservableObject
 
     public async void Init()
     {
-        //var c = await _api.GetCurrency(new CancellationToken());
+        var c = await _api.GetCurrency(new CancellationToken());
 
         //TODO clean planned notifications
 
         _notifications.RemoveScheduledNotifications();
 
-#if !WINDOWS
-        _notifications.ScheduleNotification("someidto", "CZK is currently", /*c.Rates["CZK"].ToString() +*/ " Kč" + $" {DateTime.Now}", DateOnly.FromDateTime(DateTime.Now), TimeOnly.FromDateTime(DateTime.Now).Add(TimeSpan.FromSeconds(5))/*.Add(TimeSpan.FromMinutes(2))*/);
-#endif
+        //#if !WINDOWS
+        _notifications.ShowBasicToastNotification("1 USD is currently", c.Rates["CZK"].ToString() + " Kč" + $" {DateTime.Now}");
+        //#endif
 
         var currentDate = DateTime.Now;
 
@@ -127,6 +132,8 @@ public partial class ShellViewModel : ObservableObject
             sampleItem3
         };
 
+        await Task.Delay(10000);
+
         await _dataService.SaveLocalAsync(sampleItems);
 
         var results = await _dataService.InitializeDatabaseAsync();
@@ -135,21 +142,19 @@ public partial class ShellViewModel : ObservableObject
         {
             var itemVM = new ItemViewModel(item);
 
-#if WINDOWS
             _itemService.ScheduleBilling(itemVM);
-#endif
 
             Items.Add(itemVM);
         }
 
-        _interopService.SetTheme(ElementTheme.Light);
+        //_interopService.SetTheme(ElementTheme.Light);
 
         await Task.Delay(5000);
-        _interopService.SetTheme(ElementTheme.Dark);
+        //_interopService.SetTheme(ElementTheme.Dark);
 
         await Task.Delay(10000);
-        _interopService.SetTheme(ElementTheme.Default);
+        //_interopService.SetTheme(ElementTheme.Default);
 
-            //_ = _interopService.OpenStoreReviewUrlAsync();
-        }
+        //_ = _interopService.OpenStoreReviewUrlAsync();
+    }
 }
