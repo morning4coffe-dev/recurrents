@@ -8,6 +8,13 @@ namespace ProjectSBS.Services.Notifications;
 
 public class WindowsNotificationService : NotificationServiceBase
 {
+    public override bool IsEnabledOnDevice()
+    {
+        ToastNotifierCompat notifier = ToastNotificationManagerCompat.CreateToastNotifier();
+
+        return notifier.Setting is NotificationSetting.Enabled;
+    }
+
     public override void ShowInAppNotification(string notification, bool autoHide)
     {
         InvokeInAppNotificationRequested(new InAppNotificationRequestedEventArgs { NotificationText = notification, NotificationTime = autoHide ? 1500 : 0 });
@@ -15,6 +22,12 @@ public class WindowsNotificationService : NotificationServiceBase
 
     public override void ShowBasicToastNotification(string title, string description)
     {
+        if (!IsEnabledOnDevice())
+        {
+            //TODO show that notification could not been sent
+            return;
+        }
+
         var assetUri = AppDomain.CurrentDomain.BaseDirectory + "Assets";
 
         new ToastContentBuilder()
@@ -26,6 +39,12 @@ public class WindowsNotificationService : NotificationServiceBase
 
     public override void ScheduleNotification(string id, string title, string text, DateOnly day, TimeOnly time)
     {
+        if (!IsEnabledOnDevice())
+        {
+            //TODO show that notification could not been sent
+            return;
+        }
+
         var date = new DateTime(day.Year, day.Month, day.Day, time.Hour, time.Minute, time.Second, time.Millisecond, DateTimeKind.Unspecified);
 
         if (date < DateTime.Now)
@@ -34,19 +53,21 @@ public class WindowsNotificationService : NotificationServiceBase
         }
 
 
-        ToastNotifierCompat notifier = ToastNotificationManagerCompat.CreateToastNotifier();
-        //TODO add a method to show to the user that notifications are disabled
-        var c = notifier.Setting;
+        CreateNotification(id, title, text).Schedule(date, toast =>
+            {
+                //toast.Id = new Guid().ToString().Take(4).ToString();
+            });
+    }
 
-
-
-        new ToastContentBuilder()
+    private ToastContentBuilder CreateNotification(string id, string title, string text)
+    {
+        return new ToastContentBuilder()
             //.AddArgument("action", "viewItemsDueToday")
             .AddInlineImage(new Uri("ms-appx:///Assets/app-icon.png"))
             .AddText(title)
             .AddText(text)
-            .AddArgument("action", "viewConversation")
-            .AddArgument("conversationId", 9813)
+            .AddArgument("action", "viewItem")
+            .AddArgument("itemId", id)
             .AddToastInput(new ToastSelectionBox("snoozeTime")
             {
                 DefaultSelectionBoxItemId = "15",
@@ -59,7 +80,6 @@ public class WindowsNotificationService : NotificationServiceBase
                     new ToastSelectionBoxItem("1440", "1 day")
                 }
             })
-
             .AddButton(new ToastButtonSnooze() { SelectionBoxId = "snoozeTime" })
             .AddButton(
             new ToastButton()
@@ -67,11 +87,7 @@ public class WindowsNotificationService : NotificationServiceBase
                 .AddArgument("action", "done")
                 .SetBackgroundActivation()
                 )
-            .SetToastScenario(ToastScenario.Reminder)
-            .Schedule(date, toast =>
-            {
-                //toast.Id = new Guid().ToString().Take(4).ToString();
-            });
+            .SetToastScenario(ToastScenario.Reminder);
     }
 
     public override void RemoveScheduledNotifications(string id = "")

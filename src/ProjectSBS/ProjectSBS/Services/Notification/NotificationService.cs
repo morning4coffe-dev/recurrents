@@ -5,22 +5,30 @@ using Android.Content;
 using Android.OS;
 using Android.Support.V4.App;
 using AndroidX.Core.App;
-using Uno.Extensions;
+using System;
 
 namespace ProjectSBS.Services.Notifications;
 
-//TODO Rename to AndroidNotificationService
-
+// TODO: Rename to AndroidNotificationService
 public class NotificationService : NotificationServiceBase
 {
-
     public NotificationService()
     {
     }
 
+    public override bool IsEnabledOnDevice()
+    {
+        //TODO implement 
+        return false;
+    }
+
     public override void ShowInAppNotification(string notification, bool autoHide)
     {
-        InvokeInAppNotificationRequested(new InAppNotificationRequestedEventArgs { NotificationText = notification, NotificationTime = autoHide ? 1500 : 0 });
+        InvokeInAppNotificationRequested(new InAppNotificationRequestedEventArgs
+        {
+            NotificationText = notification,
+            NotificationTime = autoHide ? 1500 : 0
+        });
     }
 
     public override void ScheduleNotification(string id, string title, string text, DateOnly day, TimeOnly time)
@@ -30,7 +38,6 @@ public class NotificationService : NotificationServiceBase
         var (manager, intent) = CreateAlarm(id, title, text, notificationDateTime);
 
         manager.Set(AlarmType.RtcWakeup, notificationDateTime.Millisecond, intent);
-
     }
 
     private (AlarmManager, PendingIntent) CreateAlarm(string id, string title, string text, DateTime notificationDateTime)
@@ -43,7 +50,7 @@ public class NotificationService : NotificationServiceBase
             notificationIntent.PutExtra("text", text);
 
             var random = new Random();
-            int requestCode = random.Next(0, 5000); //TODO: ID here You can convert the id to an integer for the requestCode
+            int requestCode = random.Next(0, 5000); // TODO: ID here You can convert the id to an integer for the requestCode
 
             PendingIntent pendingIntent = PendingIntent.GetBroadcast(Android.App.Application.Context, requestCode, notificationIntent, PendingIntentFlags.Immutable);
 
@@ -55,9 +62,23 @@ public class NotificationService : NotificationServiceBase
         throw new Exception("Desired time was set in the past.");
     }
 
+    // TODO: Test this function properly
     public override void RemoveScheduledNotifications(string id)
     {
-        //throw new NotImplementedException();
+        Intent notificationIntent = new(Android.App.Application.Context, typeof(NotificationReceiver));
+
+        notificationIntent.PutExtra("id", id);
+
+        int requestCode = 0; // You should use the same requestCode that you used when scheduling the notification
+
+        PendingIntent pendingIntent = PendingIntent.GetBroadcast(Android.App.Application.Context, requestCode, notificationIntent, PendingIntentFlags.Immutable);
+
+        if (pendingIntent != null)
+        {
+            AlarmManager alarmManager = (AlarmManager)Android.App.Application.Context.GetSystemService(Context.AlarmService);
+            alarmManager.Cancel(pendingIntent);
+            pendingIntent.Cancel();
+        }
     }
 
     public override void ShowBasicToastNotification(string title, string description)
@@ -97,7 +118,7 @@ public class NotificationReceiver : BroadcastReceiver
         PendingIntent pendingIntent = PendingIntent.GetActivity(Android.App.Application.Context, 0, intent, PendingIntentFlags.Immutable);
 
         var channelId = id;
-        var channelName = id; //TODO Change from id to Item name
+        var channelName = id; // TODO: Change from id to Item name
         var importance = NotificationImportance.High;
 
         var notificationChannel = new NotificationChannel(channelId, channelName, importance);
@@ -116,4 +137,5 @@ public class NotificationReceiver : BroadcastReceiver
         notificationManager.Notify(0, notification);
     }
 }
+
 #endif

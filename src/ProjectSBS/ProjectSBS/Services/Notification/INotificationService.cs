@@ -4,9 +4,11 @@ public class InAppNotificationRequestedEventArgs : EventArgs { public required s
 
 public interface INotificationService
 {
-    void ShowBasicToastNotification(string title, string description);
+    bool IsEnabledOnDevice();
 
     void ShowInAppNotification(string notification, bool autoHide = true);
+
+    void ShowBasicToastNotification(string title, string description);
 
     //void ShowErrorNotification(Exception ex);
 
@@ -26,8 +28,9 @@ public abstract class NotificationServiceBase : INotificationService
     //TODO ShowInAppNotification
     //public void ShowErrorNotification(Exception ex) => ShowInAppNotification(string.Format(Resources.ErrorGeneric, ex), false);
 
-    public abstract void ShowBasicToastNotification(string title, string description);
+    public abstract bool IsEnabledOnDevice();
     public abstract void ShowInAppNotification(string notification, bool autoHide = true);
+    public abstract void ShowBasicToastNotification(string title, string description);
     public abstract void ScheduleNotification(string id, string title, string text, DateOnly day, TimeOnly time);
     public abstract void RemoveScheduledNotifications(string id = "");
 }
