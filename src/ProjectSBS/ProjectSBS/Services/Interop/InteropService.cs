@@ -18,10 +18,12 @@ public class InteropService : IInteropService
 
     private void HandleSystemThemeChange(UISettings sender, object args)
     {
+#if WINDOWS
         if (Window.Current.Content is FrameworkElement frameworkElement)
         {
             UpdateTitleBarTheme(frameworkElement.RequestedTheme);
         }
+#endif
     }
 
     public Version GetAppVersion()
@@ -36,23 +38,25 @@ public class InteropService : IInteropService
         {
             frameworkElement.RequestedTheme = theme;
 
+#if WINDOWS
             UpdateTitleBarTheme(theme);
+#endif
         }
     }
 
+#if WINDOWS
     private void UpdateTitleBarTheme(ElementTheme theme)
     {
-#if WINDOWS
-            if(theme == ElementTheme.Light)
-            {
-                Win32.SetCaptionButtonColors((Application.Current as App)!.MainWindow!, Colors.Black);
-            }
-            else
-            {
-                Win32.SetCaptionButtonColors((Application.Current as App)!.MainWindow!, Colors.White);
-            }
-#endif
+        if(theme == ElementTheme.Light)
+        {
+            Win32.SetCaptionButtonColors((Application.Current as App)!.MainWindow!, Colors.Black);
+        }
+        else
+        {
+            Win32.SetCaptionButtonColors((Application.Current as App)!.MainWindow!, Colors.White);
+        }
     }
+#endif
 
     public async Task OpenStoreReviewUrlAsync()
     {

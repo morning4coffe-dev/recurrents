@@ -10,7 +10,7 @@ public sealed partial class ShellPage : Page
         DataContext = (Application.Current as App)?.Host?.Services.GetService<ShellViewModel>();
 
 
-#if !HAS_UNO
+#if WINDOWS
         //TODO Make this a func somewhere
         if (AppWindowTitleBar.IsCustomizationSupported())
         {
