@@ -1,7 +1,28 @@
-﻿namespace ProjectSBS.Services.Items.Billing;
+﻿using ProjectSBS.Services.FileManagement.Data;
+
+namespace ProjectSBS.Services.Items.Billing;
 
 class BillingService : IBillingService
 {
+    private readonly IDataService _dataService;
+
+    public BillingService(IDataService dataService)
+    {
+        _dataService = dataService;
+    }
+
+    public void NewPaymentLog(Item item)
+    {
+        var log = new ItemLog()
+        {
+            ItemId = item.Id,
+            PaymentDate = DateOnly.FromDateTime(DateTime.Now.Date),
+            Price = item.Billing.BasePrice,
+            CurrencyId = item.Billing.CurrencyId,
+        };
+        _dataService.AddLogAsync(new );
+    }
+
     public List<DateOnly> GetFuturePayments(DateOnly initialDate, Period periodType, int recurEvery, int numberOfPayments = 20)
     {
         List<DateOnly> paymentList = new();

@@ -1,11 +1,12 @@
-﻿namespace ProjectSBS.Services.FileManagement.Data
+﻿namespace ProjectSBS.Services.FileManagement.Data;
+
+public interface IDataService
 {
-    public interface IDataService
-    {
-        Task<List<Item>> InitializeDatabaseAsync();
-        Task<List<Item>?> LoadLocalAsync();
-        Task LoadRemoteAsync();
-        Task SaveLocalAsync(List<Item> data);
-        Task SaveRemoteAsync();
-    }
+    Task<(List<Item>, List<ItemLog>)> InitializeDatabaseAsync();
+    Task<List<Item>> LoadDataAsync();
+
+    Task<bool> SaveDataAsync(List<Item> data);
+    Task<bool> SaveLogsAsync(List<ItemLog> logs);
+
+    Task<bool> AddLogAsync(ItemLog log);
 }

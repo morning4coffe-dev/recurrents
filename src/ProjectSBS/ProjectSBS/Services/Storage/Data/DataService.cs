@@ -8,72 +8,105 @@ public class DataService : IDataService
     private readonly IStorageService _storage;
 
     //TODO Rename
-    private const string itemsName = "appItems.json";
+    private const string itemsPath = "appItems.json";
+    private const string logsPath = "appItems.json";
 
     public DataService(IStorageService storage)
     {
         _storage = storage;
     }
 
-    public async Task<List<Item>> InitializeDatabaseAsync()
+    public async Task<(List<Item>, List<ItemLog>)> InitializeDatabaseAsync()
     {
         //TODO Check if user is logged in
         //Load from remote database
+        //Check if the remote database is newer than the local one (or vice-versa)
 
-        var data = await LoadLocalAsync();
+        var data = await LoadDataAsync();
+        var logs = await LoadLogsAsync();
 
-        if (data is not null)
-        {
-            return data;
-        }
-
-        return new List<Item>();
+        return (data, logs);
     }
 
-
-
-    public async Task SaveLocalAsync(List<Item> data)
+    public async Task<bool> SaveDataAsync(List<Item> data)
     {
         var stringData = JsonSerializer.Serialize(data);
 
-        await _storage.WriteStringAsync(stringData, itemsName);
+        await _storage.WriteStringAsync(stringData, itemsPath);
+
+        //TODO return depending on success
+        return false;
     }
 
-    public async Task SaveRemoteAsync()
+    public async Task<bool> SaveLogsAsync(List<ItemLog> logs)
     {
+        var stringData = JsonSerializer.Serialize(logs);
 
+        await _storage.WriteStringAsync(stringData, logsPath);
+
+        //TODO return depending on success
+        return false;
     }
 
-    private async Task SaveAsync()
+    public async Task<bool> AddLogAsync(ItemLog log)
     {
+        //TODO This seem inefficient
+        var logs = await LoadLogsAsync();
 
+        logs.Add(log);
+
+        var stringData = JsonSerializer.Serialize(logs);
+
+        await _storage.WriteStringAsync(stringData, logsPath);
+
+        //TODO return depending on success
+        return false;
     }
 
-    public async Task<List<Item>?> LoadLocalAsync()
+    public async Task<List<Item>> LoadDataAsync()
     {
-        if (!_storage.DoesFileExist(itemsName))
+        var data = await LoadAsync(itemsPath);
+
+        if (data is null)
+        {
+            return new List<Item>();
+        }
+
+        return (List<Item>)data;
+    }
+
+    private async Task<List<ItemLog>> LoadLogsAsync()
+    {
+        var logs = await LoadAsync(logsPath);
+
+        if (logs is null)
+        {
+            return new List<ItemLog>();
+        }
+
+        return (List<ItemLog>)logs;
+    }
+
+    private async Task<object?> LoadAsync(string path)
+    {
+        //TODO Check if user is connected and is logged in
+        //Load from remote database
+
+        if (!_storage.DoesFileExist(path))
         {
             return null;
         }
 
-        var fileContent = await _storage.ReadLocalAsync(itemsName);
+        var fileContent = await _storage.ReadLocalAsync(path);
 
         if (string.IsNullOrEmpty(fileContent))
         {
             return null;
         }
 
+        //TODO Try catch
+
         var appData = JsonSerializer.Deserialize<List<Item>>(fileContent);
         return appData;
-    }
-
-    public async Task LoadRemoteAsync()
-    {
-
-    }
-
-    private async Task LoadAsync()
-    {
-
     }
 }
