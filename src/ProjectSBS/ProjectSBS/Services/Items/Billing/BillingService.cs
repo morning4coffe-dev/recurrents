@@ -20,18 +20,22 @@ class BillingService : IBillingService
             Price = item.Billing.BasePrice,
             CurrencyId = item.Billing.CurrencyId,
         };
-        _dataService.AddLogAsync(new );
+
+        Task.Run(async () => await _dataService.AddLogAsync(log)).Wait();
+    }
+
+    public async Task<List<ItemLog>> GetPaymentLogsForItemAsync(Item item)
+    {
+        var logs = await _dataService.LoadLogsAsync();
+
+        return logs.Where(log => log.ItemId == item.Id).ToList();
     }
 
     public List<DateOnly> GetFuturePayments(DateOnly initialDate, Period periodType, int recurEvery, int numberOfPayments = 20)
     {
-        List<DateOnly> paymentList = new();
-        DateOnly nextBillingDate = GetNextBillingDate(initialDate, periodType, recurEvery);
+        var nextBillingDate = GetBillingDates(initialDate, periodType, recurEvery).upcomingBillingDate;
 
-        while (nextBillingDate <= DateOnly.FromDateTime(DateTime.Now.Date))
-        {
-            nextBillingDate = GetNextBillingDate(nextBillingDate, periodType, recurEvery);
-        }
+        List<DateOnly> paymentList = new();
 
         for (int i = 0; i < numberOfPayments; i++)
         {
@@ -46,6 +50,20 @@ class BillingService : IBillingService
         }
 
         return paymentList;
+    }
+
+    public (DateOnly lastBillingDate, DateOnly upcomingBillingDate) GetBillingDates(DateOnly initialDate, Period periodType, int recurEvery)
+    {
+        DateOnly lastBillingDate = initialDate;
+        DateOnly nextBillingDate = initialDate;
+
+        while (nextBillingDate <= DateOnly.FromDateTime(DateTime.Now.Date))
+        {
+            lastBillingDate = nextBillingDate;
+            nextBillingDate = GetNextBillingDate(nextBillingDate, periodType, recurEvery);
+        }
+
+        return (lastBillingDate, nextBillingDate);
     }
 
     public DateOnly GetNextBillingDate(DateOnly initialDate, Period periodType, int recurEvery)

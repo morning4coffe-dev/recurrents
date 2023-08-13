@@ -1,9 +1,12 @@
 ﻿using ProjectSBS.Models;
+using ProjectSBS.Services.Analytics;
+using ProjectSBS.Services.Authentication;
 using ProjectSBS.Services.FileManagement.Data;
 using ProjectSBS.Services.Interop;
 using ProjectSBS.Services.Items;
 using ProjectSBS.Services.Notifications;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using Windows.UI.Core;
 
 namespace ProjectSBS;
@@ -15,14 +18,18 @@ public partial class ShellViewModel : ObservableObject
     private readonly IInteropService _interopService;
     private readonly IDataService _dataService;
     private readonly IItemService _itemService;
+    private readonly IStringLocalizer _stringLocalizer;
+    private readonly IAnalyticsService _analyticsService;
 
-    public ShellViewModel(ICurrencyCache api, INotificationService notifications, IInteropService interop, IDataService data, IItemService item)
+    public ShellViewModel(ICurrencyCache api, INotificationService notifications, IInteropService interop, IDataService data, IItemService item, IStringLocalizer stringLocalizer, IAnalyticsService analytics)
     {
         _api = api;
         _notifications = notifications;
         _interopService = interop;
         _dataService = data;
         _itemService = item;
+        _stringLocalizer = stringLocalizer;
+        _analyticsService = analytics;
 
         Items = new ObservableCollection<ItemViewModel>();
 
@@ -55,15 +62,22 @@ public partial class ShellViewModel : ObservableObject
 
     public async void Init()
     {
-        var c = await _api.GetCurrency(new CancellationToken());
+        //var c = await _api.GetCurrency(new CancellationToken());
 
-        //TODO clean planned notifications
+        //_notifications.RemoveScheduledNotifications();
 
-        _notifications.RemoveScheduledNotifications();
+        //var culture = CultureInfo.GetCultureInfo("hu-HU");
 
-        //#if !WINDOWS
-        _notifications.ShowBasicToastNotification("1 USD is currently", c.Rates["CZK"].ToString() + " Kč" + $" {DateTime.Now}");
-        //#endif
+        //string notificationTitle = String.Format(_stringLocalizer["ItemNotificationTitle"], $"PremiumSUB {DateTime.Now}", "today");
+        //string notificationText = String.Format(_stringLocalizer["ItemNotificationText"], c.Rates["HUF"].ToString("C", culture), "today");
+
+
+        //TimeOnly time = TimeOnly.FromDateTime(DateTime.Now.Add(TimeSpan.FromSeconds(2)));
+        //for (int i = 0; i < 1; i++)
+        //{
+        //    //time = time.Add(TimeSpan.FromMinutes(2));
+        //    _notifications.ScheduleNotification((new Random().Next(0, 1000)).ToString(), notificationTitle, notificationText, DateOnly.FromDateTime(DateTime.Now), time);
+        //}
 
         var currentDate = DateTime.Now;
 
@@ -132,27 +146,36 @@ public partial class ShellViewModel : ObservableObject
             sampleItem3
         };
 
-        await Task.Delay(10000);
 
-        await _dataService.SaveLocalAsync(sampleItems);
 
-        var results = await _dataService.InitializeDatabaseAsync();
+        //await _dataService.SaveDataAsync(sampleItems);
 
-        foreach (var item in results)
+        var (items, _) = await _dataService.InitializeDatabaseAsync();
+
+        foreach (var item in items)
         {
-            var itemVM = new ItemViewModel(item);
+            ItemViewModel itemVM = new(item)
+            {
+                //IsPaid = true
+            };
+
+            await itemVM.InitializeAsync();
 
             _itemService.ScheduleBilling(itemVM);
 
             Items.Add(itemVM);
+
+            var isPaid = itemVM.IsPaid;
         }
+
+        //Authentication.Authenticate();
 
         //_interopService.SetTheme(ElementTheme.Light);
 
-        await Task.Delay(5000);
+        //await Task.Delay(5000);
         //_interopService.SetTheme(ElementTheme.Dark);
 
-        await Task.Delay(10000);
+        //await Task.Delay(10000);
         //_interopService.SetTheme(ElementTheme.Default);
 
         //_ = _interopService.OpenStoreReviewUrlAsync();

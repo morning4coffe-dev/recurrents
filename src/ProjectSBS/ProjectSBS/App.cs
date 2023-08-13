@@ -1,13 +1,14 @@
-using CommunityToolkit.WinUI.Notifications;
-using Microsoft.UI.Composition.SystemBackdrops;
 using ProjectSBS.Services.FileManagement.Data;
 using ProjectSBS.Services.Interop;
 using ProjectSBS.Services.Items;
 using ProjectSBS.Services.Items.Billing;
 using ProjectSBS.Services.Notifications;
 using ProjectSBS.Services.Storage;
-using Windows.Foundation.Collections;
+using ProjectSBS.Services.Analytics;
 #if WINDOWS
+using Windows.Foundation.Collections;
+using CommunityToolkit.WinUI.Notifications;
+using Microsoft.UI.Composition.SystemBackdrops;
 using ProjectSBS.Infrastructure.Helpers;
 using WinUIEx;
 #endif
@@ -84,6 +85,7 @@ public class App : Application
                     services.AddSingleton<IDataService, DataService>();
                     services.AddSingleton<IBillingService, BillingService>();
                     services.AddSingleton<IInteropService, InteropService>();
+                    services.AddSingleton<IAnalyticsService, AnalyticsService>();
 
 #if __ANDROID__
                     services.AddSingleton<INotificationService, NotificationService>();
@@ -108,9 +110,10 @@ public class App : Application
         manager.MinWidth = 500;
         manager.MinHeight = 500;
 
-        //var size = builder.Window.AppWindow.Size;
+        var size = builder.Window.AppWindow.Size;
 
-        //builder.Window.CenterOnScreen(size.Width / 1.55, size.Height / 1.1);
+        builder.Window.SetWindowSize(size.Width / 1.55, size.Height / 1.1);
+        builder.Window.CenterOnScreen();
         builder.Window.Title = "Project SBS";
 
         ToastNotificationManagerCompat.OnActivated += toastArgs =>
@@ -122,6 +125,24 @@ public class App : Application
             ValueSet userInput = toastArgs.UserInput;
 
             //TODO work with args
+
+            if (args.TryGetValue("action", out var action))
+            {
+                if (action == "openItem")
+                {
+                    var itemId = args["itemId"];
+
+                    if (itemId != null)
+                    {
+                        var shell = builder.Window.Content as ShellPage;
+
+                        if (shell != null)
+                        {
+                            //shell.NavigateToItem(itemId);
+                        }
+                    }
+                }
+            }
         };
 #endif
 

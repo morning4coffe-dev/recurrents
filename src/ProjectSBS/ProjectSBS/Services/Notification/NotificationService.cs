@@ -1,10 +1,15 @@
 ﻿#if __ANDROID__
 
+using Android;
 using Android.App;
 using Android.Content;
+using Android.Content.PM;
 using Android.OS;
 using Android.Support.V4.App;
+using Android.Util;
+using Android.Views;
 using AndroidX.Core.App;
+using AndroidX.Lifecycle;
 using System;
 
 namespace ProjectSBS.Services.Notifications;
@@ -12,14 +17,21 @@ namespace ProjectSBS.Services.Notifications;
 // TODO: Rename to AndroidNotificationService
 public class NotificationService : NotificationServiceBase
 {
+    private Context context = Android.App.Application.Context;
+
     public NotificationService()
     {
     }
 
     public override bool IsEnabledOnDevice()
     {
-        //TODO implement 
-        return false;
+        if (Build.VERSION.SdkInt >= BuildVersionCodes.N)
+        {
+            //TODO Returns true on all
+            //return true;
+        }
+
+        return NotificationManagerCompat.From(context).AreNotificationsEnabled();
     }
 
     public override void ShowInAppNotification(string notification, bool autoHide)
@@ -31,20 +43,37 @@ public class NotificationService : NotificationServiceBase
         });
     }
 
-    public override void ScheduleNotification(string id, string title, string text, DateOnly day, TimeOnly time)
+    public override async void ScheduleNotification(string id, string title, string text, DateOnly day, TimeOnly time)
     {
+        if (!IsEnabledOnDevice())
+        {
+            //TODO make this not only for not scheduled notifications  
+            var current = await ApplicationActivity.GetCurrent(new CancellationToken());
+            if (ActivityCompat.CheckSelfPermission(current, Manifest.Permission.PostNotifications) != Android.Content.PM.Permission.Granted)
+            {
+                ActivityCompat.RequestPermissions(current, new string[] { Manifest.Permission.PostNotifications }, 1);
+            }
+        }
+
+        id = Guid.NewGuid().ToString();
+
         DateTime notificationDateTime = new(day.Year, day.Month, day.Day, time.Hour, time.Minute, time.Second);
+        long totalMilliSeconds = (long)(notificationDateTime.ToUniversalTime() - DateTime.Now).TotalMilliseconds;
+
+        text += $" Scheduled for {notificationDateTime}";
 
         var (manager, intent) = CreateAlarm(id, title, text, notificationDateTime);
 
-        manager.Set(AlarmType.RtcWakeup, notificationDateTime.Millisecond, intent);
+        GetAlarm();
+
+        manager.SetExact(AlarmType.ElapsedRealtime, totalMilliSeconds, intent);
     }
 
     private (AlarmManager, PendingIntent) CreateAlarm(string id, string title, string text, DateTime notificationDateTime)
     {
         if (notificationDateTime > DateTime.Now)
         {
-            Intent notificationIntent = new(Android.App.Application.Context, typeof(NotificationReceiver));
+            Intent notificationIntent = new(context, typeof(NotificationReceiver));
             notificationIntent.PutExtra("id", id);
             notificationIntent.PutExtra("title", title);
             notificationIntent.PutExtra("text", text);
@@ -52,38 +81,44 @@ public class NotificationService : NotificationServiceBase
             var random = new Random();
             int requestCode = random.Next(0, 5000); // TODO: ID here You can convert the id to an integer for the requestCode
 
-            PendingIntent pendingIntent = PendingIntent.GetBroadcast(Android.App.Application.Context, requestCode, notificationIntent, PendingIntentFlags.Immutable);
+            PendingIntent pendingIntent = PendingIntent.GetBroadcast(context, requestCode, notificationIntent, PendingIntentFlags.Immutable);
 
-            AlarmManager alarmManager = (AlarmManager)Android.App.Application.Context.GetSystemService(Context.AlarmService);
+            AlarmManager alarmManager = (AlarmManager)context.GetSystemService(Context.AlarmService);
 
             return (alarmManager, pendingIntent);
         }
 
-        throw new Exception("Desired time was set in the past.");
+        //TODO throw new Exception("Desired time was set in the past.");
+        return (null, null);
     }
 
     // TODO: Test this function properly
     public override void RemoveScheduledNotifications(string id)
     {
-        Intent notificationIntent = new(Android.App.Application.Context, typeof(NotificationReceiver));
-
+        Intent notificationIntent = new(context, typeof(NotificationReceiver));
         notificationIntent.PutExtra("id", id);
 
-        int requestCode = 0; // You should use the same requestCode that you used when scheduling the notification
+        var random = new Random();
+        int requestCode = random.Next(0, 5000); // TODO: ID here You can convert the id to an integer for the requestCode
 
-        PendingIntent pendingIntent = PendingIntent.GetBroadcast(Android.App.Application.Context, requestCode, notificationIntent, PendingIntentFlags.Immutable);
+        PendingIntent pendingIntent = PendingIntent.GetBroadcast(context, requestCode, notificationIntent, PendingIntentFlags.Immutable);
 
-        if (pendingIntent != null)
-        {
-            AlarmManager alarmManager = (AlarmManager)Android.App.Application.Context.GetSystemService(Context.AlarmService);
-            alarmManager.Cancel(pendingIntent);
-            pendingIntent.Cancel();
-        }
+        AlarmManager alarmManager = (AlarmManager)context.GetSystemService(Context.AlarmService);
+
+        alarmManager.Cancel(pendingIntent);
+    }
+
+    private void GetAlarm() 
+    {
+        AlarmManager alarmManager = (AlarmManager)context.GetSystemService(Context.AlarmService);
+
+        //var c = alarmManager.CanScheduleExactAlarms();
+        //var d = alarmManager.NextAlarmClock;
     }
 
     public override void ShowBasicToastNotification(string title, string description)
     {
-        var notificationManager = (NotificationManager)Android.App.Application.Context.GetSystemService(Context.NotificationService);
+        var notificationManager = (NotificationManager)context.GetSystemService(Context.NotificationService);
 
         var channelId = "ProjectSBS-channel";
         var channelName = "Other";
@@ -92,7 +127,7 @@ public class NotificationService : NotificationServiceBase
         var notificationChannel = new NotificationChannel(channelId, channelName, importance);
         notificationManager.CreateNotificationChannel(notificationChannel);
 
-        var notificationBuilder = new NotificationCompat.Builder(Android.App.Application.Context, channelId)
+        var notificationBuilder = new NotificationCompat.Builder(context, channelId)
             .SetSmallIcon(Resource.Drawable.abc_vector_test)
             .SetContentTitle(title)
             .SetContentText(description)
@@ -113,9 +148,9 @@ public class NotificationReceiver : BroadcastReceiver
         string title = intent.GetStringExtra("title");
         string text = intent.GetStringExtra("text");
 
-        var notificationManager = (NotificationManager)Android.App.Application.Context.GetSystemService(Context.NotificationService);
+        var notificationManager = (NotificationManager)context.GetSystemService(Context.NotificationService);
 
-        PendingIntent pendingIntent = PendingIntent.GetActivity(Android.App.Application.Context, 0, intent, PendingIntentFlags.Immutable);
+        PendingIntent pendingIntent = PendingIntent.GetActivity(context, 0, intent, PendingIntentFlags.Immutable);
 
         var channelId = id;
         var channelName = id; // TODO: Change from id to Item name
@@ -124,7 +159,7 @@ public class NotificationReceiver : BroadcastReceiver
         var notificationChannel = new NotificationChannel(channelId, channelName, importance);
         notificationManager.CreateNotificationChannel(notificationChannel);
 
-        var notificationBuilder = new NotificationCompat.Builder(Android.App.Application.Context, channelId)
+        var notificationBuilder = new NotificationCompat.Builder(context, channelId)
             .SetSmallIcon(Resource.Drawable.abc_vector_test)
             .SetContentTitle(title)
             .SetContentText(text)
