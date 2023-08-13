@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<OutputType Condition="'$(Configuration)'=='Release'">WinExe</OutputType>
 		<OutputType Condition="'$(Configuration)'=='Debug'">Exe</OutputType>
@@ -11,6 +11,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Labs.WinUI.SettingsControls" />
+		<PackageReference Include="Microsoft.AppCenter" />
+		<PackageReference Include="Microsoft.AppCenter.Analytics" />
+		<PackageReference Include="Microsoft.AppCenter.Crashes" />
+		<PackageReference Include="Microsoft.Graph" />
 		<PackageReference Include="Uno.WinUI.Skia.Gtk" />
 		<PackageReference Include="CommunityToolkit.Mvvm" />
 		<PackageReference Include="Uno.Extensions.Configuration" />
