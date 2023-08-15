@@ -6,14 +6,16 @@ namespace ProjectSBS.Services.FileManagement.Data;
 public class DataService : IDataService
 {
     private readonly IStorageService _storage;
+    private readonly IStorageService _remoteStorage;
 
     //TODO Rename
     private const string itemsPath = "appItems.json";
     private const string logsPath = "itemLogs.json";
 
-    public DataService(IStorageService storage)
+    public DataService(IEnumerable<IStorageService> storages)
     {
-        _storage = storage;
+        _storage = storages.First();
+        _remoteStorage = storages.Last();
     }
 
     public async Task<(List<Item> items, List<ItemLog> logs)> InitializeDatabaseAsync()
@@ -28,26 +30,15 @@ public class DataService : IDataService
         return (data, new List<ItemLog>());
     }
 
+
+
+
     public async Task<bool> SaveDataAsync(List<Item> data)
     {
         var stringData = JsonSerializer.Serialize(data);
 
-        await _storage.WriteStringAsync(stringData, itemsPath);
-
-        //TODO return depending on success
-        return false;
+        return await _storage.WriteFileAsync(stringData, itemsPath);
     }
-
-    public async Task<bool> SaveLogsAsync(List<ItemLog> logs)
-    {
-        var stringData = JsonSerializer.Serialize(logs);
-
-        await _storage.WriteStringAsync(stringData, logsPath);
-
-        //TODO return depending on success
-        return false;
-    }
-
     public async Task<bool> AddLogAsync(ItemLog log)
     {
         var logs = await LoadLogsAsync() ?? new List<ItemLog>();
@@ -55,35 +46,32 @@ public class DataService : IDataService
         logs.Add(log);
 
         var stringData = JsonSerializer.Serialize(logs);
-
-        await _storage.WriteStringAsync(stringData, logsPath);
-
-        //TODO return depending on success
-        return false;
+        
+        return await _storage.WriteFileAsync(stringData, logsPath);
     }
+
+    public async Task<bool> SaveLogsAsync(List<ItemLog> logs)
+    {
+        var stringData = JsonSerializer.Serialize(logs);
+
+        return await _storage.WriteFileAsync(stringData, logsPath);
+    }
+
+
+
 
     public async Task<List<Item>> LoadDataAsync()
     {
         var data = await LoadAsync(itemsPath, typeof(List<Item>));
 
-        if (data is null)
-        {
-            return new List<Item>();
-        }
-
-        return data as List<Item>;
+        return (data as List<Item>) ?? new List<Item>();
     }
 
     public async Task<List<ItemLog>> LoadLogsAsync()
     {
         var logs = await LoadAsync(logsPath, typeof(List<ItemLog>));
 
-        if (logs is null)
-        {
-            return new List<ItemLog>();
-        }
-
-        return (List<ItemLog>)logs;
+        return (logs as List<ItemLog>) ?? new List<ItemLog>();
     }
 
     private async Task<object?> LoadAsync(string path, Type type)
@@ -96,14 +84,12 @@ public class DataService : IDataService
             return null;
         }
 
-        var fileContent = await _storage.ReadLocalAsync(path);
+        var fileContent = await _storage.ReadFileAsync(path);
 
         if (string.IsNullOrEmpty(fileContent))
         {
             return null;
         }
-
-        //TODO Try catch
 
         return JsonSerializer.Deserialize(fileContent, type);
     }

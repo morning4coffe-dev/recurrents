@@ -1,168 +1,88 @@
 ﻿using System.Collections.Concurrent;
-using Windows.Foundation.Collections;
-using Windows.Graphics.Imaging;
-using Windows.Storage.Streams;
 
-namespace ProjectSBS.Services.Storage
+namespace ProjectSBS.Services.Storage;
+
+public class StorageService : IStorageService
 {
-    /// <summary>
-    /// Writes data to either the local or remote directory.
-    /// </summary>
-    public class StorageService : IStorageService
+    private static readonly ConcurrentDictionary<string, SemaphoreSlim> _semaphores = new();
+
+    public bool DoesFileExist(string fileName)
     {
-        private static readonly ConcurrentDictionary<string, SemaphoreSlim> _semaphores = new();
-        private const string _imagesDirName = "images";
+        var localFolder = ApplicationData.Current.LocalFolder;
+        var filePath = Path.Combine(localFolder.Path, fileName);
+        return File.Exists(filePath);
+    }
 
-        private readonly IPropertySet SettingsStorage = ApplicationData.Current.LocalSettings.Values;
+    public async Task<string> ReadFileAsync(string relativeLocalPath, CancellationToken ct = default)
+    {
+        ct.ThrowIfCancellationRequested();
 
-        public async Task<string> ReadLocalAsync(string relativeLocalPath, CancellationToken ct = default)
+        if (string.IsNullOrEmpty(relativeLocalPath))
         {
-            ct.ThrowIfCancellationRequested();
-
-            if (string.IsNullOrEmpty(relativeLocalPath))
-            {
-                return string.Empty;
-            }
-
-            IStorageItem targetLocation = await ApplicationData.Current.LocalFolder.TryGetItemAsync(relativeLocalPath);
-
-            ct.ThrowIfCancellationRequested();
-
-            if (targetLocation is StorageFile file)
-            {
-                return await FileIO.ReadTextAsync(file);
-            }
-
             return string.Empty;
         }
 
-        public async Task<string> ReadRemoteAsync(string relativeLocalPath, CancellationToken ct = default)
+        IStorageItem targetLocation = await ApplicationData.Current.LocalFolder.TryGetItemAsync(relativeLocalPath);
+
+        ct.ThrowIfCancellationRequested();
+
+        if (targetLocation is StorageFile file)
         {
-            throw new NotImplementedException();
+            return await FileIO.ReadTextAsync(file);
         }
 
-        public async Task<bool> DeleteFileAsync(string absolutePathInLocalStorage)
-        {
-            if (string.IsNullOrEmpty(absolutePathInLocalStorage))
-            {
-                return false;
-            }
+        return string.Empty;
+    }
 
-            try
-            {
-                var file = await StorageFile.GetFileFromPathAsync(absolutePathInLocalStorage);
-                await file.DeleteAsync();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+    public async Task<bool> WriteFileAsync(string content, string relativeLocalPath)
+    {
+        if (string.IsNullOrEmpty(relativeLocalPath))
+        {
+            return false;
         }
 
-        public async Task WriteStringAsync(string content, string relativeLocalPath)
+        var semaphore = _semaphores.GetOrAdd(relativeLocalPath, new SemaphoreSlim(1, 1));
+        await semaphore.WaitAsync();
+        try
         {
-            if (string.IsNullOrEmpty(relativeLocalPath))
-            {
-                return;
-            }
+            StorageFile targetLocation = await ApplicationData.Current.LocalFolder.CreateFileAsync(
+                relativeLocalPath,
+                CreationCollisionOption.OpenIfExists);
 
-            var semaphore = _semaphores.GetOrAdd(relativeLocalPath, new SemaphoreSlim(1, 1));
-            await semaphore.WaitAsync();
-            try
+            if (targetLocation != null)
             {
-                StorageFile targetLocation = await ApplicationData.Current.LocalFolder.CreateFileAsync(
-                    relativeLocalPath,
-                    CreationCollisionOption.OpenIfExists);
-
-                if (targetLocation != null)
-                {
-                    await FileIO.WriteTextAsync(targetLocation, content);
-                }
-            }
-            finally
-            {
-                semaphore.Release();
+                await FileIO.WriteTextAsync(targetLocation, content);
             }
         }
-
-        public Task<string> WriteImageAsync(Stream stream, string nameWithExt)
+        catch (Exception ex)
         {
-            return WriteFileAsync(stream, nameWithExt, _imagesDirName);
+            //TODO: Log exception
+            return false;
+        }
+        finally
+        {
+            semaphore.Release();
         }
 
-        public async Task<string> WriteFileAsync(Stream stream, string nameWithExt, string? localDirName = null)
+        return true;
+    }
+
+    public async Task<bool> DeleteFileAsync(string absolutePathInLocalStorage)
+    {
+        if (string.IsNullOrEmpty(absolutePathInLocalStorage))
         {
-            StorageFolder dir = string.IsNullOrWhiteSpace(localDirName)
-                ? ApplicationData.Current.LocalFolder
-                : await ApplicationData.Current.LocalFolder.CreateFolderAsync(
-                    localDirName,
-                    CreationCollisionOption.OpenIfExists);
-
-            StorageFile storageFile = await dir.CreateFileAsync(
-                nameWithExt,
-                CreationCollisionOption.ReplaceExisting);
-
-            using IRandomAccessStream fileStream = await storageFile.OpenAsync(FileAccessMode.ReadWrite);
-            await stream.CopyToAsync(fileStream.AsStreamForWrite());
-            await fileStream.FlushAsync();
-            return storageFile.Path;
+            return false;
         }
 
-        public async Task<string> WriteBitmapAsync(Stream stream, string nameWithExt)
+        try
         {
-            StorageFile storageFile = await ApplicationData.Current.LocalFolder.CreateFileAsync(
-                nameWithExt,
-                CreationCollisionOption.ReplaceExisting);
-
-            using (IRandomAccessStream s = stream.AsRandomAccessStream())
-            {
-                // Create the decoder from the stream
-                BitmapDecoder decoder = await BitmapDecoder.CreateAsync(s);
-
-                // Get the SoftwareBitmap representation of the file
-                var softwareBitmap = await decoder.GetSoftwareBitmapAsync();
-
-                BitmapEncoder encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, await storageFile.OpenAsync(FileAccessMode.ReadWrite));
-
-                encoder.SetSoftwareBitmap(softwareBitmap);
-
-                await encoder.FlushAsync();
-
-                return storageFile.Path;
-            }
+            var file = await StorageFile.GetFileFromPathAsync(absolutePathInLocalStorage);
+            await file.DeleteAsync();
+            return true;
         }
-
-        public bool DoesFileExist(string fileName)
+        catch
         {
-            var localFolder = ApplicationData.Current.LocalFolder;
-            var filePath = Path.Combine(localFolder.Path, fileName);
-            return File.Exists(filePath);
-        }
-
-        public void SetValue<T>(string key, T value)
-        {
-            if (!SettingsStorage.ContainsKey(key))
-                SettingsStorage.Add(key, value);
-            else
-                SettingsStorage[key] = value;
-        }
-
-        public T GetValue<T>(string key, T defaultValue = default)
-        {
-            if (SettingsStorage.TryGetValue(key, out object value))
-            {
-                try
-                {
-                    return (T)value;
-                }
-                catch
-                {
-                    // Corrupted storage, return default
-                }
-            }
-
-            return defaultValue;
+            return false;
         }
     }
 }
