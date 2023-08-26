@@ -43,6 +43,7 @@
 		<PackageReference Include="Uno.Extensions.Logging.OSLog" />
 		<PackageReference Include="Uno.UI.Adapter.Microsoft.Extensions.Logging" />
 		<PackageReference Include="Uno.WinUI.RemoteControl" Condition="'$(Configuration)'=='Debug'" />
+		<PackageReference Include="Microsoft.Graph" />
 	</ItemGroup>
 	<Choose>
 		<When Condition="$(IsAndroid)">

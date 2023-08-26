@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using System.Text.Json.Serialization;
 
 namespace ProjectSBS.DataContracts.Serialization
@@ -13,13 +12,9 @@ namespace ProjectSBS.DataContracts.Serialization
     /// For more information on the JsonSerializerContext see:
     /// https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/source-generation?WT.mc_id=DT-MVP-5002924
     /// </remarks>
-    [JsonSerializable(typeof(WeatherForecast))]
-    [JsonSerializable(typeof(WeatherForecast[]))]
-    [JsonSerializable(typeof(IEnumerable<WeatherForecast>))]
-    [JsonSerializable(typeof(IImmutableList<WeatherForecast>))]
-    [JsonSerializable(typeof(ImmutableList<WeatherForecast>))]
+    [JsonSerializable(typeof(Currency))]
     [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
-    public partial class WeatherForecastContext : JsonSerializerContext
+    public partial class CurrencyContext : JsonSerializerContext
     {
     }
 }

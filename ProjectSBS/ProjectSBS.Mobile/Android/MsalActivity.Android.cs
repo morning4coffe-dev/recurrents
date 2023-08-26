@@ -11,7 +11,7 @@ namespace ProjectSBS.Droid
     [IntentFilter(
         new[] { Android.Content.Intent.ActionView },
         Categories = new[] { Android.Content.Intent.CategoryDefault, Android.Content.Intent.CategoryBrowsable },
-        DataScheme = "myprotocol")]
+        DataScheme = "project-sbs")]
     public class MsalActivity : BrowserTabActivity
     {
     }
