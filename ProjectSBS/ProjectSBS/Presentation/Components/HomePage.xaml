@@ -1,0 +1,32 @@
+<Page x:Class="ProjectSBS.Presentation.HomePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="using:ProjectSBS.Presentation"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:not_win="http://uno.ui/not_win"
+      mc:Ignorable="d not_win"
+      xmlns:uen="using:Uno.Extensions.Navigation.UI"
+      xmlns:utu="using:Uno.Toolkit.UI"
+      xmlns:page="using:ProjectSBS.Presentation.Components"
+      NavigationCacheMode="Required">
+    <!--not_win:Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">-->
+
+    <Grid>
+        <StackPanel Grid.Row="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Spacing="16">
+            <TextBox Text="{Binding Name, Mode=TwoWay}"
+                     PlaceholderText="Enter your name:" />
+            <TextBlock Text="{Binding UserName}" />
+            <Button Content="Go to Second Page"
+                    AutomationProperties.AutomationId="SecondPageButton"
+                    Command="{Binding GoToSecond}" />
+            <Button Content="Logout"
+                    Command="{Binding Logout}" />
+        </StackPanel>
+
+        <Frame x:Name="contentFrame" />
+    </Grid>
+</Page>
