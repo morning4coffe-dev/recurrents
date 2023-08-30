@@ -1,6 +1,6 @@
 ﻿using ProjectSBS.Services.Items.Billing;
 
-namespace ProjectSBS;
+namespace ProjectSBS.Presentation.Components;
 
 public partial class ItemViewModel : ObservableObject
 {
