@@ -5,6 +5,8 @@
         public MainPage()
         {
             this.InitializeComponent();
+
+            //OnNavigatedTo
         }
     }
 }

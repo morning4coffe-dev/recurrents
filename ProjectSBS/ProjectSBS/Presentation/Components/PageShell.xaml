@@ -7,8 +7,10 @@
       xmlns:win="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:utu="using:Uno.Toolkit.UI"
       utu:StatusBar.Foreground="Auto"
-      utu:StatusBar.Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-      mc:Ignorable="d">
+      utu:StatusBar.Background="{ThemeResource ApplicationBackground}"
+      not_win:Background="{ThemeResource ApplicationBackground}"
+      xmlns:not_win="http://uno.ui/not_win"
+      mc:Ignorable="d not_win">
       <!--TODO Foreground of StatusBar-->
 
     <Grid utu:SafeArea.Insets="All">

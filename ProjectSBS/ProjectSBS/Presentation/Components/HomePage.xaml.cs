@@ -34,4 +34,17 @@ public sealed partial class HomePage : Page
         get { return (ItemViewModel)GetValue(SelectedItemProperty); }
         set { SetValue(SelectedItemProperty, value); }
     }
+
+    public static readonly DependencyProperty AddNewCommandProperty = DependencyProperty.Register(
+      nameof(AddNewCommand),
+      typeof(ICommand),
+      typeof(HomePage),
+      new PropertyMetadata(null)
+    );
+
+    public ICommand AddNewCommand
+    {
+        get { return (ICommand)GetValue(AddNewCommandProperty); }
+        set { SetValue(AddNewCommandProperty, value); }
+    }
 }

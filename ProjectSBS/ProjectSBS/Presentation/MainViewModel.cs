@@ -1,8 +1,11 @@
+using CommunityToolkit.Mvvm.Messaging;
 using ProjectSBS.Services.Items;
-using ProjectSBS.Services.User;
 using ProjectSBS.Services.Notifications;
 using ProjectSBS.Services.Storage.Data;
+using ProjectSBS.Services.User;
 using System.Collections.ObjectModel;
+using Windows.System.Profile;
+using ProjectSBS.Business;
 
 namespace ProjectSBS.Presentation;
 
@@ -25,6 +28,55 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private User? _user;
 
+    [ObservableProperty]
+    private Type? _page;
+
+    [ObservableProperty]
+    private bool _isEditing;
+
+    public bool IsMobile()
+    {
+        var deviceFamily = AnalyticsInfo.VersionInfo.DeviceFamily;
+        return deviceFamily.Contains("Mobile");
+    }
+
+    public string? Title { get; }
+
+    public ObservableCollection<ItemViewModel> Items { get; } = new();
+
+    private ItemViewModel? _selectedItem;
+
+    public ItemViewModel? SelectedItem
+    {
+        get => _selectedItem;
+        set
+        {
+            if (_selectedItem == value)
+            {
+                return;
+            }
+
+            if (IsMobile() && value != null)
+            {
+                _ = _navigator.NavigateViewModelAsync<ItemDetailsViewModel>(this);
+                WeakReferenceMessenger.Default.Send(new ItemSelectionChanged(value));
+            }
+
+            IsEditing = false;
+
+            _selectedItem = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public ICommand GoToSecond { get; }
+    public ICommand Logout { get; }
+    public ICommand AddNewCommand { get; }
+    public ICommand SubmitChangesCommand { get; }
+    public ICommand CloseDetailsCommand { get; }
+    public ICommand EnableEditingCommand { get; }
+    public ICommand DeleteItemCommand { get; }
+
     public MainViewModel(
         IStringLocalizer localizer,
         IOptions<AppConfig> appInfo,
@@ -32,33 +84,34 @@ public partial class MainViewModel : ObservableObject
         IUserService userService,
         IItemService itemService,
         IDispatcher dispatch,
-        ICurrencyCache api, 
-        INotificationService notifications,
+        ICurrencyCache api,
+        //INotificationService notifications,
         INavigator navigator,
         IDataService dataService)
     {
         _authentication = authentication;
         _userService = userService;
         _itemService = itemService;
+        //_notificationService = notifications;
+        _api = api;
         _dispatch = dispatch;
         _navigator = navigator;
 
         Title = "Main";
         Title += $" - {localizer["ApplicationName"]}";
         Title += $" - {appInfo?.Value?.Environment}";
+
         GoToSecond = new AsyncRelayCommand(GoToSecondView);
         Logout = new AsyncRelayCommand(DoLogout);
+        AddNewCommand = new AsyncRelayCommand(AddNew);
+        SubmitChangesCommand = new AsyncRelayCommand(SubmitChanges);
+        CloseDetailsCommand = new AsyncRelayCommand(CloseDetails);
+        EnableEditingCommand = new AsyncRelayCommand(EnableEditing);
+        DeleteItemCommand = new AsyncRelayCommand(DeleteItem);
 
         Initialize();
         _dataService = dataService;
     }
-    public string? Title { get; }
-
-    public ICommand GoToSecond { get; }
-
-    public ICommand Logout { get; }
-
-    public ObservableCollection<ItemViewModel> Items { get; set; }
 
     public async void Initialize()
     {
@@ -75,9 +128,11 @@ public partial class MainViewModel : ObservableObject
             {
                 //TODO enable login button
             }
+
+            Page = typeof(HomePage);
         });
 
-        //var c = await _api.GetCurrency(new CancellationToken());
+        var c = await _api.GetCurrency(new CancellationToken());
 
         //_notifications.RemoveScheduledNotifications();
 
@@ -161,9 +216,7 @@ public partial class MainViewModel : ObservableObject
             sampleItem3
         };
 
-
-
-        //await _dataService.SaveDataAsync(sampleItems);
+        await _dataService.SaveDataAsync(sampleItems);
 
         var (items, _) = await _dataService.InitializeDatabaseAsync();
 
@@ -176,9 +229,12 @@ public partial class MainViewModel : ObservableObject
 
             await itemVM.InitializeAsync();
 
-            _itemService.ScheduleBilling(itemVM);
+            //_itemService.ScheduleBilling(itemVM);
 
-            Items.Add(itemVM);
+            await _dispatch.ExecuteAsync(() =>
+            {
+                Items.Add(itemVM);
+            });
 
             var isPaid = itemVM.IsPaid;
         }
@@ -186,12 +242,53 @@ public partial class MainViewModel : ObservableObject
 
     private async Task GoToSecondView()
     {
-        await _navigator.NavigateViewModelAsync<SecondViewModel>(this, data: new Entity(Name!));
+        //await _navigator.NavigateViewModelAsync<ItemDetailsViewModel>(this, data: new Entity(Name!));
     }
 
     public async Task DoLogout(CancellationToken token)
     {
         await _authentication.LogoutAsync(_dispatch, token);
-        //TODO probabbly will have to clean the token too
+        //TODO probably will have to clean the token too
+    }
+
+    private async Task AddNew()
+    {
+        SelectedItem = new ItemViewModel(null);
+
+        IsEditing = true;
+    }
+
+    private async Task SubmitChanges()
+    {
+        //TODO Add new item to database
+        SelectedItem = new ItemViewModel(null);
+
+        IsEditing = true;
+    }
+
+    private async Task EnableEditing()
+    {
+        IsEditing = true;
+    }
+
+    private async Task DeleteItem()
+    {
+        //TODO Find item by Id in database and delete it
+        return;
+    }
+
+    private async Task CloseDetails()
+    {
+        //TODO Instead of IsEditing, check if the item is dirty
+        if (IsEditing)
+        {
+            await _navigator.ShowMessageDialogAsync(this, title: "...", content: "Really?");
+        }
+        else
+        {
+            SelectedItem = null;
+        }
+
+        IsEditing = false;
     }
 }

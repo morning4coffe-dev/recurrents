@@ -6,12 +6,15 @@ public partial class ItemViewModel : ObservableObject
 {
     private readonly IBillingService _billingService;
 
-    public ItemViewModel(Item item)
+    public ItemViewModel(Item? item)
     {
         _item = item;
 
-        //(Application.Current as App)!.Host?.Services.GetService<IItemService>();
-        _billingService = (Application.Current as App)!.Host?.Services.GetService<IBillingService>()!;
+        if (item != null)
+        {
+            //(Application.Current as App)!.Host?.Services.GetService<IItemService>();
+            _billingService = (Application.Current as App)!.Host?.Services.GetService<IBillingService>()!;
+        }
     }
 
     [ObservableProperty]

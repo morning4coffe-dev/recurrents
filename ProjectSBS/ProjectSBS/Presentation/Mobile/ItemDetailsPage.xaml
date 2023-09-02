@@ -1,0 +1,62 @@
+<Page x:Class="ProjectSBS.Presentation.Mobile.ItemDetailsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="using:ProjectSBS.Presentation"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:comp="using:ProjectSBS.Presentation.Components"
+      xmlns:uen="using:Uno.Extensions.Navigation.UI"
+      xmlns:utu="using:Uno.Toolkit.UI"
+      xmlns:not_win="http://uno.ui/not_win"
+      mc:Ignorable="d not_win">
+
+    <comp:PageShell>
+        <comp:PageShell.ContentView>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Grid Background="{ThemeResource CardBackgroundFillColorDefault}"
+                      Padding="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Vertical">
+                        <Button uen:Navigation.Request="-"
+                                Background="Transparent"
+                                BorderBrush="Transparent"
+                                BorderThickness="0"
+                                Padding="12">
+                            <SymbolIcon Symbol="Back" />
+                        </Button>
+
+                        <TextBlock Text="{Binding SelectedItem.Item.Name}"
+                                   Style="{StaticResource TitleTextBlockStyle}"
+                                   VerticalAlignment="Center"
+                                   Margin="12" />
+                    </StackPanel>
+
+                    <Button Background="Transparent"
+                            BorderBrush="Transparent"
+                            BorderThickness="0"
+                            Padding="12"
+                            VerticalAlignment="Top"
+                            Grid.Column="1"
+                            Command="{Binding EnableEditingCommand}">
+
+                        <SymbolIcon Symbol="Edit" />
+                    </Button>
+                </Grid>
+
+                <comp:ItemDetails SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                                  IsEditing="{Binding IsEditing, Mode=TwoWay}"
+                                  Margin="16"
+                                  Grid.Row="1" />
+            </Grid>
+        </comp:PageShell.ContentView>
+    </comp:PageShell>
+</Page>

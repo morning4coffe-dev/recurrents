@@ -10,8 +10,7 @@
       xmlns:uen="using:Uno.Extensions.Navigation.UI"
       xmlns:utu="using:Uno.Toolkit.UI"
       xmlns:page="using:ProjectSBS.Presentation.Components"
-      NavigationCacheMode="Required"
-      not_win:Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+      NavigationCacheMode="Required">
 
     <page:PageShell TitleVisibility="Collapsed">
         <page:PageShell.ContentView>
@@ -29,7 +28,7 @@
                         <VisualStateGroup>
                             <VisualState x:Name="SmallScreen">
                                 <VisualState.StateTriggers>
-                                    <AdaptiveTrigger MinWindowWidth="200" />
+                                    <AdaptiveTrigger MinWindowWidth="0" />
                                 </VisualState.StateTriggers>
                                 <VisualState.Setters>
                                     <Setter Target="backgroundImage.Visibility"
@@ -59,10 +58,10 @@
                            Grid.Column="1"
                            VerticalAlignment="Center" />
 
-                    <Grid>
+                    <Grid not_win:Background="{ThemeResource ApplicationBackground}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
-                            <RowDefinition Height="*" />
+                            <RowDefinition Height="1.1*" />
                             <RowDefinition Height="*" />
                             <RowDefinition Height="auto" />
                         </Grid.RowDefinitions>
@@ -95,9 +94,9 @@
                                    Style="{StaticResource TitleTextBlockStyle}" />
 
                         <Image Source="/ProjectSBS/Assets/Illustrations/undraw_Newsletter_re_wrob.png"
-                               Margin="0, 30"
-                               MinHeight="40"
-                               MaxHeight="215"
+                               Margin="0, 50"
+                               MinHeight="45"
+                               MaxHeight="220"
                                Grid.Row="1" />
 
                         <StackPanel Grid.Row="2"

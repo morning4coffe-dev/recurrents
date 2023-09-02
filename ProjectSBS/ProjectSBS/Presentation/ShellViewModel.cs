@@ -1,24 +1,23 @@
-namespace ProjectSBS.Presentation
+namespace ProjectSBS.Presentation;
+
+public class ShellViewModel
 {
-    public class ShellViewModel
+    private readonly IAuthenticationService _authentication;
+
+
+    private readonly INavigator _navigator;
+
+    public ShellViewModel(
+        IAuthenticationService authentication,
+        INavigator navigator)
     {
-        private readonly IAuthenticationService _authentication;
+        _navigator = navigator;
+        _authentication = authentication;
+        _authentication.LoggedOut += LoggedOut;
+    }
 
-
-        private readonly INavigator _navigator;
-
-        public ShellViewModel(
-            IAuthenticationService authentication,
-            INavigator navigator)
-        {
-            _navigator = navigator;
-            _authentication = authentication;
-            _authentication.LoggedOut += LoggedOut;
-        }
-
-        private async void LoggedOut(object? sender, EventArgs e)
-        {
-            await _navigator.NavigateViewModelAsync<LoginViewModel>(this, qualifier: Qualifiers.ClearBackStack);
-        }
+    private async void LoggedOut(object? sender, EventArgs e)
+    {
+        await _navigator.NavigateViewModelAsync<LoginViewModel>(this, qualifier: Qualifiers.ClearBackStack);
     }
 }
