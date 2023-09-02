@@ -17,7 +17,7 @@ public sealed class CurrencyCache : ICurrencyCache
 
     public async ValueTask<Currency?> GetCurrency(CancellationToken token)
     {
-        var currencyText = await GetCachedWeather();
+        var currencyText = await GetCachedCurrency();
         if (!string.IsNullOrWhiteSpace(currencyText))
         {
             return _serializer.FromString<Currency>(currencyText);
@@ -49,9 +49,9 @@ public sealed class CurrencyCache : ICurrencyCache
     }
 
     private async ValueTask<StorageFile> GetFile(CreationCollisionOption option) =>
-        await ApplicationData.Current.TemporaryFolder.CreateFileAsync("weather.json", option);
+        await ApplicationData.Current.TemporaryFolder.CreateFileAsync("currency.json", option);
 
-    private async ValueTask<string?> GetCachedWeather()
+    private async ValueTask<string?> GetCachedCurrency()
     {
         var file = await GetFile(CreationCollisionOption.OpenIfExists);
         var properties = await file.GetBasicPropertiesAsync();

@@ -27,12 +27,17 @@ public class MsalUser : IUserService
         {
             var authenticationProvider = new BaseBearerTokenAuthenticationProvider(new TokenProvider(token));
 
-            _client = new GraphServiceClient(authenticationProvider);
+            _client = new GraphServiceClient(authenticationProvider);//.WithIosKeychainSecurityGroup("com.microsoft.adalcache
         }
     }
 
-    public async Task<UserModel.User> GetUser()
+    public async Task<UserModel.User?> GetUser()
     {
+        if (_client is null)
+        {
+            return null;
+        }
+
         var user = await _client.Me
             .GetAsync(requestConfiguration =>
             {
