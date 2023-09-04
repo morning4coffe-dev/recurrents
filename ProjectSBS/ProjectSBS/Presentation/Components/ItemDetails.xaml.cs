@@ -1,23 +1,14 @@
-﻿namespace ProjectSBS.Presentation.Components;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using ProjectSBS.Business;
+using Microsoft.UI.Xaml.Input;
 
-public sealed partial class ItemDetails : Page
+namespace ProjectSBS.Presentation.Components;
+
+public sealed partial class ItemDetails : UserControl
 {
-	public ItemDetails()
-	{
-		this.InitializeComponent();
-	}
-
-    private static readonly DependencyProperty PreviousSelectedItemProperty = DependencyProperty.Register(
-      nameof(PreviousSelectedItem),
-      typeof(ItemViewModel),
-      typeof(ItemDetails),
-      new PropertyMetadata(null)
-    );
-
-    public ItemViewModel? PreviousSelectedItem
+    public ItemDetails()
     {
-        get => (ItemViewModel?)GetValue(PreviousSelectedItemProperty);
-        set => SetValue(PreviousSelectedItemProperty, value);
+        this.InitializeComponent();
     }
 
     public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(
@@ -34,8 +25,8 @@ public sealed partial class ItemDetails : Page
         {
             if (value != SelectedItem)
             {
-                PreviousSelectedItem = SelectedItem;
-                IsEditing = SelectedItem != null;
+                //PreviousSelectedItem = SelectedItem;
+                IsEditing = SelectedItem.Item != null;
 
                 SetValue(SelectedItemProperty, value);
             }
@@ -59,5 +50,10 @@ public sealed partial class ItemDetails : Page
                 SetValue(IsEditingProperty, value);
             }
         }
+    }
+
+    private void SaveButton_Click(object sender, RoutedEventArgs e)
+    {
+        WeakReferenceMessenger.Default.Send(new ItemSelectionChanged(SelectedItem));
     }
 }

@@ -26,6 +26,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Labs.WinUI.SettingsControls" />
+		<PackageReference Include="CommunityToolkit.WinUI.Converters" />
+		<PackageReference Include="CommunityToolkit.WinUI.Triggers" />
+		<PackageReference Include="LiveChartsCore.SkiaSharpView.Uno.WinUI" />
+		<PackageReference Include="Microsoft.AppCenter" />
+		<PackageReference Include="Microsoft.AppCenter.Analytics" />
+		<PackageReference Include="Microsoft.AppCenter.Crashes" />
 		<PackageReference Include="Uno.WinUI" />
 		<PackageReference Include="Microsoft.WindowsAppSDK" />
 		<PackageReference Include="Microsoft.Windows.SDK.BuildTools" />
@@ -49,6 +56,8 @@
 		<PackageReference Include="Uno.Core.Extensions.Logging.Singleton" />
 		<PackageReference Include="Uno.UI.Adapter.Microsoft.Extensions.Logging" />
 		<PackageReference Include="Microsoft.Graph" />
+		<PackageReference Include="CommunityToolkit.WinUI.Notifications" />
+		<PackageReference Include="WinUIEx" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -62,8 +71,8 @@
 		the "Microsoft.Windows.SDK.BuildTools" package above, and the "revision" version number
 		must be the highest found in https://www.nuget.org/packages/Microsoft.Windows.SDK.NET.Ref.
 		-->
-		<!-- <FrameworkReference Update="Microsoft.Windows.SDK.NET.Ref" RuntimeFrameworkVersion="10.0.22621.28" />
-		<FrameworkReference Update="Microsoft.Windows.SDK.NET.Ref" TargetingPackVersion="10.0.22621.28" /> -->
+	    <FrameworkReference Update="Microsoft.Windows.SDK.NET.Ref" RuntimeFrameworkVersion="10.0.22621.28" />
+		<FrameworkReference Update="Microsoft.Windows.SDK.NET.Ref" TargetingPackVersion="10.0.22621.28" /> 
 	</ItemGroup>
 
 	<ItemGroup>
@@ -77,7 +86,7 @@
 		package has not yet been restored.
 	-->
 	<ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
-		<ProjectCapability Include="Msix"/>
+		<ProjectCapability Include="Msix" />
 	</ItemGroup>
 
 	<!-- 

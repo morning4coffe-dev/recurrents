@@ -41,7 +41,7 @@ public class DataService : IDataService
     {
         var stringData = JsonSerializer.Serialize(data);
 
-        return await SaveAsync(stringData);
+        return await SaveAsync(stringData, itemsPath);
     }
     public async Task<bool> AddLogAsync(ItemLog log)
     {
@@ -51,26 +51,26 @@ public class DataService : IDataService
 
         var stringData = JsonSerializer.Serialize(logs);
 
-        return await SaveAsync(stringData);
+        return await SaveAsync(stringData, logsPath);
     }
 
     public async Task<bool> SaveLogsAsync(List<ItemLog> logs)
     {
         var stringData = JsonSerializer.Serialize(logs);
 
-        return await SaveAsync(stringData);
+        return await SaveAsync(stringData, logsPath);
     }
 
-    private async Task<bool> SaveAsync(string content)
+    private async Task<bool> SaveAsync(string content, string path)
     {
+        await _storage.WriteFileAsync(content, path);
+
         var isSigned = await _authentication.IsAuthenticated();
 
         if (isSigned)
         {
-            await _userService.UploadData(content, logsPath);
+            await _userService.UploadData(content, path);
         }
-
-        await _storage.WriteFileAsync(content, logsPath);
 
         //TODO return based on result of both operations
         return true;
@@ -95,8 +95,7 @@ public class DataService : IDataService
 
     private async Task<object?> LoadAsync(string path, Type type)
     {
-        //TODO Check if user is connected and is logged in
-        //Load from remote database
+        //TODO Checks only locally
 
         if (!_storage.DoesFileExist(path))
         {

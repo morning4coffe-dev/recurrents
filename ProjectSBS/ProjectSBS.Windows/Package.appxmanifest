@@ -4,7 +4,12 @@
 	xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
 	xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
 	xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
-	IgnorableNamespaces="uap rescap">
+	xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+	xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10"
+	xmlns:com="http://schemas.microsoft.com/appx/manifest/com/windows10"
+	xmlns:desktop4="http://schemas.microsoft.com/appx/manifest/desktop/windows10/4"
+	xmlns:iot2="http://schemas.microsoft.com/appx/manifest/iot/windows10/2"
+	IgnorableNamespaces="uap rescap mp com desktop desktop4 iot2">
 
 	<Identity
 		Name="ProjectSBS"
@@ -34,13 +39,23 @@
 				Description="ProjectSBS">
 				<uap:SplashScreen />
 			</uap:VisualElements>
-			<Extensions>
-			<uap:Extension Category="windows.protocol">
-				<uap:Protocol Name="myprotocol">
-					<uap:DisplayName>MyProtocol</uap:DisplayName>
-				</uap:Protocol>
-			</uap:Extension>
-		</Extensions>
+
+			<!--TODO <Extensions>
+
+				--><!--Specify which CLSID to activate when toast clicked--><!--
+				<desktop:Extension Category="windows.toastNotificationActivation">
+					<desktop:ToastNotificationActivation ToastActivatorCLSID="d3d3615x-8ab4-4c60-84a5-82734c2e6643" />
+				</desktop:Extension>
+
+				--><!--Register COM CLSID LocalServer32 registry key--><!--
+				<com:Extension Category="windows.comServer">
+					<com:ComServer>
+						<com:ExeServer Executable="ProjectSBS.Windows.exe" Arguments="-ToastActivated" DisplayName="Toast activator">
+							<com:Class Id="d3d3615x-8ab4-4c60-84a5-82734c2e6643" DisplayName="Toast activator"/>
+						</com:ExeServer>
+					</com:ComServer>
+				</com:Extension>
+			</Extensions>-->
 		</Application>
 	</Applications>
 

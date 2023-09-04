@@ -31,4 +31,6 @@ global using Uno.Extensions.Serialization;
 global using Windows.ApplicationModel;
 global using Windows.Networking.Connectivity;
 global using Windows.Storage;
+global using ProjectSBS.Presentation.Components;
+global using ProjectSBS.Presentation.Mobile;
 global using ApplicationExecutionState = Windows.ApplicationModel.Activation.ApplicationExecutionState;

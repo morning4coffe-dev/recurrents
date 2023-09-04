@@ -1,6 +1,4 @@
-﻿using ProjectSBS.Models;
-
-namespace ProjectSBS.Business.Models;
+﻿namespace ProjectSBS.Business.Models;
 
 public partial record Item
 {
@@ -20,9 +18,9 @@ public partial record Item
         CreationDate = creationDate;
     }
     public string Id { get; }
-    public string Name { get; }
+    public string Name { get; set; }
     public BillingDetails Billing { get; }
-    public string TagId { get; }
-    public string? Description { get; }
-    public DateTime CreationDate { get; }
+    public string TagId { get; set; }
+    public string? Description { get; set; }
+    public DateTime CreationDate { get; set; }
 }

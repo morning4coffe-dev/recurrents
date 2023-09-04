@@ -13,7 +13,7 @@ public class ItemLog
         Price = price;
         CurrencyId = currencyId;
     }
-    public required string ItemId { get; set; }
+    public string ItemId { get; set; }
     public DateOnly PaymentDate { get; set; }
     public decimal Price { get; set; }
     public string CurrencyId { get; set; }

@@ -8,6 +8,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Labs.WinUI.SettingsControls" />
+		<PackageReference Include="CommunityToolkit.WinUI.Converters" />
+		<PackageReference Include="CommunityToolkit.WinUI.Triggers" />
+		<PackageReference Include="LiveChartsCore.SkiaSharpView.Uno.WinUI" />
+		<PackageReference Include="Microsoft.AppCenter" />
+		<PackageReference Include="Microsoft.AppCenter.Analytics" />
+		<PackageReference Include="Microsoft.AppCenter.Crashes" />
 		<PackageReference Include="Uno.WinUI" />
 		<PackageReference Include="Uno.Resizetizer" />
 		<PackageReference Include="CommunityToolkit.Mvvm" />
@@ -28,6 +35,8 @@
 		<PackageReference Include="Uno.Extensions.Navigation.WinUI" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Console" />
 		<PackageReference Include="Microsoft.Graph" />
+		<PackageReference Include="CommunityToolkit.WinUI.Notifications" />
+		<PackageReference Include="WinUIEx" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" />
 	</ItemGroup>
 
 	<Choose>
@@ -43,7 +52,7 @@
 				the "Microsoft.Windows.SDK.BuildTools" package above, and the "revision" version number
 				must be the highest found in https://www.nuget.org/packages/Microsoft.Windows.SDK.NET.Ref.
 				-->
-				<!-- <WindowsSdkPackageVersion>10.0.22621.28</WindowsSdkPackageVersion> -->
+			    <WindowsSdkPackageVersion>10.0.22621.28</WindowsSdkPackageVersion> 
 				<RuntimeIdentifiers>win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
 			</PropertyGroup>
 			<ItemGroup>
@@ -72,5 +81,38 @@
 		<EmbeddedResource Include="appsettings.json" />
 		<EmbeddedResource Include="appsettings.*.json" DependentUpon="appsettings.json" />
 		<UpToDateCheckInput Include="**\*.xaml" Exclude="bin\**\*.xaml;obj\**\*.xaml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Presentation\Components\ItemDetails.xaml" />
+	  <None Remove="Presentation\Components\PageShell.xaml" />
+	  <None Remove="Presentation\HomePage.xaml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Presentation\Components\ItemDetails - Copy.xaml" />
+	  <UpToDateCheckInput Remove="Presentation\Components\ItemDetails.xaml" />
+	  <UpToDateCheckInput Remove="Presentation\Components\PageShell.xaml" />
+	  <UpToDateCheckInput Remove="Presentation\HomePage.xaml" />
+	  <UpToDateCheckInput Remove="Presentation\Mobile\ItemDetailsPage.xaml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Page Remove="Presentation\HomePage.xaml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <AdditionalFiles Include="Presentation\Components\HomePage.xaml">
+	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+	    <Generator>MSBuild:Compile</Generator>
+	  </AdditionalFiles>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Services\Interop\Store\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <AdditionalFiles Remove="Presentation\Components\ItemDetails.xaml" />
 	</ItemGroup>
 </Project>

@@ -1,4 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using LiveChartsCore;
+using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore.SkiaSharpView.Painting;
+using SkiaSharp;
+using System.Collections.ObjectModel;
 
 namespace ProjectSBS.Presentation.Components;
 
@@ -8,6 +12,39 @@ public sealed partial class HomePage : Page
     {
         this.InitializeComponent();
     }
+
+    public ISeries[] Series { get; set; } =
+    {
+        new LineSeries<double>
+        {
+            Values = new double[] { 2, 1, 3, 5, 3, 4, 6 },
+            Fill = null
+        }
+    };
+
+    //public Axis[] XAxes { get; set; } =
+    //{
+    //    new Axis
+    //    {
+    //        LabelsPaint = new SolidColorPaint
+    //        {
+    //            Color = SKColors.White,
+    //        },
+    //        // Use the labels property for named or static labels 
+    //        Labels = new string[] { "Jan", "Feb", "Mar", "Apr", "May" },
+    //    }
+    //};
+
+    //public Axis[] YAxes { get; set; } =
+    //{
+    //    new Axis
+    //    {
+    //        LabelsPaint = new SolidColorPaint
+    //        {
+    //            Color = SKColors.Transparent,
+    //        },
+    //    }
+    //};
 
     public static readonly DependencyProperty ItemsProperty = DependencyProperty.Register(
       nameof(Items),
@@ -29,10 +66,16 @@ public sealed partial class HomePage : Page
       new PropertyMetadata(null)
     );
 
-    public ItemViewModel SelectedItem
+    public ItemViewModel? SelectedItem
     {
-        get { return (ItemViewModel)GetValue(SelectedItemProperty); }
-        set { SetValue(SelectedItemProperty, value); }
+        get { return (ItemViewModel?)GetValue(SelectedItemProperty); }
+        set
+        {
+            if (value != SelectedItem)
+            {
+                SetValue(SelectedItemProperty, value);
+            }
+        }
     }
 
     public static readonly DependencyProperty AddNewCommandProperty = DependencyProperty.Register(

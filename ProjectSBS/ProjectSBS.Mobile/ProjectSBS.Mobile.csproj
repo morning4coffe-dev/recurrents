@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFrameworks>net7.0-ios;net7.0-android;net7.0-maccatalyst</TargetFrameworks>
 		<SingleProject>true</SingleProject>
@@ -20,8 +20,26 @@
 		<UseInterpreter Condition="'$(Configuration)' == 'Debug' and $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) != 'maccatalyst'">True</UseInterpreter>
 		<IsUnoHead>true</IsUnoHead>
 	</PropertyGroup>
+	
+	<!--TODO Issue with AOT on .NET 7 with Graph and Toolkit-->
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android|AnyCPU'">
+		<RunAOTCompilation>False</RunAOTCompilation>
+		<AndroidEnableProfiledAot>False</AndroidEnableProfiledAot>
+	</PropertyGroup>
+
+	<!--<ItemGroup>
+		<TrimmableAssembly Include="Microsoft.Graph" />
+		<TrimmableAssembly Include="CommunityToolkit.WinUI" />
+	</ItemGroup>-->
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Labs.WinUI.SettingsControls" />
+		<PackageReference Include="CommunityToolkit.WinUI.Converters" />
+		<PackageReference Include="CommunityToolkit.WinUI.Triggers" />
+		<PackageReference Include="LiveChartsCore.SkiaSharpView.Uno.WinUI" />
+		<PackageReference Include="Microsoft.AppCenter" />
+		<PackageReference Include="Microsoft.AppCenter.Analytics" />
+		<PackageReference Include="Microsoft.AppCenter.Crashes" />
 		<PackageReference Include="Uno.WinUI" />
 		<PackageReference Include="CommunityToolkit.Mvvm" />
 		<PackageReference Include="Uno.Extensions.Configuration" />
@@ -30,7 +48,7 @@
 		<PackageReference Include="Uno.Extensions.Logging.WinUI" />
 		<PackageReference Include="Uno.Extensions.Serialization.Http" />
 		<PackageReference Include="Uno.Extensions.Serialization.Refit" />
-		<PackageReference Include="Uno.Extensions.Toolkit.WinUI"/>
+		<PackageReference Include="Uno.Extensions.Toolkit.WinUI" />
 		<PackageReference Include="Uno.Toolkit.WinUI" />
 		<PackageReference Include="Uno.Extensions.Authentication.WinUI" />
 		<PackageReference Include="Microsoft.Identity.Client" />
@@ -42,6 +60,7 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Console" />
 		<PackageReference Include="Uno.Extensions.Logging.OSLog" />
 		<PackageReference Include="Uno.UI.Adapter.Microsoft.Extensions.Logging" />
+		<PackageReference Include="Uno.WinUI.Lottie" />
 		<PackageReference Include="Uno.WinUI.RemoteControl" Condition="'$(Configuration)'=='Debug'" />
 		<PackageReference Include="Microsoft.Graph" />
 	</ItemGroup>

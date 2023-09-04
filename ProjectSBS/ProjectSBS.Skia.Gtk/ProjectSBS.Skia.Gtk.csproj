@@ -11,6 +11,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Labs.WinUI.SettingsControls" />
+		<PackageReference Include="CommunityToolkit.WinUI.Converters" />
+		<PackageReference Include="CommunityToolkit.WinUI.Triggers" />
+		<PackageReference Include="LiveChartsCore.SkiaSharpView.Uno.WinUI" />
+		<PackageReference Include="Microsoft.AppCenter" />
+		<PackageReference Include="Microsoft.AppCenter.Analytics" />
+		<PackageReference Include="Microsoft.AppCenter.Crashes" />
+		<PackageReference Include="Uno.WinUI.Lottie" />
 		<PackageReference Include="Uno.WinUI.Skia.Gtk" />
 		<PackageReference Include="CommunityToolkit.Mvvm" />
 		<PackageReference Include="Uno.Extensions.Configuration" />

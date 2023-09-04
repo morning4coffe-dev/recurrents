@@ -1,13 +1,25 @@
 using ProjectSBS.Services.Storage;
 using ProjectSBS.Services.Storage.Data;
 using ProjectSBS.Services.User;
+using ProjectSBS.Services.Notifications;
+using ProjectSBS.Services.Interop;
+using ProjectSBS.Services.Items;
+using ProjectSBS.Services.Items.Billing;
+using ProjectSBS.Services.Analytics;
+#if WINDOWS
+using Windows.Foundation.Collections;
+using CommunityToolkit.WinUI.Notifications;
+using Microsoft.UI.Composition.SystemBackdrops;
+using ProjectSBS.Infrastructure.Helpers;
+using WinUIEx;
+#endif
 
 namespace ProjectSBS;
 
 public class App : Application
 {
-    protected Window? MainWindow { get; private set; }
-    protected IHost? Host { get; private set; }
+    public Window? MainWindow { get; private set; }
+    public IHost? Host { get; private set; }
 
     protected async override void OnLaunched(LaunchActivatedEventArgs args)
     {
@@ -73,14 +85,68 @@ public class App : Application
                 .ConfigureServices((context, services) =>
                 {
                     services.AddSingleton<IStorageService, StorageService>();
+                    //TODO Remove RemoteStorageService
                     services.AddSingleton<IStorageService, RemoteStorageService>();
                     services.AddSingleton<IDataService, DataService>();
                     services.AddSingleton<IUserService, MsalUser>();
-                    // TODO: Register your services
-                    //services.AddSingleton<IMyService, MyService>();
+                    services.AddSingleton<IItemService, ItemService>();
+                    services.AddSingleton<IBillingService, BillingService>();
+                    services.AddSingleton<IInteropService, InteropService>();
+                    services.AddSingleton<IAnalyticsService, AnalyticsService>();
+
+#if __ANDROID__
+                    services.AddSingleton<INotificationService, NotificationService>();
+#elif __WASM__ || HAS_UNO_SKIA
+                    services.AddSingleton<INotificationService, WebNotificationService>();
+#elif !HAS_UNO
+                    services.AddSingleton<INotificationService, WindowsNotificationService>();
+#endif
                 })
                 .UseNavigation(RegisterRoutes)
             );
+
+#if WINDOWS
+        var manager = WindowManager.Get(builder.Window);
+
+        manager.MinWidth = 500;
+        manager.MinHeight = 500;
+
+        var size = builder.Window.AppWindow.Size;
+
+        builder.Window.SetWindowSize(size.Width / 1.55, size.Height / 1.1);
+        builder.Window.CenterOnScreen();
+        builder.Window.Title = "Project SBS";
+
+        ToastNotificationManagerCompat.OnActivated += toastArgs =>
+        {
+            // Obtain the arguments from the notification
+            ToastArguments args = ToastArguments.Parse(toastArgs.Argument);
+
+            // Obtain any user input (text boxes, menu selections) from the notification
+            ValueSet userInput = toastArgs.UserInput;
+
+            //TODO work with args
+
+            //if (args.TryGetValue("action", out var action))
+            //{
+            //    if (action == "openItem")
+            //    {
+            //        var itemId = args["itemId"];
+
+            //        if (itemId != null)
+            //        {
+            //            var shell = builder.Window.Content as ShellPage;
+
+            //            if (shell != null)
+            //            {
+            //                //shell.NavigateToItem(itemId);
+            //            }
+            //        }
+            //    }
+            //}
+        };
+#endif
+
         MainWindow = builder.Window;
 
         Host = await builder.NavigateAsync<Shell>(initialNavigate:
@@ -97,6 +163,17 @@ public class App : Application
                     await navigator.NavigateViewModelAsync<LoginViewModel>(this, qualifier: Qualifiers.Nested);
                 }
             });
+
+#if WINDOWS
+        if (MicaController.IsSupported())
+        {
+            MainWindow.SystemBackdrop = new MicaBackdrop() { Kind = MicaKind.Base };
+        }
+
+        Win32.SetTitleBackgroundTransparent(MainWindow);
+
+        //TODO Log MicaController.IsSupported()
+#endif
     }
 
     private static void RegisterRoutes(IViewRegistry views, IRouteRegistry routes)
@@ -105,7 +182,7 @@ public class App : Application
             new ViewMap(ViewModel: typeof(ShellViewModel)),
             new ViewMap<LoginPage, LoginViewModel>(),
             new ViewMap<MainPage, MainViewModel>(),
-            new DataViewMap<SecondPage, SecondViewModel, Entity>()
+            new ViewMap<ItemDetailsPage, ItemDetailsViewModel>()
         );
 
         routes.Register(
@@ -114,7 +191,7 @@ public class App : Application
                 {
                 new RouteMap("Login", View: views.FindByViewModel<LoginViewModel>()),
                 new RouteMap("Main", View: views.FindByViewModel<MainViewModel>()),
-                new RouteMap("Second", View: views.FindByViewModel<SecondViewModel>()),
+                new RouteMap("Details", View: views.FindByViewModel<ItemDetailsViewModel>()),
                 }
             )
         );

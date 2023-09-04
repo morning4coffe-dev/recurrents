@@ -20,6 +20,10 @@
                                                  EmptyValue="False"
                                                  NotEmptyValue="True" />
 
+        <converters:BoolToObjectConverter x:Key="MobileToValueConverter"
+                                          TrueValue="0"
+                                          FalseValue="350" />
+
         <MenuFlyout x:Key="UserFlyout">
             <MenuFlyoutItem Text="Settings"
                             Icon="{toolkit:FontIcon Glyph=&#xE713;}"
@@ -36,7 +40,7 @@
                             Padding="100, 16"
                             Command="{Binding Logout}">
                 <MenuFlyoutItem.Icon>
-                    <FontIcon Glyph="&#xF3B1;" />
+                    <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xF3B1;" />
                 </MenuFlyoutItem.Icon>
             </MenuFlyoutItem>
         </MenuFlyout>
@@ -144,7 +148,7 @@
                         <SplitView IsPaneOpen="{Binding SelectedItem, Converter={StaticResource EmptyToFalseConverter}}"
                                    PaneBackground="Transparent"
                                    PanePlacement="Right"
-                                   OpenPaneLength="350"
+                                   OpenPaneLength="{Binding IsMobile, Converter={StaticResource MobileToValueConverter}}"
                                    DisplayMode="Inline">
 
                             <Grid x:Name="contentHolder"
@@ -170,11 +174,9 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
 
-                                    <Grid>
-                                        <TextBlock Text="Good Morning"
-                                                   Style="{StaticResource TitleTextBlockStyle}"
-                                                   VerticalAlignment="Center" />
-                                    </Grid>
+                                    <TextBlock Text="Good Morning"
+                                               Style="{StaticResource TitleTextBlockStyle}"
+                                               Margin="0,20,0,0" />
 
                                     <Button Grid.Column="1"
                                             Padding="0"
@@ -192,7 +194,7 @@
 
                                 <comp:HomePage Items="{Binding Items, Mode=TwoWay}"
                                                SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
-                                               AddNewCommand="{Binding AddNewCommand}"
+                                               AddNewCommand="{Binding AddNewCommand, Mode=OneTime}"
                                                Grid.Row="1" />
                             </Grid>
 
@@ -247,6 +249,7 @@
                                     <comp:ItemDetails SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                                                       IsEditing="{Binding IsEditing, Mode=TwoWay}"
                                                       Grid.Row="1" />
+                                    <!--IsEditing="{Binding IsEditing, Mode=TwoWay}"-->
 
                                 </Grid>
 

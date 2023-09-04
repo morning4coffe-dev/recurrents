@@ -10,6 +10,15 @@
       xmlns:not_win="http://uno.ui/not_win"
       mc:Ignorable="d not_win">
 
+    <Page.Resources>
+        <Storyboard x:Name="spinrect">
+            <DoubleAnimation To="360"
+                             RepeatBehavior="Forever"
+                             Storyboard.TargetName="spinme"
+                             Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)" />
+        </Storyboard>
+    </Page.Resources>
+
     <comp:PageShell>
         <comp:PageShell.ContentView>
 
@@ -25,31 +34,62 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
-                    <StackPanel Orientation="Vertical">
-                        <Button uen:Navigation.Request="-"
-                                Background="Transparent"
+                    <StackPanel>
+                        <Button Background="Transparent"
                                 BorderBrush="Transparent"
                                 BorderThickness="0"
-                                Padding="12">
+                                Padding="12"
+                                Command="{Binding CloseCommand}">
                             <SymbolIcon Symbol="Back" />
                         </Button>
 
-                        <TextBlock Text="{Binding SelectedItem.Item.Name}"
+                        <TextBlock Text="{Binding ItemName, Mode=OneWay}"
                                    Style="{StaticResource TitleTextBlockStyle}"
                                    VerticalAlignment="Center"
                                    Margin="12" />
                     </StackPanel>
 
-                    <Button Background="Transparent"
-                            BorderBrush="Transparent"
-                            BorderThickness="0"
-                            Padding="12"
-                            VerticalAlignment="Top"
-                            Grid.Column="1"
-                            Command="{Binding EnableEditingCommand}">
+                    <StackPanel Orientation="Horizontal"
+                                Spacing="4"
+                                Grid.Column="1">
+                        <Button Background="Transparent"
+                                BorderBrush="Transparent"
+                                BorderThickness="0"
+                                Padding="12"
+                                VerticalAlignment="Top"
+                                Command="{Binding EnableEditingCommand}">
 
-                        <SymbolIcon Symbol="Edit" />
-                    </Button>
+                            <SymbolIcon Symbol="Edit" />
+                        </Button>
+
+                        <Button Background="Transparent"
+                                BorderBrush="Transparent"
+                                BorderThickness="0"
+                                Padding="12"
+                                VerticalAlignment="Top"
+                                Command="{Binding EnableEditingCommand}">
+
+                            <SymbolIcon Symbol="More"
+                                        RenderTransformOrigin=".5,.5">
+                                <SymbolIcon.RenderTransform>
+                                    <RotateTransform Angle="90" />
+                                </SymbolIcon.RenderTransform>
+                            </SymbolIcon>
+                        </Button>
+
+                        <StackPanel>
+                            <Rectangle Name="spinme"
+                                       Width="50"
+                                       Height="50"
+                                       Fill="Red"
+                                       RenderTransformOrigin=".5,.5"
+                                       PointerPressed="spinme_PointerPressed">
+                                <Rectangle.RenderTransform>
+                                    <RotateTransform />
+                                </Rectangle.RenderTransform>
+                            </Rectangle>
+                        </StackPanel>
+                    </StackPanel>
                 </Grid>
 
                 <comp:ItemDetails SelectedItem="{Binding SelectedItem, Mode=TwoWay}"

@@ -29,15 +29,15 @@ public partial class MainViewModel : ObservableObject
     private User? _user;
 
     [ObservableProperty]
-    private Type? _page;
-
-    [ObservableProperty]
     private bool _isEditing;
 
-    public bool IsMobile()
+    public bool IsMobile
     {
-        var deviceFamily = AnalyticsInfo.VersionInfo.DeviceFamily;
-        return deviceFamily.Contains("Mobile");
+        get
+        {
+            var deviceFamily = AnalyticsInfo.VersionInfo.DeviceFamily;
+            return !deviceFamily.Contains("Mobile");
+        }
     }
 
     public string? Title { get; }
@@ -56,16 +56,26 @@ public partial class MainViewModel : ObservableObject
                 return;
             }
 
-            if (IsMobile() && value != null)
+            if (IsMobile && value != null)
             {
+                SentItem = value;
                 _ = _navigator.NavigateViewModelAsync<ItemDetailsViewModel>(this);
-                WeakReferenceMessenger.Default.Send(new ItemSelectionChanged(value));
             }
 
             IsEditing = false;
 
             _selectedItem = value;
             OnPropertyChanged();
+        }
+    }
+
+    private static ItemViewModel? _sentItem;
+    public static ItemViewModel? SentItem
+    {
+        get => _sentItem;
+        set
+        {
+            _sentItem = value;
         }
     }
 
@@ -103,7 +113,7 @@ public partial class MainViewModel : ObservableObject
 
         GoToSecond = new AsyncRelayCommand(GoToSecondView);
         Logout = new AsyncRelayCommand(DoLogout);
-        AddNewCommand = new AsyncRelayCommand(AddNew);
+        AddNewCommand = new RelayCommand(AddNew);
         SubmitChangesCommand = new AsyncRelayCommand(SubmitChanges);
         CloseDetailsCommand = new AsyncRelayCommand(CloseDetails);
         EnableEditingCommand = new AsyncRelayCommand(EnableEditing);
@@ -111,6 +121,26 @@ public partial class MainViewModel : ObservableObject
 
         Initialize();
         _dataService = dataService;
+
+        //if (IsMobile)
+        {
+            WeakReferenceMessenger.Default.Register<ItemSelectionChanged>(this, (r, m) =>
+            {
+                if (SelectedItem is null)
+                {
+                    SelectedItem = null;
+                    return;
+                }
+                var item = Items.Where(i => i.Item.Id == SelectedItem.Item.Id).First();
+
+                item = m.Item;
+
+                var items = Items;
+
+                SelectedItem = null;
+                //m.Item;
+            });
+        }
     }
 
     public async void Initialize()
@@ -128,8 +158,6 @@ public partial class MainViewModel : ObservableObject
             {
                 //TODO enable login button
             }
-
-            Page = typeof(HomePage);
         });
 
         var c = await _api.GetCurrency(new CancellationToken());
@@ -216,7 +244,7 @@ public partial class MainViewModel : ObservableObject
             sampleItem3
         };
 
-        await _dataService.SaveDataAsync(sampleItems);
+        //await _dataService.SaveDataAsync(sampleItems);
 
         var (items, _) = await _dataService.InitializeDatabaseAsync();
 
@@ -251,7 +279,7 @@ public partial class MainViewModel : ObservableObject
         //TODO probably will have to clean the token too
     }
 
-    private async Task AddNew()
+    private void AddNew()
     {
         SelectedItem = new ItemViewModel(null);
 
@@ -260,10 +288,13 @@ public partial class MainViewModel : ObservableObject
 
     private async Task SubmitChanges()
     {
-        //TODO Add new item to database
-        SelectedItem = new ItemViewModel(null);
+        //var item = Items.Where(i => i.Item.Id == SelectedItem.Item.Id).First();
 
-        IsEditing = true;
+        //item = 
+        //TODO Add new item to database
+        SelectedItem = null;
+
+        IsEditing = false;
     }
 
     private async Task EnableEditing()
