@@ -43,6 +43,7 @@ public class DataService : IDataService
 
         return await SaveAsync(stringData, itemsPath);
     }
+
     public async Task<bool> AddLogAsync(ItemLog log)
     {
         var logs = await LoadLogsAsync() ?? new List<ItemLog>();
@@ -95,7 +96,15 @@ public class DataService : IDataService
 
     private async Task<object?> LoadAsync(string path, Type type)
     {
-        //TODO Checks only locally
+        var isSigned = await _authentication.IsAuthenticated();
+        string remoteContent = "";
+
+        if (isSigned)
+        {
+            //TODO Use CancellationToken
+            var data = await _userService.RetrieveData(path, CancellationToken.None);
+            remoteContent = data.ReadToEnd();
+        }
 
         if (!_storage.DoesFileExist(path))
         {
@@ -109,6 +118,8 @@ public class DataService : IDataService
             return null;
         }
 
-        return JsonSerializer.Deserialize(fileContent, type);
+        //TODO Compare remote and local content
+
+        return JsonSerializer.Deserialize(remoteContent, type);
     }
 }

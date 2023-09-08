@@ -57,10 +57,10 @@ public class MsalUser : IUserService
     {
         //TODO cancellation token not used
         //https://learn.microsoft.com/en-us/onedrive/developer/rest-api/concepts/special-folders-appfolder?view=odsp-graph-online
-        var user = await _client.Me.GetAsync();
+        var user = await _client.Me.GetAsync(cancellationToken: token);
 
-        var userDrive = await _client.Users[user.Id].Drive.GetAsync();
-        var driveItems = await _client.Drives[userDrive.Id].Special["approot"].GetAsync();
+        var userDrive = await _client.Users[user.Id].Drive.GetAsync(cancellationToken: token);
+        var driveItems = await _client.Drives[userDrive.Id].Special["approot"].GetAsync(cancellationToken: token);
 
         byte[] byteArray = Encoding.UTF8.GetBytes(content);
         var newItem = new DriveItem { Name = relativeLocalPath, Content = byteArray };
@@ -74,9 +74,23 @@ public class MsalUser : IUserService
         return uploadedItem != null;
     }
 
-    public async Task<bool> RetrieveData(CancellationToken token)
+    public async Task<Stream?> RetrieveData(string relativeLocalPath, CancellationToken token)
     {
-        return false;
+        if (_client is null)
+        {
+            return null;
+        }
+
+        var user = await _client.Me.GetAsync(cancellationToken: token);
+
+        var userDrive = await _client.Users[user.Id].Drive.GetAsync(cancellationToken: token);
+        var driveItems = await _client.Drives[userDrive.Id].Special["approot"].GetAsync(cancellationToken: token);
+
+        return await _client.Drives[userDrive.Id]
+            .Items[driveItems.Id]
+            .ItemWithPath(relativeLocalPath)
+            .Content
+            .GetAsync(cancellationToken: token);
     }
 }
 

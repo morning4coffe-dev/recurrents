@@ -76,6 +76,7 @@ public class StorageService : IStorageService
 
         try
         {
+            //TODO Add support for deleting Remote files
             var file = await StorageFile.GetFileFromPathAsync(absolutePathInLocalStorage);
             await file.DeleteAsync();
             return true;
