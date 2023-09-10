@@ -6,7 +6,6 @@ namespace ProjectSBS.Services.Storage.Data;
 public class DataService : IDataService
 {
     private readonly IStorageService _storage;
-    private readonly IStorageService _remoteStorage;
     private readonly IUserService _userService;
     private readonly IAuthenticationService _authentication;
 
@@ -14,12 +13,20 @@ public class DataService : IDataService
     private const string itemsPath = "appItems.json";
     private const string logsPath = "itemLogs.json";
 
-    public DataService(IEnumerable<IStorageService> storages, IUserService userService, IAuthenticationService authentication)
+    public DataService(
+        IStorageService storage,
+        IUserService userService
+#if !__IOS__
+        ,
+        IAuthenticationService authentication
+#endif
+        )
     {
-        _storage = storages.First();
-        _remoteStorage = storages.Last();
+        _storage = storage;
         _userService = userService;
+#if !__IOS__
         _authentication = authentication;
+#endif
     }
 
     public async Task<(List<Item> items, List<ItemLog> logs)> InitializeDatabaseAsync()
@@ -29,9 +36,9 @@ public class DataService : IDataService
         //Check if the remote database is newer than the local one (or vice-versa)
 
         var data = await LoadDataAsync();
-        //var logs = await LoadLogsAsync();
+        var logs = await LoadLogsAsync();
 
-        return (data, new List<ItemLog>());
+        return (data, logs);
     }
 
 
@@ -64,15 +71,19 @@ public class DataService : IDataService
 
     private async Task<bool> SaveAsync(string content, string path)
     {
-        await _storage.WriteFileAsync(content, path);
 
+#if !__IOS__
         var isSigned = await _authentication.IsAuthenticated();
+#else
+        var isSigned = false;
+#endif
 
         if (isSigned)
         {
             await _userService.UploadData(content, path);
         }
 
+        await _storage.WriteFileAsync(content, path);
         //TODO return based on result of both operations
         return true;
     }
@@ -106,16 +117,14 @@ public class DataService : IDataService
             remoteContent = data.ReadToEnd();
         }
 
-        if (!_storage.DoesFileExist(path))
+        if (!isSigned)
         {
-            return null;
-        }
-
-        var fileContent = await _storage.ReadFileAsync(path);
-
-        if (string.IsNullOrEmpty(fileContent))
-        {
-            return null;
+            if (!_storage.DoesFileExist(path))
+            {
+                return null;
+            }
+            var fileContent = await _storage.ReadFileAsync(path);
+            remoteContent = fileContent;
         }
 
         //TODO Compare remote and local content

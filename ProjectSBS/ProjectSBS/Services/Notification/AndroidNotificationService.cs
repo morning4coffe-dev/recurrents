@@ -14,12 +14,11 @@ using System;
 
 namespace ProjectSBS.Services.Notifications;
 
-// TODO: Rename to AndroidNotificationService
-public class NotificationService : NotificationServiceBase
+public class AndroidNotificationService : NotificationServiceBase
 {
     private Context context = Android.App.Application.Context;
 
-    public NotificationService()
+    public AndroidNotificationService()
     {
     }
 

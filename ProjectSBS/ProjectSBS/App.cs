@@ -28,8 +28,8 @@ public class App : Application
             .UseToolkitNavigation()
             .Configure(host => host
 #if DEBUG
-				// Switch to Development environment when running in DEBUG
-				.UseEnvironment(Environments.Development)
+                // Switch to Development environment when running in DEBUG
+                .UseEnvironment(Environments.Development)
 #endif
                 .UseLogging(configure: (context, logBuilder) =>
                 {
@@ -74,19 +74,19 @@ public class App : Application
                 .UseHttp((context, services) => services
                         // Register HttpClient
 #if DEBUG
-						// DelegatingHandler will be automatically injected into Refit Client
-						.AddTransient<DelegatingHandler, DebugHttpHandler>()
+                        // DelegatingHandler will be automatically injected into Refit Client
+                        .AddTransient<DelegatingHandler, DebugHttpHandler>()
 #endif
                         .AddSingleton<ICurrencyCache, CurrencyCache>()
                         .AddRefitClient<IApiClient>(context))
+#if !__IOS__
                 .UseAuthentication(auth =>
                     auth.AddMsal(name: "MsalAuthentication")
                 )
+#endif
                 .ConfigureServices((context, services) =>
                 {
                     services.AddSingleton<IStorageService, StorageService>();
-                    //TODO Remove RemoteStorageService
-                    services.AddSingleton<IStorageService, RemoteStorageService>();
                     services.AddSingleton<IDataService, DataService>();
                     services.AddSingleton<IUserService, MsalUser>();
                     services.AddSingleton<IItemService, ItemService>();
@@ -95,7 +95,9 @@ public class App : Application
                     services.AddSingleton<IAnalyticsService, AnalyticsService>();
 
 #if __ANDROID__
-                    services.AddSingleton<INotificationService, NotificationService>();
+                    services.AddSingleton<INotificationService, AndroidNotificationService>();
+#elif __IOS__
+                    services.AddSingleton<INotificationService, IOSNotificationService>();
 #elif __WASM__ || HAS_UNO_SKIA
                     services.AddSingleton<INotificationService, WebNotificationService>();
 #elif !HAS_UNO
@@ -116,34 +118,31 @@ public class App : Application
         builder.Window.SetWindowSize(size.Width / 1.55, size.Height / 1.1);
         builder.Window.CenterOnScreen();
         builder.Window.Title = "Project SBS";
+        //builder.Window.SetIcon();
 
         ToastNotificationManagerCompat.OnActivated += toastArgs =>
         {
-            // Obtain the arguments from the notification
             ToastArguments args = ToastArguments.Parse(toastArgs.Argument);
-
-            // Obtain any user input (text boxes, menu selections) from the notification
             ValueSet userInput = toastArgs.UserInput;
 
             //TODO work with args
+            if (args.TryGetValue("action", out var action))
+            {
+                if (action == "openItem")
+                {
+                    var itemId = args["itemId"];
 
-            //if (args.TryGetValue("action", out var action))
-            //{
-            //    if (action == "openItem")
-            //    {
-            //        var itemId = args["itemId"];
+                    if (itemId != null)
+                    {
+                        var shell = builder.Window.Content;
 
-            //        if (itemId != null)
-            //        {
-            //            var shell = builder.Window.Content as ShellPage;
-
-            //            if (shell != null)
-            //            {
-            //                //shell.NavigateToItem(itemId);
-            //            }
-            //        }
-            //    }
-            //}
+                        if (shell != null)
+                        {
+                            //shell.NavigateToItem(itemId);
+                        }
+                    }
+                }
+            }
         };
 #endif
 
