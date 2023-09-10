@@ -27,8 +27,8 @@
                                       Grid.Row="1"
                                       VerticalAlignment="Center"
                                       HorizontalAlignment="Center"
-                                      Height="60"
-                                      Width="60" />
+                                      Height="50"
+                                      Width="50" />
                     </Grid>
                 </DataTemplate>
             </utu:ExtendedSplashScreen.LoadingContentTemplate>

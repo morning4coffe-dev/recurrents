@@ -43,149 +43,137 @@
             </VisualStateGroup>
 
         </VisualStateManager.VisualStateGroups>
-        <ScrollViewer>
-            <Grid RowSpacing="12">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="1.8*" />
-                </Grid.RowDefinitions>
 
-                <Button x:Name="desktopAddButton"
-                        Visibility="Visible"
-                        Content="New Item"
-                        Command="{x:Bind AddNewCommand, Mode=OneTime}" />
+        <Grid RowSpacing="16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="1.8*" />
+            </Grid.RowDefinitions>
 
-                <Border CornerRadius="16"
-                        Margin="8"
-                        Visibility="Visible"
-                        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-                        Grid.Row="1">
-                    <StackPanel>
-                        <StackPanel Margin="30,30,0,0">
-                            <TextBlock Text="Monthly items"
-                                       Opacity="0.75" />
-                            <TextBlock Text="5,000CZK"
-                                       Style="{StaticResource TitleTextBlockStyle}" />
-                        </StackPanel>
+            <Button x:Name="desktopAddButton"
+                    Visibility="Visible"
+                    Content="New Item"
+                    Command="{x:Bind AddNewCommand, Mode=OneWay}" />
 
-                        <lvc:CartesianChart Height="170"
-                                            Foreground="White"
-                                            Series="{x:Bind Series}" />
+            <Border CornerRadius="16"
+                    Visibility="Visible"
+                    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                    Grid.Row="1">
+                <StackPanel>
+                    <StackPanel Margin="30,30,0,0">
+                        <TextBlock Text="Monthly items"
+                                   Opacity="0.75" />
+                        <TextBlock Text="{Binding Sum}"
+                                   Style="{StaticResource TitleTextBlockStyle}" />
                     </StackPanel>
-                </Border>
 
-                <ItemsControl Grid.Row="2">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <ItemsWrapGrid MaximumRowsOrColumns="1" Orientation="Vertical" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
+                    <lvc:CartesianChart Height="170"
+                                        Foreground="White"
+                                        Series="{x:Bind Series}" />
+                </StackPanel>
+            </Border>
 
-                    <utu:Chip Content="All"
-                              CornerRadius="4"
-                              Margin="0,0,8,0" />
-                    <utu:Chip Content="Some"
-                              CornerRadius="4"
-                              Margin="0,0,8,0" />
-                    <utu:Chip Content="None"
-                              CornerRadius="4"
-                              Margin="0,0,8,0" />
-                </ItemsControl>
+            <Pivot Grid.Row="2"
+                   FontSize="5">
+                <PivotItem Header="Urgent" />
+                <PivotItem Header="Urgent" />
+                <PivotItem Header="Urgent" />
+                <PivotItem Header="Urgent" />
+            </Pivot>
 
-                <GridView ItemsSource="{x:Bind Items, Mode=TwoWay}"
-                          SelectedItem="{x:Bind SelectedItem, Mode=TwoWay}"
-                          ScrollViewer.VerticalScrollMode="Disabled"
-                          Grid.Row="3">
+            <GridView ItemsSource="{x:Bind Items, Mode=TwoWay}"
+                      SelectedItem="{x:Bind SelectedItem, Mode=TwoWay}"
+                      ScrollViewer.VerticalScrollMode="Disabled"
+                      Grid.Row="3">
 
-                    <GridView.Resources>
-                        <FontIconSource x:Key="ReplyAllIcon"
-                                        Glyph="&#xE8C2;" />
-                        <FontIconSource x:Key="ReadIcon"
-                                        Glyph="&#xE8C3;" />
-                        <FontIconSource x:Key="DeleteIcon"
-                                        Glyph="&#xE74D;" />
+                <GridView.Resources>
+                    <FontIconSource x:Key="ReplyAllIcon"
+                                    Glyph="&#xE8C2;" />
+                    <FontIconSource x:Key="ReadIcon"
+                                    Glyph="&#xE8C3;" />
+                    <FontIconSource x:Key="DeleteIcon"
+                                    Glyph="&#xE74D;" />
 
-                        <!--TODO improvements to Android (pobably on Uno site)-->
-                        <SwipeItems x:Key="left"
-                                    Mode="Reveal">
-                            <SwipeItem Text="Reply All"
-                                       IconSource="{StaticResource ReplyAllIcon}" />
-                            <SwipeItem Text="Open"
-                                       IconSource="{StaticResource ReadIcon}" />
-                        </SwipeItems>
-                        <SwipeItems x:Key="right"
-                                    Mode="Execute">
-                            <SwipeItem Text="Delete"
-                                       IconSource="{StaticResource DeleteIcon}"
-                                       Foreground="{StaticResource TextOnAccentFillColorPrimaryBrush}"
-                                       Background="{StaticResource SystemAccentColor}" />
-                            <!--Invoked="SwipeItem_Invoked"-->
-                        </SwipeItems>
-                    </GridView.Resources>
+                    <!--TODO improvements to Android (pobably on Uno site)-->
+                    <SwipeItems x:Key="left"
+                                Mode="Reveal">
+                        <SwipeItem Text="Reply All"
+                                   IconSource="{StaticResource ReplyAllIcon}" />
+                        <SwipeItem Text="Open"
+                                   IconSource="{StaticResource ReadIcon}" />
+                    </SwipeItems>
+                    <SwipeItems x:Key="right"
+                                Mode="Execute">
+                        <SwipeItem Text="Delete"
+                                   IconSource="{StaticResource DeleteIcon}"
+                                   Foreground="{StaticResource TextOnAccentFillColorPrimaryBrush}"
+                                   Background="{StaticResource SystemAccentColor}" />
+                        <!--Invoked="SwipeItem_Invoked"-->
+                    </SwipeItems>
+                </GridView.Resources>
 
-                    <GridView.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <ItemsWrapGrid MaximumRowsOrColumns="1"
-                                           Orientation="Horizontal" />
-                        </ItemsPanelTemplate>
-                    </GridView.ItemsPanel>
+                <GridView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <ItemsWrapGrid MaximumRowsOrColumns="1"
+                                       Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </GridView.ItemsPanel>
 
-                    <GridView.ItemTemplate>
-                        <DataTemplate x:DataType="local:ItemViewModel">
-                            <UserControl android:Height="100">
-                                <SwipeControl LeftItems="{StaticResource left}"
-                                              RightItems="{StaticResource right}"
-                                              Background="Transparent"
-                                              android:CornerRadius="20"
-                                              not_android:CornerRadius="8">
+                <GridView.ItemTemplate>
+                    <DataTemplate x:DataType="local:ItemViewModel">
+                        <UserControl android:Height="100">
+                            <SwipeControl LeftItems="{StaticResource left}"
+                                          RightItems="{StaticResource right}"
+                                          Background="Transparent"
+                                          android:CornerRadius="20"
+                                          not_android:CornerRadius="8">
 
-                                    <Border android:Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-                                            android:CornerRadius="20">
+                                <Border android:Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                                        android:CornerRadius="20">
 
-                                        <Grid Padding="20">
-                                            <!--<Background="{x:Bind Tag.Color, Converter={StaticResource BackgroundColorConverter}}"
+                                    <Grid Padding="20">
+                                        <!--<Background="{x:Bind Tag.Color, Converter={StaticResource BackgroundColorConverter}}"
                                       not_android:Background="{StaticResource LayerOnMicaBaseAltFillColorDefault}"-->
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="*" />
-                                            </Grid.ColumnDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
 
-                                            <StackPanel Spacing="12">
-                                                <!--<not_android:Border Background="{x:Bind TagId, Converter={StaticResource ColorConverter}}"
+                                        <StackPanel Spacing="12">
+                                            <!--<not_android:Border Background="{x:Bind TagId, Converter={StaticResource ColorConverter}}"
                                                             CornerRadius="4"
                                                             Height="6"
                                                             Width="80"
                                                             HorizontalAlignment="Left" />-->
-                                                <!--android:Foreground="{x:Bind Tag.Color, Converter={StaticResource ColorConverter}}"-->
-                                                <TextBlock Text="{x:Bind Item.Name, Mode=OneWay}"
-                                                           Style="{StaticResource SubtitleTextBlockStyle}" />
-                                                <TextBlock Text="in 6 days" />
-                                            </StackPanel>
+                                            <!--android:Foreground="{x:Bind Tag.Color, Converter={StaticResource ColorConverter}}"-->
+                                            <TextBlock Text="{x:Bind Item.Name, Mode=OneWay}"
+                                                       Style="{StaticResource SubtitleTextBlockStyle}" />
+                                            <TextBlock Text="in 6 days" />
+                                        </StackPanel>
 
-                                            <StackPanel Grid.Column="1"
-                                                        Spacing="12"
-                                                        HorizontalAlignment="Right"
-                                                        VerticalAlignment="Center">
-                                                <TextBlock Style="{StaticResource SubtitleTextBlockStyle}"
-                                                           HorizontalAlignment="Right">
+                                        <StackPanel Grid.Column="1"
+                                                    Spacing="12"
+                                                    HorizontalAlignment="Right"
+                                                    VerticalAlignment="Center">
+                                            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}"
+                                                       HorizontalAlignment="Right">
                                         
                                                     <Run Text="{x:Bind Item.Billing.BasePrice, Mode=OneWay}" />
                                                     <Run Text="CZK" />
-                                                </TextBlock>
-                                                <TextBlock Text="255,00 CZK / 2m"
-                                                           HorizontalAlignment="Right" />
-                                            </StackPanel>
-                                        </Grid>
-                                    </Border>
-                                </SwipeControl>
-                            </UserControl>
-                        </DataTemplate>
-                    </GridView.ItemTemplate>
-                </GridView>
-            </Grid>
-        </ScrollViewer>
+                                            </TextBlock>
+                                            <TextBlock Text="255,00 CZK / 2m"
+                                                       HorizontalAlignment="Right" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </SwipeControl>
+                        </UserControl>
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+            </GridView>
+        </Grid>
 
         <Button x:Name="mobileAddButton"
                 CornerRadius="22"

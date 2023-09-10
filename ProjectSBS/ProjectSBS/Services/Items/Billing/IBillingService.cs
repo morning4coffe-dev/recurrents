@@ -2,8 +2,8 @@
 
 public interface IBillingService
 {
-    void NewPaymentLog(Item item);
-    Task<List<ItemLog>> GetPaymentLogsForItemAsync(Item item);
+    Task NewPaymentLogAsync(Item item);
+    List<ItemLog> GetPaymentLogsForItem(Item item, List<ItemLog> logs);
 
     List<DateOnly> GetFuturePayments(DateOnly initialDate, Period periodType, int recurEvery, int numberOfPayments = 20);
 

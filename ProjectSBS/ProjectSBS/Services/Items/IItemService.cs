@@ -1,8 +1,9 @@
-﻿using ProjectSBS.Presentation.Components;
-
-namespace ProjectSBS.Services.Items;
+﻿namespace ProjectSBS.Services.Items;
 
 public interface IItemService
 {
-    ItemViewModel ScheduleBilling(ItemViewModel item);
+    Task InitializeAsync();
+    List<ItemViewModel> GetItems();
+    void NewItem(Item item, List<ItemLog>? logs = null);
+    ItemViewModel ScheduleBilling(ItemViewModel item, List<ItemLog> logs);
 }

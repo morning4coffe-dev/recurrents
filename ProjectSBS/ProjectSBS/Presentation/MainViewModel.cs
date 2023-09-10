@@ -1,11 +1,9 @@
 using CommunityToolkit.Mvvm.Messaging;
+using ProjectSBS.Business;
 using ProjectSBS.Services.Items;
-using ProjectSBS.Services.Notifications;
-using ProjectSBS.Services.Storage.Data;
 using ProjectSBS.Services.User;
 using System.Collections.ObjectModel;
 using Windows.System.Profile;
-using ProjectSBS.Business;
 
 namespace ProjectSBS.Presentation;
 
@@ -15,9 +13,6 @@ public partial class MainViewModel : ObservableObject
     private IUserService _userService;
 
     private readonly IItemService _itemService;
-    private readonly INotificationService _notificationService;
-    private readonly ICurrencyCache _api;
-    private readonly IDataService _dataService;
 
     private IDispatcher _dispatch;
     private INavigator _navigator;
@@ -31,12 +26,15 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private bool _isEditing;
 
+    [ObservableProperty]
+    private decimal _sum;
+
     public bool IsMobile
     {
         get
         {
             var deviceFamily = AnalyticsInfo.VersionInfo.DeviceFamily;
-            return !deviceFamily.Contains("Mobile");
+            return deviceFamily.Contains("Mobile");
         }
     }
 
@@ -90,20 +88,19 @@ public partial class MainViewModel : ObservableObject
     public MainViewModel(
         IStringLocalizer localizer,
         IOptions<AppConfig> appInfo,
+#if !__IOS__
         IAuthenticationService authentication,
+#endif
         IUserService userService,
         IItemService itemService,
         IDispatcher dispatch,
-        ICurrencyCache api,
-        //INotificationService notifications,
-        INavigator navigator,
-        IDataService dataService)
+        INavigator navigator)
     {
+#if !__IOS__
         _authentication = authentication;
+#endif
         _userService = userService;
         _itemService = itemService;
-        //_notificationService = notifications;
-        _api = api;
         _dispatch = dispatch;
         _navigator = navigator;
 
@@ -119,31 +116,32 @@ public partial class MainViewModel : ObservableObject
         EnableEditingCommand = new AsyncRelayCommand(EnableEditing);
         DeleteItemCommand = new AsyncRelayCommand(DeleteItem);
 
-        Initialize();
-        _dataService = dataService;
+        InitializeAsync();
 
-        //if (IsMobile)
+        WeakReferenceMessenger.Default.Register<ItemSelectionChanged>(this, (r, m) =>
         {
-            WeakReferenceMessenger.Default.Register<ItemSelectionChanged>(this, (r, m) =>
+            ItemViewModel? item = null;
+
+            if (SelectedItem is not null)
             {
-                if (SelectedItem is null)
+                item = Items.FirstOrDefault(i => i.Item.Id == SelectedItem.Item?.Id);
+            }
+
+            if (item is null)
+            {
+                _itemService.NewItem(m.Item.Item);
+
+                if (IsMobile)
                 {
-                    SelectedItem = null;
-                    return;
+                    _navigator.GoBack(this);
                 }
-                var item = Items.Where(i => i.Item.Id == SelectedItem.Item.Id).First();
+            }
 
-                item = m.Item;
-
-                var items = Items;
-
-                SelectedItem = null;
-                //m.Item;
-            });
-        }
+            SelectedItem = null;
+        });
     }
 
-    public async void Initialize()
+    private async void InitializeAsync()
     {
         var user = await _userService.GetUser();
 
@@ -160,112 +158,15 @@ public partial class MainViewModel : ObservableObject
             }
         });
 
-        var c = await _api.GetCurrency(new CancellationToken());
+        await _itemService.InitializeAsync();
+        var items = _itemService.GetItems();
 
-        //_notifications.RemoveScheduledNotifications();
+        await _dispatch.ExecuteAsync(() => Items.AddRange(items));
 
-        //var culture = CultureInfo.GetCultureInfo("hu-HU");
-
-        //string notificationTitle = String.Format(_stringLocalizer["ItemNotificationTitle"], $"PremiumSUB {DateTime.Now}", "today");
-        //string notificationText = String.Format(_stringLocalizer["ItemNotificationText"], c.Rates["HUF"].ToString("C", culture), "today");
-
-
-        //TimeOnly time = TimeOnly.FromDateTime(DateTime.Now.Add(TimeSpan.FromSeconds(2)));
-        //for (int i = 0; i < 1; i++)
-        //{
-        //    //time = time.Add(TimeSpan.FromMinutes(2));
-        //    _notifications.ScheduleNotification((new Random().Next(0, 1000)).ToString(), notificationTitle, notificationText, DateOnly.FromDateTime(DateTime.Now), time);
-        //}
-
-        var currentDate = DateTime.Now;
-
-        // Sample BillingDetails for Item 1
-        var billingDetails1 = new BillingDetails(
-            basePrice: 50.00m,
-            initialDate: new DateOnly(2023, 8, 1),
-            currencyId: "USD",
-            periodType: Period.Daily,
-            recurEvery: 1
-        );
-
-        // Sample Item 1
-        var sampleItem1 = new Item(
-            id: "001",
-            name: "Sample Item 1",
-            billing: billingDetails1,
-            tagId: "tag-001",
-            description: "This is a sample item for testing purposes.",
-            creationDate: currentDate
-        );
-
-        // Sample BillingDetails for Item 2
-        var billingDetails2 = new BillingDetails(
-            basePrice: 30.00m,
-            initialDate: new DateOnly(2019, 4, 16),
-            currencyId: "EUR",
-            periodType: Period.Daily,
-            recurEvery: 2
-        );
-
-        // Sample Item 2
-        var sampleItem2 = new Item(
-            id: "002",
-            name: "Sample Item 2",
-            billing: billingDetails2,
-            tagId: "tag-002",
-            description: "This is another sample item for testing purposes.",
-            creationDate: currentDate
-        );
-
-        // Sample BillingDetails for Item 3
-        var billingDetails3 = new BillingDetails(
-            basePrice: 100.00m,
-            initialDate: new DateOnly(2022, 12, 1),
-            currencyId: "GBP",
-            periodType: Period.Weekly,
-            recurEvery: 1
-        );
-
-        // Sample Item 3
-        var sampleItem3 = new Item(
-            id: "003",
-            name: "Sample Item 3",
-            billing: billingDetails3,
-            tagId: "tag-003",
-            description: "This is a third sample item for testing purposes.",
-            creationDate: currentDate
-        );
-
-        // Create a list of items
-        var sampleItems = new List<Item>
+        await _dispatch.ExecuteAsync(() =>
         {
-            sampleItem1,
-            sampleItem2,
-            sampleItem3
-        };
-
-        //await _dataService.SaveDataAsync(sampleItems);
-
-        var (items, _) = await _dataService.InitializeDatabaseAsync();
-
-        foreach (var item in items)
-        {
-            ItemViewModel itemVM = new(item)
-            {
-                //IsPaid = true
-            };
-
-            await itemVM.InitializeAsync();
-
-            //_itemService.ScheduleBilling(itemVM);
-
-            await _dispatch.ExecuteAsync(() =>
-            {
-                Items.Add(itemVM);
-            });
-
-            var isPaid = itemVM.IsPaid;
-        }
+            Sum = Items.Sum(i => i.Item.Billing.BasePrice);
+        });
     }
 
     private async Task GoToSecondView()

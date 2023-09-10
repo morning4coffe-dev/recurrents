@@ -10,15 +10,11 @@ public partial class ItemViewModel : ObservableObject
     {
         _item = item;
 
-        if (item != null)
-        {
-            //(Application.Current as App)!.Host?.Services.GetService<IItemService>();
-            _billingService = (Application.Current as App)!.Host?.Services.GetService<IBillingService>()!;
-        }
+        _billingService = (Application.Current as App)!.Host?.Services.GetService<IBillingService>()!;
     }
 
     [ObservableProperty]
-    private Item _item;
+    private Item? _item;
 
     private bool _isPaid;
 
@@ -30,19 +26,26 @@ public partial class ItemViewModel : ObservableObject
             _isPaid = value;
             if (value)
             {
-                _billingService.NewPaymentLog(Item);
+                _billingService.NewPaymentLogAsync(_item).Wait();
             }
+            //TODO IsPaid doesn't set when item has been unpaid
         }
     }
 
-    public async Task InitializeAsync()
+    public void Initialize(List<ItemLog> logs)
     {
-        _isPaid = await CalculateIsPaidAsync(Item);
+        if (Item == null)
+        {
+            IsPaid = false;
+            return;
+        }
+
+        IsPaid = CalculateIsPaid(Item, logs);
     }
 
-    private async Task<bool> CalculateIsPaidAsync(Item item)
+    private bool CalculateIsPaid(Item item, List<ItemLog> logs)
     {
-        var logs = await _billingService.GetPaymentLogsForItemAsync(item);
+        _billingService.GetPaymentLogsForItem(item, logs);
 
         if (logs.Count == 0)
         {
@@ -56,9 +59,7 @@ public partial class ItemViewModel : ObservableObject
         {
             return true;
         }
-        else
-        {
-            return false;
-        }
+
+        return false;
     }
 }

@@ -40,7 +40,8 @@
                             Padding="100, 16"
                             Command="{Binding Logout}">
                 <MenuFlyoutItem.Icon>
-                    <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xF3B1;" />
+                    <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                              Glyph="&#xF3B1;" />
                 </MenuFlyoutItem.Icon>
             </MenuFlyoutItem>
         </MenuFlyout>
@@ -67,7 +68,7 @@
                                     <Setter Target="desktopHeader.Visibility"
                                             Value="Collapsed" />
                                     <Setter Target="contentHolder.Padding"
-                                            Value="18,12" />
+                                            Value="16,0" />
                                 </VisualState.Setters>
                             </VisualState>
 
@@ -151,52 +152,54 @@
                                    OpenPaneLength="{Binding IsMobile, Converter={StaticResource MobileToValueConverter}}"
                                    DisplayMode="Inline">
 
-                            <Grid x:Name="contentHolder"
-                                  RowSpacing="12"
-                                  Padding="50, 20">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
+                            <ScrollViewer>
+                                <Grid x:Name="contentHolder"
+                                      RowSpacing="12"
+                                      Padding="50, 10">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
 
-                                <Grid x:Name="desktopHeader"
-                                      Height="70">
-                                    <TextBlock Text="Home"
-                                               VerticalAlignment="Center"
-                                               Style="{StaticResource TitleTextBlockStyle}" />
+                                    <Grid x:Name="desktopHeader"
+                                          Height="70">
+                                        <TextBlock Text="Home"
+                                                   VerticalAlignment="Center"
+                                                   Style="{StaticResource TitleTextBlockStyle}" />
+                                    </Grid>
+
+                                    <Grid x:Name="mobileHeader"
+                                          Visibility="Collapsed"
+                                          Height="70">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Text="Good Morning"
+                                                   Style="{StaticResource TitleTextBlockStyle}"
+                                                   Margin="0,20,0,0" />
+
+                                        <Button Grid.Column="1"
+                                                Padding="0"
+                                                CornerRadius="50"
+                                                Background="Transparent"
+                                                BorderBrush="Transparent"
+                                                Flyout="{StaticResource UserFlyout}">
+
+                                            <PersonPicture Width="55"
+                                                           DisplayName="{Binding User.Name}" />
+
+                                        </Button>
+
+                                    </Grid>
+
+                                    <comp:HomePage Items="{Binding Items, Mode=TwoWay}"
+                                                   SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                                                   AddNewCommand="{Binding AddNewCommand, Mode=OneWay}"
+                                                   Grid.Row="1" />
                                 </Grid>
-
-                                <Grid x:Name="mobileHeader"
-                                      Visibility="Collapsed"
-                                      Height="70">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <TextBlock Text="Good Morning"
-                                               Style="{StaticResource TitleTextBlockStyle}"
-                                               Margin="0,20,0,0" />
-
-                                    <Button Grid.Column="1"
-                                            Padding="0"
-                                            CornerRadius="50"
-                                            Background="Transparent"
-                                            BorderBrush="Transparent"
-                                            Flyout="{StaticResource UserFlyout}">
-
-                                        <PersonPicture Width="55"
-                                                       DisplayName="{Binding User.Name}" />
-
-                                    </Button>
-
-                                </Grid>
-
-                                <comp:HomePage Items="{Binding Items, Mode=TwoWay}"
-                                               SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
-                                               AddNewCommand="{Binding AddNewCommand, Mode=OneTime}"
-                                               Grid.Row="1" />
-                            </Grid>
+                            </ScrollViewer>
 
                             <SplitView.Pane>
 
@@ -249,8 +252,6 @@
                                     <comp:ItemDetails SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                                                       IsEditing="{Binding IsEditing, Mode=TwoWay}"
                                                       Grid.Row="1" />
-                                    <!--IsEditing="{Binding IsEditing, Mode=TwoWay}"-->
-
                                 </Grid>
 
                             </SplitView.Pane>

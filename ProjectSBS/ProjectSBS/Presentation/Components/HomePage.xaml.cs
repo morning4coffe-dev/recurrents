@@ -1,7 +1,5 @@
 ﻿using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
-using LiveChartsCore.SkiaSharpView.Painting;
-using SkiaSharp;
 using System.Collections.ObjectModel;
 
 namespace ProjectSBS.Presentation.Components;
@@ -17,7 +15,7 @@ public sealed partial class HomePage : Page
     {
         new LineSeries<double>
         {
-            Values = new double[] { 2, 1, 3, 5, 3, 4, 6 },
+            Values = new double[] { 20, 1, 3, 5, 3, 4, 6 },
             Fill = null
         }
     };

@@ -11,7 +11,7 @@ class BillingService : IBillingService
         _dataService = dataService;
     }
 
-    public void NewPaymentLog(Item item)
+    public async Task NewPaymentLogAsync(Item item)
     {
         var log = new ItemLog(
             item.Id,
@@ -20,13 +20,11 @@ class BillingService : IBillingService
             item.Billing.CurrencyId
         );
 
-        Task.Run(async () => await _dataService.AddLogAsync(log)).Wait();
+        await _dataService.AddLogAsync(log);
     }
 
-    public async Task<List<ItemLog>> GetPaymentLogsForItemAsync(Item item)
+    public List<ItemLog> GetPaymentLogsForItem(Item item, List<ItemLog> logs)
     {
-        var logs = await _dataService.LoadLogsAsync();
-
         return logs.Where(log => log.ItemId == item.Id).ToList();
     }
 
