@@ -40,22 +40,21 @@
 				<uap:SplashScreen />
 			</uap:VisualElements>
 
-			<!--TODO <Extensions>
-
-				--><!--Specify which CLSID to activate when toast clicked--><!--
+			<Extensions>
+				<!--Specify which CLSID to activate when toast clicked-->
 				<desktop:Extension Category="windows.toastNotificationActivation">
-					<desktop:ToastNotificationActivation ToastActivatorCLSID="d3d3615x-8ab4-4c60-84a5-82734c2e6643" />
+					<desktop:ToastNotificationActivation ToastActivatorCLSID="d3d3615f-8ab4-4c60-84a5-82734c2e6643" />
 				</desktop:Extension>
 
-				--><!--Register COM CLSID LocalServer32 registry key--><!--
+				<!--Register COM CLSID LocalServer32 registry key-->
 				<com:Extension Category="windows.comServer">
 					<com:ComServer>
 						<com:ExeServer Executable="ProjectSBS.Windows.exe" Arguments="-ToastActivated" DisplayName="Toast activator">
-							<com:Class Id="d3d3615x-8ab4-4c60-84a5-82734c2e6643" DisplayName="Toast activator"/>
+							<com:Class Id="d3d3615f-8ab4-4c60-84a5-82734c2e6643" DisplayName="Toast activator"/>
 						</com:ExeServer>
 					</com:ComServer>
 				</com:Extension>
-			</Extensions>-->
+			</Extensions>
 		</Application>
 	</Applications>
 
