@@ -76,11 +76,30 @@
             </Border>
 
             <Pivot Grid.Row="2"
-                   FontSize="5">
-                <PivotItem Header="Urgent" />
-                <PivotItem Header="Urgent" />
-                <PivotItem Header="Urgent" />
-                <PivotItem Header="Urgent" />
+                   FontSize="5"
+                   CanBeScrollAnchor="False"
+                   IsHeaderItemsCarouselEnabled="False"
+                   ItemsSource="{Binding Categories}"
+                   SelectedItem="{Binding SelectedCategory, Mode=TwoWay}">
+
+                <Pivot.HeaderTemplate>
+                    <DataTemplate x:DataType="models:FilterCategory">
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="8">
+                            <FontIcon Glyph="{x:Bind Glyph}"
+                                      FontSize="18" />
+                            <TextBlock Text="{x:Bind Text}"
+                                       Style="{StaticResource SubtitleTextBlockStyle}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </Pivot.HeaderTemplate>
+
+                <Pivot.ItemTemplate>
+                    <DataTemplate x:DataType="models:FilterCategory">
+                        <Grid />
+                    </DataTemplate>
+                </Pivot.ItemTemplate>
+
             </Pivot>
 
             <GridView ItemsSource="{x:Bind Items, Mode=TwoWay}"
@@ -89,28 +108,32 @@
                       Grid.Row="3">
 
                 <GridView.Resources>
-                    <FontIconSource x:Key="ReplyAllIcon"
-                                    Glyph="&#xE8C2;" />
-                    <FontIconSource x:Key="ReadIcon"
-                                    Glyph="&#xE8C3;" />
+                    <FontIconSource x:Key="EditIcon"
+                                    Glyph="&#xE70F;" />
+                    <FontIconSource x:Key="ArchiveIcon"
+                                    Glyph="&#xE7B8;" />
                     <FontIconSource x:Key="DeleteIcon"
                                     Glyph="&#xE74D;" />
 
                     <!--TODO improvements to Android (pobably on Uno site)-->
-                    <SwipeItems x:Key="left"
+                    <SwipeItems x:Key="Left"
                                 Mode="Reveal">
-                        <SwipeItem Text="Reply All"
-                                   IconSource="{StaticResource ReplyAllIcon}" />
-                        <SwipeItem Text="Open"
-                                   IconSource="{StaticResource ReadIcon}" />
+                        <SwipeItem Text="Edit"
+                                   Background="Transparent"
+                                   IconSource="{StaticResource EditIcon}" 
+                                   Invoked="EditItem_Invoked"/>
+                        <SwipeItem Text="Archive"
+                                   Background="Transparent"
+                                   IconSource="{StaticResource ArchiveIcon}"
+                                   Invoked="ArchiveItem_Invoked" />
                     </SwipeItems>
-                    <SwipeItems x:Key="right"
+                    <SwipeItems x:Key="Right"
                                 Mode="Execute">
                         <SwipeItem Text="Delete"
                                    IconSource="{StaticResource DeleteIcon}"
                                    Foreground="{StaticResource TextOnAccentFillColorPrimaryBrush}"
-                                   Background="{StaticResource SystemAccentColor}" />
-                        <!--Invoked="SwipeItem_Invoked"-->
+                                   Background="{StaticResource SystemAccentColor}"
+                                   Invoked="DeleteItem_Invoked" />
                     </SwipeItems>
                 </GridView.Resources>
 
@@ -124,8 +147,8 @@
                 <GridView.ItemTemplate>
                     <DataTemplate x:DataType="local:ItemViewModel">
                         <UserControl android:Height="100">
-                            <SwipeControl LeftItems="{StaticResource left}"
-                                          RightItems="{StaticResource right}"
+                            <SwipeControl LeftItems="{StaticResource Left}"
+                                          RightItems="{StaticResource Right}"
                                           Background="Transparent"
                                           android:CornerRadius="20"
                                           not_android:CornerRadius="8">
@@ -134,20 +157,12 @@
                                         android:CornerRadius="20">
 
                                     <Grid Padding="20">
-                                        <!--<Background="{x:Bind Tag.Color, Converter={StaticResource BackgroundColorConverter}}"
-                                      not_android:Background="{StaticResource LayerOnMicaBaseAltFillColorDefault}"-->
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
 
                                         <StackPanel Spacing="12">
-                                            <!--<not_android:Border Background="{x:Bind TagId, Converter={StaticResource ColorConverter}}"
-                                                            CornerRadius="4"
-                                                            Height="6"
-                                                            Width="80"
-                                                            HorizontalAlignment="Left" />-->
-                                            <!--android:Foreground="{x:Bind Tag.Color, Converter={StaticResource ColorConverter}}"-->
                                             <TextBlock Text="{x:Bind Item.Name, Mode=OneWay}"
                                                        Style="{StaticResource SubtitleTextBlockStyle}" />
                                             <TextBlock Text="in 6 days" />

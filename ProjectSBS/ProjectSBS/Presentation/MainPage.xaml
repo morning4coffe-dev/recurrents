@@ -10,6 +10,7 @@
       xmlns:utu="using:Uno.Toolkit.UI"
       xmlns:comp="using:ProjectSBS.Presentation.Components"
       xmlns:converters="using:CommunityToolkit.WinUI.Converters"
+      xmlns:models="using:ProjectSBS.Business.Models"
       NavigationCacheMode="Required"
       xmlns:toolkit="using:CommunityToolkit.WinUI">
 
@@ -68,7 +69,7 @@
                                     <Setter Target="desktopHeader.Visibility"
                                             Value="Collapsed" />
                                     <Setter Target="contentHolder.Padding"
-                                            Value="16,0" />
+                                            Value="12,0" />
                                 </VisualState.Setters>
                             </VisualState>
 
@@ -112,6 +113,8 @@
                                     IsBackButtonVisible="Collapsed"
                                     IsSettingsVisible="True"
                                     IsPaneVisible="True"
+                                    MenuItemsSource="{Binding Categories}"
+                                    SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
                                     uen:Region.Attached="True">
 
                         <NavigationView.PaneCustomContent>
@@ -137,14 +140,16 @@
                             </StackPanel>
                         </NavigationView.PaneCustomContent>
 
-                        <NavigationView.MenuItems>
-                            <NavigationViewItem Content="One"
-                                                IsSelected="True"
-                                                Icon="AddFriend" />
-
-                            <NavigationViewItem Content="Two"
-                                                Icon="CellPhone" />
-                        </NavigationView.MenuItems>
+                        <NavigationView.MenuItemTemplate>
+                            <DataTemplate x:DataType="models:FilterCategory">
+                                <NavigationViewItem Content="{x:Bind Text}">
+                                <!--ToolTip="{x:Bind Tooltip}">-->
+                                    <NavigationViewItem.Icon>
+                                        <FontIcon Glyph="{x:Bind Glyph}" />
+                                    </NavigationViewItem.Icon>
+                                </NavigationViewItem>
+                            </DataTemplate>
+                        </NavigationView.MenuItemTemplate>
 
                         <SplitView IsPaneOpen="{Binding SelectedItem, Converter={StaticResource EmptyToFalseConverter}}"
                                    PaneBackground="Transparent"
@@ -155,14 +160,14 @@
                             <ScrollViewer>
                                 <Grid x:Name="contentHolder"
                                       RowSpacing="12"
-                                      Padding="50, 10">
+                                      Padding="50, 25">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
 
                                     <Grid x:Name="desktopHeader"
-                                          Height="70">
+                                          Height="50">
                                         <TextBlock Text="Home"
                                                    VerticalAlignment="Center"
                                                    Style="{StaticResource TitleTextBlockStyle}" />
@@ -170,7 +175,8 @@
 
                                     <Grid x:Name="mobileHeader"
                                           Visibility="Collapsed"
-                                          Height="70">
+                                          Margin="0,6,0,-12"
+                                          Height="60">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
@@ -178,11 +184,11 @@
 
                                         <TextBlock Text="Good Morning"
                                                    Style="{StaticResource TitleTextBlockStyle}"
-                                                   Margin="0,20,0,0" />
+                                                   Margin="0,15,0,0" />
 
                                         <Button Grid.Column="1"
                                                 Padding="0"
-                                                CornerRadius="50"
+                                                CornerRadius="55"
                                                 Background="Transparent"
                                                 BorderBrush="Transparent"
                                                 Flyout="{StaticResource UserFlyout}">
@@ -196,7 +202,12 @@
 
                                     <comp:HomePage Items="{Binding Items, Mode=TwoWay}"
                                                    SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                                                   Categories="{Binding Categories, Mode=TwoWay}"
+                                                   SelectedCategory="{Binding SelectedCategory, Mode=TwoWay}"
                                                    AddNewCommand="{Binding AddNewCommand, Mode=OneWay}"
+                                                   DeleteItemCommand="{Binding DeleteItemCommand, Mode=OneTime}"
+                                                   ArchiveItemCommand="{Binding ArchiveItemCommand, Mode=OneTime}"
+                                                   EditItemCommand="{Binding EnableEditingCommand, Mode=OneTime}"
                                                    Grid.Row="1" />
                                 </Grid>
                             </ScrollViewer>

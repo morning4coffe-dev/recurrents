@@ -53,8 +53,8 @@ public sealed partial class HomePage : Page
 
     public ObservableCollection<ItemViewModel> Items
     {
-        get { return (ObservableCollection<ItemViewModel>)GetValue(ItemsProperty); }
-        set { SetValue(ItemsProperty, value); }
+        get => (ObservableCollection<ItemViewModel>)GetValue(ItemsProperty);
+        set => SetValue(ItemsProperty, value); 
     }
 
     public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(
@@ -66,12 +66,44 @@ public sealed partial class HomePage : Page
 
     public ItemViewModel? SelectedItem
     {
-        get { return (ItemViewModel?)GetValue(SelectedItemProperty); }
+        get => (ItemViewModel?)GetValue(SelectedItemProperty);
         set
         {
             if (value != SelectedItem)
             {
                 SetValue(SelectedItemProperty, value);
+            }
+        }
+    }
+
+    public static readonly DependencyProperty CategoriesProperty = DependencyProperty.Register(
+      nameof(Categories),
+      typeof(List<FilterCategory>),
+      typeof(HomePage),
+      new PropertyMetadata(null)
+    );
+
+    public List<FilterCategory> Categories
+    {
+        get => (List<FilterCategory>)GetValue(CategoriesProperty);
+        set => SetValue(CategoriesProperty, value);
+    }
+
+    public static readonly DependencyProperty SelectedCategoryProperty = DependencyProperty.Register(
+      nameof(SelectedCategory),
+      typeof(FilterCategory),
+      typeof(HomePage),
+      new PropertyMetadata(null)
+    );
+
+    public FilterCategory SelectedCategory
+    {
+        get => (FilterCategory)GetValue(SelectedCategoryProperty);
+        set
+        {
+            if (value != SelectedCategory)
+            {
+                SetValue(SelectedCategoryProperty, value);
             }
         }
     }
@@ -85,7 +117,61 @@ public sealed partial class HomePage : Page
 
     public ICommand AddNewCommand
     {
-        get { return (ICommand)GetValue(AddNewCommandProperty); }
-        set { SetValue(AddNewCommandProperty, value); }
+        get => (ICommand)GetValue(AddNewCommandProperty);
+        set => SetValue(AddNewCommandProperty, value);
+    }
+
+    public static readonly DependencyProperty DeleteItemCommandProperty = DependencyProperty.Register(
+      nameof(DeleteItemCommand),
+      typeof(ICommand),
+      typeof(HomePage),
+      new PropertyMetadata(null)
+    );
+
+    public ICommand DeleteItemCommand
+    {
+        get => (ICommand)GetValue(DeleteItemCommandProperty);
+        set => SetValue(DeleteItemCommandProperty, value);
+    }
+
+    public static readonly DependencyProperty ArchiveItemCommandProperty = DependencyProperty.Register(
+      nameof(ArchiveItemCommand),
+      typeof(ICommand),
+      typeof(HomePage),
+      new PropertyMetadata(null)
+    );
+
+    public ICommand ArchiveItemCommand
+    {
+        get => (ICommand)GetValue(ArchiveItemCommandProperty);
+        set => SetValue(ArchiveItemCommandProperty, value);
+    }
+
+    public static readonly DependencyProperty EditItemCommandProperty = DependencyProperty.Register(
+      nameof(EditItemCommand),
+      typeof(ICommand),
+      typeof(HomePage),
+      new PropertyMetadata(null)
+    );
+
+    public ICommand EditItemCommand
+    {
+        get => (ICommand)GetValue(EditItemCommandProperty);
+        set => SetValue(EditItemCommandProperty, value);
+    }
+
+    private void DeleteItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
+    {
+        DeleteItemCommand.Execute(args.SwipeControl.DataContext);
+    }
+    private void ArchiveItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
+    {
+        ArchiveItemCommand.Execute(args.SwipeControl.DataContext);
+    }
+    private void EditItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
+    {
+        SelectedItem = (ItemViewModel)args.SwipeControl.DataContext;
+
+        EditItemCommand.Execute(args.SwipeControl.DataContext);
     }
 }

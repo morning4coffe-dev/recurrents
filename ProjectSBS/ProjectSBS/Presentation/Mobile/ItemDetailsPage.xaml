@@ -57,6 +57,7 @@
                                 BorderThickness="0"
                                 Padding="12"
                                 VerticalAlignment="Top"
+                                Visibility="{Binding IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
                                 Command="{Binding EnableEditingCommand}">
 
                             <SymbolIcon Symbol="Edit" />
@@ -67,6 +68,7 @@
                                 BorderThickness="0"
                                 Padding="12"
                                 VerticalAlignment="Top"
+                                Visibility="{Binding IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
                                 Command="{Binding EnableEditingCommand}">
 
                             <SymbolIcon Symbol="More"
@@ -82,6 +84,7 @@
                                        Width="50"
                                        Height="50"
                                        Fill="Red"
+                                       Visibility="{Binding IsEditing, Mode=OneWay, Converter={StaticResource TrueToVisibleConverter}}"
                                        RenderTransformOrigin=".5,.5"
                                        PointerPressed="spinme_PointerPressed">
                                 <Rectangle.RenderTransform>

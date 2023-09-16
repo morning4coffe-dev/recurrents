@@ -1,21 +1,22 @@
-using CommunityToolkit.Mvvm.Messaging;
+﻿using CommunityToolkit.Mvvm.Messaging;
 using ProjectSBS.Business;
 using ProjectSBS.Services.Items;
 using ProjectSBS.Services.User;
 using System.Collections.ObjectModel;
 using Windows.System.Profile;
+using ProjectSBS.Services.Items.Filtering;
 
 namespace ProjectSBS.Presentation;
 
 public partial class MainViewModel : ObservableObject
 {
-    private IAuthenticationService _authentication;
-    private IUserService _userService;
+    private readonly IAuthenticationService _authentication;
+    private readonly IUserService _userService;
 
     private readonly IItemService _itemService;
 
-    private IDispatcher _dispatch;
-    private INavigator _navigator;
+    private readonly IDispatcher _dispatch;
+    private readonly INavigator _navigator;
 
     [ObservableProperty]
     private string? name;
@@ -38,12 +39,12 @@ public partial class MainViewModel : ObservableObject
         }
     }
 
+
     public string? Title { get; }
 
     public ObservableCollection<ItemViewModel> Items { get; } = new();
 
     private ItemViewModel? _selectedItem;
-
     public ItemViewModel? SelectedItem
     {
         get => _selectedItem;
@@ -67,6 +68,25 @@ public partial class MainViewModel : ObservableObject
         }
     }
 
+    public List<FilterCategory> Categories { get; }
+
+    private FilterCategory _selectedCategory;
+    public FilterCategory SelectedCategory
+    {
+        get => _selectedCategory;
+        set
+        {
+            if (_selectedCategory == value)
+            {
+                return;
+            }
+
+            _selectedCategory = value;
+
+            _ = RefreshItems();
+        }
+    }
+
     private static ItemViewModel? _sentItem;
     public static ItemViewModel? SentItem
     {
@@ -84,6 +104,7 @@ public partial class MainViewModel : ObservableObject
     public ICommand CloseDetailsCommand { get; }
     public ICommand EnableEditingCommand { get; }
     public ICommand DeleteItemCommand { get; }
+    public ICommand ArchiveItemCommand { get; }
 
     public MainViewModel(
         IStringLocalizer localizer,
@@ -94,7 +115,8 @@ public partial class MainViewModel : ObservableObject
         IUserService userService,
         IItemService itemService,
         IDispatcher dispatch,
-        INavigator navigator)
+        INavigator navigator,
+        IItemFilterService filterService)
     {
 #if !__IOS__
         _authentication = authentication;
@@ -114,9 +136,12 @@ public partial class MainViewModel : ObservableObject
         SubmitChangesCommand = new AsyncRelayCommand(SubmitChanges);
         CloseDetailsCommand = new AsyncRelayCommand(CloseDetails);
         EnableEditingCommand = new AsyncRelayCommand(EnableEditing);
+        ArchiveItemCommand = new AsyncRelayCommand(ArchiveItem);
         DeleteItemCommand = new AsyncRelayCommand(DeleteItem);
 
-        InitializeAsync();
+        Categories = filterService.Categories;
+
+        Task.Run(InitializeAsync);
 
         WeakReferenceMessenger.Default.Register<ItemSelectionChanged>(this, (r, m) =>
         {
@@ -141,8 +166,10 @@ public partial class MainViewModel : ObservableObject
         });
     }
 
-    private async void InitializeAsync()
+    private async Task InitializeAsync()
     {
+        _selectedCategory = Categories[0];
+
         var user = await _userService.GetUser();
 
         await _dispatch.ExecuteAsync(() =>
@@ -159,14 +186,26 @@ public partial class MainViewModel : ObservableObject
         });
 
         await _itemService.InitializeAsync();
-        var items = _itemService.GetItems();
 
-        await _dispatch.ExecuteAsync(() => Items.AddRange(items));
+        var items = await RefreshItems();
 
         await _dispatch.ExecuteAsync(() =>
         {
-            Sum = Items.Sum(i => i.Item.Billing.BasePrice);
+            Sum = items.Sum(i => i.Item.Billing.BasePrice);
         });
+    }
+
+    private async Task<IEnumerable<ItemViewModel>> RefreshItems()
+    {
+        var items = _itemService.GetItems(SelectedCategory.Selector);
+
+        await _dispatch.ExecuteAsync(() =>
+        {
+            Items.Clear();
+            Items.AddRange(items);
+        });
+
+        return items;
     }
 
     private async Task GoToSecondView()
@@ -189,10 +228,6 @@ public partial class MainViewModel : ObservableObject
 
     private async Task SubmitChanges()
     {
-        //var item = Items.Where(i => i.Item.Id == SelectedItem.Item.Id).First();
-
-        //item = 
-        //TODO Add new item to database
         SelectedItem = null;
 
         IsEditing = false;
@@ -204,6 +239,12 @@ public partial class MainViewModel : ObservableObject
     }
 
     private async Task DeleteItem()
+    {
+        //TODO Find item by Id in database and delete it
+        return;
+    }
+
+    private async Task ArchiveItem()
     {
         //TODO Find item by Id in database and delete it
         return;

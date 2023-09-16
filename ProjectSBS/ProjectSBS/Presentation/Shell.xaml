@@ -15,6 +15,7 @@
                                   VerticalAlignment="Stretch"
                                   HorizontalContentAlignment="Stretch"
                                   VerticalContentAlignment="Stretch">
+
             <utu:ExtendedSplashScreen.LoadingContentTemplate>
                 <DataTemplate>
                     <Grid>

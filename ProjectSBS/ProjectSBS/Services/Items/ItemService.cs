@@ -32,9 +32,14 @@ public class ItemService : IItemService
         }
     }
 
-    public List<ItemViewModel> GetItems()
+    public IEnumerable<ItemViewModel> GetItems(Func<ItemViewModel, bool>? selector = null)
     {
-        return _items;
+        if (selector is null)
+        {
+            return _items;
+        }
+
+        return _items.Where(selector);
     }
 
     public void NewItem(Item item, List<ItemLog>? logs = null)
