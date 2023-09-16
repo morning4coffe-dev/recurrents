@@ -17,6 +17,7 @@ public partial record Item
         Description = description;
         CreationDate = creationDate;
     }
+
     public string Id { get; }
     public string Name { get; set; }
     public BillingDetails Billing { get; }
