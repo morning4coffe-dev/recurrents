@@ -6,7 +6,7 @@ public partial record Item
         string id, 
         string name, 
         BillingDetails billing, 
-        string tagId, 
+        int tagId, 
         string? description, 
         DateTime creationDate)
     {
@@ -21,7 +21,7 @@ public partial record Item
     public string Id { get; }
     public string Name { get; set; }
     public BillingDetails Billing { get; }
-    public string TagId { get; set; }
+    public int TagId { get; set; }
     public string? Description { get; set; }
     public DateTime CreationDate { get; set; }
 }

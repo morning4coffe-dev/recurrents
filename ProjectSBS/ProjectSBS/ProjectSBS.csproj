@@ -9,7 +9,9 @@
 
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Labs.WinUI.SettingsControls" />
+		<PackageReference Include="CommunityToolkit.WinUI.Controls.Segmented" />
 		<PackageReference Include="CommunityToolkit.WinUI.Converters" />
+		<PackageReference Include="CommunityToolkit.WinUI.Animations" />
 		<PackageReference Include="CommunityToolkit.WinUI.Triggers" />
 		<PackageReference Include="LiveChartsCore.SkiaSharpView.Uno.WinUI" />
 		<PackageReference Include="Microsoft.AppCenter" />
@@ -86,33 +88,51 @@
 	<ItemGroup>
 	  <None Remove="Presentation\Components\ItemDetails.xaml" />
 	  <None Remove="Presentation\Components\PageShell.xaml" />
+	  <None Remove="Presentation\Components\StatsBanner.xaml" />
 	  <None Remove="Presentation\HomePage.xaml" />
+	  <None Remove="Presentation\NestedPages\ConversionsPage.xaml" />
+	  <None Remove="Presentation\NestedPages\HomePage.xaml" />
+	  <None Remove="Presentation\NestedPages\SettingsPage.xaml" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <UpToDateCheckInput Remove="Presentation\Components\ItemDetails - Copy.xaml" />
 	  <UpToDateCheckInput Remove="Presentation\Components\ItemDetails.xaml" />
 	  <UpToDateCheckInput Remove="Presentation\Components\PageShell.xaml" />
+	  <UpToDateCheckInput Remove="Presentation\Components\StatsBanner.xaml" />
 	  <UpToDateCheckInput Remove="Presentation\HomePage.xaml" />
-	  <UpToDateCheckInput Remove="Presentation\Mobile\ItemDetailsPage.xaml" />
+	  <UpToDateCheckInput Remove="Presentation\NestedPages\ConversionsPage.xaml" />
+	  <UpToDateCheckInput Remove="Presentation\NestedPages\HomePage.xaml" />
+	  <UpToDateCheckInput Remove="Presentation\NestedPages\SettingsPage.xaml" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <Page Remove="Presentation\HomePage.xaml" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <AdditionalFiles Include="Presentation\Components\HomePage.xaml">
-	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-	    <Generator>MSBuild:Compile</Generator>
-	  </AdditionalFiles>
+	  <Page Remove="Presentation\NestedPages\ConversionsPage.xaml" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <Folder Include="Services\Interop\Store\" />
+	  <Folder Include="Services\Navigation\" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <AdditionalFiles Remove="Presentation\Components\ItemDetails.xaml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <AdditionalFiles Remove="Presentation\NestedPages\HomePage.xaml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <AdditionalFiles Remove="Presentation\NestedPages\SettingsPage.xaml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <AdditionalFiles Remove="Presentation\NestedPages\ConversionsPage.xaml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <AdditionalFiles Remove="Presentation\Components\StatsBanner.xaml" />
 	</ItemGroup>
 </Project>

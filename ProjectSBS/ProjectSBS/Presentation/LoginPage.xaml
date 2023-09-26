@@ -12,7 +12,7 @@
       xmlns:page="using:ProjectSBS.Presentation.Components"
       NavigationCacheMode="Required">
 
-    <page:PageShell TitleVisibility="Collapsed">
+    <page:PageShell>
         <page:PageShell.ContentView>
 
             <UserControl>

@@ -42,16 +42,29 @@ public sealed partial class PageShell : Page
         set { SetValue(ContentViewProperty, value); }
     }
 
-    public static readonly DependencyProperty TitleVisibilityProperty = DependencyProperty.Register(
-      nameof(TitleVisibility),
+    public static readonly DependencyProperty DesktopTitleVisibilityProperty = DependencyProperty.Register(
+      nameof(DesktopTitleVisibility),
       typeof(Visibility),
       typeof(PageShell),
-      new PropertyMetadata(Visibility.Visible)
+      new PropertyMetadata(Visibility.Collapsed)
     );
 
-    public Visibility TitleVisibility
+    public Visibility DesktopTitleVisibility
     {
-        get { return (Visibility)GetValue(TitleVisibilityProperty); }
-        set { SetValue(TitleVisibilityProperty, value); }
+        get => (Visibility)GetValue(DesktopTitleVisibilityProperty);
+        set => SetValue(DesktopTitleVisibilityProperty, value);
+    }
+
+    public static readonly DependencyProperty MobileTitleVisibilityProperty = DependencyProperty.Register(
+      nameof(MobileTitleVisibility),
+      typeof(Visibility),
+      typeof(PageShell),
+      new PropertyMetadata(Visibility.Collapsed)
+    );
+
+    public Visibility MobileTitleVisibility
+    {
+        get => (Visibility)GetValue(MobileTitleVisibilityProperty);
+        set => SetValue(MobileTitleVisibilityProperty, value);
     }
 }

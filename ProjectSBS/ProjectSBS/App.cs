@@ -6,6 +6,9 @@ using ProjectSBS.Services.Interop;
 using ProjectSBS.Services.Items;
 using ProjectSBS.Services.Items.Billing;
 using ProjectSBS.Services.Analytics;
+using ProjectSBS.Services.Items.Filtering;
+using ProjectSBS.Services.Items.Tags;
+using ProjectSBS.Presentation.NestedPages;
 #if WINDOWS
 using Windows.Foundation.Collections;
 using CommunityToolkit.WinUI.Notifications;
@@ -46,13 +49,13 @@ public class App : Application
                     // Uno Platform namespace filter groups
                     // Uncomment individual methods to see more detailed logging
                     //// Generic Xaml events
-                    //logBuilder.XamlLogLevel(LogLevel.Debug);
+                    logBuilder.XamlLogLevel(LogLevel.Debug);
                     //// Layouter specific messages
                     //logBuilder.XamlLayoutLogLevel(LogLevel.Debug);
                     //// Storage messages
                     //logBuilder.StorageLogLevel(LogLevel.Debug);
                     //// Binding related messages
-                    //logBuilder.XamlBindingLogLevel(LogLevel.Debug);
+                    logBuilder.XamlBindingLogLevel(LogLevel.Debug);
                     //// Binder memory references tracking
                     //logBuilder.BinderMemoryReferenceLogLevel(LogLevel.Debug);
                     //// RemoteControl and HotReload related
@@ -93,6 +96,13 @@ public class App : Application
                     services.AddSingleton<IBillingService, BillingService>();
                     services.AddSingleton<IInteropService, InteropService>();
                     services.AddSingleton<IAnalyticsService, AnalyticsService>();
+                    services.AddSingleton<IItemFilterService, ItemFilterService>();
+                    services.AddSingleton<ITagService, TagService>();
+
+                    services.AddTransient<ItemDetailsViewModel>();
+                    services.AddTransient<HomeViewModel>();
+                    services.AddTransient<SettingsViewModel>();
+                    //services.AddTransient<ConversionsViewModel>();
 
 #if __ANDROID__
                     services.AddSingleton<INotificationService, AndroidNotificationService>();
@@ -181,7 +191,7 @@ public class App : Application
             new ViewMap(ViewModel: typeof(ShellViewModel)),
             new ViewMap<LoginPage, LoginViewModel>(),
             new ViewMap<MainPage, MainViewModel>(),
-            new ViewMap<ItemDetailsPage, ItemDetailsViewModel>()
+            new ViewMap<ItemDetails, ItemDetailsViewModel>()
         );
 
         routes.Register(

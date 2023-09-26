@@ -11,9 +11,9 @@ public class TagService : ITagService
         //TODO: Add proper Selectors for FilterCategories
         Tags = new()
         {
-           new Tag(localizer["Welcome"], Color.FromName("Red")),
-           new Tag(localizer["Welcome"], Color.FromName("Red")),
-           new Tag(localizer["Welcome"], Color.FromName("Red"))
+           new(0, localizer["Red Welcome"], Color.FromName("Red")),
+           new(1, localizer["Blue Welcome"], Color.FromName("Blue")),
+           new(2, localizer["Yellow Welcome"], Color.FromName("Yellow"))
         };
     }
 }

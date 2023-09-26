@@ -11,7 +11,6 @@
       not_win:Background="{ThemeResource ApplicationBackground}"
       xmlns:not_win="http://uno.ui/not_win"
       mc:Ignorable="d not_win">
-      <!--TODO Foreground of StatusBar-->
 
     <Grid utu:SafeArea.Insets="All">
         <Grid.RowDefinitions>
@@ -22,7 +21,7 @@
         <win:StackPanel x:Name="AppTitleBar"
                         Orientation="Horizontal"
                         Background="Transparent"
-                        Visibility="{x:Bind TitleVisibility}"
+                        Visibility="{x:Bind DesktopTitleVisibility}"
                         Height="48">
             <Image Source="Assets/Icons/app-icon.png"
                    HorizontalAlignment="Left"
@@ -33,6 +32,60 @@
                        Style="{StaticResource CaptionTextBlockStyle}"
                        VerticalAlignment="Center" />
         </win:StackPanel>
+        
+        <Grid Background="{ThemeResource CardBackgroundFillColorDefault}"
+              Visibility="{x:Bind MobileTitleVisibility}"
+              Padding="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <Button Background="Transparent"
+                        BorderBrush="Transparent"
+                        BorderThickness="0"
+                        Padding="12"
+                        Command="{Binding CloseCommand}">
+                    <SymbolIcon Symbol="Back" />
+                </Button>
+
+                <TextBlock Text="{Binding ItemName, Mode=OneWay}"
+                           Style="{StaticResource TitleTextBlockStyle}"
+                           VerticalAlignment="Center"
+                           Margin="12" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal"
+                        Spacing="4"
+                        Grid.Column="1">
+                <Button Background="Transparent"
+                        BorderBrush="Transparent"
+                        BorderThickness="0"
+                        Padding="12"
+                        VerticalAlignment="Top"
+                        Visibility="{Binding IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
+                        Command="{Binding EnableEditingCommand}">
+
+                    <SymbolIcon Symbol="Edit" />
+                </Button>
+
+                <Button Background="Transparent"
+                        BorderBrush="Transparent"
+                        BorderThickness="0"
+                        Padding="12"
+                        VerticalAlignment="Top"
+                        Visibility="{Binding IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
+                        Command="{Binding EnableEditingCommand}">
+
+                    <SymbolIcon Symbol="More"
+                                RenderTransformOrigin=".5,.5">
+                        <SymbolIcon.RenderTransform>
+                            <RotateTransform Angle="90" />
+                        </SymbolIcon.RenderTransform>
+                    </SymbolIcon>
+                </Button>
+            </StackPanel>
+        </Grid>
 
         <ContentPresenter Content="{x:Bind ContentView}"
                           Grid.Row="1" />

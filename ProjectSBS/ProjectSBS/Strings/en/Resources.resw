@@ -126,11 +126,32 @@
   <data name="ContinueWithoutLogin" xml:space="preserve">
     <value>Continue without Login</value>
   </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Expensive" xml:space="preserve">
+    <value>Expensive</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
   <data name="LoginWithMicrosoft" xml:space="preserve">
     <value>Login with Microsoft</value>
   </data>
+  <data name="Overdue" xml:space="preserve">
+    <value>Overdue</value>
+  </data>
   <data name="PrivacyPolicy" xml:space="preserve">
     <value>Privacy Policy</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Upcoming" xml:space="preserve">
+    <value>Upcoming</value>
   </data>
   <data name="Welcome" xml:space="preserve">
     <value>Welcome</value>

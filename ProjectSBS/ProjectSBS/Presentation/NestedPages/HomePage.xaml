@@ -1,0 +1,257 @@
+﻿<Page x:Class="ProjectSBS.Presentation.NestedPages.HomePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="using:ProjectSBS.Presentation.NestedPages"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:comp="using:ProjectSBS.Presentation.Components"
+      xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+      xmlns:toolkit="using:CommunityToolkit.WinUI"
+      xmlns:controls="using:CommunityToolkit.WinUI.Controls"
+      xmlns:animations="using:CommunityToolkit.WinUI.Animations"
+      xmlns:triggers="using:CommunityToolkit.WinUI.UI.Triggers"
+      xmlns:not_win="http://uno.ui/not_win"
+      xmlns:not_android="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:android="http://uno.ui/android"
+      mc:Ignorable="d not_win android">
+
+    <!--TODO Black blackground-->
+
+    <Border>
+
+        <VisualStateManager.VisualStateGroups>
+
+            <!--Pane Opening DetailsPane-->
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <triggers:IsNullOrEmptyStateTrigger Value="{x:Bind ViewModel.SelectedItem, Mode=OneWay}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="pane2Holder.Visibility"
+                                Value="Collapsed" />
+                        <Setter Target="RootPanel.PanePriority"
+                                Value="Pane1" />
+                        <Setter Target="RootPanel.Pane2Length"
+                                Value="0" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+
+            <!--Pane1 Empty Image-->
+            <VisualStateGroup>
+                <VisualState />
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <triggers:IsNullOrEmptyStateTrigger Value="{x:Bind ViewModel.Items, Mode=OneWay}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="itemsEmptyImage.Visibility"
+                                Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+
+                    </VisualState.StateTriggers>
+
+                    <VisualState.Setters>
+                        <Setter Target="mobileAddButton.Visibility"
+                                Value="Visible" />
+                        <Setter Target="contentHolder.Margin"
+                                Value="8,8,8,0" />
+                    </VisualState.Setters>
+                </VisualState>
+
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="640" />
+                    </VisualState.StateTriggers>
+                </VisualState>
+            </VisualStateGroup>
+
+        </VisualStateManager.VisualStateGroups>
+
+        <muxc:TwoPaneView x:Name="RootPanel"
+                          Pane1Length="*"
+                          Pane2Length="350"
+                          PanePriority="Pane2"
+                          TallModeConfiguration="SinglePane"
+                          WideModeConfiguration="LeftRight">
+
+            <muxc:TwoPaneView.Pane1>
+                <Grid x:Name="contentHolder"
+                      Margin="48,48,48,0">
+                    <StackPanel Spacing="16">
+
+                        <TextBlock Text="Home"
+                                   Style="{StaticResource TitleTextBlockStyle}" />
+
+                        <Button x:Name="desktopAddButton"
+                                Visibility="Visible"
+                                Content="New Item" />
+
+                        <ScrollViewer>
+                            <controls:Segmented SelectedIndex="0">
+                                <controls:SegmentedItem Content="Item 1"
+                                                        Icon="{toolkit:FontIcon Glyph=&#xEA3A;}" />
+                                <controls:SegmentedItem Content="Item 2"
+                                                        Icon="{toolkit:FontIcon Glyph=&#xEA3A;}" />
+                                <controls:SegmentedItem Content="Item 3 with a long label"
+                                                        Icon="{toolkit:FontIcon Glyph=&#xEA3A;}" />
+                                <controls:SegmentedItem Content="Item 4"
+                                                        Icon="{toolkit:FontIcon Glyph=&#xEA3A;}" />
+                            </controls:Segmented>
+                        </ScrollViewer>
+
+                        <comp:StatsBanner />
+
+                        <Image x:Name="itemsEmptyImage"
+                               Visibility="Collapsed"
+                               Source="/ProjectSBS/Assets/Illustrations/undraw_Newsletter_re_wrob.png" />
+
+                        <GridView x:Name="MainList"
+                                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                  ItemsSource="{x:Bind ViewModel.Items, Mode=OneWay}"
+                                  SelectedItem="{x:Bind ViewModel.SelectedItem, Mode=TwoWay}"
+                                  Grid.Row="3">
+
+                            <GridView.Resources>
+                                <FontIconSource x:Key="EditIcon"
+                                                Glyph="&#xE70F;" />
+                                <FontIconSource x:Key="ArchiveIcon"
+                                                Glyph="&#xE7B8;" />
+                                <FontIconSource x:Key="DeleteIcon"
+                                                Glyph="&#xE74D;" />
+
+                                <SwipeItems x:Key="Left"
+                                            Mode="Reveal">
+                                    <SwipeItem Text="Edit"
+                                               Background="Transparent"
+                                               IconSource="{StaticResource EditIcon}"
+                                               Invoked="EditItem_Invoked" />
+                                    <SwipeItem Text="Archive"
+                                               Background="Transparent"
+                                               IconSource="{StaticResource ArchiveIcon}"
+                                               Invoked="ArchiveItem_Invoked" />
+                                </SwipeItems>
+                                <SwipeItems x:Key="Right"
+                                            Mode="Execute">
+                                    <SwipeItem Text="Delete"
+                                               IconSource="{StaticResource DeleteIcon}"
+                                               Foreground="{StaticResource TextOnAccentFillColorPrimaryBrush}"
+                                               Background="{StaticResource SystemAccentColor}"
+                                               Invoked="DeleteItem_Invoked" />
+                                </SwipeItems>
+                            </GridView.Resources>
+
+                            <GridView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <ItemsWrapGrid MaximumRowsOrColumns="1"
+                                                   Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </GridView.ItemsPanel>
+
+                            <GridView.ItemTemplate>
+                                <DataTemplate x:DataType="comp:ItemViewModel">
+                                    <UserControl android:Height="100">
+                                        <SwipeControl LeftItems="{StaticResource Left}"
+                                                      RightItems="{StaticResource Right}"
+                                                      Background="Transparent"
+                                                      android:CornerRadius="20"
+                                                      not_android:CornerRadius="8">
+
+                                            <Border android:Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                                                    android:CornerRadius="20">
+
+                                                <Grid Padding="20">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <StackPanel Spacing="12">
+                                                        <TextBlock Text="{x:Bind Item.Name, Mode=OneWay}"
+                                                                   Style="{StaticResource SubtitleTextBlockStyle}" />
+                                                        <TextBlock Text="in 6 days" />
+                                                    </StackPanel>
+
+                                                    <StackPanel Grid.Column="1"
+                                                                Spacing="12"
+                                                                HorizontalAlignment="Right"
+                                                                VerticalAlignment="Center">
+                                                        <TextBlock Style="{StaticResource SubtitleTextBlockStyle}"
+                                                                   HorizontalAlignment="Right">
+                                        
+                                                            <Run Text="{x:Bind Item.Billing.BasePrice, Mode=OneWay}" />
+                                                            <Run Text="{x:Bind Item.Billing.CurrencyId, Mode=OneWay}" />
+                                                        </TextBlock>
+                                                        <TextBlock Text="255,00 CZK / 2m"
+                                                                   HorizontalAlignment="Right" />
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
+                                        </SwipeControl>
+                                    </UserControl>
+                                </DataTemplate>
+                            </GridView.ItemTemplate>
+                        </GridView>
+
+                    </StackPanel>
+
+                    <Button x:Name="mobileAddButton"
+                            CornerRadius="22"
+                            Height="65"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Right"
+                            ToolTipService.ToolTip="Add new"
+                            Style="{StaticResource AccentButtonStyle}"
+                            Grid.Row="2"
+                            Visibility="Collapsed"
+                            Margin="20"
+                            Padding="22,0">
+                        <!--Command="{x:Bind AddNewCommand, Mode=TwoWay}"-->
+
+                        <!--TODO Rotate this icon - previous project Easter Egg-->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+                            <SymbolIcon x:Name="fabIcon"
+                                        Symbol="Add" />
+
+                            <TextBlock Text="Add"
+                                       Grid.Column="1"
+                                       Margin="12,0,0,0" />
+                        </Grid>
+                    </Button>
+                </Grid>
+
+            </muxc:TwoPaneView.Pane1>
+
+            <muxc:TwoPaneView.Pane2>
+                <StackPanel x:Name="pane2Holder"
+                            Visibility="Visible">
+                    <!--<animations:Implicit.ShowAnimations>
+                        <animations:TranslationAnimation From="0, -200, 0"
+                                                         To="0"
+                                                         Duration="0:0:1" />
+                        <animations:OpacityAnimation From="0"
+                                                     To="1.0"
+                                                     Duration="0:0:1" />
+                    </animations:Implicit.ShowAnimations>-->
+
+                    <comp:ItemDetails />
+
+                </StackPanel>
+            </muxc:TwoPaneView.Pane2>
+
+        </muxc:TwoPaneView>
+
+    </Border>
+</Page>

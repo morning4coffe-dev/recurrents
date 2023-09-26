@@ -12,7 +12,9 @@
 
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Labs.WinUI.SettingsControls" />
+		<PackageReference Include="CommunityToolkit.WinUI.Controls.Segmented" />
 		<PackageReference Include="CommunityToolkit.WinUI.Converters" />
+		<PackageReference Include="CommunityToolkit.WinUI.Animations" />
 		<PackageReference Include="CommunityToolkit.WinUI.Triggers" />
 		<PackageReference Include="LiveChartsCore.SkiaSharpView.Uno.WinUI" />
 		<PackageReference Include="Microsoft.AppCenter" />

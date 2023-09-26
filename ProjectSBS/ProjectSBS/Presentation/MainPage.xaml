@@ -12,9 +12,8 @@
       xmlns:converters="using:CommunityToolkit.WinUI.Converters"
       xmlns:models="using:ProjectSBS.Business.Models"
       NavigationCacheMode="Required"
+      xmlns:triggers="using:CommunityToolkit.WinUI.UI.Triggers"
       xmlns:toolkit="using:CommunityToolkit.WinUI">
-
-    <!--TODO make the Background Black-->
 
     <Page.Resources>
         <converters:EmptyObjectToObjectConverter x:Key="EmptyToFalseConverter"
@@ -49,68 +48,67 @@
 
     </Page.Resources>
 
-    <comp:PageShell>
+    <comp:PageShell DesktopTitleVisibility="Visible">
         <comp:PageShell.ContentView>
 
             <UserControl>
                 <Grid>
                     <VisualStateManager.VisualStateGroups>
+
                         <VisualStateGroup>
-                            <VisualState x:Name="NarrowState">
+                            <VisualState>
                                 <VisualState.StateTriggers>
                                     <AdaptiveTrigger MinWindowWidth="0" />
+
                                 </VisualState.StateTriggers>
 
                                 <VisualState.Setters>
-                                    <Setter Target="navigation.IsPaneVisible"
+                                    <Setter Target="navigation.IsPaneToggleButtonVisible"
                                             Value="False" />
-                                    <Setter Target="mobileHeader.Visibility"
-                                            Value="Visible" />
-                                    <Setter Target="desktopHeader.Visibility"
-                                            Value="Collapsed" />
-                                    <Setter Target="contentHolder.Padding"
-                                            Value="12,0" />
                                 </VisualState.Setters>
                             </VisualState>
 
-                            <VisualState x:Name="WideState">
+                            <VisualState>
                                 <VisualState.StateTriggers>
                                     <AdaptiveTrigger MinWindowWidth="640" />
+
                                 </VisualState.StateTriggers>
 
                                 <VisualState.Setters>
+
                                 </VisualState.Setters>
                             </VisualState>
                         </VisualStateGroup>
 
                         <VisualStateGroup>
-                            <VisualState x:Name="connected">
+                            <VisualState>
                                 <VisualState.StateTriggers>
-                                    <toolkit:NetworkConnectionStateTrigger ConnectionState="Connected" />
+                                    <triggers:IsEqualStateTrigger Value="{Binding IsPaneOpen, ElementName=navigation, Mode=OneWay}"
+                                                                  To="True" />
                                 </VisualState.StateTriggers>
                                 <VisualState.Setters>
+                                    <Setter Target="desktopPerson.Height"
+                                            Value="48" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState>
+                                <VisualState.StateTriggers>
+                                    <triggers:IsEqualStateTrigger Value="{Binding IsPaneOpen, ElementName=navigation, Mode=OneWay}"
+                                                                  To="False" />
+                                </VisualState.StateTriggers>
+                                <VisualState.Setters>
+                                    <Setter Target="desktopPerson.Height"
+                                            Value="26" />
                                 </VisualState.Setters>
                             </VisualState>
                         </VisualStateGroup>
-
-                        <!--<VisualStateGroup>
-                            <VisualState x:Name="paneOpen">
-                                <VisualState.StateTriggers>
-                                    <toolkit:CompareStateTrigger Comparison="Equal"
-                                                                 Value="{Binding navigation.IsPaneOpen, ElementName=NavigationView, Mode=OneWay}"
-                                                                 To="True" />
-                                </VisualState.StateTriggers>
-                                <VisualState.Setters>
-                                    <Setter Target="desktopPerson.Width" Value="25" />
-                                </VisualState.Setters>
-                            </VisualState>
-                        </VisualStateGroup>-->
 
                     </VisualStateManager.VisualStateGroups>
 
                     <NavigationView x:Name="navigation"
                                     Grid.Row="1"
                                     IsBackButtonVisible="Collapsed"
+                                    IsPaneToggleButtonVisible="True"
                                     IsSettingsVisible="True"
                                     IsPaneVisible="True"
                                     MenuItemsSource="{Binding Categories}"
@@ -130,8 +128,8 @@
                                     <StackPanel Orientation="Horizontal"
                                                 Spacing="12">
                                         <PersonPicture x:Name="desktopPerson"
-                                                       Width="45"
-                                                       DisplayName="{Binding User.Name}" />
+                                                       DisplayName="{Binding User.Name}"
+                                                       Height="48" />
                                         <TextBlock  Text="{Binding User.Name}"
                                                     VerticalAlignment="Center" />
                                     </StackPanel>
@@ -143,7 +141,7 @@
                         <NavigationView.MenuItemTemplate>
                             <DataTemplate x:DataType="models:FilterCategory">
                                 <NavigationViewItem Content="{x:Bind Text}">
-                                <!--ToolTip="{x:Bind Tooltip}">-->
+                                    <!--ToolTip="{x:Bind Tooltip}">-->
                                     <NavigationViewItem.Icon>
                                         <FontIcon Glyph="{x:Bind Glyph}" />
                                     </NavigationViewItem.Icon>
@@ -151,123 +149,7 @@
                             </DataTemplate>
                         </NavigationView.MenuItemTemplate>
 
-                        <SplitView IsPaneOpen="{Binding SelectedItem, Converter={StaticResource EmptyToFalseConverter}}"
-                                   PaneBackground="Transparent"
-                                   PanePlacement="Right"
-                                   OpenPaneLength="{Binding IsMobile, Converter={StaticResource MobileToValueConverter}}"
-                                   DisplayMode="Inline">
-
-                            <ScrollViewer>
-                                <Grid x:Name="contentHolder"
-                                      RowSpacing="12"
-                                      Padding="50, 25">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="*" />
-                                    </Grid.RowDefinitions>
-
-                                    <Grid x:Name="desktopHeader"
-                                          Height="50">
-                                        <TextBlock Text="Home"
-                                                   VerticalAlignment="Center"
-                                                   Style="{StaticResource TitleTextBlockStyle}" />
-                                    </Grid>
-
-                                    <Grid x:Name="mobileHeader"
-                                          Visibility="Collapsed"
-                                          Margin="0,6,0,-12"
-                                          Height="60">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-
-                                        <TextBlock Text="Good Morning"
-                                                   Style="{StaticResource TitleTextBlockStyle}"
-                                                   Margin="0,15,0,0" />
-
-                                        <Button Grid.Column="1"
-                                                Padding="0"
-                                                CornerRadius="55"
-                                                Background="Transparent"
-                                                BorderBrush="Transparent"
-                                                Flyout="{StaticResource UserFlyout}">
-
-                                            <PersonPicture Width="55"
-                                                           DisplayName="{Binding User.Name}" />
-
-                                        </Button>
-
-                                    </Grid>
-
-                                    <comp:HomePage Items="{Binding Items, Mode=TwoWay}"
-                                                   SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
-                                                   Categories="{Binding Categories, Mode=TwoWay}"
-                                                   SelectedCategory="{Binding SelectedCategory, Mode=TwoWay}"
-                                                   AddNewCommand="{Binding AddNewCommand, Mode=OneWay}"
-                                                   DeleteItemCommand="{Binding DeleteItemCommand, Mode=OneTime}"
-                                                   ArchiveItemCommand="{Binding ArchiveItemCommand, Mode=OneTime}"
-                                                   EditItemCommand="{Binding EnableEditingCommand, Mode=OneTime}"
-                                                   Grid.Row="1" />
-                                </Grid>
-                            </ScrollViewer>
-
-                            <SplitView.Pane>
-
-                                <Grid Background="{ThemeResource CardBackgroundFillColorDefault}"
-                                      RowSpacing="12"
-                                      Padding="24">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto" />
-                                        <RowDefinition />
-                                    </Grid.RowDefinitions>
-
-                                    <Border Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-                                            Margin="-24"
-                                            Grid.RowSpan="2" />
-
-                                    <Grid ColumnSpacing="8">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-
-                                        <TextBlock Text="Details"
-                                                   Style="{StaticResource TitleTextBlockStyle}" />
-
-                                        <StackPanel Orientation="Horizontal"
-                                                    Spacing="8"
-                                                    Grid.Column="1">
-                                            <Button Visibility="{Binding IsEditing, Converter={StaticResource FalseToVisibleConverter}}"
-                                                    Command="{Binding EnableEditingCommand}"
-                                                    Padding="12, 8">
-                                                <FontIcon Glyph="&#xE70F;"
-                                                          FontSize="14" />
-                                            </Button>
-
-                                            <Button Visibility="{Binding IsEditing, Converter={StaticResource FalseToVisibleConverter}}"
-                                                    Command="{Binding DeleteItemCommand}"
-                                                    Padding="12, 8">
-                                                <FontIcon Glyph="&#xE74D;"
-                                                          FontSize="14" />
-                                            </Button>
-
-                                            <Button Command="{Binding CloseDetailsCommand}"
-                                                    Padding="12, 8">
-                                                <FontIcon Glyph="&#xE8BB;"
-                                                          FontSize="14" />
-                                            </Button>
-                                        </StackPanel>
-                                    </Grid>
-
-                                    <comp:ItemDetails SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
-                                                      IsEditing="{Binding IsEditing, Mode=TwoWay}"
-                                                      Grid.Row="1" />
-                                </Grid>
-
-                            </SplitView.Pane>
-                        </SplitView>
-
+                        <Frame SourcePageType="{Binding PageType, Mode=TwoWay}" />
                     </NavigationView>
 
                 </Grid>

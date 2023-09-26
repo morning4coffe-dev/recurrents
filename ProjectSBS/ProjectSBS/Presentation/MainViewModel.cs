@@ -5,6 +5,7 @@ using ProjectSBS.Services.User;
 using System.Collections.ObjectModel;
 using Windows.System.Profile;
 using ProjectSBS.Services.Items.Filtering;
+using ProjectSBS.Presentation.NestedPages;
 
 namespace ProjectSBS.Presentation;
 
@@ -15,7 +16,7 @@ public partial class MainViewModel : ObservableObject
 
     private readonly IItemService _itemService;
 
-    private readonly IDispatcher _dispatch;
+    public static IDispatcher Dispatch { get; private set; }
     private readonly INavigator _navigator;
 
     [ObservableProperty]
@@ -28,7 +29,10 @@ public partial class MainViewModel : ObservableObject
     private bool _isEditing;
 
     [ObservableProperty]
-    private decimal _sum;
+    private Type? _pageType;
+
+    [ObservableProperty]
+    private Type? _settingsPage;
 
     public bool IsMobile
     {
@@ -55,11 +59,10 @@ public partial class MainViewModel : ObservableObject
                 return;
             }
 
-            if (IsMobile && value != null)
-            {
-                SentItem = value;
-                _ = _navigator.NavigateViewModelAsync<ItemDetailsViewModel>(this);
-            }
+            //Created only after user first requests opening item
+            //ItemDetails ??= typeof(ItemDetails);
+
+            WeakReferenceMessenger.Default.Send(new ItemSelectionChanged(value));
 
             IsEditing = false;
 
@@ -81,19 +84,14 @@ public partial class MainViewModel : ObservableObject
                 return;
             }
 
+            if (PageType != typeof(HomePage))
+            {
+                PageType = typeof(HomePage);
+            }
+
             _selectedCategory = value;
 
-            _ = RefreshItems();
-        }
-    }
-
-    private static ItemViewModel? _sentItem;
-    public static ItemViewModel? SentItem
-    {
-        get => _sentItem;
-        set
-        {
-            _sentItem = value;
+            //_ = RefreshItems();
         }
     }
 
@@ -123,8 +121,8 @@ public partial class MainViewModel : ObservableObject
 #endif
         _userService = userService;
         _itemService = itemService;
-        _dispatch = dispatch;
         _navigator = navigator;
+        Dispatch = dispatch;
 
         Title = "Main";
         Title += $" - {localizer["ApplicationName"]}";
@@ -142,28 +140,6 @@ public partial class MainViewModel : ObservableObject
         Categories = filterService.Categories;
 
         Task.Run(InitializeAsync);
-
-        WeakReferenceMessenger.Default.Register<ItemSelectionChanged>(this, (r, m) =>
-        {
-            ItemViewModel? item = null;
-
-            if (SelectedItem is not null)
-            {
-                item = Items.FirstOrDefault(i => i.Item.Id == SelectedItem.Item?.Id);
-            }
-
-            if (item is null)
-            {
-                _itemService.NewItem(m.Item.Item);
-
-                if (IsMobile)
-                {
-                    _navigator.GoBack(this);
-                }
-            }
-
-            SelectedItem = null;
-        });
     }
 
     private async Task InitializeAsync()
@@ -172,7 +148,7 @@ public partial class MainViewModel : ObservableObject
 
         var user = await _userService.GetUser();
 
-        await _dispatch.ExecuteAsync(() =>
+        await Dispatch.ExecuteAsync(() =>
         {
             if (user is not null)
             {
@@ -182,40 +158,31 @@ public partial class MainViewModel : ObservableObject
             else
             {
                 //TODO enable login button
-            }
+            }            
         });
 
-        await _itemService.InitializeAsync();
-
-        var items = await RefreshItems();
-
-        await _dispatch.ExecuteAsync(() =>
+        while ((Application.Current as App)!.Host == null)
         {
-            Sum = items.Sum(i => i.Item.Billing.BasePrice);
-        });
-    }
+            //Wait till Host is created
+            await Task.Delay(200);
 
-    private async Task<IEnumerable<ItemViewModel>> RefreshItems()
-    {
-        var items = _itemService.GetItems(SelectedCategory.Selector);
+            //TODO Add loading indicator
+        }
 
-        await _dispatch.ExecuteAsync(() =>
+        await Dispatch.ExecuteAsync(() =>
         {
-            Items.Clear();
-            Items.AddRange(items);
+            PageType = typeof(HomePage);
         });
-
-        return items;
     }
 
     private async Task GoToSecondView()
     {
-        //await _navigator.NavigateViewModelAsync<ItemDetailsViewModel>(this, data: new Entity(Name!));
+        PageType = typeof(SettingsPage);
     }
 
     public async Task DoLogout(CancellationToken token)
     {
-        await _authentication.LogoutAsync(_dispatch, token);
+        await _authentication.LogoutAsync(Dispatch, token);
         //TODO probably will have to clean the token too
     }
 

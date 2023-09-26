@@ -1,0 +1,30 @@
+﻿<Page x:Class="ProjectSBS.Presentation.Components.StatsBanner"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="using:ProjectSBS.Presentation.Components"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:win="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:lvc="using:LiveChartsCore.SkiaSharpView.WinUI"
+      xmlns:not_win="http://uno.ui/not_win"
+      mc:Ignorable="d not_win">
+
+    <Border CornerRadius="16"
+            Visibility="Visible"
+            not_win:Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+            win:Background="{ThemeResource AcrylicInAppFillColorDefaultBrush}"
+            Grid.Row="1">
+        <StackPanel>
+            <StackPanel Margin="30,30,0,0">
+                <TextBlock Text="Monthly items"
+                           Opacity="0.75" />
+                <TextBlock Text="{Binding Sum}"
+                           Style="{StaticResource TitleTextBlockStyle}" />
+            </StackPanel>
+
+            <lvc:CartesianChart Height="170"
+                                Foreground="White"
+                                Series="{x:Bind Series}" />
+        </StackPanel>
+    </Border>
+</Page>
