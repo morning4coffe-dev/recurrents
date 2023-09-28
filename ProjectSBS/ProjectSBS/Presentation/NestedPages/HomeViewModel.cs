@@ -2,15 +2,17 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Messaging;
 using ProjectSBS.Business;
 using ProjectSBS.Services.Items;
+using ProjectSBS.Services.Items.Filtering;
 using Windows.UI.Core;
 
 namespace ProjectSBS.Presentation.NestedPages;
 
 public partial class HomeViewModel : ObservableObject
 {
-    private INavigator _navigator;
-    private IDispatcher _dispatch;
-    private IItemService _itemService;
+    private readonly INavigator _navigator;
+    private readonly IDispatcher _dispatch;
+    private readonly IItemService _itemService;
+    private readonly IItemFilterService _filterService;
 
     [ObservableProperty]
     private Type? _itemDetails;
@@ -46,21 +48,44 @@ public partial class HomeViewModel : ObservableObject
 
     public ObservableCollection<ItemViewModel> Items { get; } = new();
 
-    public ICommand EnableEditingCommand { get; }
-    public ICommand CloseCommand { get; }
+    public List<FilterCategory> Categories { get; }
+
+    public FilterCategory SelectedCategory
+    {
+        get => _filterService.SelectedCategory;
+        set
+        {
+            _filterService.SelectedCategory = value;
+
+            WeakReferenceMessenger.Default.Send(new CategorySelectionChanged());
+
+            OnPropertyChanged();
+
+            _ = RefreshItems();
+        }
+    }
+
+    public ICommand Logout { get; }
+    public ICommand AddNewCommand { get; }
 
     public HomeViewModel(
         INavigator navigator,
         IDispatcher dispatch,
-        IItemService itemService)
+        IItemService itemService,
+        IItemFilterService filterService)
     {
         _navigator = navigator;
         _dispatch = dispatch;
         _itemService = itemService;
+        _filterService = filterService;
+
+        AddNewCommand = new RelayCommand(AddNew);
 
 #if HAS_UNO
         SystemNavigationManager.GetForCurrentView().BackRequested += System_BackRequested;
 #endif
+
+        Categories = filterService.Categories;
 
         Task.Run(InitializeAsync);
 
@@ -81,7 +106,10 @@ public partial class HomeViewModel : ObservableObject
             SelectedItem = null;
         });
 
-        //InitializeAsync();
+        WeakReferenceMessenger.Default.Register<CategorySelectionChanged>(this, (r, m) =>
+        {
+            OnPropertyChanged(nameof(SelectedCategory));
+        });
     }
 
     private async Task InitializeAsync()
@@ -98,7 +126,7 @@ public partial class HomeViewModel : ObservableObject
 
     private async Task<IEnumerable<ItemViewModel>> RefreshItems()
     {
-        var items = _itemService.GetItems(/*TODO Filtering SelectedCategory.Selector*/);
+        var items = _itemService.GetItems(SelectedCategory.Selector);
 
         await MainViewModel.Dispatch.ExecuteAsync(() =>
         {
@@ -119,5 +147,51 @@ public partial class HomeViewModel : ObservableObject
     {
         e.Handled = true;
         SystemNavigationManager.GetForCurrentView().BackRequested -= System_BackRequested;
+    }
+
+    private void AddNew()
+    {
+        SelectedItem = new ItemViewModel(null);
+
+        IsEditing = true;
+    }
+
+    private async Task SubmitChanges()
+    {
+        SelectedItem = null;
+
+        IsEditing = false;
+    }
+
+    private async Task EnableEditing()
+    {
+        IsEditing = true;
+    }
+
+    private async Task DeleteItem()
+    {
+        //TODO Find item by Id in database and delete it
+        return;
+    }
+
+    private async Task ArchiveItem()
+    {
+        //TODO Find item by Id in database and delete it
+        return;
+    }
+
+    private async Task CloseDetails()
+    {
+        //TODO Instead of IsEditing, check if the item is dirty
+        if (IsEditing)
+        {
+            await _navigator.ShowMessageDialogAsync(this, title: "...", content: "Really?");
+        }
+        else
+        {
+            SelectedItem = null;
+        }
+
+        IsEditing = false;
     }
 }

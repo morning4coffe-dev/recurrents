@@ -29,7 +29,7 @@
                             Icon="{toolkit:FontIcon Glyph=&#xE713;}"
                             AutomationProperties.AutomationId="SecondPageButton"
                             Padding="100, 16"
-                            Command="{Binding GoToSecond}" />
+                            Command="{Binding GoToSettingsCommand}" />
 
             <MenuFlyoutItem Text="Conversions"
                             Icon="{toolkit:FontIcon Glyph=&#xE8C7;}"
@@ -38,7 +38,7 @@
 
             <MenuFlyoutItem Text="Logout"
                             Padding="100, 16"
-                            Command="{Binding Logout}">
+                            Command="{Binding LogoutCommand}">
                 <MenuFlyoutItem.Icon>
                     <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}"
                               Glyph="&#xF3B1;" />

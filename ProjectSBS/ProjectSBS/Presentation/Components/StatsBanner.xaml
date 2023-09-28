@@ -24,7 +24,7 @@
 
             <lvc:CartesianChart Height="170"
                                 Foreground="White"
-                                Series="{x:Bind Series}" />
+                                Series="{x:Bind ViewModel.Series}" />
         </StackPanel>
     </Border>
 </Page>

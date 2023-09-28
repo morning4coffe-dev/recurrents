@@ -102,6 +102,7 @@ public class App : Application
                     services.AddTransient<ItemDetailsViewModel>();
                     services.AddTransient<HomeViewModel>();
                     services.AddTransient<SettingsViewModel>();
+                    services.AddTransient<StatsBannerViewModel>();
                     //services.AddTransient<ConversionsViewModel>();
 
 #if __ANDROID__

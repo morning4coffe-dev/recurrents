@@ -1,7 +1,4 @@
-﻿using LiveChartsCore.SkiaSharpView;
-using LiveChartsCore;
-
-namespace ProjectSBS.Presentation.Components;
+﻿namespace ProjectSBS.Presentation.Components;
 
 public sealed partial class StatsBanner : Page
 {
@@ -13,13 +10,4 @@ public sealed partial class StatsBanner : Page
     }
 
     public StatsBannerViewModel ViewModel => (StatsBannerViewModel)DataContext;
-
-    public ISeries[] Series { get; set; } =
-    {
-        new LineSeries<double>
-        {
-            Values = new double[] { 20, 1, 3, 5, 3, 24, 6 },
-            Fill = null
-        }
-    };
 }

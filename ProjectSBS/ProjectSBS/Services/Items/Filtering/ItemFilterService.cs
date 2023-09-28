@@ -3,6 +3,7 @@
 public class ItemFilterService : IItemFilterService
 {
     public List<FilterCategory> Categories { get; }
+    public FilterCategory SelectedCategory { get; set; }
 
     public ItemFilterService(IStringLocalizer localizer)
     {
@@ -11,8 +12,10 @@ public class ItemFilterService : IItemFilterService
         {
             new(localizer["Home"], "\uE80F"),
             new(localizer["Upcoming"], "\uE752", i => !i.IsPaid),
-            new(localizer["Overdue"], "\uEC92", i => i.Item.Name is "Sample Item 1"),
-            new(localizer["Expensive"], "🥩", i => i.Item.Billing.BasePrice > 50),
+            new(localizer["Overdue"], "\uEC92", i => i.Item?.Name is "Sample Item 1"),
+            new(localizer["Expensive"], "\uE717", i => i.Item.Billing.BasePrice > 50),
         };
+
+        SelectedCategory = Categories[0];
     }
 }

@@ -27,7 +27,8 @@
                 <Grid>
 
                     <ScrollViewer Visibility="{Binding IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}">
-                        <StackPanel Spacing="8">
+                        <StackPanel Spacing="8"
+                                    Margin="8">
                             <Border Style="{StaticResource DetailsBorder}">
                                 <StackPanel Spacing="8">
                                     <TextBlock Text="{Binding SelectedItem.Item.Name, Mode=OneWay}"
@@ -51,7 +52,7 @@
                                               Margin="-16"
                                               Padding="16">
                                     <ItemsRepeater VerticalAlignment="Top"
-                                                   ItemsSource="{Binding Items}">
+                                                   ItemsSource="{x:Bind ViewModel.Items}">
                                         <ItemsRepeater.Layout>
                                             <StackLayout Orientation="Horizontal"
                                                          Spacing="8" />
@@ -82,7 +83,8 @@
                         </Grid.RowDefinitions>
 
                         <ScrollViewer>
-                            <StackPanel Spacing="16">
+                            <StackPanel Spacing="16"
+                                        Margin="8">
                                 <TextBox Header="Name"
                                          Text="{Binding SelectedItem.Item.Name, Mode=TwoWay}" />
 
@@ -96,14 +98,14 @@
                                                Value="{Binding SelectedItem.Item.Billing.BasePrice, Mode=TwoWay, Converter={StaticResource DecimalToDoubleConverter}}"
                                                SpinButtonPlacementMode="Inline" />
                                     <ComboBox VerticalAlignment="Bottom"
-                                              ItemsSource="{Binding Currencies, Mode=OneWay}"
-                                              SelectedItem="{Binding}"
+                                              ItemsSource="{x:Bind ViewModel.Currencies, Mode=OneWay}"
+                                              SelectedItem="{x:Bind}"
                                               Grid.Column="1" />
                                 </Grid>
 
                                 <!--TODO Make the Tags more safe for future versions, check for inner TagId-->
                                 <ComboBox Header="Tag"
-                                          ItemsSource="{Binding Tags, Mode=OneTime}"
+                                          ItemsSource="{x:Bind ViewModel.Tags, Mode=OneTime}"
                                           SelectedIndex="{Binding SelectedItem.Item.TagId, Mode=TwoWay}"
                                           VerticalAlignment="Bottom">
                                     <ComboBox.ItemTemplate>
@@ -146,7 +148,8 @@
                             </StackPanel>
                         </ScrollViewer>
 
-                        <Button Content="{Binding SaveText, Mode=OneWay}"
+                        <Button Content="{x:Bind ViewModel.SaveText, Mode=OneWay}"
+                                Command="{x:Bind ViewModel.SaveCommand}"
                                 HorizontalAlignment="Stretch"
                                 Height="45"
                                 Grid.Row="1" />

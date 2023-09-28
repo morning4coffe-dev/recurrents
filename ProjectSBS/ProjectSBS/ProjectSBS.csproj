@@ -113,7 +113,6 @@
 
 	<ItemGroup>
 	  <Folder Include="Services\Interop\Store\" />
-	  <Folder Include="Services\Navigation\" />
 	</ItemGroup>
 
 	<ItemGroup>

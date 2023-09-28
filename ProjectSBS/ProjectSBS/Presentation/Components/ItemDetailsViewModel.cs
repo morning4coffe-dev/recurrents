@@ -33,6 +33,7 @@ public partial class ItemDetailsViewModel : ObservableObject
 
     public ICommand EnableEditingCommand { get; }
     public ICommand CloseCommand { get; }
+    public ICommand SaveCommand { get; }
 
     public ItemDetailsViewModel(
         INavigator navigator,
@@ -47,10 +48,17 @@ public partial class ItemDetailsViewModel : ObservableObject
 
         EnableEditingCommand = new AsyncRelayCommand(EnableEditing);
         CloseCommand = new AsyncRelayCommand(Close);
+        SaveCommand = new AsyncRelayCommand(Save);
 
         SaveText = localizer["Save"];
         EditText = localizer["Edit"];
 
+        Tags = tagService.Tags.ToObservableCollection();
+
+        InitializeCurrency(currencyCache);
+
+        ItemName = SelectedItem?.Item?.Name ?? "New Item";
+        
         WeakReferenceMessenger.Default.Register<ItemSelectionChanged>(this, (r, m) =>
         {
 #if HAS_UNO
@@ -59,17 +67,10 @@ public partial class ItemDetailsViewModel : ObservableObject
             if (m.SelectedItem is { } item)
             {
                 SelectedItem = item;
+
+                //TODO get logs Items = item.
             }
         });
-
-        Tags = tagService.Tags.ToObservableCollection();
-
-        InitializeCurrency(currencyCache);
-
-        ItemName = SelectedItem?.Item?.Name ?? "New Item";
-
-        //Done after init of itemService
-        Items = itemService.GetItems().ToObservableCollection();
     }
 
     private async void InitializeCurrency(ICurrencyCache currencyCache)
@@ -100,6 +101,12 @@ public partial class ItemDetailsViewModel : ObservableObject
 
         WeakReferenceMessenger.Default.Send(new ItemUpdated(SelectedItem));
     }
+
+    private async Task Save()
+    {
+        WeakReferenceMessenger.Default.Send(new ItemUpdated(SelectedItem));
+    }
+
     private void System_BackRequested(object? sender, BackRequestedEventArgs e)
     {
         e.Handled = true;
