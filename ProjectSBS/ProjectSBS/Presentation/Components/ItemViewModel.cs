@@ -43,6 +43,16 @@ public partial class ItemViewModel : ObservableObject
         IsPaid = CalculateIsPaid(Item, logs);
     }
 
+    public List<DateOnly> GetFuturePayments()
+    {
+        if (Item?.Billing is not { } billing)
+        {
+            return new();
+        }
+
+        return _billingService.GetFuturePayments(billing.InitialDate, billing.PeriodType, billing.RecurEvery);
+    }
+
     private bool CalculateIsPaid(Item item, List<ItemLog> logs)
     {
         _billingService.GetPaymentLogsForItem(item, logs);
