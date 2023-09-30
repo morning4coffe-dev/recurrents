@@ -64,6 +64,16 @@ public class ItemService : IItemService
         _items.Add(itemVM);
     }
 
+    public void DeleteItem(ItemViewModel item)
+    {
+        _items.Remove(item);
+
+        var itemsList = _items
+            .Select(itemViewModel => itemViewModel.Item)
+            .ToList() ?? new();
+        _dataService.SaveDataAsync(itemsList);
+    }
+
     public ItemViewModel ScheduleBilling(ItemViewModel itemVM, List<ItemLog> logs)
     {
         var item = itemVM.Item;
@@ -73,7 +83,7 @@ public class ItemService : IItemService
         {
             foreach (var date in paymentDates)
             {
-                _notification.ScheduleNotification(item.Id, item.Name, DateTime.Now.ToString(), date, new TimeOnly(8, 00));
+                //TODO _notification.ScheduleNotification(item.Id, item.Name, DateTime.Now.ToString(), date, new TimeOnly(8, 00));
             }
         });
 
