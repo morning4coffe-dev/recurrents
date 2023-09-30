@@ -17,7 +17,7 @@ public partial class MainViewModel : ObservableObject
     private readonly IItemFilterService _filterService;
 
     public static IDispatcher? Dispatch { get; private set; }
-    private readonly INavigator _navigator;
+    public static INavigator? Navigator { get; private set; }
 
     [ObservableProperty]
     private string? name;
@@ -82,10 +82,10 @@ public partial class MainViewModel : ObservableObject
         _authentication = authentication;
 #endif
         _userService = userService;
-        _navigator = navigator;
-        Dispatch = dispatch;
         _filterService = filterService;
 
+        Dispatch = dispatch;
+        Navigator = navigator;
 
         Title = "Main";
         Title += $" - {localizer["ApplicationName"]}";

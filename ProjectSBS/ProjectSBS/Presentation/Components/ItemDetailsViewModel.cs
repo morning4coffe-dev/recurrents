@@ -3,14 +3,19 @@ using ProjectSBS.Business;
 using ProjectSBS.Services.Items;
 using ProjectSBS.Services.Items.Tags;
 using System.Collections.ObjectModel;
+using System.Globalization;
+using Uno.Extensions.Navigation;
 using Windows.UI.Core;
 
 namespace ProjectSBS.Presentation.Components;
 
 public partial class ItemDetailsViewModel : ObservableObject
 {
-    private INavigator _navigator;
-    private IDispatcher _dispatch;
+    private readonly INavigator _navigator;
+    private readonly IDispatcher _dispatch;
+
+    private readonly IStringLocalizer _localizer;
+    private readonly IItemService _itemService;
 
     [ObservableProperty]
     private ItemViewModel? _selectedItem;
@@ -30,10 +35,12 @@ public partial class ItemDetailsViewModel : ObservableObject
     public string EditText { get; }
 
     public ObservableCollection<ItemViewModel> Items { get; } = new();
+    public ObservableCollection<string> FuturePayments { get; } = new();
 
     public ICommand EnableEditingCommand { get; }
     public ICommand CloseCommand { get; }
     public ICommand SaveCommand { get; }
+    public ICommand DeleteCommand { get; }
 
     public ItemDetailsViewModel(
         INavigator navigator,
@@ -45,10 +52,13 @@ public partial class ItemDetailsViewModel : ObservableObject
     {
         _navigator = navigator;
         _dispatch = dispatch;
+        _localizer = localizer;
+        _itemService = itemService;
 
         EnableEditingCommand = new AsyncRelayCommand(EnableEditing);
         CloseCommand = new AsyncRelayCommand(Close);
         SaveCommand = new AsyncRelayCommand(Save);
+        DeleteCommand = new AsyncRelayCommand(DeleteItem);
 
         SaveText = localizer["Save"];
         EditText = localizer["Edit"];
@@ -58,7 +68,7 @@ public partial class ItemDetailsViewModel : ObservableObject
         InitializeCurrency(currencyCache);
 
         ItemName = SelectedItem?.Item?.Name ?? "New Item";
-        
+
         WeakReferenceMessenger.Default.Register<ItemSelectionChanged>(this, (r, m) =>
         {
 #if HAS_UNO
@@ -68,7 +78,16 @@ public partial class ItemDetailsViewModel : ObservableObject
             {
                 SelectedItem = item;
 
-                //TODO get logs Items = item.
+                IsEditing = m.IsEdit;
+
+                FuturePayments.Clear();
+
+                var localizedDateStrings 
+                    = item.GetFuturePayments()
+                          .Select(date => date.ToString(CultureInfo.CurrentCulture))
+                          .ToList();
+
+                FuturePayments.AddRange(localizedDateStrings);
             }
         });
     }
@@ -94,12 +113,29 @@ public partial class ItemDetailsViewModel : ObservableObject
         IsEditing = true;
     }
 
-    private async Task Close()
+    private async Task<bool> Close()
     {
-        //await _navigator.ShowMessageDialogAsync(this, title: "...", content: "Really?");
-        //TODO Ask to save?
+        if (IsEditing)
+        {
+            await MainViewModel.Navigator.ShowMessageDialogAsync(
+                this,
+                title: _localizer?["Leave"] ?? "Really wanna leave?",
+                content: _localizer?["Dialog_Ok"] ?? "Really?",
+                buttons: new[]
+                {
+                    new DialogAction(
+                        Label: _localizer?["Ok"] ?? "Ok", 
+                        Action: () => { IsEditing = false; }),
+                    new DialogAction(
+                        Label: _localizer?["Cancel"] ?? "Cancel")
+                });
+
+            return false;
+        }
 
         WeakReferenceMessenger.Default.Send(new ItemUpdated(SelectedItem));
+
+        return true;
     }
 
     private async Task Save()
@@ -107,10 +143,19 @@ public partial class ItemDetailsViewModel : ObservableObject
         WeakReferenceMessenger.Default.Send(new ItemUpdated(SelectedItem));
     }
 
-    private void System_BackRequested(object? sender, BackRequestedEventArgs e)
+    private async Task DeleteItem()
+    {
+        WeakReferenceMessenger.Default.Send(new ItemDeleted(SelectedItem));
+    }
+
+    private async void System_BackRequested(object? sender, BackRequestedEventArgs e)
     {
         e.Handled = true;
-        _ = Close();
-        SystemNavigationManager.GetForCurrentView().BackRequested -= System_BackRequested;
+        var close = await Close();
+
+        if (close)
+        {
+            SystemNavigationManager.GetForCurrentView().BackRequested -= System_BackRequested;
+        }
     }
 }

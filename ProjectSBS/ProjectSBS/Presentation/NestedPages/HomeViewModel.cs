@@ -9,8 +9,6 @@ namespace ProjectSBS.Presentation.NestedPages;
 
 public partial class HomeViewModel : ObservableObject
 {
-    private readonly INavigator _navigator;
-    private readonly IDispatcher _dispatch;
     private readonly IItemService _itemService;
     private readonly IItemFilterService _filterService;
 
@@ -19,9 +17,6 @@ public partial class HomeViewModel : ObservableObject
 
     [ObservableProperty]
     private decimal _sum;
-
-    [ObservableProperty]
-    private bool _isEditing = false;
 
     private ItemViewModel? _selectedItem;
     public ItemViewModel? SelectedItem
@@ -37,9 +32,7 @@ public partial class HomeViewModel : ObservableObject
             //Created only after user first requests opening item
             ItemDetails ??= typeof(ItemDetails);
 
-            WeakReferenceMessenger.Default.Send(new ItemSelectionChanged(value));
-
-            IsEditing = false;
+            WeakReferenceMessenger.Default.Send(new ItemSelectionChanged(value, (value?.Item is null)));
 
             _selectedItem = value;
             OnPropertyChanged();
@@ -67,19 +60,17 @@ public partial class HomeViewModel : ObservableObject
 
     public ICommand Logout { get; }
     public ICommand AddNewCommand { get; }
+    public ICommand DeleteCommand { get; }
 
     public HomeViewModel(
-        INavigator navigator,
-        IDispatcher dispatch,
         IItemService itemService,
         IItemFilterService filterService)
     {
-        _navigator = navigator;
-        _dispatch = dispatch;
         _itemService = itemService;
         _filterService = filterService;
 
         AddNewCommand = new RelayCommand(AddNew);
+        DeleteCommand = new AsyncRelayCommand(() => DeleteItem());
 
 #if HAS_UNO
         SystemNavigationManager.GetForCurrentView().BackRequested += System_BackRequested;
@@ -106,10 +97,16 @@ public partial class HomeViewModel : ObservableObject
             SelectedItem = null;
         });
 
+        WeakReferenceMessenger.Default.Register<ItemDeleted>(this, (r, m) =>
+        {
+            DeleteItem(m.Item);
+        });
+
         WeakReferenceMessenger.Default.Register<CategorySelectionChanged>(this, (r, m) =>
         {
             OnPropertyChanged(nameof(SelectedCategory));
         });
+
     }
 
     private async Task InitializeAsync()
@@ -152,46 +149,14 @@ public partial class HomeViewModel : ObservableObject
     private void AddNew()
     {
         SelectedItem = new ItemViewModel(null);
-
-        IsEditing = true;
     }
 
-    private async Task SubmitChanges()
+    private async Task DeleteItem(ItemViewModel? item = null)
     {
-        SelectedItem = null;
+        _itemService.DeleteItem(item ?? SelectedItem);
 
-        IsEditing = false;
-    }
+        await RefreshItems();
 
-    private async Task EnableEditing()
-    {
-        IsEditing = true;
-    }
-
-    private async Task DeleteItem()
-    {
-        //TODO Find item by Id in database and delete it
         return;
-    }
-
-    private async Task ArchiveItem()
-    {
-        //TODO Find item by Id in database and delete it
-        return;
-    }
-
-    private async Task CloseDetails()
-    {
-        //TODO Instead of IsEditing, check if the item is dirty
-        if (IsEditing)
-        {
-            await _navigator.ShowMessageDialogAsync(this, title: "...", content: "Really?");
-        }
-        else
-        {
-            SelectedItem = null;
-        }
-
-        IsEditing = false;
     }
 }

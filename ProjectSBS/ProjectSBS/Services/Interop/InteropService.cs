@@ -71,7 +71,7 @@ public class InteropService : IInteropService
     public void UpdateAppTitle(string title)
     {
 #if !HAS_UNO
-        //ApplicationView.GetForCurrentView().Title = title;
+        ApplicationView.GetForCurrentView().Title = title;
 #endif
     }
 }
