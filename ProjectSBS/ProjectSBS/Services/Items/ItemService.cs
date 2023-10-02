@@ -46,10 +46,7 @@ public class ItemService : IItemService
     {
         AddNewItem(item, logs ?? new());
 
-        var itemsList = _items
-            .Select(itemViewModel => itemViewModel.Item)
-            .ToList() ?? new();
-        _dataService.SaveDataAsync(itemsList);
+        SaveDataAsync();
     }
 
     private void AddNewItem(Item item, List<ItemLog>? logs = null)
@@ -64,10 +61,23 @@ public class ItemService : IItemService
         _items.Add(itemVM);
     }
 
+    public void UpdateItem(ItemViewModel item)
+    {
+        var index = _items.IndexOf(item);
+        _items[index] = item;
+
+        SaveDataAsync();
+    }
+
     public void DeleteItem(ItemViewModel item)
     {
         _items.Remove(item);
 
+        SaveDataAsync();
+    }
+
+    private void SaveDataAsync()
+    {
         var itemsList = _items
             .Select(itemViewModel => itemViewModel.Item)
             .ToList() ?? new();

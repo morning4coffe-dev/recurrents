@@ -99,10 +99,10 @@ public class App : Application
                     services.AddSingleton<IItemFilterService, ItemFilterService>();
                     services.AddSingleton<ITagService, TagService>();
 
-                    services.AddTransient<ItemDetailsViewModel>();
-                    services.AddTransient<HomeViewModel>();
-                    services.AddTransient<SettingsViewModel>();
-                    services.AddTransient<StatsBannerViewModel>();
+                    services.AddSingleton<ItemDetailsViewModel>();
+                    services.AddSingleton<HomeViewModel>();
+                    services.AddSingleton<SettingsViewModel>();
+                    services.AddSingleton<StatsBannerViewModel>();
                     //services.AddTransient<ConversionsViewModel>();
 
 #if __ANDROID__

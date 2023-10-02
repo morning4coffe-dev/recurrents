@@ -94,7 +94,12 @@ public partial class HomeViewModel : ObservableObject
                 _itemService.NewItem(m.Item.Item);
             }
 
+            //TODO Does this even when just closed
+            _itemService.UpdateItem(item);
+
             SelectedItem = null;
+
+            _ = RefreshItems();
         });
 
         WeakReferenceMessenger.Default.Register<ItemDeleted>(this, (r, m) =>
@@ -148,6 +153,7 @@ public partial class HomeViewModel : ObservableObject
 
     private void AddNew()
     {
+        //SelectedItem cannot be something that is not in the List
         SelectedItem = new ItemViewModel(null);
     }
 

@@ -21,32 +21,6 @@
                     Value="16" />
         </Style>
     </Page.Resources>
-    <VisualStateManager.VisualStateGroups>
-        <!--AdaptiveTriggers-->
-        <VisualStateGroup>
-            <VisualState>
-                <VisualState.StateTriggers>
-                    <AdaptiveTrigger MinWindowWidth="0" />
-                </VisualState.StateTriggers>
-
-                <VisualState.Setters>
-                    <Setter Target="pageShell.Visibility"
-                            Value="Visible" />
-                    <Setter Target="desktopHeader.Visibility"
-                            Value="Collapsed" />
-                </VisualState.Setters>
-            </VisualState>
-
-            <VisualState>
-                <VisualState.StateTriggers>
-                    <AdaptiveTrigger MinWindowWidth="640" />
-                </VisualState.StateTriggers>
-            </VisualState>
-        </VisualStateGroup>
-        
-        <!--TODO Does not propperly work-->
-
-    </VisualStateManager.VisualStateGroups>
 
     <comp:PageShell x:Name="pageShell"
                     MobileTitleVisibility="Visible">
@@ -54,6 +28,33 @@
 
             <UserControl>
                 <Grid>
+                    <VisualStateManager.VisualStateGroups>
+                        <!--AdaptiveTriggers-->
+                        <VisualStateGroup>
+                            <VisualState>
+                                <VisualState.StateTriggers>
+                                    <AdaptiveTrigger MinWindowWidth="0" />
+                                </VisualState.StateTriggers>
+
+                                <VisualState.Setters>
+                                    <Setter Target="pageShell.Visibility"
+                                            Value="Visible" />
+                                    <Setter Target="desktopHeader.Visibility"
+                                            Value="Collapsed" />
+                                </VisualState.Setters>
+                            </VisualState>
+
+                            <VisualState>
+                                <VisualState.StateTriggers>
+                                    <AdaptiveTrigger MinWindowWidth="640" />
+                                </VisualState.StateTriggers>
+                            </VisualState>
+                        </VisualStateGroup>
+
+                        <!--TODO Does not propperly work-->
+
+                    </VisualStateManager.VisualStateGroups>
+
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />

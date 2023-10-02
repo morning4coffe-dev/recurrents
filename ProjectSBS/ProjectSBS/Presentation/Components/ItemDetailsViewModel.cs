@@ -69,6 +69,7 @@ public partial class ItemDetailsViewModel : ObservableObject
 
         ItemName = SelectedItem?.Item?.Name ?? "New Item";
 
+        //TODO Doesn't unregister when switching pages and registers again
         WeakReferenceMessenger.Default.Register<ItemSelectionChanged>(this, (r, m) =>
         {
 #if HAS_UNO
