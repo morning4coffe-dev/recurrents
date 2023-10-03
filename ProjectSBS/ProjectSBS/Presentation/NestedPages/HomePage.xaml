@@ -26,7 +26,8 @@
             <VisualStateGroup>
                 <VisualState>
                     <VisualState.StateTriggers>
-                        <triggers:IsNullOrEmptyStateTrigger Value="{x:Bind ViewModel.SelectedItem, Mode=OneWay}" />
+                        <triggers:IsNullOrEmptyStateTrigger Value="True" />
+                        <!--{x:Bind ViewModel.SelectedItem, Mode=OneWay}-->
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="pane2Holder.Visibility"
@@ -312,12 +313,12 @@
             </muxc:TwoPaneView.Pane1>
 
             <muxc:TwoPaneView.Pane2>
-                <StackPanel x:Name="pane2Holder"
-                            Visibility="Visible">
+                <Border x:Name="pane2Holder"
+                        Visibility="Visible">
 
                     <comp:ItemDetails />
 
-                </StackPanel>
+                </Border>
             </muxc:TwoPaneView.Pane2>
 
         </muxc:TwoPaneView>

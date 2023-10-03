@@ -4,7 +4,6 @@ using ProjectSBS.Services.Items;
 using ProjectSBS.Services.Items.Tags;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using Uno.Extensions.Navigation;
 using Windows.UI.Core;
 
 namespace ProjectSBS.Presentation.Components;

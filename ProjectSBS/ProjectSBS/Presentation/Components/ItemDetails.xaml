@@ -3,12 +3,14 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:local="using:ProjectSBS.Presentation.Components"
       xmlns:models="using:ProjectSBS.Business.Models"
+      xmlns:toolkit="using:CommunityToolkit.WinUI"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:comp="using:ProjectSBS.Presentation.Components"
       xmlns:sys="ProjectSBS:System;assembly=System.Private.CoreLib"
       xmlns:android="http://uno.ui/android"
-      mc:Ignorable="d android">
+      mc:Ignorable="d android"
+      Background="DarkSlateGray">
 
     <Page.Resources>
         <Style x:Key="DetailsBorder"
@@ -20,10 +22,15 @@
             <Setter Property="Padding"
                     Value="16" />
         </Style>
+
+        <Style x:Key="ContentStack"
+               TargetType="StackPanel">
+            <Setter Property="Padding"
+                    Value="8" />
+        </Style>
     </Page.Resources>
 
-    <comp:PageShell x:Name="pageShell"
-                    MobileTitleVisibility="Visible">
+    <comp:PageShell MobileTitleVisibility="Visible">
         <comp:PageShell.ContentView>
 
             <UserControl>
@@ -37,8 +44,6 @@
                                 </VisualState.StateTriggers>
 
                                 <VisualState.Setters>
-                                    <Setter Target="pageShell.Visibility"
-                                            Value="Visible" />
                                     <Setter Target="desktopHeader.Visibility"
                                             Value="Collapsed" />
                                 </VisualState.Setters>
@@ -51,8 +56,6 @@
                             </VisualState>
                         </VisualStateGroup>
 
-                        <!--TODO Does not propperly work-->
-
                     </VisualStateManager.VisualStateGroups>
 
                     <Grid.RowDefinitions>
@@ -61,7 +64,8 @@
                     </Grid.RowDefinitions>
 
                     <Grid x:Name="desktopHeader"
-                          Visibility="Visible">
+                          Visibility="Visible"
+                          Padding="8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
                             <ColumnDefinition Width="Auto" />
@@ -98,7 +102,8 @@
                     <ScrollViewer Visibility="{x:Bind ViewModel.IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
                                   Grid.Row="1">
                         <StackPanel Spacing="8"
-                                    Margin="8">
+                                    Style="{StaticResource ContentStack}">
+
                             <Border Style="{StaticResource DetailsBorder}">
                                 <StackPanel Spacing="8">
                                     <TextBlock Text="{Binding SelectedItem.Item.Name, Mode=OneWay}"
@@ -130,6 +135,7 @@
                                     </ItemsRepeater>
                                 </ScrollViewer>
                             </Border>
+
                         </StackPanel>
                     </ScrollViewer>
 
@@ -138,14 +144,14 @@
                           Grid.Row="1">
                         <Grid.RowDefinitions>
                             <RowDefinition />
-                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="45" />
                         </Grid.RowDefinitions>
 
                         <ScrollViewer>
                             <StackPanel Spacing="16"
-                                        Margin="8">
+                                        Style="{StaticResource ContentStack}">
+
                                 <TextBox Header="Name"
-                                         Height="72"
                                          Text="{Binding SelectedItem.Item.Name, Mode=TwoWay}" />
 
                                 <Grid ColumnSpacing="8">
@@ -159,7 +165,7 @@
                                                SpinButtonPlacementMode="Inline" />
                                     <ComboBox VerticalAlignment="Bottom"
                                               ItemsSource="{x:Bind ViewModel.Currencies, Mode=OneWay}"
-                                              SelectedItem="{x:Bind}"
+                                              SelectedItem="{Binding SelectedItem.Item.Billing.CurrencyId, Mode=TwoWay}"
                                               Grid.Column="1" />
                                 </Grid>
 
@@ -185,12 +191,30 @@
                                 <CalendarDatePicker Header="Billing Date"
                                                     Date="{Binding SelectedItem.Item.Billing.InitialDate, Mode=TwoWay, Converter={StaticResource DateOnlyToDateTimeOffsetConverter}}"
                                                     HorizontalAlignment="Stretch" />
+
+                                <Grid ColumnSpacing="8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <NumberBox Header="Repete every"
+                                               Value="{Binding SelectedItem.Item.Billing.RecurEvery, Mode=TwoWay}"
+                                               SpinButtonPlacementMode="Inline" />
+                                    <ComboBox VerticalAlignment="Bottom"
+                                              ItemsSource="{toolkit:EnumValues Type=models:Period}"
+                                              SelectedItem="{Binding SelectedItem.Item.Billing.PeriodType, Mode=TwoWay}"
+                                              Grid.Column="1" />
+                                </Grid>
+                                
                                 <Grid>
-                                    <CheckBox Content="Notifications {NI}" />
+                                    <!--TODO Add changing icon here-->
+                                    <CheckBox Content="Get notified {NI}"
+                                              IsEnabled="True" />
                                     <FontIcon HorizontalAlignment="Right"
-                                              Opacity="0.7"
+                                              Opacity="0.75"
                                               FontSize="18"
-                                              Glyph="" />
+                                              Glyph="&#xEA8F;" />
                                 </Grid>
 
                                 <Grid>
@@ -198,7 +222,7 @@
                                     <FontIcon HorizontalAlignment="Right"
                                               Opacity="0.7"
                                               FontSize="18"
-                                              Glyph="" />
+                                              Glyph="&#xE748;" />
                                 </Grid>
                                 <TextBox Header="Description"
                                          Text="{Binding SelectedItem.Item.Description, Mode=TwoWay}"
@@ -211,7 +235,7 @@
                         <Button Content="{x:Bind ViewModel.SaveText, Mode=OneWay}"
                                 Command="{x:Bind ViewModel.SaveCommand}"
                                 HorizontalAlignment="Stretch"
-                                Height="45"
+                                VerticalAlignment="Stretch"
                                 Grid.Row="1" />
 
                     </Grid>

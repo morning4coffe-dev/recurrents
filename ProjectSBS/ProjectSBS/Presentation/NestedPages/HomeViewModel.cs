@@ -7,7 +7,7 @@ using Windows.UI.Core;
 
 namespace ProjectSBS.Presentation.NestedPages;
 
-public partial class HomeViewModel : ObservableObject
+public partial class HomeViewModel : ViewModelBase
 {
     private readonly IItemService _itemService;
     private readonly IItemFilterService _filterService;
@@ -58,7 +58,7 @@ public partial class HomeViewModel : ObservableObject
         }
     }
 
-    public ICommand Logout { get; }
+    //public ICommand Logout { get; }
     public ICommand AddNewCommand { get; }
     public ICommand DeleteCommand { get; }
 
@@ -83,6 +83,13 @@ public partial class HomeViewModel : ObservableObject
         WeakReferenceMessenger.Default.Register<ItemUpdated>(this, (r, m) =>
         {
             ItemViewModel? item = null;
+
+            if (m.Item?.Item is not { })
+            {
+                //TODO Some minor fixes needed here
+                SelectedItem = null;
+                return;
+            }
 
             if (SelectedItem is not null)
             {
@@ -164,5 +171,11 @@ public partial class HomeViewModel : ObservableObject
         await RefreshItems();
 
         return;
+    }
+
+    public override void Dispose()
+    {
+        WeakReferenceMessenger.Default.UnregisterAll(this);
+        SystemNavigationManager.GetForCurrentView().BackRequested -= System_BackRequested;
     }
 }

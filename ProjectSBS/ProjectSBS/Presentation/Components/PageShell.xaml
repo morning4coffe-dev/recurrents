@@ -18,12 +18,35 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
+        <VisualStateManager.VisualStateGroups>
+            <!--AdaptiveTriggers-->
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+
+                    <VisualState.Setters>
+                        <Setter Target="mobileShell.Visibility"
+                                Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="640" />
+                    </VisualState.StateTriggers>
+                </VisualState>
+            </VisualStateGroup>
+
+        </VisualStateManager.VisualStateGroups>
+
         <win:StackPanel x:Name="AppTitleBar"
                         Orientation="Horizontal"
                         Background="Transparent"
                         Visibility="{x:Bind DesktopTitleVisibility}"
                         Height="48">
-            <Image Source="Assets/Icons/app-icon.png"
+            <Image Source="Assets/Icons/back.svg"
                    HorizontalAlignment="Left"
                    Width="16"
                    Height="30"
@@ -32,60 +55,63 @@
                        Style="{StaticResource CaptionTextBlockStyle}"
                        VerticalAlignment="Center" />
         </win:StackPanel>
-        
-        <Grid Background="{ThemeResource CardBackgroundFillColorDefault}"
-              Visibility="{x:Bind MobileTitleVisibility}"
-              Padding="8">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="auto" />
-            </Grid.ColumnDefinitions>
-            <StackPanel>
-                <Button Background="Transparent"
-                        BorderBrush="Transparent"
-                        BorderThickness="0"
-                        Padding="12"
-                        Command="{Binding CloseCommand}">
-                    <SymbolIcon Symbol="Back" />
-                </Button>
 
-                <TextBlock Text="{Binding ItemName, Mode=OneWay}"
-                           Style="{StaticResource TitleTextBlockStyle}"
-                           VerticalAlignment="Center"
-                           Margin="12" />
-            </StackPanel>
+        <Border Visibility="{x:Bind MobileTitleVisibility}">
+            <Grid x:Name="mobileShell"
+                  Background="{ThemeResource CardBackgroundFillColorDefault}"
+                  Visibility="Collapsed"
+                  Padding="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <Button Background="Transparent"
+                            BorderBrush="Transparent"
+                            BorderThickness="0"
+                            Padding="12"
+                            Command="{Binding CloseCommand}">
+                        <SymbolIcon Symbol="Back" />
+                    </Button>
 
-            <StackPanel Orientation="Horizontal"
-                        Spacing="4"
-                        Grid.Column="1">
-                <Button Background="Transparent"
-                        BorderBrush="Transparent"
-                        BorderThickness="0"
-                        Padding="12"
-                        VerticalAlignment="Top"
-                        Visibility="{Binding IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
-                        Command="{Binding EnableEditingCommand}">
+                    <TextBlock Text="{Binding ItemName, Mode=OneWay}"
+                               Style="{StaticResource TitleTextBlockStyle}"
+                               VerticalAlignment="Center"
+                               Margin="12" />
+                </StackPanel>
 
-                    <SymbolIcon Symbol="Edit" />
-                </Button>
+                <StackPanel Orientation="Horizontal"
+                            Spacing="4"
+                            Grid.Column="1">
+                    <Button Background="Transparent"
+                            BorderBrush="Transparent"
+                            BorderThickness="0"
+                            Padding="12"
+                            VerticalAlignment="Top"
+                            Visibility="{Binding IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
+                            Command="{Binding EnableEditingCommand}">
 
-                <Button Background="Transparent"
-                        BorderBrush="Transparent"
-                        BorderThickness="0"
-                        Padding="12"
-                        VerticalAlignment="Top"
-                        Visibility="{Binding IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
-                        Command="{Binding EnableEditingCommand}">
+                        <SymbolIcon Symbol="Edit" />
+                    </Button>
 
-                    <SymbolIcon Symbol="More"
-                                RenderTransformOrigin=".5,.5">
-                        <SymbolIcon.RenderTransform>
-                            <RotateTransform Angle="90" />
-                        </SymbolIcon.RenderTransform>
-                    </SymbolIcon>
-                </Button>
-            </StackPanel>
-        </Grid>
+                    <Button Background="Transparent"
+                            BorderBrush="Transparent"
+                            BorderThickness="0"
+                            Padding="12"
+                            VerticalAlignment="Top"
+                            Visibility="{Binding IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
+                            Command="{Binding EnableEditingCommand}">
+
+                        <SymbolIcon Symbol="More"
+                                    RenderTransformOrigin=".5,.5">
+                            <SymbolIcon.RenderTransform>
+                                <RotateTransform Angle="90" />
+                            </SymbolIcon.RenderTransform>
+                        </SymbolIcon>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
 
         <ContentPresenter Content="{x:Bind ContentView}"
                           Grid.Row="1" />

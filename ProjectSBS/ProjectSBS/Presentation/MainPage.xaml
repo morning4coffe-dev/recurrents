@@ -55,6 +55,7 @@
                 <Grid>
                     <VisualStateManager.VisualStateGroups>
 
+                        <!--AdaptiveTriggers-->
                         <VisualStateGroup>
                             <VisualState>
                                 <VisualState.StateTriggers>
@@ -74,6 +75,7 @@
                             </VisualState>
                         </VisualStateGroup>
 
+                        <!--Navigation flexibility-->
                         <VisualStateGroup>
                             <VisualState>
                                 <VisualState.StateTriggers>
@@ -110,7 +112,7 @@
                                     uen:Region.Attached="True">
 
                         <NavigationView.PaneCustomContent>
-                            <StackPanel>
+                            <Border>
                                 <Button Background="Transparent"
                                         BorderThickness="0"
                                         BorderBrush="Transparent"
@@ -128,8 +130,7 @@
                                                     VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Button>
-
-                            </StackPanel>
+                            </Border>
                         </NavigationView.PaneCustomContent>
 
                         <NavigationView.MenuItemTemplate>
