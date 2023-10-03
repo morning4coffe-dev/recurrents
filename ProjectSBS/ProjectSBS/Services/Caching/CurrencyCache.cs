@@ -13,7 +13,17 @@ public sealed class CurrencyCache : ICurrencyCache
         _logger = logger;
     }
 
-    private bool IsConnected => NetworkInformation.GetInternetConnectionProfile().GetNetworkConnectivityLevel() == NetworkConnectivityLevel.InternetAccess;
+    private bool IsConnected
+    {
+        get
+        {
+            try
+            {
+                return NetworkInformation.GetInternetConnectionProfile().GetNetworkConnectivityLevel() == NetworkConnectivityLevel.InternetAccess;
+            }
+            catch { return false; }
+        }
+    }
 
     public async ValueTask<Currency?> GetCurrency(CancellationToken token)
     {

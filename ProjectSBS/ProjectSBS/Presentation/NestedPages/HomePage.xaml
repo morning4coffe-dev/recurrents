@@ -53,6 +53,27 @@
                 </VisualState>
             </VisualStateGroup>
 
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <triggers:NetworkConnectionStateTrigger ConnectionState="Connected" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="disconnectAlert.Visibility"
+                                Value="Collapsed" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <triggers:NetworkConnectionStateTrigger ConnectionState="Disconnected" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="disconnectAlert.Visibility"
+                                Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+
             <!--AdaptiveTriggers-->
             <VisualStateGroup>
                 <VisualState>
@@ -156,6 +177,11 @@
                                     </Pivot.ItemTemplate>
                                 </Pivot>
                             </StackPanel>
+
+                            <InfoBar x:Name="disconnectAlert"
+                                     Title="You are disconnected!"
+                                     Severity="Error"
+                                     IsOpen="True" />
 
                             <comp:StatsBanner />
 
