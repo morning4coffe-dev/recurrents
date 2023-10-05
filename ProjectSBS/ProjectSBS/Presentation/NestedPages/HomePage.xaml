@@ -26,8 +26,8 @@
             <VisualStateGroup>
                 <VisualState>
                     <VisualState.StateTriggers>
-                        <triggers:IsNullOrEmptyStateTrigger Value="True" />
-                        <!--{x:Bind ViewModel.SelectedItem, Mode=OneWay}-->
+                        <triggers:IsNullOrEmptyStateTrigger Value="{x:Bind ViewModel.SelectedItem, Mode=OneWay}" />
+                        <!--TODO Use IsEditing here-->
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="pane2Holder.Visibility"

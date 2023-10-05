@@ -144,7 +144,7 @@
                           Grid.Row="1">
                         <Grid.RowDefinitions>
                             <RowDefinition />
-                            <RowDefinition Height="45" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
                         <ScrollViewer>
@@ -236,6 +236,8 @@
                                 Command="{x:Bind ViewModel.SaveCommand}"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"
+                                Height="42"
+                                Margin="8"
                                 Grid.Row="1" />
 
                     </Grid>

@@ -76,7 +76,10 @@ public partial class ItemDetailsViewModel : ObservableObject
 #endif
             if (m.SelectedItem is { } item)
             {
-                SelectedItem = item;
+                MainViewModel.Dispatch.ExecuteAsync(() =>
+                {
+                    SelectedItem = item;
+                });
 
                 IsEditing = m.IsEdit;
 
