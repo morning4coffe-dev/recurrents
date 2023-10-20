@@ -13,10 +13,13 @@ public partial class HomeViewModel : ViewModelBase
     private readonly IItemFilterService _filterService;
 
     [ObservableProperty]
+    private decimal _sum;
+
+    [ObservableProperty]
     private Type? _itemDetails;
 
     [ObservableProperty]
-    private decimal _sum;
+    private string _welcomeMessage;
 
     private ItemViewModel? _selectedItem;
     public ItemViewModel? SelectedItem
@@ -79,6 +82,16 @@ public partial class HomeViewModel : ViewModelBase
         Categories = filterService.Categories;
 
         Task.Run(InitializeAsync);
+
+        var welcome = DateTime.Now.Hour switch
+        {
+            >= 5 and < 12 => "Good Morning",
+            >= 12 and < 17 => "Good Afternoon",
+            >= 17 and < 20 => "Good Evening",
+            _ => "Good Night"
+        };
+
+        WelcomeMessage = welcome += ",";
 
         WeakReferenceMessenger.Default.Register<ItemUpdated>(this, (r, m) =>
         {

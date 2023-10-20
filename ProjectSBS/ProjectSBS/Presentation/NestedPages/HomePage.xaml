@@ -116,7 +116,7 @@
                     <ScrollViewer>
                         <StackPanel x:Name="contentHolder"
                                     Margin="48,48,48,0"
-                                    Spacing="8">
+                                    Spacing="12">
 
                             <StackPanel x:Name="desktopHeader"
                                         Visibility="Visible"
@@ -130,27 +130,35 @@
                             </StackPanel>
 
                             <StackPanel x:Name="mobileHeader"
-                                        Visibility="Collapsed">
-                                <Grid>
+                                        Visibility="Collapsed"
+                                        Spacing="8">
+                                <Grid ColumnSpacing="16">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition />
                                         <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition />
                                     </Grid.ColumnDefinitions>
 
-                                    <TextBlock Text="Good morning Dominik"
-                                               TextWrapping="WrapWholeWords"
-                                               VerticalAlignment="Center"
-                                               HorizontalAlignment="Left"
-                                               MaxWidth="250"
-                                               Style="{StaticResource TitleTextBlockStyle}" />
-
-                                    <Button Grid.Column="1"
-                                            CornerRadius="30"
+                                    <Button CornerRadius="30"
                                             Padding="0"
                                             BorderThickness="0"
                                             Background="Transparent">
-                                        <PersonPicture Width="60" />
+                                        <PersonPicture Width="65" />
                                     </Button>
+
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="{x:Bind ViewModel.WelcomeMessage, Mode=OneTime}"
+                                                   TextWrapping="WrapWholeWords"
+                                                   VerticalAlignment="Center"
+                                                   HorizontalAlignment="Left"
+                                                   Opacity="0.6"
+                                                   Style="{StaticResource SubtitleTextBlockStyle}" />
+
+                                        <TextBlock Text="Dominik"
+                                                   TextWrapping="WrapWholeWords"
+                                                   VerticalAlignment="Center"
+                                                   HorizontalAlignment="Left"
+                                                   Style="{StaticResource TitleTextBlockStyle}" />
+                                    </StackPanel>
                                 </Grid>
 
                                 <Pivot Grid.Row="2"
