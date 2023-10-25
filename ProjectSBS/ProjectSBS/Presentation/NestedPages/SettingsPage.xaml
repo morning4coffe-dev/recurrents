@@ -5,18 +5,44 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:comp="using:ProjectSBS.Presentation.Components"
-      mc:Ignorable="d"
-      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+      xmlns:controls="using:CommunityToolkit.WinUI.Controls"
+      xmlns:ui="using:CommunityToolkit.WinUI"
+      mc:Ignorable="d">
 
     <comp:PageShell x:Name="pageShell"
                     MobileTitleVisibility="Visible">
         <comp:PageShell.ContentView>
             <UserControl>
-                <Grid>
-                    
-                    <TextBlock Text="This is Settings" />
-                    
-                </Grid>
+                <ScrollViewer>
+                    <StackPanel Spacing="8">
+
+                        <controls:SettingsCard>
+                            <controls:SettingsCard.Header>
+                                <StackPanel Orientation="Horizontal"
+                                            Spacing="20">
+                                    <PersonPicture Width="80" />
+                                    <StackPanel VerticalAlignment="Center"
+                                                Spacing="4">
+                                        <TextBlock  Text="John Doe"
+                                                    Style="{StaticResource SubtitleTextBlockStyle}" />
+                                        <TextBlock  Text="john@test-mail.com" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </controls:SettingsCard.Header>
+                            <Button Content="Sign out" />
+                        </controls:SettingsCard>
+
+                        <controls:SettingsCard Header="A clickable SettingsCard"
+                                               Description="A SettingsCard can be made clickable and you can leverage the Command property or Click event." />
+
+                        <controls:SettingsCard Header="Customizing the ActionIcon"
+                                               Description="You can customize the ActionIcon and ActionIconToolTip."
+                                               ActionIcon="{ui:FontIcon Glyph=&#xE8A7;}"
+                                               HeaderIcon="{ui:FontIcon Glyph=&#xE774;}"
+                                               IsClickEnabled="True" />
+
+                    </StackPanel>
+                </ScrollViewer>
             </UserControl>
         </comp:PageShell.ContentView>
     </comp:PageShell>
