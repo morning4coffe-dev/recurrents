@@ -177,7 +177,7 @@ public partial class HomeViewModel : ViewModelBase
         SelectedItem = new ItemViewModel(null);
     }
 
-    private async Task DeleteItem(ItemViewModel? item = null)
+    public async Task DeleteItem(ItemViewModel? item = null)
     {
         _itemService.DeleteItem(item ?? SelectedItem);
 

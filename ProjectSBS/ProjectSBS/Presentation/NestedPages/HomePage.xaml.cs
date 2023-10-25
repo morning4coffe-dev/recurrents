@@ -10,9 +10,9 @@ public sealed partial class HomePage : Page
 
     public HomeViewModel ViewModel => (HomeViewModel)DataContext;
 
-    private void DeleteItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
+    private async void DeleteItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
     {
-        //DeleteItemCommand.Execute(args.SwipeControl.DataContext);
+        await ViewModel.DeleteItem(args.SwipeControl.DataContext as ItemViewModel);
     }
     private void ArchiveItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
     {
