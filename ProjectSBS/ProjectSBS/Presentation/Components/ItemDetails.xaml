@@ -9,8 +9,7 @@
       xmlns:comp="using:ProjectSBS.Presentation.Components"
       xmlns:sys="ProjectSBS:System;assembly=System.Private.CoreLib"
       xmlns:android="http://uno.ui/android"
-      mc:Ignorable="d android"
-      Background="DarkSlateGray">
+      mc:Ignorable="d android">
 
     <Page.Resources>
         <Style x:Key="DetailsBorder"
@@ -26,7 +25,7 @@
         <Style x:Key="ContentStack"
                TargetType="StackPanel">
             <Setter Property="Padding"
-                    Value="8" />
+                    Value="12, 12" />
         </Style>
     </Page.Resources>
 
@@ -65,7 +64,7 @@
 
                     <Grid x:Name="desktopHeader"
                           Visibility="Visible"
-                          Padding="8">
+                          Padding="12,12,12,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
                             <ColumnDefinition Width="Auto" />
@@ -79,20 +78,20 @@
                                     Grid.Column="1">
                             <Button Visibility="{x:Bind ViewModel.IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
                                     Command="{Binding EnableEditingCommand}"
-                                    Padding="12, 8">
+                                    Padding="14, 10">
                                 <FontIcon Glyph="&#xE70F;"
                                           FontSize="14" />
                             </Button>
 
                             <Button Visibility="{x:Bind ViewModel.IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
                                     Command="{x:Bind ViewModel.DeleteCommand}"
-                                    Padding="12, 8">
+                                    Padding="14, 10">
                                 <FontIcon Glyph="&#xE74D;"
                                           FontSize="14" />
                             </Button>
 
                             <Button Command="{x:Bind ViewModel.CloseCommand}"
-                                    Padding="12, 8">
+                                    Padding="14, 10">
                                 <FontIcon Glyph="&#xE8BB;"
                                           FontSize="14" />
                             </Button>
@@ -206,7 +205,7 @@
                                               SelectedItem="{Binding SelectedItem.Item.Billing.PeriodType, Mode=TwoWay}"
                                               Grid.Column="1" />
                                 </Grid>
-                                
+
                                 <Grid>
                                     <!--TODO Add changing icon here-->
                                     <CheckBox Content="Get notified {NI}"
@@ -237,7 +236,7 @@
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"
                                 Height="42"
-                                Margin="8"
+                                Margin="12"
                                 Grid.Row="1" />
 
                     </Grid>

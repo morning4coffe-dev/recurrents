@@ -10,11 +10,7 @@ namespace ProjectSBS.Presentation.Components;
 
 public partial class ItemDetailsViewModel : ObservableObject
 {
-    private readonly INavigator _navigator;
-    private readonly IDispatcher _dispatch;
-
     private readonly IStringLocalizer _localizer;
-    private readonly IItemService _itemService;
 
     [ObservableProperty]
     private ItemViewModel? _selectedItem;
@@ -29,12 +25,10 @@ public partial class ItemDetailsViewModel : ObservableObject
 
     [ObservableProperty]
     public Dictionary<string, double> _currencies = new();
+    public ObservableCollection<string> FuturePayments { get; } = new();
 
     public string SaveText { get; }
     public string EditText { get; }
-
-    public ObservableCollection<ItemViewModel> Items { get; } = new();
-    public ObservableCollection<string> FuturePayments { get; } = new();
 
     public ICommand EnableEditingCommand { get; }
     public ICommand CloseCommand { get; }
@@ -42,17 +36,11 @@ public partial class ItemDetailsViewModel : ObservableObject
     public ICommand DeleteCommand { get; }
 
     public ItemDetailsViewModel(
-        INavigator navigator,
-        IDispatcher dispatch,
         IStringLocalizer localizer,
         ITagService tagService,
-        ICurrencyCache currencyCache,
-        IItemService itemService)
+        ICurrencyCache currencyCache)
     {
-        _navigator = navigator;
-        _dispatch = dispatch;
         _localizer = localizer;
-        _itemService = itemService;
 
         EnableEditingCommand = new AsyncRelayCommand(EnableEditing);
         CloseCommand = new AsyncRelayCommand(Close);

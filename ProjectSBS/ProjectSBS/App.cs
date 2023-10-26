@@ -99,17 +99,17 @@ public class App : Application
                     services.AddSingleton<IItemFilterService, ItemFilterService>();
                     services.AddSingleton<ITagService, TagService>();
 
-                    services.AddSingleton<ItemDetailsViewModel>();
-                    services.AddSingleton<HomeViewModel>();
-                    services.AddSingleton<SettingsViewModel>();
-                    services.AddSingleton<StatsBannerViewModel>();
+                    services.AddTransient<ItemDetailsViewModel>();
+                    services.AddTransient<HomeViewModel>();
+                    services.AddTransient<SettingsViewModel>();
+                    services.AddTransient<StatsBannerViewModel>();
                     //services.AddTransient<ConversionsViewModel>();
 
 #if __ANDROID__
                     services.AddSingleton<INotificationService, AndroidNotificationService>();
 #elif __IOS__
                     services.AddSingleton<INotificationService, IOSNotificationService>();
-#elif __WASM__ || HAS_UNO_SKIA
+#elif HAS_UNO_WASM || HAS_UNO_SKIA
                     services.AddSingleton<INotificationService, WebNotificationService>();
 #elif !HAS_UNO
                     services.AddSingleton<INotificationService, WindowsNotificationService>();
