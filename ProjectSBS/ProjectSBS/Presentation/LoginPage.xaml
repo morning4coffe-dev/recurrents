@@ -9,6 +9,7 @@
       xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
       xmlns:uen="using:Uno.Extensions.Navigation.UI"
       xmlns:utu="using:Uno.Toolkit.UI"
+      xmlns:triggers="using:CommunityToolkit.WinUI.UI.Triggers"
       xmlns:page="using:ProjectSBS.Presentation.Components"
       NavigationCacheMode="Required">
 
@@ -43,7 +44,20 @@
                                 <VisualState.StateTriggers>
                                     <AdaptiveTrigger MinWindowWidth="1000" />
                                 </VisualState.StateTriggers>
+                            </VisualState>
+                        </VisualStateGroup>
+
+                        <VisualStateGroup>
+                            <VisualState>
+                                <VisualState.StateTriggers>
+                                    <triggers:IsNullOrEmptyStateTrigger Value="{Binding User, Mode=OneWay}" />
+                                </VisualState.StateTriggers>
                                 <VisualState.Setters>
+                                    <!--TODO [Login UI] Doesn't switch on login-->
+                                    <Setter Target="personPicture.Visibility"
+                                            Value="Collapsed" />
+                                    <Setter Target="secImage.Visibility"
+                                            Value="Visible" />
                                 </VisualState.Setters>
                             </VisualState>
                         </VisualStateGroup>
@@ -93,11 +107,25 @@
                                    VerticalAlignment="Bottom"
                                    Style="{StaticResource TitleTextBlockStyle}" />
 
-                        <Image Source="/ProjectSBS/Assets/Illustrations/undraw_Newsletter_re_wrob.png"
-                               Margin="0, 50"
-                               MinHeight="45"
-                               MaxHeight="220"
-                               Grid.Row="1" />
+                        <Grid Grid.Row="1">
+                            <StackPanel x:Name="personPicture"
+                                        Visibility="Collapsed">
+                                <TextBlock Text="{Binding User.Name}"
+                                           Style="{StaticResource TitleTextBlockStyle}" />
+
+                                <PersonPicture ProfilePicture="{Binding User.Photo}"
+                                               DisplayName="{Binding User.Name}"
+                                               MinHeight="45"
+                                               MaxHeight="200" />
+                            </StackPanel>
+
+                            <Image x:Name="secImage"
+                                   Visibility="Visible"
+                                   Source="/ProjectSBS/Assets/Illustrations/undraw_Newsletter_re_wrob.png"
+                                   Margin="0, 50"
+                                   MinHeight="45"
+                                   MaxHeight="220" />
+                        </Grid>
 
                         <StackPanel Grid.Row="2"
                                     Spacing="20"

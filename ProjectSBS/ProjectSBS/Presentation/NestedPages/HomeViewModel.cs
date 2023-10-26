@@ -3,14 +3,19 @@ using CommunityToolkit.Mvvm.Messaging;
 using ProjectSBS.Business;
 using ProjectSBS.Services.Items;
 using ProjectSBS.Services.Items.Filtering;
+using ProjectSBS.Services.User;
 using Windows.UI.Core;
 
 namespace ProjectSBS.Presentation.NestedPages;
 
 public partial class HomeViewModel : ViewModelBase
 {
+    private readonly IUserService _userService;
     private readonly IItemService _itemService;
     private readonly IItemFilterService _filterService;
+
+    [ObservableProperty]
+    private User? _user;
 
     [ObservableProperty]
     private decimal _sum;
@@ -21,12 +26,17 @@ public partial class HomeViewModel : ViewModelBase
     [ObservableProperty]
     private string _welcomeMessage;
 
+    [ObservableProperty]
+    private bool _isPaneOpen;
+
     private ItemViewModel? _selectedItem;
     public ItemViewModel? SelectedItem
     {
         get => _selectedItem;
         set
         {
+            IsPaneOpen = _selectedItem is { };
+
             if (_selectedItem == value)
             {
                 return;
@@ -66,22 +76,18 @@ public partial class HomeViewModel : ViewModelBase
     public ICommand DeleteCommand { get; }
 
     public HomeViewModel(
+        IUserService userService,
         IItemService itemService,
         IItemFilterService filterService)
     {
+        _userService = userService;
         _itemService = itemService;
         _filterService = filterService;
 
         AddNewCommand = new RelayCommand(AddNew);
         DeleteCommand = new AsyncRelayCommand(() => DeleteItem());
 
-#if HAS_UNO
-        SystemNavigationManager.GetForCurrentView().BackRequested += System_BackRequested;
-#endif
-
         Categories = filterService.Categories;
-
-        Task.Run(InitializeAsync);
 
         var welcome = DateTime.Now.Hour switch
         {
@@ -92,6 +98,20 @@ public partial class HomeViewModel : ViewModelBase
         };
 
         WelcomeMessage = welcome += ",";
+    }
+
+    public override async void Load()
+    {
+        User = await _userService.GetUser();
+
+        await _itemService.InitializeAsync();
+        var items = await RefreshItems();
+
+        Sum = items.Sum(i => i.Item.Billing.BasePrice);
+
+#if HAS_UNO
+        SystemNavigationManager.GetForCurrentView().BackRequested += System_BackRequested;
+#endif
 
         WeakReferenceMessenger.Default.Register<ItemUpdated>(this, (r, m) =>
         {
@@ -99,7 +119,7 @@ public partial class HomeViewModel : ViewModelBase
 
             if (m.Item?.Item is not { })
             {
-                //TODO Some minor fixes needed here
+                //when item added it does not get saved, fails here
                 SelectedItem = null;
                 return;
             }
@@ -114,7 +134,7 @@ public partial class HomeViewModel : ViewModelBase
                 _itemService.NewItem(m.Item.Item);
             }
 
-            //TODO Does this even when just closed
+            //TODO Does this even when just closed and when item added it does not get saved 
             _itemService.UpdateItem(item);
 
             SelectedItem = null;
@@ -131,19 +151,15 @@ public partial class HomeViewModel : ViewModelBase
         {
             OnPropertyChanged(nameof(SelectedCategory));
         });
-
     }
 
-    private async Task InitializeAsync()
+    public override void Unload()
     {
-        await _itemService.InitializeAsync();
+        WeakReferenceMessenger.Default.UnregisterAll(this);
 
-        var items = await RefreshItems();
-
-        await MainViewModel.Dispatch.ExecuteAsync(() =>
-        {
-            Sum = items.Sum(i => i.Item.Billing.BasePrice);
-        });
+#if HAS_UNO
+        SystemNavigationManager.GetForCurrentView().BackRequested -= System_BackRequested;
+#endif
     }
 
     private async Task<IEnumerable<ItemViewModel>> RefreshItems()
@@ -157,11 +173,6 @@ public partial class HomeViewModel : ViewModelBase
             Items.AddRange(items);
         });
 
-        foreach (var item in items)
-        {
-            Items.Add(item);
-        }
-
         return items;
     }
 
@@ -173,22 +184,19 @@ public partial class HomeViewModel : ViewModelBase
 
     private void AddNew()
     {
-        //SelectedItem cannot be something that is not in the List
-        SelectedItem = new ItemViewModel(null);
+        SelectedItem = null;
+
+        WeakReferenceMessenger.Default.Send(new ItemSelectionChanged(new ItemViewModel(null), true));
+        IsPaneOpen = true;
     }
 
     public async Task DeleteItem(ItemViewModel? item = null)
     {
         _itemService.DeleteItem(item ?? SelectedItem);
 
+        SelectedItem = null;
         await RefreshItems();
 
         return;
-    }
-
-    public override void Dispose()
-    {
-        WeakReferenceMessenger.Default.UnregisterAll(this);
-        SystemNavigationManager.GetForCurrentView().BackRequested -= System_BackRequested;
     }
 }

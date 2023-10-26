@@ -124,6 +124,7 @@
                                     <StackPanel Orientation="Horizontal"
                                                 Spacing="12">
                                         <PersonPicture x:Name="desktopPerson"
+                                                       ProfilePicture="{Binding User.Photo}"
                                                        DisplayName="{Binding User.Name}"
                                                        Height="48" />
                                         <TextBlock  Text="{Binding User.Name}"

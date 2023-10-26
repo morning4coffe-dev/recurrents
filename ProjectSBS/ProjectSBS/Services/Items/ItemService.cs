@@ -8,18 +8,25 @@ public class ItemService : IItemService
 {
     private readonly IBillingService _billing;
     private readonly IDataService _dataService;
+#if !__WASM__
     private readonly INotificationService _notification;
+#endif
 
     private readonly List<ItemViewModel> _items = new();
 
     public ItemService(
         IBillingService billing,
         IDataService dataService,
-        INotificationService notification)
+#if !HAS_UNO_WASM
+        INotificationService notification
+#endif
+        )
     {
         _billing = billing;
         _dataService = dataService;
+#if !HAS_UNO_WASM
         _notification = notification;
+#endif
     }
 
     public async Task InitializeAsync()
@@ -93,7 +100,10 @@ public class ItemService : IItemService
         {
             foreach (var date in paymentDates)
             {
-                //TODO _notification.ScheduleNotification(item.Id, item.Name, DateTime.Now.ToString(), date, new TimeOnly(8, 00));
+                //TODO Remove before scheduling new 
+#if !HAS_UNO_WASM
+                _notification.ScheduleNotification(item.Id, item.Name, DateTime.Now.ToString(), date, new TimeOnly(8, 00));
+#endif
             }
         });
 

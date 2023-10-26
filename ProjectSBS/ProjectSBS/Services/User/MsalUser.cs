@@ -1,8 +1,9 @@
-﻿using System.Text;
-using UserModel = ProjectSBS.Business.Models;
-using Microsoft.Graph;
+﻿using Microsoft.Graph;
 using Microsoft.Graph.Models;
 using Microsoft.Kiota.Abstractions.Authentication;
+using Microsoft.UI.Xaml.Media.Imaging;
+using System.Text;
+using UserModel = ProjectSBS.Business.Models;
 
 namespace ProjectSBS.Services.User;
 
@@ -12,11 +13,11 @@ public class MsalUser : IUserService
 
     private GraphServiceClient? _client;
 
+    private UserModel.User? _currentUser;
+
     public MsalUser(ITokenCache token)
     {
         _token = token;
-
-        Initialize();
     }
 
     private async void Initialize()
@@ -33,9 +34,19 @@ public class MsalUser : IUserService
 
     public async Task<UserModel.User?> GetUser()
     {
+        if (_currentUser is { })
+        {
+            return _currentUser;
+        }
+
         if (_client is null)
         {
-            return null;
+            Initialize();
+
+            if (_client is null)
+            {
+                return null;
+            }
         }
 
         var user = await _client.Me
@@ -45,17 +56,26 @@ public class MsalUser : IUserService
                     new string[] { "displayName", "mail" };
             });
 
-        var fullName = user.DisplayName;
-        var firstName = user.GivenName;
-        var mail = user.Mail;
-        var c = user.Photo;
+        var fullName = user?.DisplayName;
+        var mail = user?.Mail;
 
-        return new UserModel.User(fullName, mail);
+        // Retrieve the user's profile picture
+        var photoStream = await _client.Me
+            .Photo
+            .Content
+            .GetAsync();
+
+        var photoBitmap = new BitmapImage();
+        var stream = new MemoryStream();
+        await photoStream.CopyToAsync(stream);
+        stream.Seek(0, SeekOrigin.Begin);
+        await photoBitmap.SetSourceAsync(stream.AsRandomAccessStream());
+
+        return new UserModel.User(fullName, mail, photoBitmap);
     }
 
     public async Task<bool> UploadData(string content, string relativeLocalPath, CancellationToken token = default)
     {
-        //TODO cancellation token not used
         //https://learn.microsoft.com/en-us/onedrive/developer/rest-api/concepts/special-folders-appfolder?view=odsp-graph-online
         var user = await _client.Me.GetAsync(cancellationToken: token);
 
@@ -65,7 +85,6 @@ public class MsalUser : IUserService
         byte[] byteArray = Encoding.UTF8.GetBytes(content);
         var newItem = new DriveItem { Name = relativeLocalPath, Content = byteArray };
 
-        // Upload the file content
         var uploadedItem = await _client.Drives[userDrive.Id]
             .Items[driveItems.Id]
             .ItemWithPath(newItem.Name).Content
@@ -92,13 +111,18 @@ public class MsalUser : IUserService
             .Content
             .GetAsync(cancellationToken: token);
     }
+
+    public void Logout()
+    {
+        _currentUser = null;
+    }
 }
 
 class TokenProvider : IAccessTokenProvider
 {
     private readonly string _token;
 
-    public TokenProvider(string token)     
+    public TokenProvider(string token)
     {
         _token = token;
     }

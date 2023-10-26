@@ -1,23 +1,32 @@
+using ProjectSBS.Services.User;
+using UserModel = ProjectSBS.Business.Models;
 using Windows.System;
 
 namespace ProjectSBS.Presentation;
 
 public partial class LoginViewModel : ObservableObject
 {
-    private IAuthenticationService _authentication;
-    private IStringLocalizer _localization;
+    private readonly IAuthenticationService _authentication;
+    private readonly IUserService _userService;
+
+    private readonly IStringLocalizer _localization;
     private readonly IDispatcher _dispatcher;
 
-    private INavigator _navigator;
+    private readonly INavigator _navigator;
+
+    [ObservableProperty]
+    private UserModel.User? _user;
 
     public LoginViewModel(
         INavigator navigator,
         IAuthenticationService authentication,
+        IUserService userService,
         IStringLocalizer localization,
         IDispatcher dispatcher)
     {
         _navigator = navigator;
         _authentication = authentication;
+        _userService = userService;
         _localization = localization;
         _dispatcher = dispatcher;
 
@@ -46,7 +55,15 @@ public partial class LoginViewModel : ObservableObject
 
         if (success)
         {
-            await _navigator.NavigateViewModelAsync<MainViewModel>(this, qualifier: Qualifiers.ClearBackStack);
+            await _dispatcher.ExecuteAsync(async () =>
+            {
+                User = await _userService.GetUser();
+
+                //TODO [Optimization] instead of waiting, maybe load items, or stuff like that here
+                await Task.Delay(100000);
+
+                await _navigator.NavigateViewModelAsync<MainViewModel>(this, qualifier: Qualifiers.ClearBackStack);
+            });
         }
     }
 

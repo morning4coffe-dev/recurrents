@@ -1,11 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
 using ProjectSBS.Business;
-using ProjectSBS.Services.Items;
-using ProjectSBS.Services.User;
-using System.Collections.ObjectModel;
-using Windows.System.Profile;
-using ProjectSBS.Services.Items.Filtering;
 using ProjectSBS.Presentation.NestedPages;
+using ProjectSBS.Services.Items;
+using ProjectSBS.Services.Items.Filtering;
+using ProjectSBS.Services.User;
 
 namespace ProjectSBS.Presentation;
 
@@ -106,12 +104,10 @@ public partial class MainViewModel : ObservableObject
 
     private async Task InitializeAsync()
     {
-        var user = await _userService.GetUser();
-
-        //TODO Log Dispatch is null on Initialization
-
         await Dispatch.ExecuteAsync(async () =>
         {
+            var user = await _userService.GetUser();
+
             if (user is not null)
             {
                 User = user;
