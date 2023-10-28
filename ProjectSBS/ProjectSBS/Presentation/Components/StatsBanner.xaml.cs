@@ -6,7 +6,7 @@ public sealed partial class StatsBanner : Page
     {
         this.InitializeComponent();
 
-        this.DataContext = (Application.Current as App)!.Host?.Services.GetService<StatsBannerViewModel>()!;
+        this.DataContext = App.Services?.GetRequiredService<StatsBannerViewModel>()!;
     }
 
     public StatsBannerViewModel ViewModel => (StatsBannerViewModel)DataContext;

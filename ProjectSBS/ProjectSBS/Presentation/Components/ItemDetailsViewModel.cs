@@ -20,6 +20,7 @@ public partial class ItemDetailsViewModel : ObservableObject
 
     [ObservableProperty]
     private bool _isEditing = false;
+    private bool _isNew = false;
 
     public ObservableCollection<Tag> Tags { get; }
 
@@ -54,18 +55,19 @@ public partial class ItemDetailsViewModel : ObservableObject
 
         InitializeCurrency(currencyCache);
 
-        ItemName = SelectedItem?.Item?.Name ?? "New Item";
-
         //TODO Doesn't unregister when switching pages and registers again
-        WeakReferenceMessenger.Default.Register<ItemSelectionChanged>(this, (r, m) =>
+        WeakReferenceMessenger.Default.Register<ItemSelectionChanged>(this, async (r, m) =>
         {
 #if HAS_UNO
             SystemNavigationManager.GetForCurrentView().BackRequested += System_BackRequested;
 #endif
             if (m.SelectedItem is { } item)
             {
-                MainViewModel.Dispatch.ExecuteAsync(() =>
+                _isNew = m.IsNew;
+
+                App.Dispatcher.TryEnqueue(() =>
                 {
+                    ItemName = (m.SelectedItem?.Item?.Name) != String.Empty ? m.SelectedItem?.Item?.Name : "New Item";
                     SelectedItem = item;
                 });
 
@@ -73,7 +75,7 @@ public partial class ItemDetailsViewModel : ObservableObject
 
                 FuturePayments.Clear();
 
-                var localizedDateStrings 
+                var localizedDateStrings
                     = item.GetFuturePayments()
                           .Select(date => date.ToString(CultureInfo.CurrentCulture))
                           .ToList();
@@ -92,7 +94,7 @@ public partial class ItemDetailsViewModel : ObservableObject
             return;
         }
 
-        await MainViewModel.Dispatch.ExecuteAsync(() =>
+        App.Dispatcher.TryEnqueue(() =>
         {
             Currencies.AddRange(currency.Rates);
         });
@@ -106,32 +108,33 @@ public partial class ItemDetailsViewModel : ObservableObject
 
     private async Task<bool> Close()
     {
-        if (IsEditing)
+        if (IsEditing && !_isNew)
         {
-            await MainViewModel.Navigator.ShowMessageDialogAsync(
-                this,
-                title: _localizer?["Leave"] ?? "Really wanna leave?",
-                content: _localizer?["Dialog_Ok"] ?? "Really?",
-                buttons: new[]
-                {
-                    new DialogAction(
-                        Label: _localizer?["Ok"] ?? "Ok", 
-                        Action: () => { IsEditing = false; }),
-                    new DialogAction(
-                        Label: _localizer?["Cancel"] ?? "Cancel")
-                });
+            //TODO Switch to new Dialog on Dispatcher
+            //await MainViewModel.Navigator.ShowMessageDialogAsync(
+            //    this,
+            //    title: _localizer?["Leave"] ?? "Really wanna leave?",
+            //    content: _localizer?["Dialog_Ok"] ?? "Really?",
+            //    buttons: new[]
+            //    {
+            //        new DialogAction(
+            //            Label: _localizer?["Ok"] ?? "Ok",
+            //            Action: () => { IsEditing = false; }),
+            //        new DialogAction(
+            //            Label: _localizer?["Cancel"] ?? "Cancel")
+            //    });
 
             return false;
         }
 
-        WeakReferenceMessenger.Default.Send(new ItemUpdated(SelectedItem));
+        WeakReferenceMessenger.Default.Send(new ItemUpdated(SelectedItem, Canceled: true));
 
         return true;
     }
 
     private async Task Save()
     {
-        WeakReferenceMessenger.Default.Send(new ItemUpdated(SelectedItem));
+        WeakReferenceMessenger.Default.Send(new ItemUpdated(SelectedItem, ToSave: true));
     }
 
     private async Task DeleteItem()

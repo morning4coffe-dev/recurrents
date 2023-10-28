@@ -7,7 +7,7 @@ public sealed partial class ItemDetails : Page
         this.InitializeComponent();
 
         //TODO Log if null
-        this.DataContext = (Application.Current as App)!.Host?.Services.GetService<ItemDetailsViewModel>()!;
+        this.DataContext = App.Services?.GetRequiredService<ItemDetailsViewModel>()!;
     }
 
     public ItemDetailsViewModel ViewModel => (ItemDetailsViewModel)DataContext;

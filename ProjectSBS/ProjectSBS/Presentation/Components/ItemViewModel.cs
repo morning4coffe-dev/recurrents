@@ -10,7 +10,7 @@ public partial class ItemViewModel : ObservableObject
     {
         _item = item;
 
-        _billingService = (Application.Current as App)!.Host?.Services.GetService<IBillingService>()!;
+        _billingService = App.Services?.GetRequiredService<IBillingService>()!;
     }
 
     [ObservableProperty]

@@ -3,19 +3,19 @@
 public partial record Item
 {
     public Item(
-        string id, 
+        string? id, 
         string name, 
-        BillingDetails billing, 
-        int tagId, 
-        string? description, 
-        DateTime creationDate)
+        BillingDetails billing = null, 
+        int tagId = default, 
+        string description = "", 
+        DateTime creationDate = default)
     {
-        Id = id;
+        Id = id ?? Guid.NewGuid().ToString();
         Name = name;
-        Billing = billing;
+        Billing = billing ?? new BillingDetails(5.99M, DateOnly.FromDateTime(DateTime.Today));
         TagId = tagId;
         Description = description;
-        CreationDate = creationDate;
+        CreationDate = creationDate == default ? DateTime.Now : creationDate;
     }
 
     public string Id { get; }
