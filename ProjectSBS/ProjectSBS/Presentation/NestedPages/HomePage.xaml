@@ -20,7 +20,7 @@
 
     <!--TODO Black blackground-->
 
-    <Border>
+    <Grid>
 
         <VisualStateManager.VisualStateGroups>
 
@@ -116,120 +116,110 @@
             <muxc:TwoPaneView.Pane1>
 
                 <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
                     <ScrollViewer>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
 
-                            <StackPanel x:Name="contentHolder"
-                                        Margin="48,48,48,0"
-                                        Spacing="12">
+                        <StackPanel x:Name="contentHolder"
+                                    Margin="48,48,48,0"
+                                    Spacing="8">
 
-                                <StackPanel x:Name="desktopHeader"
-                                            Visibility="Visible"
-                                            Spacing="16">
-                                    <TextBlock Text="Home"
-                                               Style="{StaticResource TitleTextBlockStyle}" />
+                            <StackPanel x:Name="desktopHeader"
+                                        Visibility="Visible"
+                                        Spacing="16">
+                                <TextBlock Text="Home"
+                                           Style="{StaticResource TitleTextBlockStyle}" />
 
-                                    <Button Visibility="Visible"
-                                            Content="New Item"
-                                            Command="{x:Bind ViewModel.AddNewCommand}" />
-                                </StackPanel>
-
-                                <StackPanel x:Name="mobileHeader"
-                                            Visibility="Collapsed"
-                                            Spacing="8">
-                                    <Grid ColumnSpacing="16">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition />
-                                        </Grid.ColumnDefinitions>
-
-                                        <Button CornerRadius="30"
-                                                Padding="0"
-                                                BorderThickness="0"
-                                                Background="Transparent">
-                                            <PersonPicture ProfilePicture="{x:Bind ViewModel.User.Photo, Mode=OneWay}"
-                                                           DisplayName="{x:Bind ViewModel.User.Name, Mode=OneWay}"
-                                                           Width="65" />
-                                        </Button>
-
-                                        <StackPanel Grid.Column="1">
-                                            <TextBlock Text="{x:Bind ViewModel.WelcomeMessage, Mode=OneTime}"
-                                                       TextWrapping="WrapWholeWords"
-                                                       VerticalAlignment="Center"
-                                                       HorizontalAlignment="Left"
-                                                       Opacity="0.6"
-                                                       Style="{StaticResource SubtitleTextBlockStyle}" />
-
-                                            <TextBlock Text="{x:Bind ViewModel.User.Name, Mode=OneWay}"
-                                                       TextWrapping="WrapWholeWords"
-                                                       VerticalAlignment="Center"
-                                                       HorizontalAlignment="Left"
-                                                       Style="{StaticResource TitleTextBlockStyle}" />
-                                        </StackPanel>
-                                    </Grid>
-
-                                    <Pivot Grid.Row="2"
-                                           FontSize="5"
-                                           ItemsSource="{x:Bind ViewModel.Categories, Mode=OneWay}"
-                                           SelectedItem="{x:Bind ViewModel.SelectedCategory, Mode=TwoWay}">
-
-                                        <Pivot.HeaderTemplate>
-                                            <DataTemplate x:DataType="models:FilterCategory">
-                                                <StackPanel Orientation="Horizontal"
-                                                            Spacing="12">
-                                                    <FontIcon Glyph="{x:Bind Glyph}"
-                                                              FontSize="16" />
-                                                    <TextBlock Text="{x:Bind Text}"
-                                                               Style="{StaticResource SubtitleTextBlockStyle}"
-                                                               FontSize="18" />
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </Pivot.HeaderTemplate>
-
-                                        <Pivot.ItemTemplate>
-                                            <DataTemplate>
-                                                <Grid />
-                                            </DataTemplate>
-                                        </Pivot.ItemTemplate>
-                                    </Pivot>
-                                </StackPanel>
-
-                                <InfoBar x:Name="disconnectAlert"
-                                         Title="You are disconnected!"
-                                         Severity="Error"
-                                         IsOpen="True" />
-
-                                <comp:StatsBanner />
-
-                                <StackPanel x:Name="itemsEmptyImage"
-                                            Spacing="12"
-                                            Visibility="Collapsed">
-                                    <Image Source="/ProjectSBS/Assets/Illustrations/undraw_Newsletter_re_wrob.png"
-                                           MaxHeight="200" />
-                                    <TextBlock Text="You have no items here!"
-                                               HorizontalAlignment="Center"
-                                               FontWeight="Bold" />
-                                    <TextBlock Text="Improve your spending habbits by adding your subscriptions."
-                                               HorizontalAlignment="Center" />
-                                    <Button Content="Add Items"
-                                            HorizontalAlignment="Center"
-                                            Padding="16, 10" />
-                                </StackPanel>
-
+                                <Button Visibility="Visible"
+                                        Content="New Item"
+                                        Command="{x:Bind ViewModel.AddNewCommand}" />
                             </StackPanel>
 
-                            <GridView x:Name="MainList"
-                                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                            <StackPanel x:Name="mobileHeader"
+                                        Visibility="Collapsed"
+                                        Spacing="8">
+                                <Grid ColumnSpacing="16">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Button CornerRadius="30"
+                                            Padding="0"
+                                            BorderThickness="0"
+                                            Background="Transparent">
+                                        <PersonPicture ProfilePicture="{x:Bind ViewModel.User.Photo, Mode=OneWay}"
+                                                       DisplayName="{x:Bind ViewModel.User.Name, Mode=OneWay}"
+                                                       Width="65" />
+                                    </Button>
+
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="{x:Bind ViewModel.WelcomeMessage, Mode=OneTime}"
+                                                   TextWrapping="WrapWholeWords"
+                                                   VerticalAlignment="Center"
+                                                   HorizontalAlignment="Left"
+                                                   Opacity="0.6"
+                                                   Style="{StaticResource SubtitleTextBlockStyle}" />
+
+                                        <TextBlock Text="{x:Bind ViewModel.User.Name, Mode=OneWay}"
+                                                   TextWrapping="WrapWholeWords"
+                                                   VerticalAlignment="Center"
+                                                   HorizontalAlignment="Left"
+                                                   Style="{StaticResource TitleTextBlockStyle}" />
+                                    </StackPanel>
+                                </Grid>
+
+                                <Pivot Grid.Row="2"
+                                       FontSize="5"
+                                       ItemsSource="{x:Bind ViewModel.Categories, Mode=OneWay}"
+                                       SelectedItem="{x:Bind ViewModel.SelectedCategory, Mode=TwoWay}">
+
+                                    <Pivot.HeaderTemplate>
+                                        <DataTemplate x:DataType="models:FilterCategory">
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="12">
+                                                <FontIcon Glyph="{x:Bind Glyph}"
+                                                          FontSize="16" />
+                                                <TextBlock Text="{x:Bind Text}"
+                                                           Style="{StaticResource SubtitleTextBlockStyle}"
+                                                           FontSize="18" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </Pivot.HeaderTemplate>
+
+                                    <Pivot.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid />
+                                        </DataTemplate>
+                                    </Pivot.ItemTemplate>
+                                </Pivot>
+                            </StackPanel>
+
+                            <InfoBar x:Name="disconnectAlert"
+                                     Title="You are disconnected!"
+                                     Severity="Error"
+                                     IsClosable="False"
+                                     IsOpen="True" />
+
+                            <comp:StatsBanner />
+
+                            <StackPanel x:Name="itemsEmptyImage"
+                                        Spacing="12"
+                                        Visibility="Collapsed">
+                                <Image Source="/ProjectSBS/Assets/Illustrations/undraw_Newsletter_re_wrob.png"
+                                       MaxHeight="200" />
+                                <TextBlock Text="You have no items here!"
+                                           HorizontalAlignment="Center"
+                                           FontWeight="Bold" />
+                                <TextBlock Text="Improve your spending habbits by adding your subscriptions."
+                                           HorizontalAlignment="Center" />
+                                <Button Content="Add Items"
+                                        HorizontalAlignment="Center"
+                                        Padding="14, 8"
+                                        Command="{x:Bind ViewModel.AddNewCommand}"/>
+                            </StackPanel>
+
+                            <GridView ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                       ItemsSource="{x:Bind ViewModel.Items, Mode=OneWay}"
-                                      SelectedItem="{x:Bind ViewModel.SelectedItem, Mode=TwoWay}"
-                                      Grid.Row="1">
+                                      SelectedItem="{x:Bind ViewModel.SelectedItem, Mode=TwoWay}">
 
                                 <GridView.Resources>
                                     <FontIconSource x:Key="EditIcon"
@@ -311,8 +301,7 @@
                                     </DataTemplate>
                                 </GridView.ItemTemplate>
                             </GridView>
-
-                        </Grid>
+                        </StackPanel>
 
                     </ScrollViewer>
 
@@ -360,5 +349,5 @@
 
         </muxc:TwoPaneView>
 
-    </Border>
+    </Grid>
 </Page>

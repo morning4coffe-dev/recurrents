@@ -8,7 +8,7 @@ public sealed partial class HomePage : Page
     {
         this.InitializeComponent();
 
-        this.DataContext = (Application.Current as App)!.Host?.Services.GetService<HomeViewModel>()!;
+        this.DataContext = App.Services?.GetRequiredService<HomeViewModel>()!;
     }
 
     private void Page_Loaded(object sender, RoutedEventArgs e)

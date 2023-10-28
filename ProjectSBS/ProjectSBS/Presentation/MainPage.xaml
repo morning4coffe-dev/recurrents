@@ -6,14 +6,14 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:not_win="http://uno.ui/not_win"
       mc:Ignorable="d not_win"
-      xmlns:uen="using:Uno.Extensions.Navigation.UI"
       xmlns:utu="using:Uno.Toolkit.UI"
       xmlns:comp="using:ProjectSBS.Presentation.Components"
       xmlns:converters="using:CommunityToolkit.WinUI.Converters"
       xmlns:models="using:ProjectSBS.Business.Models"
-      NavigationCacheMode="Required"
       xmlns:triggers="using:CommunityToolkit.WinUI.UI.Triggers"
-      xmlns:toolkit="using:CommunityToolkit.WinUI">
+      xmlns:toolkit="using:CommunityToolkit.WinUI"
+      Loaded="Page_Loaded"
+      Unloaded="Page_Unloaded">
 
     <Page.Resources>
         <converters:EmptyObjectToObjectConverter x:Key="EmptyToFalseConverter"
@@ -106,10 +106,10 @@
                                     IsBackButtonVisible="Collapsed"
                                     IsPaneToggleButtonVisible="True"
                                     IsSettingsVisible="True"
-                                    IsPaneVisible="True"
+                                    IsPaneVisible="True"                                    
                                     MenuItemsSource="{Binding Categories}"
                                     SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
-                                    uen:Region.Attached="True">
+                                    SelectionChanged="OnNavigation_SelectionChanged">
 
                         <NavigationView.PaneCustomContent>
                             <Border>

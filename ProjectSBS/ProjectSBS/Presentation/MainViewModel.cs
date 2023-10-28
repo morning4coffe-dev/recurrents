@@ -4,21 +4,16 @@ using ProjectSBS.Presentation.NestedPages;
 using ProjectSBS.Services.Items;
 using ProjectSBS.Services.Items.Filtering;
 using ProjectSBS.Services.User;
+using Uno.Extensions;
 
 namespace ProjectSBS.Presentation;
 
-public partial class MainViewModel : ObservableObject
+public partial class MainViewModel : ViewModelBase
 {
     private readonly IAuthenticationService _authentication;
     private readonly IUserService _userService;
-
+    private readonly IDispatcher _dispatcher;
     private readonly IItemFilterService _filterService;
-
-    public static IDispatcher? Dispatch { get; private set; }
-    public static INavigator? Navigator { get; private set; }
-
-    [ObservableProperty]
-    private string? name;
 
     [ObservableProperty]
     private User? _user;
@@ -30,7 +25,7 @@ public partial class MainViewModel : ObservableObject
     private Type? _pageType;
 
     [ObservableProperty]
-    private Type? _settingsPage;
+    private bool _isSignedIn;
 
     public string? Title { get; }
 
@@ -59,8 +54,6 @@ public partial class MainViewModel : ObservableObject
 
     public List<FilterCategory> Categories { get; }
 
-    public bool IsSignedIn { get; private set; }
-
     public ICommand GoToSettingsCommand { get; }
     public ICommand LogoutCommand { get; }
 
@@ -72,18 +65,15 @@ public partial class MainViewModel : ObservableObject
 #endif
         IUserService userService,
         IItemService itemService,
-        IDispatcher dispatch,
-        INavigator navigator,
-        IItemFilterService filterService)
+        IItemFilterService filterService,
+        IDispatcher dispatcher)
     {
 #if !__IOS__
         _authentication = authentication;
 #endif
         _userService = userService;
         _filterService = filterService;
-
-        Dispatch = dispatch;
-        Navigator = navigator;
+        _dispatcher = dispatcher;
 
         Title = "Main";
         Title += $" - {localizer["ApplicationName"]}";
@@ -94,41 +84,19 @@ public partial class MainViewModel : ObservableObject
 
         Categories = filterService.Categories;
 
-        Task.Run(InitializeAsync);
-
         WeakReferenceMessenger.Default.Register<CategorySelectionChanged>(this, (r, m) =>
         {
             OnPropertyChanged(nameof(SelectedCategory));
         });
     }
 
-    private async Task InitializeAsync()
+    public async override void Load()
     {
-        await Dispatch.ExecuteAsync(async () =>
-        {
-            var user = await _userService.GetUser();
+        User = await _userService.GetUser();
 
-            if (user is not null)
-            {
-                User = user;
-                Name = User.Name;
-            }
+        IsSignedIn = await _authentication.IsAuthenticated();
 
-            IsSignedIn = await _authentication.IsAuthenticated();
-        });
-
-        while ((Application.Current as App)!.Host == null)
-        {
-            //Wait till Host is created
-            await Task.Delay(200);
-
-            //TODO Add loading indicator
-        }
-
-        await Dispatch.ExecuteAsync(() =>
-        {
-            PageType = typeof(HomePage);
-        });
+        PageType = typeof(HomePage);
     }
 
     private async Task GoToSettings()
@@ -138,7 +106,12 @@ public partial class MainViewModel : ObservableObject
 
     public async Task DoLogout(CancellationToken token)
     {
-        await _authentication.LogoutAsync(Dispatch, token);
-        //TODO probably will have to clean the token too
+        await _authentication.LogoutAsync(_dispatcher, token);
+        //TODO probably will have to clean the token and User too
+    }
+
+    public override void Unload()
+    {
+        throw new NotImplementedException();
     }
 }

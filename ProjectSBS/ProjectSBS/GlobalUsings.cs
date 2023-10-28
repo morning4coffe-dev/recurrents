@@ -33,3 +33,4 @@ global using Windows.Networking.Connectivity;
 global using Windows.Storage;
 global using ProjectSBS.Presentation.Components;
 global using ApplicationExecutionState = Windows.ApplicationModel.Activation.ApplicationExecutionState;
+global using ProjectSBS.Services.Navigation;

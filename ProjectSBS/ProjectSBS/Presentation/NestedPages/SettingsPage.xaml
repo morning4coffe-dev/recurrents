@@ -7,6 +7,8 @@
       xmlns:comp="using:ProjectSBS.Presentation.Components"
       xmlns:controls="using:CommunityToolkit.WinUI.Controls"
       xmlns:ui="using:CommunityToolkit.WinUI"
+      Loaded="Page_Loaded"
+      Unloaded="Page_Unloaded"
       mc:Ignorable="d">
 
     <comp:PageShell x:Name="pageShell"
@@ -14,26 +16,37 @@
         <comp:PageShell.ContentView>
             <UserControl>
                 <ScrollViewer>
-                    <StackPanel Spacing="8">
+                    <StackPanel Spacing="4"
+                                Margin="48,48,48,0">
+
+                        <TextBlock Text="Settings"
+                                   Margin="0,0,0,12"
+                                   Style="{StaticResource TitleTextBlockStyle}" />
 
                         <controls:SettingsCard>
                             <controls:SettingsCard.Header>
                                 <StackPanel Orientation="Horizontal"
+                                            Margin="6"
                                             Spacing="20">
-                                    <PersonPicture Width="80" />
+                                    <PersonPicture ProfilePicture="{Binding User.Photo}"
+                                                   DisplayName="{Binding User.Name}"
+                                                   Width="80" />
                                     <StackPanel VerticalAlignment="Center"
-                                                Spacing="4">
-                                        <TextBlock  Text="John Doe"
+                                                Spacing="6">
+                                        <TextBlock  Text="{Binding User.Name}"
                                                     Style="{StaticResource SubtitleTextBlockStyle}" />
-                                        <TextBlock  Text="john@test-mail.com" />
+                                        <TextBlock  Text="{Binding User.Email}" />
                                     </StackPanel>
                                 </StackPanel>
                             </controls:SettingsCard.Header>
-                            <Button Content="Sign out" />
+                            <Button Content="Sign out"
+                                    Margin="6" />
                         </controls:SettingsCard>
 
                         <controls:SettingsCard Header="A clickable SettingsCard"
-                                               Description="A SettingsCard can be made clickable and you can leverage the Command property or Click event." />
+                                               Description="A SettingsCard can be made clickable and you can leverage the Command property or Click event.">
+                            <ToggleSwitch />
+                        </controls:SettingsCard>
 
                         <controls:SettingsCard Header="Customizing the ActionIcon"
                                                Description="You can customize the ActionIcon and ActionIconToolTip."

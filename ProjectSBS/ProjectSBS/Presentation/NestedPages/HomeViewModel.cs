@@ -115,27 +115,30 @@ public partial class HomeViewModel : ViewModelBase
 
         WeakReferenceMessenger.Default.Register<ItemUpdated>(this, (r, m) =>
         {
-            ItemViewModel? item = null;
-
-            if (m.Item?.Item is not { })
+            if (m.Canceled)
             {
-                //when item added it does not get saved, fails here
                 SelectedItem = null;
                 return;
             }
+
+            ItemViewModel? item = null;
 
             if (SelectedItem is not null)
             {
                 item = Items.FirstOrDefault(i => i.Item.Id == SelectedItem.Item?.Id);
             }
 
-            if (item is null)
+            if (m.ToSave)
             {
-                _itemService.NewItem(m.Item.Item);
+                if (item is null)
+                {
+                    _itemService.NewItem(m.Item.Item);
+                }
+                else
+                {
+                    _itemService.UpdateItem(item);
+                }
             }
-
-            //TODO Does this even when just closed and when item added it does not get saved 
-            _itemService.UpdateItem(item);
 
             SelectedItem = null;
 
@@ -166,7 +169,7 @@ public partial class HomeViewModel : ViewModelBase
     {
         var items = _itemService.GetItems(SelectedCategory.Selector);
 
-        await MainViewModel.Dispatch.ExecuteAsync(() =>
+        App.Dispatcher.TryEnqueue(() =>
         {
             Items.Clear();
             //TODO Dont clear the whole thing, just removem update and add changed
@@ -186,7 +189,12 @@ public partial class HomeViewModel : ViewModelBase
     {
         SelectedItem = null;
 
-        WeakReferenceMessenger.Default.Send(new ItemSelectionChanged(new ItemViewModel(null), true));
+        WeakReferenceMessenger.Default.Send(
+            new ItemSelectionChanged(
+                new ItemViewModel(new Item(null, String.Empty)), 
+                true, 
+                true)
+            );
         IsPaneOpen = true;
     }
 

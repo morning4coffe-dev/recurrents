@@ -9,6 +9,7 @@ using ProjectSBS.Services.Analytics;
 using ProjectSBS.Services.Items.Filtering;
 using ProjectSBS.Services.Items.Tags;
 using ProjectSBS.Presentation.NestedPages;
+using Microsoft.UI.Dispatching;
 #if WINDOWS
 using Windows.Foundation.Collections;
 using CommunityToolkit.WinUI.Notifications;
@@ -22,7 +23,10 @@ namespace ProjectSBS;
 public class App : Application
 {
     public Window? MainWindow { get; private set; }
-    public IHost? Host { get; private set; }
+    private IHost? Host { get; set; }
+
+    public static IServiceProvider? Services => (Current as App)!.Host?.Services;
+    public static DispatcherQueue Dispatcher => (Current as App)!.MainWindow!.DispatcherQueue;
 
     protected async override void OnLaunched(LaunchActivatedEventArgs args)
     {
@@ -98,7 +102,10 @@ public class App : Application
                     services.AddSingleton<IAnalyticsService, AnalyticsService>();
                     services.AddSingleton<IItemFilterService, ItemFilterService>();
                     services.AddSingleton<ITagService, TagService>();
+                    services.AddSingleton<INavigation, NavigationService>();
 
+                    services.AddTransient<MainViewModel>();
+                    services.AddTransient<LoginViewModel>();
                     services.AddTransient<ItemDetailsViewModel>();
                     services.AddTransient<HomeViewModel>();
                     services.AddTransient<SettingsViewModel>();
@@ -159,6 +166,8 @@ public class App : Application
 
         MainWindow = builder.Window;
 
+        //Host = builder.Build();
+
         Host = await builder.NavigateAsync<Shell>(initialNavigate:
             async (services, navigator) =>
             {
@@ -199,9 +208,9 @@ public class App : Application
             new RouteMap("", View: views.FindByViewModel<ShellViewModel>(),
                 Nested: new RouteMap[]
                 {
-                new RouteMap("Login", View: views.FindByViewModel<LoginViewModel>()),
-                new RouteMap("Main", View: views.FindByViewModel<MainViewModel>()),
-                new RouteMap("Details", View: views.FindByViewModel<ItemDetailsViewModel>()),
+                    new RouteMap("Login", View: views.FindByViewModel<LoginViewModel>()),
+                    new RouteMap("Main", View: views.FindByViewModel<MainViewModel>()),
+                    new RouteMap("Details", View: views.FindByViewModel<ItemDetailsViewModel>()),
                 }
             )
         );
