@@ -1,10 +1,13 @@
-﻿namespace ProjectSBS.Presentation
+﻿namespace ProjectSBS.Presentation;
+
+public sealed partial class LoginPage : Page
 {
-    public sealed partial class LoginPage : Page
+    public LoginViewModel ViewModel => (LoginViewModel)DataContext;
+
+    public LoginPage()
     {
-        public LoginPage()
-        {
-            this.InitializeComponent();
-        }
+        this.InitializeComponent();
+
+        this.DataContext = App.Services?.GetRequiredService<LoginViewModel>();
     }
 }

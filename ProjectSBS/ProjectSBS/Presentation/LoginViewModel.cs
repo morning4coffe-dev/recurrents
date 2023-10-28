@@ -1,6 +1,8 @@
 using ProjectSBS.Services.User;
 using UserModel = ProjectSBS.Business.Models;
 using Windows.System;
+using Uno.Extensions.Authentication;
+using Uno.Extensions.Navigation;
 
 namespace ProjectSBS.Presentation;
 
@@ -12,23 +14,27 @@ public partial class LoginViewModel : ObservableObject
     private readonly IStringLocalizer _localization;
     private readonly IDispatcher _dispatcher;
 
+    private readonly INavigation _navigation;
     private readonly INavigator _navigator;
+
 
     [ObservableProperty]
     private UserModel.User? _user;
 
     public LoginViewModel(
-        INavigator navigator,
+        INavigation navigation,
         IAuthenticationService authentication,
         IUserService userService,
         IStringLocalizer localization,
+        INavigator navigator,
         IDispatcher dispatcher)
     {
-        _navigator = navigator;
+        _navigation = navigation;
         _authentication = authentication;
         _userService = userService;
         _localization = localization;
         _dispatcher = dispatcher;
+        _navigator = navigator;
 
         Login = new AsyncRelayCommand(DoLogin);
         WithoutLogin = new AsyncRelayCommand(DoWithoutLogin);
@@ -47,6 +53,8 @@ public partial class LoginViewModel : ObservableObject
         try
         {
             success = await _authentication.LoginAsync(_dispatcher);
+
+            //App.Services.GetRequiredService<ILogger<LoginViewModel>>().LogInformation("Logging in");
         }
         catch (Exception ex)
         {
@@ -55,14 +63,19 @@ public partial class LoginViewModel : ObservableObject
 
         if (success)
         {
-            await _dispatcher.ExecuteAsync(async () =>
+            var user = await _userService.GetUser();
+
+            App.Dispatcher.TryEnqueue(() =>
             {
-                User = await _userService.GetUser();
+                User = user;
+            });
 
-                //TODO [Optimization] instead of waiting, maybe load items, or stuff like that here
-                await Task.Delay(100000);
+            //TODO [Optimization] instead of waiting, maybe load items, or stuff like that here
+            await Task.Delay(100);
 
-                await _navigator.NavigateViewModelAsync<MainViewModel>(this, qualifier: Qualifiers.ClearBackStack);
+            App.Dispatcher.TryEnqueue(() =>
+            {
+                _navigator.NavigateViewModelAsync<MainViewModel>(this, qualifier: Qualifiers.ClearBackStack);
             });
         }
     }

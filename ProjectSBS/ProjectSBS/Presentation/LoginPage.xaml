@@ -7,7 +7,6 @@
       xmlns:not_win="http://uno.ui/not_win"
       mc:Ignorable="d not_win"
       xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
-      xmlns:uen="using:Uno.Extensions.Navigation.UI"
       xmlns:utu="using:Uno.Toolkit.UI"
       xmlns:triggers="using:CommunityToolkit.WinUI.UI.Triggers"
       xmlns:page="using:ProjectSBS.Presentation.Components"
@@ -50,7 +49,7 @@
                         <VisualStateGroup>
                             <VisualState>
                                 <VisualState.StateTriggers>
-                                    <triggers:IsNullOrEmptyStateTrigger Value="{Binding User, Mode=OneWay}" />
+                                    <triggers:IsNullOrEmptyStateTrigger Value="{x:Bind ViewModel.User, Mode=OneWay}" />
                                 </VisualState.StateTriggers>
                                 <VisualState.Setters>
                                     <!--TODO [Login UI] Doesn't switch on login-->
@@ -102,7 +101,7 @@
                             </Ellipse.Fill>
                         </Ellipse>
 
-                        <TextBlock Text="{Binding TitleText}"
+                        <TextBlock Text="{x:Bind ViewModel.TitleText}"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Bottom"
                                    Style="{StaticResource TitleTextBlockStyle}" />
@@ -110,11 +109,11 @@
                         <Grid Grid.Row="1">
                             <StackPanel x:Name="personPicture"
                                         Visibility="Collapsed">
-                                <TextBlock Text="{Binding User.Name}"
+                                <TextBlock Text="{x:Bind ViewModel.User.Name}"
                                            Style="{StaticResource TitleTextBlockStyle}" />
 
-                                <PersonPicture ProfilePicture="{Binding User.Photo}"
-                                               DisplayName="{Binding User.Name}"
+                                <PersonPicture ProfilePicture="{x:Bind ViewModel.User.Photo}"
+                                               DisplayName="{x:Bind ViewModel.User.Name}"
                                                MinHeight="45"
                                                MaxHeight="200" />
                             </StackPanel>
@@ -133,13 +132,13 @@
                                     HorizontalAlignment="Center">
 
                             <StackPanel Spacing="8">
-                                <Button Content="{Binding LoginWithMicrosoftText}"
+                                <Button Content="{x:Bind ViewModel.LoginWithMicrosoftText}"
                                         Width="200"
                                         Height="45"
-                                        Command="{Binding Login}" />
-                                <HyperlinkButton Content="{Binding ContinueWithoutLoginText}"
+                                        Command="{x:Bind ViewModel.Login}" />
+                                <HyperlinkButton Content="{x:Bind ViewModel.ContinueWithoutLoginText}"
                                                  Width="200"
-                                                 Command="{Binding WithoutLogin}" />
+                                                 Command="{x:Bind ViewModel.WithoutLogin}" />
                             </StackPanel>
 
                             <muxc:ProgressRing IsActive="{Binding Login.IsRunning}" />
@@ -150,9 +149,9 @@
                                     Spacing="8"
                                     Margin="0, 8"
                                     Grid.Row="4">
-                            <HyperlinkButton Content="{Binding PrivacyPolicyText}"
-                                             Command="{Binding PrivacyPolicy}" />
-                            <TextBlock Text="{Binding AuthorText}"
+                            <HyperlinkButton Content="{x:Bind ViewModel.PrivacyPolicyText}"
+                                             /><!--TODO Command="{x:Bind ViewModel.PrivacyPolicy}"--> 
+                            <TextBlock Text="{x:Bind ViewModel.AuthorText}"
                                        VerticalAlignment="Center" />
                         </StackPanel>
 
