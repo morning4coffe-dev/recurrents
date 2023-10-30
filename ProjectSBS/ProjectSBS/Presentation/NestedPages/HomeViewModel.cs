@@ -1,9 +1,4 @@
 using System.Collections.ObjectModel;
-using CommunityToolkit.Mvvm.Messaging;
-using ProjectSBS.Business;
-using ProjectSBS.Services.Items;
-using ProjectSBS.Services.Items.Filtering;
-using ProjectSBS.Services.User;
 using Windows.UI.Core;
 
 namespace ProjectSBS.Presentation.NestedPages;
@@ -35,7 +30,7 @@ public partial class HomeViewModel : ViewModelBase
         get => _selectedItem;
         set
         {
-            IsPaneOpen = _selectedItem is { };
+            IsPaneOpen = value is { };
 
             if (_selectedItem == value)
             {
@@ -61,6 +56,11 @@ public partial class HomeViewModel : ViewModelBase
         get => _filterService.SelectedCategory;
         set
         {
+            if (_filterService.SelectedCategory == value)
+            {
+                return;
+            }
+
             _filterService.SelectedCategory = value;
 
             WeakReferenceMessenger.Default.Send(new CategorySelectionChanged());
@@ -105,9 +105,8 @@ public partial class HomeViewModel : ViewModelBase
         User = await _userService.GetUser();
 
         await _itemService.InitializeAsync();
-        var items = await RefreshItems();
 
-        Sum = items.Sum(i => i.Item.Billing.BasePrice);
+        var items = RefreshItems();
 
 #if HAS_UNO
         SystemNavigationManager.GetForCurrentView().BackRequested += System_BackRequested;
@@ -123,9 +122,9 @@ public partial class HomeViewModel : ViewModelBase
 
             ItemViewModel? item = null;
 
-            if (SelectedItem is not null)
+            if (_selectedItem is not null)
             {
-                item = Items.FirstOrDefault(i => i.Item.Id == SelectedItem.Item?.Id);
+                item = Items.FirstOrDefault(i => i.Item.Id == _selectedItem.Item?.Id);
             }
 
             if (m.ToSave)
@@ -142,7 +141,9 @@ public partial class HomeViewModel : ViewModelBase
 
             SelectedItem = null;
 
-            _ = RefreshItems();
+            var items = RefreshItems();
+
+            Sum = items.Sum(i => i.Item.Billing.BasePrice);
         });
 
         WeakReferenceMessenger.Default.Register<ItemDeleted>(this, (r, m) =>
@@ -165,16 +166,14 @@ public partial class HomeViewModel : ViewModelBase
 #endif
     }
 
-    private async Task<IEnumerable<ItemViewModel>> RefreshItems()
+    private IEnumerable<ItemViewModel> RefreshItems()
     {
-        var items = _itemService.GetItems(SelectedCategory.Selector);
+        var items = _itemService.GetItems(SelectedCategory.Selector)
+            .OrderBy(i => i.PaymentDate);
 
-        App.Dispatcher.TryEnqueue(() =>
-        {
-            Items.Clear();
-            //TODO Dont clear the whole thing, just removem update and add changed
-            Items.AddRange(items);
-        });
+        Items.Clear();
+        //TODO Dont clear the whole thing, just removem update and add changed
+        Items.AddRange(items);
 
         return items;
     }
@@ -191,8 +190,8 @@ public partial class HomeViewModel : ViewModelBase
 
         WeakReferenceMessenger.Default.Send(
             new ItemSelectionChanged(
-                new ItemViewModel(new Item(null, String.Empty)), 
-                true, 
+                new ItemViewModel(new Item(null, String.Empty)),
+                true,
                 true)
             );
         IsPaneOpen = true;
@@ -203,7 +202,7 @@ public partial class HomeViewModel : ViewModelBase
         _itemService.DeleteItem(item ?? SelectedItem);
 
         SelectedItem = null;
-        await RefreshItems();
+        RefreshItems();
 
         return;
     }

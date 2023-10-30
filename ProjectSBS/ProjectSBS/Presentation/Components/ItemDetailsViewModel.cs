@@ -1,6 +1,5 @@
 using CommunityToolkit.Mvvm.Messaging;
 using ProjectSBS.Business;
-using ProjectSBS.Services.Items;
 using ProjectSBS.Services.Items.Tags;
 using System.Collections.ObjectModel;
 using System.Globalization;

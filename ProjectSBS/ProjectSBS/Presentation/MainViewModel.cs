@@ -1,12 +1,4 @@
-﻿using CommunityToolkit.Mvvm.Messaging;
-using ProjectSBS.Business;
-using ProjectSBS.Presentation.NestedPages;
-using ProjectSBS.Services.Items;
-using ProjectSBS.Services.Items.Filtering;
-using ProjectSBS.Services.User;
-using Uno.Extensions;
-
-namespace ProjectSBS.Presentation;
+﻿namespace ProjectSBS.Presentation;
 
 public partial class MainViewModel : ViewModelBase
 {
@@ -79,7 +71,7 @@ public partial class MainViewModel : ViewModelBase
         Title += $" - {localizer["ApplicationName"]}";
         Title += $" - {appInfo?.Value?.Environment}";
 
-        GoToSettingsCommand = new AsyncRelayCommand(GoToSettings);
+        GoToSettingsCommand = new RelayCommand(GoToSettings);
         LogoutCommand = new AsyncRelayCommand(DoLogout);
 
         Categories = filterService.Categories;
@@ -90,16 +82,33 @@ public partial class MainViewModel : ViewModelBase
         });
     }
 
+    public void Navigate(NavigationViewSelectionChangedEventArgs args)
+    {
+        if (args.IsSettingsSelected)
+        {
+            if (PageType != typeof(SettingsPage))
+            {
+                GoToSettings();
+                return;
+            }
+        }
+
+        if (PageType != typeof(HomePage))
+        {
+            PageType = typeof(HomePage);
+        }
+    }
+
     public async override void Load()
     {
         User = await _userService.GetUser();
 
         IsSignedIn = await _authentication.IsAuthenticated();
 
-        PageType = typeof(HomePage);
+        //HomePage is currently initialized with Categories
     }
 
-    private async Task GoToSettings()
+    private void GoToSettings()
     {
         PageType = typeof(SettingsPage);
     }
@@ -112,6 +121,6 @@ public partial class MainViewModel : ViewModelBase
 
     public override void Unload()
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 }

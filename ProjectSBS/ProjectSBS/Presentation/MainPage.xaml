@@ -11,9 +11,7 @@
       xmlns:converters="using:CommunityToolkit.WinUI.Converters"
       xmlns:models="using:ProjectSBS.Business.Models"
       xmlns:triggers="using:CommunityToolkit.WinUI.UI.Triggers"
-      xmlns:toolkit="using:CommunityToolkit.WinUI"
-      Loaded="Page_Loaded"
-      Unloaded="Page_Unloaded">
+      xmlns:toolkit="using:CommunityToolkit.WinUI">
 
     <Page.Resources>
         <converters:EmptyObjectToObjectConverter x:Key="EmptyToFalseConverter"
@@ -145,7 +143,9 @@
                             </DataTemplate>
                         </NavigationView.MenuItemTemplate>
 
-                        <Frame SourcePageType="{Binding PageType, Mode=TwoWay}" />
+                        <Frame SourcePageType="{Binding PageType, Mode=TwoWay}"
+                               not_win:CornerRadius="50,0,0,0"
+                               not_win:Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
                     </NavigationView>
 
                 </Grid>

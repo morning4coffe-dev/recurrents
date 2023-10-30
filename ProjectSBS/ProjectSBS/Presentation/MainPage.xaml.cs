@@ -9,6 +9,8 @@ public sealed partial class MainPage : Page
         this.InitializeComponent();
 
         this.DataContext = App.Services?.GetRequiredService<MainViewModel>();
+        this.Loaded += Page_Loaded;
+        this.Unloaded += Page_Unloaded;
     }
 
     private async void Page_Loaded(object sender, RoutedEventArgs e)
@@ -33,12 +35,6 @@ public sealed partial class MainPage : Page
 
     private void OnNavigation_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
     {
-        this.DataContext = App.Services?.GetRequiredService<MainViewModel>();
-
-        if (args.IsSettingsSelected)
-        {
-            //contentFrame.Navigate(typeof(SampleSettingsPage));
-        }
+        ViewModel.Navigate(args);
     }
-
 }

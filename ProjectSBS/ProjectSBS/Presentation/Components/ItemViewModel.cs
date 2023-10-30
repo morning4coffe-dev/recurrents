@@ -32,6 +32,11 @@ public partial class ItemViewModel : ObservableObject
         }
     }
 
+    public string PaymentDate
+    {
+        get => "In " + ((GetFuturePayments(1).First().ToDateTime(new TimeOnly()) - DateTime.Today).Days.ToString() ?? "N/A") + "days";
+    }
+
     public void Initialize(List<ItemLog> logs)
     {
         if (Item == null)
@@ -43,14 +48,14 @@ public partial class ItemViewModel : ObservableObject
         IsPaid = CalculateIsPaid(Item, logs);
     }
 
-    public List<DateOnly> GetFuturePayments()
+    public List<DateOnly> GetFuturePayments(int numberOfPayments = 20)
     {
         if (Item?.Billing is not { } billing)
         {
             return new();
         }
 
-        return _billingService.GetFuturePayments(billing.InitialDate, billing.PeriodType, billing.RecurEvery);
+        return _billingService.GetFuturePayments(billing.InitialDate, billing.PeriodType, billing.RecurEvery, numberOfPayments);
     }
 
     private bool CalculateIsPaid(Item item, List<ItemLog> logs)

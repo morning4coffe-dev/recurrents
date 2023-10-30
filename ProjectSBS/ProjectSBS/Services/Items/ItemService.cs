@@ -102,7 +102,7 @@ public class ItemService : IItemService
             {
                 //TODO Remove before scheduling new 
 #if !HAS_UNO_WASM
-                _notification.ScheduleNotification(item.Id, item.Name, DateTime.Now.ToString(), date, new TimeOnly(8, 00));
+                //_notification.ScheduleNotification(item.Id, item.Name, DateTime.Now.ToString(), date, new TimeOnly(8, 00));
 #endif
             }
         });
