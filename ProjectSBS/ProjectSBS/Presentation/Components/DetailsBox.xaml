@@ -15,7 +15,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <TextBlock Text="{x:Bind Title}"
+            <TextBlock Text="{x:Bind TitleText}"
                        Opacity="0.6"
                        TextWrapping="WrapWholeWords" />
 

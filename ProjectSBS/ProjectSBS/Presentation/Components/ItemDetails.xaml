@@ -148,7 +148,7 @@
                         <StackPanel Spacing="8"
                                     Style="{StaticResource ContentStack}">
 
-                            <local:DetailsBox Title="for the price of">
+                            <local:DetailsBox TitleText="for the price of">
                                 <local:DetailsBox.ContentView>
                                     <TextBlock TextWrapping="WrapWholeWords">
                                      <Run Text="{x:Bind ViewModel.SelectedItem.Item.Billing.BasePrice, Mode=OneWay}" />
@@ -157,7 +157,7 @@
                                 </local:DetailsBox.ContentView>
                             </local:DetailsBox>
 
-                            <local:DetailsBox Title="paid in total">
+                            <local:DetailsBox TitleText="paid in total">
                                 <local:DetailsBox.ContentView>
                                     <TextBlock TextWrapping="WrapWholeWords">
                                        <Run Text="N/A" />
@@ -166,13 +166,13 @@
                                 </local:DetailsBox.ContentView>
                             </local:DetailsBox>
 
-                            <local:DetailsBox Title="billing period"
+                            <local:DetailsBox TitleText="billing period"
                                               Text="{x:Bind ViewModel.SelectedItem.Item.Billing.PeriodType, Mode=OneWay}" />
 
-                            <local:DetailsBox Title="payment method"
+                            <local:DetailsBox TitleText="payment method"
                                               Text="N/A" />
 
-                            <local:DetailsBox Title="next payments">
+                            <local:DetailsBox TitleText="next payments">
                                 <local:DetailsBox.ContentView>
                                     <ScrollViewer HorizontalScrollMode="Auto"
                                                   HorizontalScrollBarVisibility="Auto"
@@ -189,10 +189,10 @@
                                 </local:DetailsBox.ContentView>
                             </local:DetailsBox>
 
-                            <local:DetailsBox Title="paying since"
+                            <local:DetailsBox TitleText="paying since"
                                               Text="{x:Bind ViewModel.SelectedItem.Item.Billing.InitialDate, Mode=OneWay}" />
 
-                            <local:DetailsBox Title="other">
+                            <local:DetailsBox TitleText="other">
                                 <!--<local:DetailsBox.ContentView>
                                     <StackPanel Orientation="Horizontal"
                                                 Spacing="12">
@@ -202,7 +202,7 @@
                                 </local:DetailsBox.ContentView>-->
                             </local:DetailsBox>
 
-                            <local:DetailsBox Title="description"
+                            <local:DetailsBox TitleText="description"
                                               Text="{x:Bind ViewModel.SelectedItem.Item.Description, Mode=OneWay}" />
                             <!--Visibility="{Binding SelectedItem.Item.Description, Mode=OneWay, Converter={StaticResource StringVisibilityConverter}, ConverterParameter=False}"-->
 

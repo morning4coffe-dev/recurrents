@@ -7,14 +7,14 @@ public sealed partial class DetailsBox : UserControl
 		this.InitializeComponent();
 	}
 
-    public string Title
+    public string TitleText
     {
-        get => (string)GetValue(TitleProperty);
-        set => SetValue(TitleProperty, value);
+        get => (string)GetValue(TitleTextProperty);
+        set => SetValue(TitleTextProperty, value);
     }
 
-    public static readonly DependencyProperty TitleProperty = DependencyProperty.Register(
-      nameof(Title),
+    public static readonly DependencyProperty TitleTextProperty = DependencyProperty.Register(
+      nameof(TitleText),
       typeof(string),
       typeof(PageShell),
       new PropertyMetadata("")
