@@ -1,6 +1,4 @@
-﻿using ProjectSBS.Services.User;
-
-namespace ProjectSBS.Presentation.NestedPages;
+﻿namespace ProjectSBS.Presentation.NestedPages;
 
 public partial class SettingsViewModel : ViewModelBase
 {
@@ -10,9 +8,7 @@ public partial class SettingsViewModel : ViewModelBase
     [ObservableProperty]
     private User? _user;
 
-    [ObservableProperty]
-    private string _itemName = "Settings";
-
+    public readonly string TitleText;
     public SettingsViewModel(
     IStringLocalizer localizer,
     IAuthenticationService authentication,
@@ -20,6 +16,8 @@ public partial class SettingsViewModel : ViewModelBase
     {
         _userService = userService;
         _authentication = authentication;
+
+        TitleText = localizer["Settings"];
     }
 
     public override async void Load()

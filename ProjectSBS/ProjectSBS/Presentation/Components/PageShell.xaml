@@ -74,42 +74,14 @@
                         <SymbolIcon Symbol="Back" />
                     </Button>
 
-                    <TextBlock Text="{Binding ItemName, Mode=OneWay}"
+                    <TextBlock Text="{x:Bind Title, Mode=OneWay}"
                                Style="{StaticResource TitleTextBlockStyle}"
                                VerticalAlignment="Center"
                                Margin="12" />
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal"
-                            Spacing="4"
-                            Grid.Column="1">
-                    <Button Background="Transparent"
-                            BorderBrush="Transparent"
-                            BorderThickness="0"
-                            Padding="12"
-                            VerticalAlignment="Top"
-                            Visibility="{Binding IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
-                            Command="{Binding EnableEditingCommand}">
-
-                        <SymbolIcon Symbol="Edit" />
-                    </Button>
-
-                    <Button Background="Transparent"
-                            BorderBrush="Transparent"
-                            BorderThickness="0"
-                            Padding="12"
-                            VerticalAlignment="Top"
-                            Visibility="{Binding IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
-                            Command="{Binding EnableEditingCommand}">
-
-                        <SymbolIcon Symbol="More"
-                                    RenderTransformOrigin=".5,.5">
-                            <SymbolIcon.RenderTransform>
-                                <RotateTransform Angle="90" />
-                            </SymbolIcon.RenderTransform>
-                        </SymbolIcon>
-                    </Button>
-                </StackPanel>
+                <ContentPresenter Content="{x:Bind ActionBar}"
+                    Grid.Column="1"/> 
             </Grid>
         </Border>
 

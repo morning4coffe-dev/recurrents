@@ -97,6 +97,21 @@
                             </VisualState>
                         </VisualStateGroup>
 
+                        <!--Navigation flexibility-->
+                        <VisualStateGroup>
+                            <VisualState>
+                                <VisualState.StateTriggers>
+                                    <triggers:IsNullOrEmptyStateTrigger Value="{x:Bind ViewModel.User, Mode=OneWay}" />
+                                </VisualState.StateTriggers>
+                                <VisualState.Setters>
+                                    <Setter Target="userButton.Visibility"
+                                            Value="Collapsed" />
+                                    <Setter Target="notLoggedIn.Visibility"
+                                            Value="Visible" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+
                     </VisualStateManager.VisualStateGroups>
 
                     <NavigationView x:Name="navigation"
@@ -110,8 +125,9 @@
                                     SelectionChanged="OnNavigation_SelectionChanged">
 
                         <NavigationView.PaneCustomContent>
-                            <Border>
-                                <Button Background="Transparent"
+                            <Grid>
+                                <Button x:Name="userButton"
+                                    Background="Transparent"
                                         BorderThickness="0"
                                         BorderBrush="Transparent"
                                         HorizontalAlignment="Stretch"
@@ -129,7 +145,18 @@
                                                     VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Button>
-                            </Border>
+
+                                <Button x:Name="notLoggedIn"
+                                        Visibility="Collapsed"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        BorderBrush="Transparent"
+                                        HorizontalAlignment="Stretch"
+                                        Margin="4"
+                                        Height="60"
+                                        Content="You are not logged in" 
+                                        /><!--Command="{x:Bind ViewModel.}"-->
+                            </Grid>
                         </NavigationView.PaneCustomContent>
 
                         <NavigationView.MenuItemTemplate>

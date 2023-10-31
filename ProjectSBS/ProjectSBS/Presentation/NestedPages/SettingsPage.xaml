@@ -7,19 +7,46 @@
       xmlns:comp="using:ProjectSBS.Presentation.Components"
       xmlns:controls="using:CommunityToolkit.WinUI.Controls"
       xmlns:ui="using:CommunityToolkit.WinUI"
-      Loaded="Page_Loaded"
-      Unloaded="Page_Unloaded"
       mc:Ignorable="d">
 
     <comp:PageShell x:Name="pageShell"
+                    Title="{x:Bind ViewModel.TitleText}"
                     MobileTitleVisibility="Visible">
         <comp:PageShell.ContentView>
             <UserControl>
                 <ScrollViewer>
-                    <StackPanel Spacing="4"
+                    <VisualStateManager.VisualStateGroups>
+                        <!--AdaptiveTriggers-->
+                        <VisualStateGroup>
+                            <VisualState>
+                                <VisualState.StateTriggers>
+                                    <AdaptiveTrigger MinWindowWidth="0" />
+                                </VisualState.StateTriggers>
+
+                                <VisualState.Setters>
+                                    <Setter Target="settingsHolder.Margin"
+                                            Value="8,8,8,0" />
+                                    <Setter Target="desktopHeader.Visibility"
+                                            Value="Collapsed" />
+                                </VisualState.Setters>
+                            </VisualState>
+
+                            <VisualState>
+                                <VisualState.StateTriggers>
+                                    <AdaptiveTrigger MinWindowWidth="640" />
+                                </VisualState.StateTriggers>
+                            </VisualState>
+                        </VisualStateGroup>
+
+                    </VisualStateManager.VisualStateGroups>
+
+                    <StackPanel x:Name="settingsHolder"
+                                Spacing="4"
                                 Margin="48,48,48,0">
 
-                        <TextBlock Text="Settings"
+                        <TextBlock x:Name="desktopHeader"
+                                   Visibility="Visible"
+                                   Text="{x:Bind ViewModel.TitleText}"
                                    Margin="0,0,0,12"
                                    Style="{StaticResource TitleTextBlockStyle}" />
 
@@ -28,14 +55,14 @@
                                 <StackPanel Orientation="Horizontal"
                                             Margin="6"
                                             Spacing="20">
-                                    <PersonPicture ProfilePicture="{Binding User.Photo}"
-                                                   DisplayName="{Binding User.Name}"
+                                    <PersonPicture ProfilePicture="{x:Bind ViewModel.User.Photo}"
+                                                   DisplayName="{x:Bind ViewModel.User.Name}"
                                                    Width="80" />
                                     <StackPanel VerticalAlignment="Center"
                                                 Spacing="6">
-                                        <TextBlock  Text="{Binding User.Name}"
+                                        <TextBlock  Text="{x:Bind ViewModel.User.Name}"
                                                     Style="{StaticResource SubtitleTextBlockStyle}" />
-                                        <TextBlock  Text="{Binding User.Email}" />
+                                        <TextBlock  Text="{x:Bind ViewModel.User.Email}" />
                                     </StackPanel>
                                 </StackPanel>
                             </controls:SettingsCard.Header>
@@ -43,7 +70,7 @@
                                     Margin="6" />
                         </controls:SettingsCard>
 
-                        <controls:SettingsCard Header="A clickable SettingsCard"
+                        <controls:SettingsCard Header="{x:Bind ViewModel.TitleText}"
                                                Description="A SettingsCard can be made clickable and you can leverage the Command property or Click event.">
                             <ToggleSwitch />
                         </controls:SettingsCard>
@@ -53,6 +80,10 @@
                                                ActionIcon="{ui:FontIcon Glyph=&#xE8A7;}"
                                                HeaderIcon="{ui:FontIcon Glyph=&#xE774;}"
                                                IsClickEnabled="True" />
+
+                        <StackPanel>
+                            <TextBlock Text="About"/>
+                        </StackPanel>
 
                     </StackPanel>
                 </ScrollViewer>

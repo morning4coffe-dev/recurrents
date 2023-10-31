@@ -42,6 +42,32 @@ public sealed partial class PageShell : Page
         set { SetValue(ContentViewProperty, value); }
     }
 
+    public static readonly DependencyProperty TitleProperty = DependencyProperty.Register(
+      nameof(Title),
+      typeof(string),
+      typeof(PageShell),
+      new PropertyMetadata("")
+    );
+
+    public string Title
+    {
+        get => (string)GetValue(TitleProperty);
+        set => SetValue(TitleProperty, value); 
+    }
+
+    public static readonly DependencyProperty ActionBarProperty = DependencyProperty.Register(
+      nameof(ActionBar),
+      typeof(UIElement),
+      typeof(PageShell),
+      new PropertyMetadata(null)
+    );
+
+    public UIElement ActionBar
+    {
+        get { return (UIElement)GetValue(ActionBarProperty); }
+        set { SetValue(ActionBarProperty, value); }
+    }
+
     public static readonly DependencyProperty DesktopTitleVisibilityProperty = DependencyProperty.Register(
       nameof(DesktopTitleVisibility),
       typeof(Visibility),

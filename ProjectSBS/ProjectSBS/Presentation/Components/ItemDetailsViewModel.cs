@@ -66,7 +66,7 @@ public partial class ItemDetailsViewModel : ObservableObject
 
                 App.Dispatcher.TryEnqueue(() =>
                 {
-                    ItemName = (m.SelectedItem?.Item?.Name) != String.Empty ? m.SelectedItem?.Item?.Name : "New Item";
+                    ItemName = (m.SelectedItem?.Item?.Name) != string.Empty ? m.SelectedItem?.Item?.Name : "New Item";
                     SelectedItem = item;
                 });
 

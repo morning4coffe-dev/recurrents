@@ -7,6 +7,8 @@ public sealed partial class SettingsPage : Page
     public SettingsPage()
     {
         this.InitializeComponent();
+        this.Loaded += Page_Loaded;
+        this.Unloaded += Page_Unloaded;
 
         this.DataContext = App.Services?.GetRequiredService<SettingsViewModel>()!;
     }

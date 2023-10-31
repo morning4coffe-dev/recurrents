@@ -4,9 +4,9 @@
       xmlns:local="using:ProjectSBS.Presentation.Components"
       xmlns:models="using:ProjectSBS.Business.Models"
       xmlns:toolkit="using:CommunityToolkit.WinUI"
+      xmlns:converters="using:CommunityToolkit.WinUI.Converters"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:comp="using:ProjectSBS.Presentation.Components"
       xmlns:sys="ProjectSBS:System;assembly=System.Private.CoreLib"
       xmlns:android="http://uno.ui/android"
       mc:Ignorable="d android">
@@ -27,10 +27,49 @@
             <Setter Property="Padding"
                     Value="12, 12" />
         </Style>
+
+        <converters:StringFormatConverter x:Key="StringFormatConverter" />
+
     </Page.Resources>
 
-    <comp:PageShell MobileTitleVisibility="Visible">
-        <comp:PageShell.ContentView>
+    <local:PageShell MobileTitleVisibility="Visible"
+                     Title="{x:Bind ViewModel.ItemName, Mode=OneWay}">
+        <local:PageShell.ActionBar>
+
+            <StackPanel Orientation="Horizontal"
+                        Spacing="4"
+                        Grid.Column="1">
+                <Button Background="Transparent"
+                        BorderBrush="Transparent"
+                        BorderThickness="0"
+                        Padding="12"
+                        VerticalAlignment="Top"
+                        Visibility="{x:Bind ViewModel.IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
+                        Command="{x:Bind ViewModel.EnableEditingCommand}">
+
+                    <SymbolIcon Symbol="Edit" />
+                </Button>
+
+                <Button Background="Transparent"
+                        BorderBrush="Transparent"
+                        BorderThickness="0"
+                        Padding="12"
+                        VerticalAlignment="Top"
+                        Visibility="{x:Bind ViewModel.IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
+                        Command="{x:Bind ViewModel.EnableEditingCommand}">
+
+                    <SymbolIcon Symbol="More"
+                                RenderTransformOrigin=".5,.5">
+                        <SymbolIcon.RenderTransform>
+                            <RotateTransform Angle="90" />
+                        </SymbolIcon.RenderTransform>
+                    </SymbolIcon>
+                </Button>
+            </StackPanel>
+
+        </local:PageShell.ActionBar>
+
+        <local:PageShell.ContentView>
 
             <UserControl>
                 <Grid>
@@ -70,8 +109,14 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Text="Details"
-                                   Style="{StaticResource TitleTextBlockStyle}" />
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="{x:Bind ViewModel.ItemName, Mode=OneWay}"
+                                   Style="{StaticResource TitleTextBlockStyle}"
+                                   Grid.Row="1" />
 
                         <StackPanel Orientation="Horizontal"
                                     Spacing="8"
@@ -103,37 +148,63 @@
                         <StackPanel Spacing="8"
                                     Style="{StaticResource ContentStack}">
 
-                            <Border Style="{StaticResource DetailsBorder}">
-                                <StackPanel Spacing="8">
-                                    <TextBlock Text="{Binding SelectedItem.Item.Name, Mode=OneWay}"
-                                               Style="{StaticResource SubtitleTextBlockStyle}"
-                                               TextWrapping="WrapWholeWords" />
+                            <local:DetailsBox Title="for the price of">
+                                <local:DetailsBox.ContentView>
                                     <TextBlock TextWrapping="WrapWholeWords">
-                                    <Run Text="{Binding SelectedItem.Item.Billing.BasePrice, Mode=OneWay}" />
-                                    <Run Text="{Binding SelectedItem.Item.Billing.CurrencyId, Mode=OneWay}" />
+                                     <Run Text="{x:Bind ViewModel.SelectedItem.Item.Billing.BasePrice, Mode=OneWay}" />
+                                     <Run Text="{x:Bind ViewModel.SelectedItem.Item.Billing.CurrencyId, Mode=OneWay}" />
                                     </TextBlock>
-                                </StackPanel>
-                            </Border>
+                                </local:DetailsBox.ContentView>
+                            </local:DetailsBox>
 
-                            <Border Style="{StaticResource DetailsBorder}">
-                                <TextBlock Text="{Binding SelectedItem.Item.Description, Mode=OneWay}"
-                                           TextWrapping="WrapWholeWords" />
-                            </Border>
+                            <local:DetailsBox Title="paid in total">
+                                <local:DetailsBox.ContentView>
+                                    <TextBlock TextWrapping="WrapWholeWords">
+                                       <Run Text="N/A" />
+                                       <Run Text="{x:Bind ViewModel.SelectedItem.Item.Billing.CurrencyId, Mode=OneWay}" />
+                                    </TextBlock>
+                                </local:DetailsBox.ContentView>
+                            </local:DetailsBox>
 
-                            <Border Style="{StaticResource DetailsBorder}">
-                                <ScrollViewer HorizontalScrollMode="Auto"
-                                              HorizontalScrollBarVisibility="Auto"
-                                              Margin="-16"
-                                              Padding="16">
-                                    <ItemsRepeater VerticalAlignment="Top"
-                                                   ItemsSource="{x:Bind ViewModel.FuturePayments, Mode=OneWay}">
-                                        <ItemsRepeater.Layout>
-                                            <StackLayout Orientation="Horizontal"
-                                                         Spacing="8" />
-                                        </ItemsRepeater.Layout>
-                                    </ItemsRepeater>
-                                </ScrollViewer>
-                            </Border>
+                            <local:DetailsBox Title="billing period"
+                                              Text="{x:Bind ViewModel.SelectedItem.Item.Billing.PeriodType, Mode=OneWay}" />
+
+                            <local:DetailsBox Title="payment method"
+                                              Text="N/A" />
+
+                            <local:DetailsBox Title="next payments">
+                                <local:DetailsBox.ContentView>
+                                    <ScrollViewer HorizontalScrollMode="Auto"
+                                                  HorizontalScrollBarVisibility="Auto"
+                                                  Margin="-16"
+                                                  Padding="16">
+                                        <ItemsRepeater VerticalAlignment="Top"
+                                                       ItemsSource="{x:Bind ViewModel.FuturePayments, Mode=OneWay}">
+                                            <ItemsRepeater.Layout>
+                                                <StackLayout Orientation="Horizontal"
+                                                             Spacing="8" />
+                                            </ItemsRepeater.Layout>
+                                        </ItemsRepeater>
+                                    </ScrollViewer>
+                                </local:DetailsBox.ContentView>
+                            </local:DetailsBox>
+
+                            <local:DetailsBox Title="paying since"
+                                              Text="{x:Bind ViewModel.SelectedItem.Item.Billing.InitialDate, Mode=OneWay}" />
+
+                            <local:DetailsBox Title="other">
+                                <!--<local:DetailsBox.ContentView>
+                                    <StackPanel Orientation="Horizontal"
+                                                Spacing="12">
+                                        <FontIcon Glyph="&#xE719;" />
+                                        <FontIcon Glyph="&#xE720;" />
+                                    </StackPanel>
+                                </local:DetailsBox.ContentView>-->
+                            </local:DetailsBox>
+
+                            <local:DetailsBox Title="description"
+                                              Text="{x:Bind ViewModel.SelectedItem.Item.Description, Mode=OneWay}" />
+                            <!--Visibility="{Binding SelectedItem.Item.Description, Mode=OneWay, Converter={StaticResource StringVisibilityConverter}, ConverterParameter=False}"-->
 
                         </StackPanel>
                     </ScrollViewer>
@@ -243,6 +314,6 @@
                 </Grid>
             </UserControl>
 
-        </comp:PageShell.ContentView>
-    </comp:PageShell>
+        </local:PageShell.ContentView>
+    </local:PageShell>
 </Page>
