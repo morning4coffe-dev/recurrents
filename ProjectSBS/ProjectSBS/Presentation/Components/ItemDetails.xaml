@@ -33,7 +33,8 @@
     </Page.Resources>
 
     <local:PageShell MobileTitleVisibility="Visible"
-                     Title="{x:Bind ViewModel.ItemName, Mode=OneWay}">
+                     Title="{x:Bind ViewModel.ItemName, Mode=OneWay}"
+                     BackCommand="{x:Bind ViewModel.CloseCommand}">
         <local:PageShell.ActionBar>
 
             <StackPanel Orientation="Horizontal"
@@ -148,32 +149,41 @@
                         <StackPanel Spacing="8"
                                     Style="{StaticResource ContentStack}">
 
-                            <local:DetailsBox TitleText="for the price of">
-                                <local:DetailsBox.ContentView>
+                            <!--TODO Tag color-->
+                            <Grid Height="22">
+                                <Rectangle Fill="Red"
+                                           RadiusY="10"
+                                           RadiusX="10" />
+                                <TextBlock Text="{x:Bind ViewModel.SelectedItem.Item.TagId, Mode=OneWay}"
+                                           Margin="12,0" />
+                            </Grid>
+
+                            <local:DetailsBox Header="for the price of">
+                                <local:DetailsBox.Content>
                                     <TextBlock TextWrapping="WrapWholeWords">
                                      <Run Text="{x:Bind ViewModel.SelectedItem.Item.Billing.BasePrice, Mode=OneWay}" />
                                      <Run Text="{x:Bind ViewModel.SelectedItem.Item.Billing.CurrencyId, Mode=OneWay}" />
                                     </TextBlock>
-                                </local:DetailsBox.ContentView>
+                                </local:DetailsBox.Content>
                             </local:DetailsBox>
 
-                            <local:DetailsBox TitleText="paid in total">
-                                <local:DetailsBox.ContentView>
+                            <local:DetailsBox Header="paid in total">
+                                <local:DetailsBox.Content>
                                     <TextBlock TextWrapping="WrapWholeWords">
                                        <Run Text="N/A" />
                                        <Run Text="{x:Bind ViewModel.SelectedItem.Item.Billing.CurrencyId, Mode=OneWay}" />
                                     </TextBlock>
-                                </local:DetailsBox.ContentView>
+                                </local:DetailsBox.Content>
                             </local:DetailsBox>
 
-                            <local:DetailsBox TitleText="billing period"
+                            <local:DetailsBox Header="billing period"
                                               Text="{x:Bind ViewModel.SelectedItem.Item.Billing.PeriodType, Mode=OneWay}" />
 
-                            <local:DetailsBox TitleText="payment method"
+                            <local:DetailsBox Header="payment method"
                                               Text="N/A" />
 
-                            <local:DetailsBox TitleText="next payments">
-                                <local:DetailsBox.ContentView>
+                            <local:DetailsBox Header="next payments">
+                                <local:DetailsBox.Content>
                                     <ScrollViewer HorizontalScrollMode="Auto"
                                                   HorizontalScrollBarVisibility="Auto"
                                                   Margin="-16"
@@ -186,23 +196,23 @@
                                             </ItemsRepeater.Layout>
                                         </ItemsRepeater>
                                     </ScrollViewer>
-                                </local:DetailsBox.ContentView>
+                                </local:DetailsBox.Content>
                             </local:DetailsBox>
 
-                            <local:DetailsBox TitleText="paying since"
+                            <local:DetailsBox Header="paying since"
                                               Text="{x:Bind ViewModel.SelectedItem.Item.Billing.InitialDate, Mode=OneWay}" />
 
-                            <local:DetailsBox TitleText="other">
-                                <!--<local:DetailsBox.ContentView>
+                            <local:DetailsBox Header="other">
+                                <local:DetailsBox.Content>
                                     <StackPanel Orientation="Horizontal"
                                                 Spacing="12">
                                         <FontIcon Glyph="&#xE719;" />
                                         <FontIcon Glyph="&#xE720;" />
                                     </StackPanel>
-                                </local:DetailsBox.ContentView>-->
+                                </local:DetailsBox.Content>
                             </local:DetailsBox>
 
-                            <local:DetailsBox TitleText="description"
+                            <local:DetailsBox Header="description"
                                               Text="{x:Bind ViewModel.SelectedItem.Item.Description, Mode=OneWay}" />
                             <!--Visibility="{Binding SelectedItem.Item.Description, Mode=OneWay, Converter={StaticResource StringVisibilityConverter}, ConverterParameter=False}"-->
 

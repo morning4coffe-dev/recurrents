@@ -82,6 +82,7 @@ public partial class LoginViewModel : ObservableObject
 
     private async Task DoWithoutLogin()
     {
+        var size = (_navigator as FrameNavigator).Control?.ActualSize;
         await _navigator.NavigateViewModelAsync<MainViewModel>(this, qualifier: Qualifiers.ClearBackStack);
     }
 

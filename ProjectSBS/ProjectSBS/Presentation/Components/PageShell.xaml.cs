@@ -62,6 +62,19 @@ public sealed partial class PageShell : Page
       new PropertyMetadata(null)
     );
 
+    public string TitleBarTitle
+    {
+        get => (string)GetValue(TitleBarTitleProperty);
+        set => SetValue(TitleBarTitleProperty, value);
+    }
+
+    public static readonly DependencyProperty TitleBarTitleProperty = DependencyProperty.Register(
+      nameof(TitleBarTitle),
+      typeof(string),
+      typeof(PageShell),
+      new PropertyMetadata("")
+    );
+
     public UIElement ActionBar
     {
         get { return (UIElement)GetValue(ActionBarProperty); }
@@ -92,5 +105,18 @@ public sealed partial class PageShell : Page
     {
         get => (Visibility)GetValue(MobileTitleVisibilityProperty);
         set => SetValue(MobileTitleVisibilityProperty, value);
+    }
+
+    public static readonly DependencyProperty BackCommandProperty = DependencyProperty.Register(
+      nameof(BackCommand),
+      typeof(ICommand),
+      typeof(PageShell),
+      new PropertyMetadata(null)
+    );
+
+    public ICommand BackCommand
+    {
+        get => (ICommand)GetValue(BackCommandProperty);
+        set => SetValue(BackCommandProperty, value);
     }
 }
