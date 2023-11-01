@@ -7,14 +7,14 @@ public sealed partial class DetailsBox : UserControl
 		this.InitializeComponent();
 	}
 
-    public string Title
+    public string Header
     {
-        get => (string)GetValue(TitleProperty);
-        set => SetValue(TitleProperty, value);
+        get => (string)GetValue(HeaderProperty);
+        set => SetValue(HeaderProperty, value);
     }
 
-    public static readonly DependencyProperty TitleProperty = DependencyProperty.Register(
-      nameof(Title),
+    public static readonly DependencyProperty HeaderProperty = DependencyProperty.Register(
+      nameof(Header),
       typeof(string),
       typeof(PageShell),
       new PropertyMetadata("")
@@ -33,14 +33,14 @@ public sealed partial class DetailsBox : UserControl
       new PropertyMetadata(null)
     );
 
-    public UIElement ContentView
+    public UIElement Content
     {
-        get => (UIElement)GetValue(ContentViewProperty);
-        set => SetValue(ContentViewProperty, value);
+        get => (UIElement)GetValue(ContentProperty);
+        set => SetValue(ContentProperty, value);
     }
 
-    public static readonly DependencyProperty ContentViewProperty = DependencyProperty.Register(
-      nameof(ContentView),
+    public static readonly DependencyProperty ContentProperty = DependencyProperty.Register(
+      nameof(Content),
       typeof(UIElement),
       typeof(PageShell),
       new PropertyMetadata(null)

@@ -123,7 +123,7 @@ public partial class ItemDetailsViewModel : ObservableObject
             //            Label: _localizer?["Cancel"] ?? "Cancel")
             //    });
 
-            return false;
+            return true;
         }
 
         WeakReferenceMessenger.Default.Send(new ItemUpdated(SelectedItem, Canceled: true));

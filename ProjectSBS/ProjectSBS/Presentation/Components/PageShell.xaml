@@ -51,7 +51,7 @@
                    Width="16"
                    Height="30"
                    Margin="16,0" />
-            <TextBlock Text="{Binding Title, Mode=OneWay}"
+            <TextBlock Text="{x:Bind TitleBarTitle, Mode=OneWay}"
                        Style="{StaticResource CaptionTextBlockStyle}"
                        VerticalAlignment="Center" />
         </win:StackPanel>
@@ -70,7 +70,7 @@
                             BorderBrush="Transparent"
                             BorderThickness="0"
                             Padding="12"
-                            Command="{Binding CloseCommand}">
+                            Command="{x:Bind BackCommand}">
                         <SymbolIcon Symbol="Back" />
                     </Button>
 

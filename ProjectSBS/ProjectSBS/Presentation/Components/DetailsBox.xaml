@@ -15,7 +15,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <TextBlock Text="{x:Bind Title}"
+            <TextBlock Text="{x:Bind Header}"
                        Opacity="0.6"
                        TextWrapping="WrapWholeWords" />
 
@@ -23,7 +23,7 @@
                        Text="{x:Bind Text, Mode=OneWay}"
                        Grid.Row="1" />
 
-            <ContentPresenter Content="{x:Bind ContentView}"
+            <ContentPresenter Content="{x:Bind Content}"
                               Grid.Row="1" />
         </Grid>
     </Border>

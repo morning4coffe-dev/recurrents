@@ -60,16 +60,24 @@ public class MsalUser : IUserService
         var mail = user?.Mail;
 
         // Retrieve the user's profile picture
-        var photoStream = await _client.Me
-            .Photo
-            .Content
-            .GetAsync();
+        BitmapImage? photoBitmap = null;
+        try
+        {
+            var photoStream = await _client.Me
+                .Photo
+                .Content
+                .GetAsync();
 
-        var photoBitmap = new BitmapImage();
-        var stream = new MemoryStream();
-        await photoStream.CopyToAsync(stream);
-        stream.Seek(0, SeekOrigin.Begin);
-        await photoBitmap.SetSourceAsync(stream.AsRandomAccessStream());
+            photoBitmap = new BitmapImage();
+            var stream = new MemoryStream();
+            await photoStream.CopyToAsync(stream);
+            stream.Seek(0, SeekOrigin.Begin);
+            await photoBitmap.SetSourceAsync(stream.AsRandomAccessStream());
+        }
+        catch
+        {
+            // TODO There is no profile picture
+        }
 
         return new UserModel.User(fullName, mail, photoBitmap);
     }
