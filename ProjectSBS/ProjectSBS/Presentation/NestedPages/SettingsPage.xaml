@@ -75,7 +75,16 @@
                             <ToggleSwitch />
                         </controls:SettingsCard>
 
-                        <controls:SettingsCard Header="Customizing the ActionIcon"
+                        <controls:SettingsCard Header="Default currency">
+                            <ComboBox VerticalAlignment="Bottom"
+                                      SelectedValuePath="Key"
+                                      DisplayMemberPath="Key"
+                                      ItemsSource="{x:Bind ViewModel.Currencies, Mode=OneWay}"
+                                      
+                                      Grid.Column="1" /><!--SelectedItem="{x:Bind ViewModel.SettingsService.DefaultCurrency, Mode=TwoWay}"-->
+                        </controls:SettingsCard>
+
+                        <controls:SettingsCard Header="Currencies"
                                                Description="You can customize the ActionIcon and ActionIconToolTip."
                                                ActionIcon="{ui:FontIcon Glyph=&#xE8A7;}"
                                                HeaderIcon="{ui:FontIcon Glyph=&#xE774;}"

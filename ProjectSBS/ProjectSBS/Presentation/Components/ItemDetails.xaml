@@ -244,6 +244,8 @@
                                                Value="{Binding SelectedItem.Item.Billing.BasePrice, Mode=TwoWay, Converter={StaticResource DecimalToDoubleConverter}}"
                                                SpinButtonPlacementMode="Inline" />
                                     <ComboBox VerticalAlignment="Bottom"
+                                              SelectedValuePath="Key"
+                                              DisplayMemberPath="Key"
                                               ItemsSource="{x:Bind ViewModel.Currencies, Mode=OneWay}"
                                               SelectedItem="{Binding SelectedItem.Item.Billing.CurrencyId, Mode=TwoWay}"
                                               Grid.Column="1" />

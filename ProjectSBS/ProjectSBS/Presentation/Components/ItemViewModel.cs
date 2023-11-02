@@ -34,7 +34,12 @@ public partial class ItemViewModel : ObservableObject
 
     public string PaymentDate
     {
-        get => "In " + ((GetFuturePayments(1).First().ToDateTime(new TimeOnly()) - DateTime.Today).Days.ToString() ?? "N/A") + "days";
+        get
+        {
+            var returnable = (GetFuturePayments(1).First().ToDateTime(new TimeOnly()) - DateTime.Today).Days.ToString();
+            return "In " + (returnable
+                ?? "N/A") + "days";
+        }
     }
 
     public void Initialize(List<ItemLog> logs)

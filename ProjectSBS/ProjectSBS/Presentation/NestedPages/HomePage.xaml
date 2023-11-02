@@ -276,7 +276,7 @@
                                                         <StackPanel Spacing="12">
                                                             <TextBlock Text="{x:Bind Item.Name, Mode=OneWay}"
                                                                        Style="{StaticResource SubtitleTextBlockStyle}" />
-                                                            <TextBlock Text="in 6 days" />
+                                                            <TextBlock Text="{x:Bind PaymentDate, Mode=OneWay}" />
                                                         </StackPanel>
 
                                                         <StackPanel Grid.Column="1"
@@ -289,7 +289,7 @@
                                                             <Run Text="{x:Bind Item.Billing.BasePrice, Mode=OneWay}" />
                                                             <Run Text="{x:Bind Item.Billing.CurrencyId, Mode=OneWay}" />
                                                             </TextBlock>
-                                                            <TextBlock Text="255,00 CZK / 2m"
+                                                            <TextBlock Text="{x:Bind IsPaid, Mode=OneWay}"
                                                                        HorizontalAlignment="Right" />
                                                         </StackPanel>
                                                     </Grid>

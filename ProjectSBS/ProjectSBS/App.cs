@@ -10,6 +10,7 @@ using ProjectSBS.Services.Items.Filtering;
 using ProjectSBS.Services.Items.Tags;
 using ProjectSBS.Presentation.NestedPages;
 using Microsoft.UI.Dispatching;
+using ProjectSBS.Services.Settings;
 #if WINDOWS
 using Windows.Foundation.Collections;
 using CommunityToolkit.WinUI.Notifications;
@@ -94,6 +95,7 @@ public class App : Application
                 .ConfigureServices((context, services) =>
                 {
                     services.AddSingleton<IStorageService, StorageService>();
+                    services.AddSingleton<ISettingsService, SettingsService>();
                     services.AddSingleton<IDataService, DataService>();
                     services.AddSingleton<IUserService, MsalUser>();
                     services.AddSingleton<IItemService, ItemService>();

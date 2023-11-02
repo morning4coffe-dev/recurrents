@@ -33,13 +33,13 @@ public sealed partial class DetailsBox : UserControl
       new PropertyMetadata(null)
     );
 
-    public UIElement Content
+    public new UIElement Content
     {
         get => (UIElement)GetValue(ContentProperty);
         set => SetValue(ContentProperty, value);
     }
 
-    public static readonly DependencyProperty ContentProperty = DependencyProperty.Register(
+    public new static readonly DependencyProperty ContentProperty = DependencyProperty.Register(
       nameof(Content),
       typeof(UIElement),
       typeof(PageShell),

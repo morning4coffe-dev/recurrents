@@ -1,6 +1,6 @@
 ﻿namespace ProjectSBS.Services.Settings;
 
-interface ISettingsService
+public interface ISettingsService
 {
     /// <summary>
     /// Sets a value in the storage.
@@ -18,4 +18,6 @@ interface ISettingsService
     /// <param name="defaultValue">The default value to return if the key is not found.</param>
     /// <returns>The retrieved value or the default value if the key is not found.</returns>
     T GetValue<T>(string key, T defaultValue = default);
+
+    string DefaultCurrency { set; get; }
 }

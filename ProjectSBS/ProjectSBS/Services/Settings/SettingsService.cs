@@ -2,7 +2,7 @@
 
 namespace ProjectSBS.Services.Settings;
 
-internal class SettingsService
+public class SettingsService : ISettingsService
 {
     private readonly IPropertySet SettingsStorage = ApplicationData.Current.LocalSettings.Values;
 
@@ -30,4 +30,7 @@ internal class SettingsService
 
         return defaultValue;
     }
+
+    private string _defaultCurrencyId = "DefaultCurrency";
+    public string DefaultCurrency { get => GetValue(_defaultCurrencyId, "EUR"); set => SetValue(_defaultCurrencyId, value); }
 }
