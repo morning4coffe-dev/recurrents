@@ -11,9 +11,9 @@ public class ItemFilterService : IItemFilterService
         Categories = new()
         {
             new(localizer["Home"], "\uE80F"),
-            new(localizer["Upcoming"], "\uE752", i => !i.IsPaid),
+            new(localizer["Upcoming"], "\uE752"),
             new(localizer["Overdue"], "\uEC92", i => i.Item?.Name is "Sample Item 1"),
-            new(localizer["Expensive"], "\uE717", i => i.Item.Billing.BasePrice > 50),
+            new(localizer["Expensive"], "\uE717", i => i.Item?.Billing.BasePrice > 50),
         };
 
         SelectedCategory = Categories[0];

@@ -1,4 +1,5 @@
 ﻿using ProjectSBS.Services.Items.Billing;
+using ProjectSBS.Services.Items.Tags;
 
 namespace ProjectSBS.Presentation.Components;
 
@@ -16,19 +17,18 @@ public partial class ItemViewModel : ObservableObject
     [ObservableProperty]
     private Item? _item;
 
-    private bool _isPaid;
-
-    public bool IsPaid
+    public Tag? DisplayTag
     {
-        get => _isPaid;
-        set
+        get
         {
-            _isPaid = value;
-            if (value)
+            if (Item is not { } item)
             {
-                _billingService.NewPaymentLogAsync(_item).Wait();
+                return null;
             }
-            //TODO IsPaid doesn't set when item has been unpaid
+
+            var tag = App.Services?.GetRequiredService<ITagService>().Tags.FirstOrDefault(tag => tag.Id == item.TagId);
+
+            return tag;
         }
     }
 
@@ -42,18 +42,24 @@ public partial class ItemViewModel : ObservableObject
         }
     }
 
-    public void Initialize(List<ItemLog> logs)
+    public decimal TotalPrice
     {
-        if (Item == null)
+        get
         {
-            IsPaid = false;
-            return;
-        }
+            if (Item?.Billing is not { } billing)
+            {
+                return 0M;
+            }
 
-        IsPaid = CalculateIsPaid(Item, logs);
+            var dates = _billingService.GetLastPayments(billing.InitialDate, billing.PeriodType, billing.RecurEvery);
+
+            //TODO Doesn't account for currency or the previous value of the currency
+            var price = Enumerable.Count(dates) * billing.BasePrice;
+            return price;
+        }
     }
 
-    public List<DateOnly> GetFuturePayments(int numberOfPayments = 20)
+    public List<DateOnly> GetFuturePayments(int numberOfPayments = 12)
     {
         if (Item?.Billing is not { } billing)
         {
@@ -63,23 +69,50 @@ public partial class ItemViewModel : ObservableObject
         return _billingService.GetFuturePayments(billing.InitialDate, billing.PeriodType, billing.RecurEvery, numberOfPayments);
     }
 
-    private bool CalculateIsPaid(Item item, List<ItemLog> logs)
-    {
-        _billingService.GetPaymentLogsForItem(item, logs);
+    #region FEAT: feature/IndividualPayments
+    //[ObservableProperty]
+    //private bool _isPaid;
 
-        if (logs.Count == 0)
-        {
-            return false;
-        }
+    //public List<ItemLog> PaymentLogs { get; } = new();
 
-        var (lastPayment, nextPayment) = _billingService.GetBillingDates(item.Billing.InitialDate, item.Billing.PeriodType, item.Billing.RecurEvery);
-        var paymentDateToCheck = logs.Last().PaymentDate;
+    //private async Task OnPay()
+    //{
 
-        if (paymentDateToCheck >= lastPayment && paymentDateToCheck < nextPayment)
-        {
-            return true;
-        }
+    //await Task.CompletedTask;
 
-        return false;
-    }
+    //if (IsPaid)
+    //{
+    //    //TODO Play sound or vibrate the device
+
+    //    await _billingService.NewPaymentLogAsync(Item);
+    //}
+    //else
+    //{
+    //    await _billingService.RemoveLastPaymentLogAsync(Item);
+    //}
+    //}
+
+    //private bool CalculateIsPaid(Item item, IEnumerable<ItemLog> logs)
+    //{
+    //    var itemLogs = _billingService.GetPaymentLogsForItem(item, logs);
+
+    //    if (!Enumerable.Any(logs))
+    //    {
+    //        return false;
+    //    }
+
+    //    var (lastPayment, nextPayment) = _billingService.GetBillingDates(item.Billing.InitialDate, item.Billing.PeriodType, item.Billing.RecurEvery);
+
+    //    if (itemLogs.LastOrDefault() is { } lastLog)
+    //    {
+    //        if (lastPayment > DateOnly.FromDateTime(DateTime.Today) ||
+    //            (lastLog.PaymentDate >= lastPayment && lastLog.PaymentDate < nextPayment))
+    //        {
+    //            return true;
+    //        }
+    //    }
+
+    //    return false;
+    //}
+    #endregion
 }

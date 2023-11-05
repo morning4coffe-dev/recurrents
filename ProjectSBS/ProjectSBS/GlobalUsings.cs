@@ -40,3 +40,5 @@ global using ProjectSBS.Presentation.NestedPages;
 global using ProjectSBS.Services.Items;
 global using ProjectSBS.Services.Items.Filtering;
 global using ProjectSBS.Services.User;
+global using ProjectSBS.Services.Settings;
+global using System.Collections.ObjectModel;

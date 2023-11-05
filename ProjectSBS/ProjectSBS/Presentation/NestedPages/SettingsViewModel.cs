@@ -1,6 +1,4 @@
-﻿using ProjectSBS.Services.Settings;
-
-namespace ProjectSBS.Presentation.NestedPages;
+﻿namespace ProjectSBS.Presentation.NestedPages;
 
 public partial class SettingsViewModel : ViewModelBase
 {
@@ -12,8 +10,7 @@ public partial class SettingsViewModel : ViewModelBase
     [ObservableProperty]
     private User? _user;
 
-    [ObservableProperty]
-    public Dictionary<string, double> _currencies = new();
+    public ObservableCollection<string> Currencies { get; } = new();
 
     public readonly string TitleText;
     public SettingsViewModel(
@@ -42,7 +39,8 @@ public partial class SettingsViewModel : ViewModelBase
             return;
         }
 
-        Currencies.AddRange(currency?.Rates);
+        Currencies.Add(currency?.BaseCurrency ?? "EUR");
+        Currencies.AddRange(currency?.Rates.Keys);
     }
 
     public override void Unload()

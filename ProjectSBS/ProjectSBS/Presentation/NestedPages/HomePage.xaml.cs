@@ -37,4 +37,9 @@ public sealed partial class HomePage : Page
 
         //EditItemCommand.Execute(args.SwipeControl.DataContext);
     }
+
+    private void RefreshContainer_RefreshRequested(RefreshContainer sender, RefreshRequestedEventArgs args)
+    {
+
+    }
 }

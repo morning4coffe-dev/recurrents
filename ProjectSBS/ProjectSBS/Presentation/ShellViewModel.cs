@@ -4,7 +4,6 @@ public class ShellViewModel
 {
     private readonly IAuthenticationService _authentication;
 
-
     private readonly INavigator _navigator;
 
     public ShellViewModel(

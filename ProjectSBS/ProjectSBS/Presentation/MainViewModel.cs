@@ -5,6 +5,7 @@ public partial class MainViewModel : ViewModelBase
     private readonly IAuthenticationService _authentication;
     private readonly IUserService _userService;
     private readonly IDispatcher _dispatcher;
+    private readonly IItemService _itemService;
     private readonly IItemFilterService _filterService;
 
     [ObservableProperty]
@@ -31,10 +32,10 @@ public partial class MainViewModel : ViewModelBase
                 return;
             }
 
-            if (PageType != typeof(HomePage))
-            {
-                PageType = typeof(HomePage);
-            }
+            //if (PageType != typeof(HomePage))
+            //{
+            //    PageType = typeof(HomePage);
+            //}
 
             _filterService.SelectedCategory = value;
 
@@ -65,6 +66,7 @@ public partial class MainViewModel : ViewModelBase
 #endif
         _userService = userService;
         _filterService = filterService;
+        _itemService = itemService;
         _dispatcher = dispatcher;
 
         Title = "Main";
@@ -101,6 +103,8 @@ public partial class MainViewModel : ViewModelBase
 
     public async override void Load()
     {
+        await _itemService.InitializeAsync();
+
         User = await _userService.GetUser();
 
         IsSignedIn = await _authentication.IsAuthenticated();

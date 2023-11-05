@@ -5,6 +5,7 @@
       xmlns:models="using:ProjectSBS.Business.Models"
       xmlns:toolkit="using:CommunityToolkit.WinUI"
       xmlns:converters="using:CommunityToolkit.WinUI.Converters"
+      xmlns:localConverters="using:ProjectSBS.Business.Converters"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:sys="ProjectSBS:System;assembly=System.Private.CoreLib"
@@ -29,6 +30,7 @@
         </Style>
 
         <converters:StringFormatConverter x:Key="StringFormatConverter" />
+        <localConverters:ColorToBrushConverter x:Key="ColorToBrushConverter" />
 
     </Page.Resources>
 
@@ -151,10 +153,10 @@
 
                             <!--TODO Tag color-->
                             <Grid Height="22">
-                                <Rectangle Fill="Red"
+                                <Rectangle Fill="{x:Bind ViewModel.SelectedItem.DisplayTag.Color, Mode=OneWay,Converter={StaticResource ColorToBrushConverter}}"
                                            RadiusY="10"
                                            RadiusX="10" />
-                                <TextBlock Text="{x:Bind ViewModel.SelectedItem.Item.TagId, Mode=OneWay}"
+                                <TextBlock Text="{x:Bind ViewModel.SelectedItem.DisplayTag.Name, Mode=OneWay}"
                                            Margin="12,0" />
                             </Grid>
 
@@ -170,7 +172,7 @@
                             <local:DetailsBox Header="paid in total">
                                 <local:DetailsBox.Content>
                                     <TextBlock TextWrapping="WrapWholeWords">
-                                       <Run Text="N/A" />
+                                       <Run Text="{x:Bind ViewModel.SelectedItem.TotalPrice, Mode=OneWay}" />
                                        <Run Text="{x:Bind ViewModel.SelectedItem.Item.Billing.CurrencyId, Mode=OneWay}" />
                                     </TextBlock>
                                 </local:DetailsBox.Content>
@@ -232,7 +234,7 @@
                                         Style="{StaticResource ContentStack}">
 
                                 <TextBox Header="Name"
-                                         Text="{Binding SelectedItem.Item.Name, Mode=TwoWay}" />
+                                         Text="{x:Bind ViewModel.SelectedItem.Item.Name, Mode=TwoWay}" />
 
                                 <Grid ColumnSpacing="8">
                                     <Grid.ColumnDefinitions>
@@ -244,34 +246,32 @@
                                                Value="{Binding SelectedItem.Item.Billing.BasePrice, Mode=TwoWay, Converter={StaticResource DecimalToDoubleConverter}}"
                                                SpinButtonPlacementMode="Inline" />
                                     <ComboBox VerticalAlignment="Bottom"
-                                              SelectedValuePath="Key"
-                                              DisplayMemberPath="Key"
                                               ItemsSource="{x:Bind ViewModel.Currencies, Mode=OneWay}"
-                                              SelectedItem="{Binding SelectedItem.Item.Billing.CurrencyId, Mode=TwoWay}"
+                                              SelectedItem="{x:Bind ViewModel.SelectedItem.Item.Billing.CurrencyId, Mode=TwoWay}"
                                               Grid.Column="1" />
                                 </Grid>
 
                                 <!--TODO Make the Tags more safe for future versions, check for inner TagId-->
                                 <ComboBox Header="Tag"
                                           ItemsSource="{x:Bind ViewModel.Tags, Mode=OneTime}"
-                                          SelectedIndex="{Binding SelectedItem.Item.TagId, Mode=TwoWay}"
+                                          SelectedIndex="{x:Bind ViewModel.SelectedItem.Item.TagId, Mode=TwoWay}"
                                           VerticalAlignment="Bottom">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate x:DataType="models:Tag">
                                             <StackPanel Orientation="Horizontal"
                                                         Spacing="12">
-                                                <Rectangle Fill="{Binding Color, Converter={StaticResource ColorToBrushConverter}}"
+                                                <Rectangle Fill="{x:Bind Color, Converter={StaticResource ColorToBrushConverter}}"
                                                            Width="16"
                                                            Height="16"
                                                            RadiusX="4"
                                                            RadiusY="4" />
-                                                <TextBlock Text="{Binding Name}" />
+                                                <TextBlock Text="{x:Bind Name}" />
                                             </StackPanel>
                                         </DataTemplate>
                                     </ComboBox.ItemTemplate>
                                 </ComboBox>
                                 <CalendarDatePicker Header="Billing Date"
-                                                    Date="{Binding SelectedItem.Item.Billing.InitialDate, Mode=TwoWay, Converter={StaticResource DateOnlyToDateTimeOffsetConverter}}"
+                                                    Date="{x:Bind ViewModel.SelectedItem.Item.Billing.InitialDate, Mode=TwoWay, Converter={StaticResource DateOnlyToDateTimeOffsetConverter}}"
                                                     HorizontalAlignment="Stretch" />
 
                                 <Grid ColumnSpacing="8">
@@ -281,11 +281,11 @@
                                     </Grid.ColumnDefinitions>
 
                                     <NumberBox Header="Repete every"
-                                               Value="{Binding SelectedItem.Item.Billing.RecurEvery, Mode=TwoWay}"
+                                               Value="{x:Bind ViewModel.SelectedItem.Item.Billing.RecurEvery, Mode=TwoWay}"
                                                SpinButtonPlacementMode="Inline" />
                                     <ComboBox VerticalAlignment="Bottom"
                                               ItemsSource="{toolkit:EnumValues Type=models:Period}"
-                                              SelectedItem="{Binding SelectedItem.Item.Billing.PeriodType, Mode=TwoWay}"
+                                              SelectedItem="{x:Bind ViewModel.SelectedItem.Item.Billing.PeriodType, Mode=TwoWay}"
                                               Grid.Column="1" />
                                 </Grid>
 
@@ -307,7 +307,7 @@
                                               Glyph="&#xE748;" />
                                 </Grid>
                                 <TextBox Header="Description"
-                                         Text="{Binding SelectedItem.Item.Description, Mode=TwoWay}"
+                                         Text="{x:Bind ViewModel.SelectedItem.Item.Description, Mode=TwoWay}"
                                          Height="120"
                                          TextWrapping="Wrap"
                                          AcceptsReturn="True" />

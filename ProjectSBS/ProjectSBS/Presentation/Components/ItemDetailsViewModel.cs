@@ -23,8 +23,7 @@ public partial class ItemDetailsViewModel : ObservableObject
 
     public ObservableCollection<Tag> Tags { get; }
 
-    [ObservableProperty]
-    public Dictionary<string, double> _currencies = new();
+    public ObservableCollection<string> Currencies { get; } = new();
     public ObservableCollection<string> FuturePayments { get; } = new();
 
     public string SaveText { get; }
@@ -95,7 +94,8 @@ public partial class ItemDetailsViewModel : ObservableObject
 
         App.Dispatcher.TryEnqueue(() =>
         {
-            Currencies.AddRange(currency.Rates);
+            Currencies.Add(currency.BaseCurrency);
+            Currencies.AddRange(currency.Rates.Keys);
         });
     }
 
@@ -123,7 +123,7 @@ public partial class ItemDetailsViewModel : ObservableObject
             //            Label: _localizer?["Cancel"] ?? "Cancel")
             //    });
 
-            return true;
+            //return false;
         }
 
         WeakReferenceMessenger.Default.Send(new ItemUpdated(SelectedItem, Canceled: true));

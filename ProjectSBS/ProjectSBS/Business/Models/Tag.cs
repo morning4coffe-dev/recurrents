@@ -4,16 +4,16 @@ namespace ProjectSBS.Business.Models;
 
 public class Tag 
 {
-    public int TagId { get; set; }
+    public int Id { get; set; }
     public string Name { get; set; }
     public Color Color { get; set; }
 
     public Tag(
-        int tagId, 
+        int id, 
         string name, 
         Color color)
     {
-        TagId = tagId;
+        Id = id;
         Name = name;
         Color = color;
     }

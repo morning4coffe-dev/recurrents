@@ -8,6 +8,4 @@ public interface IDataService
 
     Task<bool> SaveDataAsync(List<Item> data);
     Task<bool> SaveLogsAsync(List<ItemLog> logs);
-
-    Task<bool> AddLogAsync(ItemLog log);
 }

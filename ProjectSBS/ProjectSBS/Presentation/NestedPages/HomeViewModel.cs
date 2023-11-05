@@ -104,9 +104,12 @@ public partial class HomeViewModel : ViewModelBase
     {
         User = await _userService.GetUser();
 
-        await _itemService.InitializeAsync();
-
-        var items = RefreshItems();
+        _itemService.OnItemsInitialized += (s, e) =>
+        {
+            _ = RefreshItems();
+        };
+        //Currently does this twice only on startup, doesn't impact performance much as the list is null here
+        _ = RefreshItems();
 
 #if HAS_UNO
         SystemNavigationManager.GetForCurrentView().BackRequested += System_BackRequested;

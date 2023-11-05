@@ -14,6 +14,8 @@ public class ItemService : IItemService
 
     private readonly List<ItemViewModel> _items = new();
 
+    public event EventHandler<bool>? OnItemsInitialized;
+
     public ItemService(
         IBillingService billing,
         IDataService dataService,
@@ -37,6 +39,8 @@ public class ItemService : IItemService
         {
             AddNewItem(item, logs);
         }
+
+        OnItemsInitialized?.Invoke(this, true);
     }
 
     public IEnumerable<ItemViewModel> GetItems(Func<ItemViewModel, bool>? selector = null)
@@ -61,8 +65,6 @@ public class ItemService : IItemService
         ItemViewModel itemVM = new(item);
 
         logs ??= new();
-
-        itemVM.Initialize(logs);
 
         ScheduleBilling(itemVM, logs);
         _items.Add(itemVM);

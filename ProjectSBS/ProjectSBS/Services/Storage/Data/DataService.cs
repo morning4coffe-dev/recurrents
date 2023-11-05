@@ -51,17 +51,6 @@ public class DataService : IDataService
         return await SaveAsync(stringData, itemsPath);
     }
 
-    public async Task<bool> AddLogAsync(ItemLog log)
-    {
-        var logs = await LoadLogsAsync() ?? new List<ItemLog>();
-
-        logs.Add(log);
-
-        var stringData = JsonSerializer.Serialize(logs);
-
-        return await SaveAsync(stringData, logsPath);
-    }
-
     public async Task<bool> SaveLogsAsync(List<ItemLog> logs)
     {
         var stringData = JsonSerializer.Serialize(logs);

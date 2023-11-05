@@ -46,7 +46,8 @@
 
     </Page.Resources>
 
-    <comp:PageShell DesktopTitleVisibility="Visible">
+    <comp:PageShell Title="{x:Bind ViewModel.Title}"
+        DesktopTitleVisibility="Visible">
         <comp:PageShell.ContentView>
 
             <UserControl>
@@ -97,11 +98,11 @@
                             </VisualState>
                         </VisualStateGroup>
 
-                        <!--Navigation flexibility-->
-                        <VisualStateGroup>
+                        <!--User Login-->
+                        <!--<VisualStateGroup>
                             <VisualState>
                                 <VisualState.StateTriggers>
-                                    <triggers:IsNullOrEmptyStateTrigger Value="{x:Bind ViewModel.User, Mode=OneWay}" />
+                                    <triggers:IsNullOrEmptyStateTrigger Value="{x:Bind ViewModel.User, Mode=OneWay, TargetNullValue=True}" />
                                 </VisualState.StateTriggers>
                                 <VisualState.Setters>
                                     <Setter Target="userButton.Visibility"
@@ -110,7 +111,7 @@
                                             Value="Visible" />
                                 </VisualState.Setters>
                             </VisualState>
-                        </VisualStateGroup>
+                        </VisualStateGroup>-->
 
                     </VisualStateManager.VisualStateGroups>
 
