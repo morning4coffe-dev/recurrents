@@ -114,7 +114,8 @@
 
             <muxc:TwoPaneView.Pane1>
 
-                <Grid>
+                <Grid CornerRadius="8,0,0,0"
+                      Background="{ThemeResource LayerFillColorDefaultBrush}">
                     <ScrollViewer>
                         <RefreshContainer x:Name="contentHolder"
                                           Margin="48,48,48,0"

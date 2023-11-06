@@ -55,14 +55,14 @@
                                 <StackPanel Orientation="Horizontal"
                                             Margin="6"
                                             Spacing="20">
-                                    <PersonPicture ProfilePicture="{x:Bind ViewModel.User.Photo}"
-                                                   DisplayName="{x:Bind ViewModel.User.Name}"
+                                    <PersonPicture ProfilePicture="{x:Bind ViewModel.User.Photo, Mode=OneWay}"
+                                                   DisplayName="{x:Bind ViewModel.User.Name, Mode=OneWay}"
                                                    Width="80" />
                                     <StackPanel VerticalAlignment="Center"
                                                 Spacing="6">
-                                        <TextBlock  Text="{x:Bind ViewModel.User.Name}"
+                                        <TextBlock  Text="{x:Bind ViewModel.User.Name, Mode=OneWay}"
                                                     Style="{StaticResource SubtitleTextBlockStyle}" />
-                                        <TextBlock  Text="{x:Bind ViewModel.User.Email}" />
+                                        <TextBlock  Text="{x:Bind ViewModel.User.Email, Mode=OneWay}" />
                                     </StackPanel>
                                 </StackPanel>
                             </controls:SettingsCard.Header>

@@ -47,7 +47,7 @@
     </Page.Resources>
 
     <comp:PageShell Title="{x:Bind ViewModel.Title}"
-        DesktopTitleVisibility="Visible">
+                    DesktopTitleVisibility="Visible">
         <comp:PageShell.ContentView>
 
             <UserControl>
@@ -120,15 +120,28 @@
                                     IsBackButtonVisible="Collapsed"
                                     IsPaneToggleButtonVisible="True"
                                     IsSettingsVisible="True"
-                                    IsPaneVisible="True"                                    
+                                    IsPaneVisible="True"
                                     MenuItemsSource="{Binding Categories}"
                                     SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
                                     SelectionChanged="OnNavigation_SelectionChanged">
 
+                        <NavigationView.Resources>
+                            <ResourceDictionary>
+                                <ResourceDictionary.ThemeDictionaries>
+                                    <ResourceDictionary x:Key="Default">
+                                        <SolidColorBrush x:Key="NavigationViewContentBackground"
+                                                         Color="Transparent" />
+                                        <SolidColorBrush x:Key="NavigationViewContentGridBorderBrush"
+                                                         Color="Transparent" />
+                                    </ResourceDictionary>
+                                </ResourceDictionary.ThemeDictionaries>
+                            </ResourceDictionary>
+                        </NavigationView.Resources>
+
                         <NavigationView.PaneCustomContent>
                             <Grid>
                                 <Button x:Name="userButton"
-                                    Background="Transparent"
+                                        Background="Transparent"
                                         BorderThickness="0"
                                         BorderBrush="Transparent"
                                         HorizontalAlignment="Stretch"
@@ -155,8 +168,8 @@
                                         HorizontalAlignment="Stretch"
                                         Margin="4"
                                         Height="60"
-                                        Content="You are not logged in" 
-                                        /><!--Command="{x:Bind ViewModel.}"-->
+                                        Content="You are not logged in" />
+                                <!--Command="{x:Bind ViewModel.}"-->
                             </Grid>
                         </NavigationView.PaneCustomContent>
 

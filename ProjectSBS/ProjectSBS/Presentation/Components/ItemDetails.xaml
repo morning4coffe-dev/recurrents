@@ -9,19 +9,22 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:sys="ProjectSBS:System;assembly=System.Private.CoreLib"
+      xmlns:win="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:android="http://uno.ui/android"
       mc:Ignorable="d android">
 
     <Page.Resources>
-        <Style x:Key="DetailsBorder"
-               TargetType="Border">
-            <Setter Property="CornerRadius"
-                    Value="4" />
-            <Setter Property="Background"
-                    Value="{ThemeResource CardBackgroundFillColorDefault}" />
-            <Setter Property="Padding"
-                    Value="16" />
-        </Style>
+        <MenuFlyout x:Key="MoreFlyout">
+            <MenuFlyoutItem Text="Archive"
+                            Icon="{toolkit:FontIcon Glyph=&#xE7B8;}"
+                            Padding="100, 16"
+                            Command="{Binding GoToSettingsCommand}" />
+
+            <MenuFlyoutItem Text="Delete"
+                            Icon="{toolkit:FontIcon Glyph=&#xE74D;}"
+                            Padding="100, 16"
+                            Command="{x:Bind ViewModel.DeleteCommand}" />
+        </MenuFlyout>
 
         <Style x:Key="ContentStack"
                TargetType="StackPanel">
@@ -59,7 +62,7 @@
                         Padding="12"
                         VerticalAlignment="Top"
                         Visibility="{x:Bind ViewModel.IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
-                        Command="{x:Bind ViewModel.EnableEditingCommand}">
+                        Flyout="{StaticResource MoreFlyout}">
 
                     <SymbolIcon Symbol="More"
                                 RenderTransformOrigin=".5,.5">
@@ -150,6 +153,12 @@
                                   Grid.Row="1">
                         <StackPanel Spacing="8"
                                     Style="{StaticResource ContentStack}">
+                            <win:StackPanel.ChildrenTransitions>
+                                <TransitionCollection>
+                                    <EntranceThemeTransition FromHorizontalOffset="20"
+                                                             IsStaggeringEnabled="True" />
+                                </TransitionCollection>
+                            </win:StackPanel.ChildrenTransitions>
 
                             <!--TODO Tag color-->
                             <Grid Height="22">
