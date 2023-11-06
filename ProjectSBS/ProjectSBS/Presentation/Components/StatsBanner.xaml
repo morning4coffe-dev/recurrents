@@ -18,7 +18,7 @@
             <StackPanel Margin="30,30,0,0">
                 <TextBlock Text="Monthly items"
                            Opacity="0.75" />
-                <TextBlock Text="{Binding Sum}"
+                <TextBlock Text="{x:Bind ViewModel.Sum, Mode=OneWay}"
                            Style="{StaticResource TitleTextBlockStyle}" />
             </StackPanel>
 
