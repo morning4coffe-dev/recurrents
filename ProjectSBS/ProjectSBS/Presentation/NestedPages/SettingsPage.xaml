@@ -89,7 +89,9 @@
                                                IsClickEnabled="True" />
 
                         <StackPanel>
-                            <TextBlock Text="About"/>
+                            <TextBlock Text="About"
+                                       Margin="0,12,0,0"
+                                       Style="{StaticResource BaseTextBlockStyle}" />
                         </StackPanel>
 
                     </StackPanel>

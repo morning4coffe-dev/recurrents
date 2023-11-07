@@ -1,4 +1,7 @@
-﻿namespace ProjectSBS.Presentation;
+﻿using System.Globalization;
+using Windows.Globalization;
+
+namespace ProjectSBS.Presentation;
 
 public partial class MainViewModel : ViewModelBase
 {
@@ -7,6 +10,7 @@ public partial class MainViewModel : ViewModelBase
     private readonly IDispatcher _dispatcher;
     private readonly IItemService _itemService;
     private readonly IItemFilterService _filterService;
+    private readonly INavigation _navigation;
 
     [ObservableProperty]
     private User? _user;
@@ -22,30 +26,26 @@ public partial class MainViewModel : ViewModelBase
 
     public string? Title { get; }
 
-    public FilterCategory SelectedCategory
+    public NavigationCategory SelectedCategory
     {
-        get => _filterService.SelectedCategory;
+        get => _navigation.SelectedCategory;
         set
         {
-            if (_filterService.SelectedCategory == value)
+            if (_navigation.SelectedCategory == value)
             {
                 return;
             }
 
-            //if (PageType != typeof(HomePage))
-            //{
-            //    PageType = typeof(HomePage);
-            //}
+            _navigation.SelectedCategory = value;
 
-            _filterService.SelectedCategory = value;
-
-            WeakReferenceMessenger.Default.Send(new CategorySelectionChanged());
+            //TODO move this to only Filtering
+            //WeakReferenceMessenger.Default.Send(new CategorySelectionChanged());
 
             OnPropertyChanged();
         }
     }
 
-    public List<FilterCategory> Categories { get; }
+    public List<NavigationCategory> Categories { get; }
 
     public ICommand GoToSettingsCommand { get; }
     public ICommand LogoutCommand { get; }
@@ -59,6 +59,7 @@ public partial class MainViewModel : ViewModelBase
         IUserService userService,
         IItemService itemService,
         IItemFilterService filterService,
+        INavigation navigation,
         IDispatcher dispatcher)
     {
 #if !__IOS__
@@ -66,6 +67,7 @@ public partial class MainViewModel : ViewModelBase
 #endif
         _userService = userService;
         _filterService = filterService;
+        _navigation = navigation;
         _itemService = itemService;
         _dispatcher = dispatcher;
 
@@ -73,15 +75,17 @@ public partial class MainViewModel : ViewModelBase
         Title += $" - {localizer["ApplicationName"]}";
         Title += $" - {appInfo?.Value?.Environment}";
 
+        //TODO Don't use static CultureInfo
+        CultureInfo ci = new("cs-CZ");
+        Thread.CurrentThread.CurrentCulture = ci;
+        Thread.CurrentThread.CurrentUICulture = ci;
+        ApplicationLanguages.PrimaryLanguageOverride = "cs-CZ";
+
         GoToSettingsCommand = new RelayCommand(GoToSettings);
         LogoutCommand = new AsyncRelayCommand(DoLogout);
 
-        Categories = filterService.Categories;
-
-        WeakReferenceMessenger.Default.Register<CategorySelectionChanged>(this, (r, m) =>
-        {
-            OnPropertyChanged(nameof(SelectedCategory));
-        });
+        Categories = navigation.Categories;
+        _navigation.NavigateNested(SelectedCategory.Page);
     }
 
     public void Navigate(NavigationViewSelectionChangedEventArgs args)
@@ -95,10 +99,7 @@ public partial class MainViewModel : ViewModelBase
             }
         }
 
-        if (PageType != typeof(HomePage))
-        {
-            PageType = typeof(HomePage);
-        }
+        _navigation.NavigateNested(SelectedCategory.Page);
     }
 
     public async override void Load()
@@ -114,7 +115,7 @@ public partial class MainViewModel : ViewModelBase
 
     private void GoToSettings()
     {
-        PageType = typeof(SettingsPage);
+        _navigation.NavigateNested(typeof(SettingsPage)); 
     }
 
     public async Task DoLogout(CancellationToken token)

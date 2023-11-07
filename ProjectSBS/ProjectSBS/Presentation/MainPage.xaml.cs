@@ -23,6 +23,10 @@ public sealed partial class MainPage : Page
             //TODO Add loading indicator
         }
 
+        var nav = App.Services?.GetRequiredService<INavigation>();
+
+        nav.NestedFrame = Frame;
+
         this.DataContext = App.Services?.GetRequiredService<MainViewModel>();
 
         ViewModel.Load();

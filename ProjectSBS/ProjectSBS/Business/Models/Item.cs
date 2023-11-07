@@ -7,6 +7,7 @@ public partial record Item
         string name, 
         BillingDetails billing = null, 
         int tagId = default, 
+        bool isNotify = true,
         string description = "", 
         DateTime creationDate = default)
     {
@@ -14,6 +15,7 @@ public partial record Item
         Name = name;
         Billing = billing ?? new BillingDetails(5.99M, DateOnly.FromDateTime(DateTime.Today));
         TagId = tagId;
+        IsNotify = isNotify;
         Description = description;
         CreationDate = creationDate == default ? DateTime.Now : creationDate;
     }
@@ -23,5 +25,6 @@ public partial record Item
     public BillingDetails Billing { get; }
     public int TagId { get; set; }
     public string? Description { get; set; }
+    public bool IsNotify { get; set; }
     public DateTime CreationDate { get; set; }
 }

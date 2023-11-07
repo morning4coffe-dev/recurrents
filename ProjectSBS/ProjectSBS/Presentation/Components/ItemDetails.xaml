@@ -122,6 +122,7 @@
 
                         <TextBlock Text="{x:Bind ViewModel.ItemName, Mode=OneWay}"
                                    Style="{StaticResource TitleTextBlockStyle}"
+                                   Grid.ColumnSpan="2"
                                    Grid.Row="1" />
 
                         <StackPanel Orientation="Horizontal"
@@ -160,13 +161,13 @@
                                 </TransitionCollection>
                             </win:StackPanel.ChildrenTransitions>
 
-                            <!--TODO Tag color-->
-                            <Grid Height="22">
+                            <Grid HorizontalAlignment="Left">
                                 <Rectangle Fill="{x:Bind ViewModel.SelectedItem.DisplayTag.Color, Mode=OneWay,Converter={StaticResource ColorToBrushConverter}}"
-                                           RadiusY="10"
-                                           RadiusX="10" />
+                                           RadiusY="12"
+                                           RadiusX="12" />
                                 <TextBlock Text="{x:Bind ViewModel.SelectedItem.DisplayTag.Name, Mode=OneWay}"
-                                           Margin="12,0" />
+                                           Margin="12,3"
+                                           Style="{StaticResource CaptionTextBlockStyle}" />
                             </Grid>
 
                             <local:DetailsBox Header="for the price of">
@@ -211,14 +212,18 @@
                             </local:DetailsBox>
 
                             <local:DetailsBox Header="paying since"
-                                              Text="{x:Bind ViewModel.SelectedItem.Item.Billing.InitialDate, Mode=OneWay}" />
+                                              Text="{x:Bind ViewModel.SelectedItem.Item.Billing.InitialDate, Mode=OneWay}" /><!--, Converter={StaticResource DateOnlyToStringConverter}-->
 
                             <local:DetailsBox Header="other">
                                 <local:DetailsBox.Content>
                                     <StackPanel Orientation="Horizontal"
                                                 Spacing="12">
-                                        <FontIcon Glyph="&#xE719;" />
-                                        <FontIcon Glyph="&#xE720;" />
+                                        <local:ToggleIcon IsChecked="{x:Bind ViewModel.SelectedItem.Item.IsNotify, Mode=OneWay}"
+                                                          TrueIcon="{toolkit:FontIcon Glyph=&#xEA8F;}"
+                                                          FalseIcon="{toolkit:FontIcon Glyph=&#xE7ED;}" />
+                                        <local:ToggleIcon IsChecked="{x:Bind ViewModel.SelectedItem.Item.IsNotify, Mode=OneWay}"
+                                                          TrueIcon="{toolkit:FontIcon Glyph=&#xEA8F;}"
+                                                          FalseIcon="{toolkit:FontIcon Glyph=&#xE7ED;}" />
                                     </StackPanel>
                                 </local:DetailsBox.Content>
                             </local:DetailsBox>
@@ -260,7 +265,6 @@
                                               Grid.Column="1" />
                                 </Grid>
 
-                                <!--TODO Make the Tags more safe for future versions, check for inner TagId-->
                                 <ComboBox Header="Tag"
                                           ItemsSource="{x:Bind ViewModel.Tags, Mode=OneTime}"
                                           SelectedIndex="{x:Bind ViewModel.SelectedItem.Item.TagId, Mode=TwoWay}"
@@ -301,19 +305,19 @@
                                 <Grid>
                                     <!--TODO Add changing icon here-->
                                     <CheckBox Content="Get notified {NI}"
-                                              IsEnabled="True" />
-                                    <FontIcon HorizontalAlignment="Right"
-                                              Opacity="0.75"
-                                              FontSize="18"
-                                              Glyph="&#xEA8F;" />
+                                              IsChecked="{x:Bind ViewModel.SelectedItem.Item.IsNotify, Mode=TwoWay}" />
+                                    <local:ToggleIcon IsChecked="{x:Bind ViewModel.SelectedItem.Item.IsNotify, Mode=OneWay}"
+                                                      HorizontalAlignment="Right"
+                                                      TrueIcon="{toolkit:FontIcon Glyph=&#xEA8F;}"
+                                                      FalseIcon="{toolkit:FontIcon Glyph=&#xE7ED;}" />
                                 </Grid>
 
                                 <Grid>
                                     <CheckBox Content="Split between people {NI}" />
-                                    <FontIcon HorizontalAlignment="Right"
-                                              Opacity="0.7"
-                                              FontSize="18"
-                                              Glyph="&#xE748;" />
+                                    <local:ToggleIcon IsChecked="True"
+                                                      HorizontalAlignment="Right"
+                                                      TrueIcon="{toolkit:FontIcon Glyph=&#xE713;}"
+                                                      FalseIcon="{toolkit:FontIcon Glyph=&#xE748;}" />
                                 </Grid>
                                 <TextBox Header="Description"
                                          Text="{x:Bind ViewModel.SelectedItem.Item.Description, Mode=TwoWay}"

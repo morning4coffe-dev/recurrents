@@ -91,6 +91,7 @@
 	  <None Remove="Presentation\Components\ItemDetails.xaml" />
 	  <None Remove="Presentation\Components\PageShell.xaml" />
 	  <None Remove="Presentation\Components\StatsBanner.xaml" />
+	  <None Remove="Presentation\Components\ToggleIcon.xaml" />
 	  <None Remove="Presentation\HomePage.xaml" />
 	  <None Remove="Presentation\NestedPages\ConversionsPage.xaml" />
 	  <None Remove="Presentation\NestedPages\HomePage.xaml" />
@@ -103,6 +104,7 @@
 	  <UpToDateCheckInput Remove="Presentation\Components\ItemDetails.xaml" />
 	  <UpToDateCheckInput Remove="Presentation\Components\PageShell.xaml" />
 	  <UpToDateCheckInput Remove="Presentation\Components\StatsBanner.xaml" />
+	  <UpToDateCheckInput Remove="Presentation\Components\ToggleIcon.xaml" />
 	  <UpToDateCheckInput Remove="Presentation\HomePage.xaml" />
 	  <UpToDateCheckInput Remove="Presentation\NestedPages\ConversionsPage.xaml" />
 	  <UpToDateCheckInput Remove="Presentation\NestedPages\HomePage.xaml" />
@@ -140,5 +142,9 @@
 
 	<ItemGroup>
 	  <AdditionalFiles Remove="Presentation\Components\DetailsBox.xaml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <AdditionalFiles Remove="Presentation\Components\ToggleIcon.xaml" />
 	</ItemGroup>
 </Project>

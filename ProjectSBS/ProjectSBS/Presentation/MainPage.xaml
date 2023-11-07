@@ -174,7 +174,7 @@
                         </NavigationView.PaneCustomContent>
 
                         <NavigationView.MenuItemTemplate>
-                            <DataTemplate x:DataType="models:FilterCategory">
+                            <DataTemplate x:DataType="models:NavigationCategory">
                                 <NavigationViewItem Content="{x:Bind Text}">
                                     <!--ToolTip="{x:Bind Tooltip}">-->
                                     <NavigationViewItem.Icon>
@@ -184,7 +184,8 @@
                             </DataTemplate>
                         </NavigationView.MenuItemTemplate>
 
-                        <Frame SourcePageType="{Binding PageType, Mode=TwoWay}"
+                        <Frame x:Name="Frame"
+                               x:FieldModifier="public"
                                not_win:CornerRadius="50,0,0,0"
                                not_win:Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
                     </NavigationView>

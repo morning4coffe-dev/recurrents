@@ -117,11 +117,13 @@
                 <Grid CornerRadius="8,0,0,0"
                       Background="{ThemeResource LayerFillColorDefaultBrush}">
                     <ScrollViewer>
-                        <RefreshContainer x:Name="contentHolder"
+                        <!--<RefreshContainer x:Name="contentHolder"
                                           Margin="48,48,48,0"
-                                          RefreshRequested="RefreshContainer_RefreshRequested">
+                                          RefreshRequested="RefreshContainer_RefreshRequested">-->
 
-                            <StackPanel Spacing="8">
+                            <StackPanel x:Name="contentHolder"
+                                        Margin="48,48,48,0"
+                                        Spacing="8">
 
                                 <StackPanel x:Name="desktopHeader"
                                             Visibility="Visible"
@@ -333,7 +335,7 @@
                                 </GridView>
                             </StackPanel>
 
-                        </RefreshContainer>
+                        <!--</RefreshContainer>-->
                     </ScrollViewer>
 
                     <Button x:Name="mobileAddButton"
