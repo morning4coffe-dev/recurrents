@@ -4,11 +4,28 @@ public partial class SettingsViewModel : ViewModelBase
 {
     private readonly IAuthenticationService _authentication;
     private readonly ICurrencyCache _currencyCache;
-    public readonly ISettingsService SettingsService;
+    private readonly ISettingsService _settingsService;
     private readonly IUserService _userService;
 
     [ObservableProperty]
     private User? _user;
+
+    public int SelectedCurrency
+    {
+        set => _settingsService.DefaultCurrency = Currencies[value];
+        get
+        {
+            for (int i = 0; i < Currencies.Count; i++)
+            {
+                if (Currencies[i] == _settingsService.DefaultCurrency)
+                {
+                    return i;
+                }
+
+            }
+            return 0;
+        }
+    }
 
     public ObservableCollection<string> Currencies { get; } = new();
 
@@ -22,7 +39,7 @@ public partial class SettingsViewModel : ViewModelBase
     {
         _userService = userService;
         _currencyCache = currencyCache;
-        SettingsService = settingsService;
+        _settingsService = settingsService;
         _authentication = authentication;
 
         TitleText = localizer["Settings"];
@@ -39,8 +56,9 @@ public partial class SettingsViewModel : ViewModelBase
             return;
         }
 
-        Currencies.Add(currency?.BaseCurrency ?? "EUR");
+        //TODO sets the value on the open of the Settings
         Currencies.AddRange(currency?.Rates.Keys);
+        Currencies.Add(currency?.BaseCurrency ?? "EUR");
     }
 
     public override void Unload()

@@ -9,9 +9,12 @@ public class SettingsService : ISettingsService
     public void SetValue<T>(string key, T value)
     {
         if (!SettingsStorage.ContainsKey(key))
+        {
             SettingsStorage.Add(key, value);
-        else
-            SettingsStorage[key] = value;
+            return;
+        }
+
+        SettingsStorage[key] = value;
     }
 
     public T GetValue<T>(string key, T defaultValue = default)
@@ -25,6 +28,7 @@ public class SettingsService : ISettingsService
             catch
             {
                 // Corrupted storage, return default
+                return defaultValue;
             }
         }
 
@@ -32,5 +36,9 @@ public class SettingsService : ISettingsService
     }
 
     private string _defaultCurrencyId = "DefaultCurrency";
-    public string DefaultCurrency { get => GetValue(_defaultCurrencyId, "EUR"); set => SetValue(_defaultCurrencyId, value); }
+    public string DefaultCurrency
+    {
+        get => GetValue(_defaultCurrencyId, "EUR");
+        set => SetValue(_defaultCurrencyId, value);
+    }
 }

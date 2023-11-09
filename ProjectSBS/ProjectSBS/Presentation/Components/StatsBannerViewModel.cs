@@ -19,12 +19,14 @@ public partial class StatsBannerViewModel : ObservableObject
         //observe ItemService that items have changed
         //_sum = $"{new Random().Next(0, 50000)} CZK";
 
-        Task.Run(Load);
+        //_itemService.OnItemsChanged += _itemService_OnItemsChanged;
 
-        for (int i = 0; i < 12; i++)
-        {
-            _values.Add(new Random().Next(0, 5000));
-        }
+        //Task.Run(Load);
+    }
+
+    private void _itemService_OnItemsChanged(object? sender, IEnumerable<ItemViewModel> e)
+    {
+        _values.Add(e.ToList().Count);
 
         ObservableCollection<ISeries> series = new()
         {

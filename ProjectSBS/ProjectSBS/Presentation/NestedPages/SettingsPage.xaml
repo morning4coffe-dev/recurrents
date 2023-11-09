@@ -78,7 +78,7 @@
                         <controls:SettingsCard Header="Default currency">
                             <ComboBox VerticalAlignment="Bottom"
                                       ItemsSource="{x:Bind ViewModel.Currencies, Mode=OneWay}"
-                                      SelectedItem="{x:Bind ViewModel.SettingsService.DefaultCurrency, Mode=TwoWay}"
+                                      SelectedIndex="{x:Bind ViewModel.SelectedCurrency, Mode=TwoWay}"
                                       Grid.Column="1" />
                         </controls:SettingsCard>
 

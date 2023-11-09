@@ -15,6 +15,7 @@ public class ItemService : IItemService
     private readonly List<ItemViewModel> _items = new();
 
     public event EventHandler<bool>? OnItemsInitialized;
+    //public event EventHandler<IEnumerable<ItemViewModel>> OnItemsChanged;
 
     public ItemService(
         IBillingService billing,
@@ -76,6 +77,8 @@ public class ItemService : IItemService
         _items[index] = item;
 
         SaveDataAsync();
+
+        //OnItemsChanged.Invoke(this, _items);
     }
 
     public void DeleteItem(ItemViewModel item)

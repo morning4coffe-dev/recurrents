@@ -81,7 +81,6 @@
                 <VisualState>
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="0" />
-
                     </VisualState.StateTriggers>
 
                     <VisualState.Setters>
@@ -117,6 +116,7 @@
 
                 <Grid CornerRadius="8,0,0,0"
                       Background="{ThemeResource LayerFillColorDefaultBrush}">
+
                     <ScrollViewer>
                         <!--<RefreshContainer x:Name="contentHolder"
                                           Margin="48,48,48,0"
@@ -339,16 +339,16 @@
                         <!--</RefreshContainer>-->
                     </ScrollViewer>
 
-                    <StackPanel>
-                        
-                        <Button x:Name="mobileAddButton"
-                                CornerRadius="22"
+                    <StackPanel x:Name="mobileAddButton"
+                                VerticalAlignment="Bottom"
+                                Visibility="Collapsed">
+
+                        <Button CornerRadius="22"
                                 Height="65"
                                 VerticalAlignment="Bottom"
                                 HorizontalAlignment="Right"
                                 ToolTipService.ToolTip="Add new"
                                 Style="{StaticResource AccentButtonStyle}"
-                                Visibility="Collapsed"
                                 Margin="20"
                                 Padding="22,0"
                                 Command="{x:Bind ViewModel.AddNewCommand}">

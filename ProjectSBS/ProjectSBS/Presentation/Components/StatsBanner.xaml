@@ -12,7 +12,7 @@
     <Border CornerRadius="16"
             Visibility="Visible"
             not_win:Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-            win:Background="{ThemeResource AcrylicInAppFillColorDefaultBrush}"
+            win:Background="{ThemeResource CardBackgroundFillColorDefault}"
             Grid.Row="1">
         <StackPanel>
             <StackPanel Margin="30,30,0,0">
