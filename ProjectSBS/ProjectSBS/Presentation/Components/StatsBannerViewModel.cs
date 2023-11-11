@@ -19,25 +19,40 @@ public partial class StatsBannerViewModel : ObservableObject
         //observe ItemService that items have changed
         //_sum = $"{new Random().Next(0, 50000)} CZK";
 
-        //_itemService.OnItemsChanged += _itemService_OnItemsChanged;
+        _itemService.OnItemsChanged += ItemService_OnItemsChanged;
+        _itemService.OnItemsInitialized += ItemService_OnItemsChanged;
 
         //Task.Run(Load);
-    }
-
-    private void _itemService_OnItemsChanged(object? sender, IEnumerable<ItemViewModel> e)
-    {
-        _values.Add(e.ToList().Count);
 
         ObservableCollection<ISeries> series = new()
-        {
-            new LineSeries<double>
             {
-                Values = _values,
-                Fill = null
-            }
-        };
+                new LineSeries<double>
+                {
+                    Values = _values,
+                    Fill = null
+                }
+            };
 
         Series = series;
+    }
+
+    private void ItemService_OnItemsChanged(object? sender, IEnumerable<ItemViewModel> e)
+    {
+        //TODO Sum for current period
+        var sum = e.Sum(item => item?.Item?.Billing.BasePrice);
+        Sum = $"{sum} CZK";
+        //    _values.Add(e.ToList().Count);
+
+        //    ObservableCollection<ISeries> series = new()
+        //    {
+        //        new LineSeries<double>
+        //        {
+        //            Values = _values,
+        //            Fill = null
+        //        }
+        //    };
+
+        //    Series = series;
     }
 
     private async Task Load() 

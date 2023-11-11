@@ -156,8 +156,8 @@
                                     Style="{StaticResource ContentStack}">
                             <win:StackPanel.ChildrenTransitions>
                                 <TransitionCollection>
-                                    <EntranceThemeTransition FromHorizontalOffset="10"
-                                                             IsStaggeringEnabled="True" />
+                                    <EntranceThemeTransition FromHorizontalOffset="50"
+                                                             IsStaggeringEnabled="False" />
                                 </TransitionCollection>
                             </win:StackPanel.ChildrenTransitions>
 

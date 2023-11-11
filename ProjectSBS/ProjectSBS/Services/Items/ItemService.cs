@@ -14,8 +14,8 @@ public class ItemService : IItemService
 
     private readonly List<ItemViewModel> _items = new();
 
-    public event EventHandler<bool>? OnItemsInitialized;
-    //public event EventHandler<IEnumerable<ItemViewModel>> OnItemsChanged;
+    public event EventHandler<IEnumerable<ItemViewModel>> OnItemsInitialized;
+    public event EventHandler<IEnumerable<ItemViewModel>> OnItemsChanged;
 
     public ItemService(
         IBillingService billing,
@@ -41,7 +41,7 @@ public class ItemService : IItemService
             AddNewItem(item, logs);
         }
 
-        OnItemsInitialized?.Invoke(this, true);
+        OnItemsInitialized?.Invoke(this, _items);
     }
 
     public IEnumerable<ItemViewModel> GetItems(Func<ItemViewModel, bool>? selector = null)
@@ -78,7 +78,7 @@ public class ItemService : IItemService
 
         SaveDataAsync();
 
-        //OnItemsChanged.Invoke(this, _items);
+        OnItemsChanged.Invoke(this, _items);
     }
 
     public void DeleteItem(ItemViewModel item)
@@ -96,6 +96,8 @@ public class ItemService : IItemService
         _dataService.SaveDataAsync(itemsList);
     }
 
+
+    //TODO move this to ItemDetailsViewModel
     public ItemViewModel ScheduleBilling(ItemViewModel itemVM, List<ItemLog> logs)
     {
         var item = itemVM.Item;
@@ -106,8 +108,8 @@ public class ItemService : IItemService
             foreach (var date in paymentDates)
             {
                 //TODO Remove before scheduling new 
-#if !HAS_UNO_WASM
-                //_notification.ScheduleNotification(item.Id, item.Name, DateTime.Now.ToString(), date, new TimeOnly(8, 00));
+#if !HAS_UNO
+                _notification.ScheduleNotification(item.Id, item.Name, DateTime.Now.ToString(), date, new TimeOnly(8, 00));
 #endif
             }
         });
