@@ -2,6 +2,8 @@
 
 public interface IUserService
 {
+    bool IsLoggedIn { get; }
+    Task<bool> LoginUser();
     Task<Business.Models.User?> GetUser();
     Task<bool> UploadData(string content, string relativeLocalPath, CancellationToken token = default);
     Task<Stream?> RetrieveData(string relativeLocalPath, CancellationToken token);

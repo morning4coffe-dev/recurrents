@@ -1,35 +1,19 @@
-﻿using ProjectSBS.Services.Items.Billing;
-using ProjectSBS.Services.Notifications;
-using ProjectSBS.Services.Storage.Data;
+﻿using ProjectSBS.Services.Storage.Data;
 
 namespace ProjectSBS.Services.Items;
 
 public class ItemService : IItemService
 {
-    private readonly IBillingService _billing;
     private readonly IDataService _dataService;
-#if !__WASM__
-    private readonly INotificationService _notification;
-#endif
 
     private readonly List<ItemViewModel> _items = new();
 
-    public event EventHandler<IEnumerable<ItemViewModel>> OnItemsInitialized;
-    public event EventHandler<IEnumerable<ItemViewModel>> OnItemsChanged;
+    public event EventHandler<IEnumerable<ItemViewModel>>? OnItemsInitialized;
+    public event EventHandler<IEnumerable<ItemViewModel>>? OnItemsChanged;
 
-    public ItemService(
-        IBillingService billing,
-        IDataService dataService,
-#if !HAS_UNO_WASM
-        INotificationService notification
-#endif
-        )
+    public ItemService(IDataService dataService)
     {
-        _billing = billing;
         _dataService = dataService;
-#if !HAS_UNO_WASM
-        _notification = notification;
-#endif
     }
 
     public async Task InitializeAsync()
@@ -65,9 +49,8 @@ public class ItemService : IItemService
     {
         ItemViewModel itemVM = new(item);
 
-        logs ??= new();
+        //logs ??= new();
 
-        ScheduleBilling(itemVM, logs);
         _items.Add(itemVM);
     }
 
@@ -77,8 +60,9 @@ public class ItemService : IItemService
         _items[index] = item;
 
         SaveDataAsync();
+        item.Updated();
 
-        OnItemsChanged.Invoke(this, _items);
+        OnItemsChanged?.Invoke(this, _items);
     }
 
     public void DeleteItem(ItemViewModel item)
@@ -93,27 +77,10 @@ public class ItemService : IItemService
         var itemsList = _items
             .Select(itemViewModel => itemViewModel.Item)
             .ToList() ?? new();
-        _dataService.SaveDataAsync(itemsList);
-    }
 
-
-    //TODO move this to ItemDetailsViewModel
-    public ItemViewModel ScheduleBilling(ItemViewModel itemVM, List<ItemLog> logs)
-    {
-        var item = itemVM.Item;
-        var paymentDates = _billing.GetFuturePayments(item.Billing.InitialDate, item.Billing.PeriodType, item.Billing.RecurEvery);
-
-        Task.Run(() =>
+        if (itemsList is { })
         {
-            foreach (var date in paymentDates)
-            {
-                //TODO Remove before scheduling new 
-#if !HAS_UNO
-                _notification.ScheduleNotification(item.Id, item.Name, DateTime.Now.ToString(), date, new TimeOnly(8, 00));
-#endif
-            }
-        });
-
-        return itemVM;
+            _dataService.SaveDataAsync(itemsList);
+        }
     }
 }

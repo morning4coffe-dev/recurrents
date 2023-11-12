@@ -9,5 +9,4 @@ public interface IItemService
     void NewItem(Item item, List<ItemLog>? logs = null);
     void UpdateItem(ItemViewModel item);
     void DeleteItem(ItemViewModel item);
-    ItemViewModel ScheduleBilling(ItemViewModel item, List<ItemLog> logs);
 }

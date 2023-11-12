@@ -37,6 +37,7 @@
 		<PackageReference Include="Microsoft.AppCenter.Analytics" />
 		<PackageReference Include="Microsoft.AppCenter.Crashes" />
 		<PackageReference Include="Uno.WinUI" />
+		<PackageReference Include="Uno.WinUI.MSAL" />
 		<PackageReference Include="Microsoft.WindowsAppSDK" />
 		<PackageReference Include="Microsoft.Windows.SDK.BuildTools" />
 		<PackageReference Include="CommunityToolkit.Mvvm" />

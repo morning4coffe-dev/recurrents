@@ -10,8 +10,8 @@ public class ItemFilterService : IItemFilterService
         //TODO: Add proper Selectors for FilterCategories
         Categories = new()
         {
-            new(localizer["Home"], "\uE80F"),
-            new(localizer["Upcoming"], "\uE752"),
+            new(localizer["All"], "\uE80F"),
+            new(localizer["Home"], "\uE752"),
             new(localizer["Overdue"], "\uEC92", i => i.Item?.Name is "Sample Item 1"),
             new(localizer["Expensive"], "\uE717", i => i.Item?.Billing.BasePrice > 50),
         };

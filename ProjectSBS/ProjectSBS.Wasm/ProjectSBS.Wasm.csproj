@@ -72,6 +72,7 @@
 		<PackageReference Include="Microsoft.Windows.Compatibility" />
 		<PackageReference Include="Uno.Wasm.Bootstrap" />
 		<PackageReference Include="Uno.Wasm.Bootstrap.DevServer" />
+		<PackageReference Include="Uno.WinUI.MSAL" />
 		<PackageReference Include="Uno.WinUI.Lottie" />
 		<PackageReference Include="Uno.WinUI.WebAssembly" />
 		<PackageReference Include="Uno.WinUI.RemoteControl" Condition="'$(Configuration)'=='Debug'" />

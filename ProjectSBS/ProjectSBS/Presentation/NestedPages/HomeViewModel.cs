@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using Windows.UI.Core;
 
 namespace ProjectSBS.Presentation.NestedPages;
@@ -8,6 +7,7 @@ public partial class HomeViewModel : ViewModelBase
     private readonly IUserService _userService;
     private readonly IItemService _itemService;
     private readonly IItemFilterService _filterService;
+    private readonly INavigation _navigation;
 
     [ObservableProperty]
     private User? _user;
@@ -23,6 +23,9 @@ public partial class HomeViewModel : ViewModelBase
 
     [ObservableProperty]
     private bool _isPaneOpen;
+
+    [ObservableProperty]
+    public bool _isStatsVisible;
 
     private ItemViewModel? _selectedItem;
     public ItemViewModel? SelectedItem
@@ -49,9 +52,9 @@ public partial class HomeViewModel : ViewModelBase
 
     public ObservableCollection<ItemViewModel> Items { get; } = new();
 
-    public List<FilterCategory> Categories { get; }
+    public List<FilterCategory> FilterCategories { get; }
 
-    public FilterCategory SelectedCategory
+    public FilterCategory SelectedFilter
     {
         get => _filterService.SelectedCategory;
         set
@@ -71,6 +74,8 @@ public partial class HomeViewModel : ViewModelBase
         }
     }
 
+    public NavigationCategory SelectedCategory => _navigation.SelectedCategory;
+
     //public ICommand Logout { get; }
     public ICommand AddNewCommand { get; }
     public ICommand DeleteCommand { get; }
@@ -78,16 +83,18 @@ public partial class HomeViewModel : ViewModelBase
     public HomeViewModel(
         IUserService userService,
         IItemService itemService,
-        IItemFilterService filterService)
+        IItemFilterService filterService,
+        INavigation navigation)
     {
         _userService = userService;
         _itemService = itemService;
         _filterService = filterService;
+        _navigation = navigation;
 
         AddNewCommand = new RelayCommand(AddNew);
         DeleteCommand = new AsyncRelayCommand(() => DeleteItem());
 
-        Categories = filterService.Categories;
+        FilterCategories = filterService.Categories;
 
         var welcome = DateTime.Now.Hour switch
         {
@@ -110,6 +117,8 @@ public partial class HomeViewModel : ViewModelBase
         };
         //Currently does this twice only on startup, doesn't impact performance much as the list is null here
         _ = RefreshItems();
+
+        IsStatsVisible = _navigation.SelectedCategory.Id == 0 && Items.Count > 0;
 
 #if HAS_UNO
         SystemNavigationManager.GetForCurrentView().BackRequested += System_BackRequested;
@@ -153,11 +162,6 @@ public partial class HomeViewModel : ViewModelBase
         {
             DeleteItem(m.Item);
         });
-
-        WeakReferenceMessenger.Default.Register<CategorySelectionChanged>(this, (r, m) =>
-        {
-            OnPropertyChanged(nameof(SelectedCategory));
-        });
     }
 
     public override void Unload()
@@ -171,7 +175,7 @@ public partial class HomeViewModel : ViewModelBase
 
     private IEnumerable<ItemViewModel> RefreshItems()
     {
-        var items = _itemService.GetItems(SelectedCategory.Selector)
+        var items = _itemService.GetItems(SelectedFilter.Selector)
             .OrderBy(i => i.PaymentDate);
 
         Items.Clear();
@@ -193,7 +197,7 @@ public partial class HomeViewModel : ViewModelBase
 
         WeakReferenceMessenger.Default.Send(
             new ItemSelectionChanged(
-                new ItemViewModel(new Item(null, String.Empty)),
+                new ItemViewModel(new Item(null, string.Empty)),
                 true,
                 true)
             );

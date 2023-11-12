@@ -1,8 +1,7 @@
-using ProjectSBS.Services.User;
-using UserModel = ProjectSBS.Business.Models;
+using Microsoft.Identity.Client;
+using Uno.UI.MSAL;
 using Windows.System;
-using Uno.Extensions.Authentication;
-using Uno.Extensions.Navigation;
+using UserModel = ProjectSBS.Business.Models;
 
 namespace ProjectSBS.Presentation;
 
@@ -12,10 +11,7 @@ public partial class LoginViewModel : ObservableObject
     private readonly IUserService _userService;
 
     private readonly IStringLocalizer _localization;
-    private readonly IDispatcher _dispatcher;
-
     private readonly INavigation _navigation;
-    private readonly INavigator _navigator;
 
 
     [ObservableProperty]
@@ -23,18 +19,13 @@ public partial class LoginViewModel : ObservableObject
 
     public LoginViewModel(
         INavigation navigation,
-        IAuthenticationService authentication,
+        //IAuthenticationService authentication,
         IUserService userService,
-        IStringLocalizer localization,
-        INavigator navigator,
-        IDispatcher dispatcher)
+        IStringLocalizer localization)
     {
         _navigation = navigation;
-        _authentication = authentication;
         _userService = userService;
         _localization = localization;
-        _dispatcher = dispatcher;
-        _navigator = navigator;
 
         Login = new AsyncRelayCommand(DoLogin);
         WithoutLogin = new AsyncRelayCommand(DoWithoutLogin);
@@ -52,7 +43,9 @@ public partial class LoginViewModel : ObservableObject
 
         try
         {
-            success = await _authentication.LoginAsync(_dispatcher);
+            //success = await _authentication.LoginAsync(_dispatcher);
+
+            success = await _userService.LoginUser();
 
             //App.Services.GetRequiredService<ILogger<LoginViewModel>>().LogInformation("Logging in");
         }
@@ -75,15 +68,16 @@ public partial class LoginViewModel : ObservableObject
 
             App.Dispatcher.TryEnqueue(() =>
             {
-                _navigator.NavigateViewModelAsync<MainViewModel>(this, qualifier: Qualifiers.ClearBackStack);
+                _navigation.Navigate(typeof(MainPage));
+                //_navigator.NavigateViewModelAsync<MainViewModel>(this, qualifier: Qualifiers.ClearBackStack);
             });
         }
     }
 
     private async Task DoWithoutLogin()
     {
-        var size = (_navigator as FrameNavigator).Control?.ActualSize;
-        await _navigator.NavigateViewModelAsync<MainViewModel>(this, qualifier: Qualifiers.ClearBackStack);
+        _navigation.Navigate(typeof(MainPage));
+        //await _navigator.NavigateViewModelAsync<MainViewModel>(this, qualifier: Qualifiers.ClearBackStack);
     }
 
     [RelayCommand]

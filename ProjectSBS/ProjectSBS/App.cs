@@ -11,6 +11,8 @@ using ProjectSBS.Services.Items.Tags;
 using ProjectSBS.Presentation.NestedPages;
 using Microsoft.UI.Dispatching;
 using ProjectSBS.Services.Settings;
+using LiveChartsCore;
+using Uno.Extensions.Navigation;
 #if WINDOWS
 using Windows.Foundation.Collections;
 using CommunityToolkit.WinUI.Notifications;
@@ -32,8 +34,6 @@ public class App : Application
     protected async override void OnLaunched(LaunchActivatedEventArgs args)
     {
         var builder = this.CreateBuilder(args)
-            // Add navigation support for toolkit controls such as TabBar and NavigationView
-            .UseToolkitNavigation()
             .Configure(host => host
 #if DEBUG
                 // Switch to Development environment when running in DEBUG
@@ -88,9 +88,9 @@ public class App : Application
                         .AddSingleton<ICurrencyCache, CurrencyCache>()
                         .AddRefitClient<IApiClient>(context))
 #if !__IOS__
-                .UseAuthentication(auth =>
-                    auth.AddMsal(name: "MsalAuthentication")
-                )
+                //.UseAuthentication(auth =>
+                //    auth.AddMsal(name: "MsalAuthentication")
+                //)
 #endif
                 .ConfigureServices((context, services) =>
                 {
@@ -124,8 +124,38 @@ public class App : Application
                     services.AddSingleton<INotificationService, WindowsNotificationService>();
 #endif
                 })
-                .UseNavigation(RegisterRoutes)
             );
+
+        MainWindow = builder.Window;
+
+        Host = builder.Build();
+
+        // Do not repeat app initialization when the Window already has content,
+        // just ensure that the window is active
+        if (MainWindow.Content is not Frame rootFrame)
+        {
+            // Create a Frame to act as the navigation context and navigate to the first page
+            rootFrame = new Frame();
+
+            // Set navigation context
+            Services.GetRequiredService<INavigation>().RootFrame = rootFrame;
+
+            // Place the frame in the current Window
+            MainWindow.Content = rootFrame;
+        }
+
+#if __IOS__ || __ANDROID__
+    Uno.UI.FeatureConfiguration.Style.ConfigureNativeFrameNavigation();
+#endif
+
+        if (rootFrame.Content is not { })
+        {
+            // When the navigation stack isn't restored navigate to the first page,
+            // configuring the new page by passing required information as a navigation
+            // parameter
+            rootFrame.Navigate(typeof(LoginPage), args.Arguments);
+        }
+
 
 #if WINDOWS
         var manager = WindowManager.Get(builder.Window);
@@ -166,24 +196,8 @@ public class App : Application
         };
 #endif
 
-        MainWindow = builder.Window;
-
-        //Host = builder.Build();
-
-        Host = await builder.NavigateAsync<Shell>(initialNavigate:
-            async (services, navigator) =>
-            {
-                var auth = services.GetRequiredService<IAuthenticationService>();
-                var authenticated = await auth.RefreshAsync();
-                if (authenticated)
-                {
-                    await navigator.NavigateViewModelAsync<MainViewModel>(this, qualifier: Qualifiers.Nested);
-                }
-                else
-                {
-                    await navigator.NavigateViewModelAsync<LoginViewModel>(this, qualifier: Qualifiers.Nested);
-                }
-            });
+        // Ensure the current window is active
+        MainWindow.Activate();
 
 #if WINDOWS
         if (MicaController.IsSupported())
@@ -195,26 +209,5 @@ public class App : Application
 
         //TODO Log MicaController.IsSupported()
 #endif
-    }
-
-    private static void RegisterRoutes(IViewRegistry views, IRouteRegistry routes)
-    {
-        views.Register(
-            new ViewMap(ViewModel: typeof(ShellViewModel)),
-            new ViewMap<LoginPage, LoginViewModel>(),
-            new ViewMap<MainPage, MainViewModel>(),
-            new ViewMap<ItemDetails, ItemDetailsViewModel>()
-        );
-
-        routes.Register(
-            new RouteMap("", View: views.FindByViewModel<ShellViewModel>(),
-                Nested: new RouteMap[]
-                {
-                    new RouteMap("Login", View: views.FindByViewModel<LoginViewModel>()),
-                    new RouteMap("Main", View: views.FindByViewModel<MainViewModel>()),
-                    new RouteMap("Details", View: views.FindByViewModel<ItemDetailsViewModel>()),
-                }
-            )
-        );
     }
 }

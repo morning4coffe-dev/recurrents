@@ -5,9 +5,8 @@ namespace ProjectSBS.Presentation;
 
 public partial class MainViewModel : ViewModelBase
 {
-    private readonly IAuthenticationService _authentication;
+    //private readonly IAuthenticationService _authentication;
     private readonly IUserService _userService;
-    private readonly IDispatcher _dispatcher;
     private readonly IItemService _itemService;
     private readonly IItemFilterService _filterService;
     private readonly INavigation _navigation;
@@ -24,28 +23,13 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty]
     private bool _isSignedIn;
 
+    [ObservableProperty]
+    public NavigationCategory _selectedCategory;
+
     public string? Title { get; }
 
-    public NavigationCategory SelectedCategory
-    {
-        get => _navigation.SelectedCategory;
-        set
-        {
-            if (_navigation.SelectedCategory == value)
-            {
-                return;
-            }
-
-            _navigation.SelectedCategory = value;
-
-            //TODO move this to only Filtering
-            //WeakReferenceMessenger.Default.Send(new CategorySelectionChanged());
-
-            OnPropertyChanged();
-        }
-    }
-
-    public List<NavigationCategory> Categories { get; }
+    public IEnumerable<NavigationCategory> DesktopCategories => _navigation.Categories.Where(c => c.Visibility == CategoryVisibility.Desktop || c.Visibility == CategoryVisibility.Both);
+    public IEnumerable<NavigationCategory> MobileCategories => _navigation.Categories.Where(c => c.Visibility == CategoryVisibility.Mobile || c.Visibility == CategoryVisibility.Both);
 
     public ICommand GoToSettingsCommand { get; }
     public ICommand LogoutCommand { get; }
@@ -53,27 +37,20 @@ public partial class MainViewModel : ViewModelBase
     public MainViewModel(
         IStringLocalizer localizer,
         IOptions<AppConfig> appInfo,
-#if !__IOS__
-        IAuthenticationService authentication,
-#endif
         IUserService userService,
         IItemService itemService,
         IItemFilterService filterService,
-        INavigation navigation,
-        IDispatcher dispatcher)
+        INavigation navigation)
     {
-#if !__IOS__
-        _authentication = authentication;
-#endif
         _userService = userService;
         _filterService = filterService;
         _navigation = navigation;
         _itemService = itemService;
-        _dispatcher = dispatcher;
 
-        Title = "Main";
-        Title += $" - {localizer["ApplicationName"]}";
+        Title = $"{localizer["ApplicationName"]}";
+#if DEBUG
         Title += $" - {appInfo?.Value?.Environment}";
+#endif
 
         //TODO Don't use static CultureInfo
         CultureInfo ci = new("cs-CZ");
@@ -84,7 +61,8 @@ public partial class MainViewModel : ViewModelBase
         GoToSettingsCommand = new RelayCommand(GoToSettings);
         LogoutCommand = new AsyncRelayCommand(DoLogout);
 
-        Categories = navigation.Categories;
+        SelectedCategory = DesktopCategories.FirstOrDefault();
+
         _navigation.NavigateNested(SelectedCategory.Page);
     }
 
@@ -108,7 +86,7 @@ public partial class MainViewModel : ViewModelBase
 
         User = await _userService.GetUser();
 
-        IsSignedIn = await _authentication.IsAuthenticated();
+        IsSignedIn = User is { };
 
         //HomePage is currently initialized with Categories
     }
@@ -120,7 +98,7 @@ public partial class MainViewModel : ViewModelBase
 
     public async Task DoLogout(CancellationToken token)
     {
-        await _authentication.LogoutAsync(_dispatcher, token);
+        //await _authentication.LogoutAsync(_dispatcher, token);
         //TODO probably will have to clean the token and User too
     }
 

@@ -22,29 +22,20 @@ public class WindowsNotificationService : NotificationServiceBase
 
     public override void ShowBasicToastNotification(string title, string description)
     {
-        if (!IsEnabledOnDevice())
-        {
-            //TODO show that notification could not been sent
-            return;
-        }
 
-        var assetUri = AppDomain.CurrentDomain.BaseDirectory + "Assets";
+        //var assetUri = AppDomain.CurrentDomain.BaseDirectory + "Assets";
 
-        new ToastContentBuilder()
-            //.AddInlineImage(new Uri("file:///" + assetUri + "/Icon_Nice.png"))
-            .AddText(title)
-            .AddText(description)
-            .Show();
+        //new ToastContentBuilder()
+        //    //.AddInlineImage(new Uri("file:///" + assetUri + "/Icon_Nice.png"))
+        //    .AddText(title)
+        //    .AddText(description);
+        //    //.Show();
+
+        CreateNotification("", title, description).Show();
     }
 
     public override void ScheduleNotification(string id, string title, string text, DateOnly day, TimeOnly time)
     {
-        if (!IsEnabledOnDevice())
-        {
-            //TODO show that notification could not been sent
-            return;
-        }
-
         var date = new DateTime(day.Year, day.Month, day.Day, time.Hour, time.Minute, time.Second, time.Millisecond, DateTimeKind.Unspecified);
 
         if (date < DateTime.Now)
@@ -52,11 +43,10 @@ public class WindowsNotificationService : NotificationServiceBase
             return;
         }
 
-
         CreateNotification(id, title, text).Schedule(date, toast =>
-            {
-                //toast.Id = new Guid().ToString().Take(4).ToString();
-            });
+        {
+            //toast.Id = new Guid().ToString().Take(4).ToString();
+        });
     }
 
     private ToastContentBuilder CreateNotification(string id, string title, string text)
@@ -85,8 +75,7 @@ public class WindowsNotificationService : NotificationServiceBase
             new ToastButton()
                 .SetContent("Done")
                 .AddArgument("action", "done")
-                .SetBackgroundActivation()
-                )
+                .SetBackgroundActivation())
             .SetToastScenario(ToastScenario.Reminder);
     }
 

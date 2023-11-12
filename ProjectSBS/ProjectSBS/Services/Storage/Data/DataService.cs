@@ -7,7 +7,7 @@ public class DataService : IDataService
 {
     private readonly IStorageService _storage;
     private readonly IUserService _userService;
-    private readonly IAuthenticationService _authentication;
+    //private readonly IAuthenticationService _authentication;
 
     //TODO Rename
     private const string itemsPath = "appItems.json";
@@ -16,16 +16,12 @@ public class DataService : IDataService
     public DataService(
         IStorageService storage,
         IUserService userService
-#if !__IOS__
-        ,
-        IAuthenticationService authentication
-#endif
         )
     {
         _storage = storage;
         _userService = userService;
 #if !__IOS__
-        _authentication = authentication;
+        //_authentication = authentication;
 #endif
     }
 
@@ -62,7 +58,8 @@ public class DataService : IDataService
     {
 
 #if !__IOS__
-        var isSigned = await _authentication.IsAuthenticated();
+        //TODO
+        var isSigned = true;
 #else
         var isSigned = false;
 #endif
@@ -96,28 +93,38 @@ public class DataService : IDataService
 
     private async Task<object?> LoadAsync(string path, Type type)
     {
-        var isSigned = await _authentication.IsAuthenticated();
-        string remoteContent = "";
-
-        if (isSigned)
+        try
         {
-            //TODO Use CancellationToken
-            var data = await _userService.RetrieveData(path, CancellationToken.None);
-            remoteContent = data.ReadToEnd();
-        }
+            //TODO var isSigned = await _authentication.IsAuthenticated();
+            var isSigned = true;
+            string remoteContent = "";
 
-        if (!isSigned)
-        {
-            if (!_storage.DoesFileExist(path))
+            if (isSigned)
             {
-                return null;
+                //TODO Use CancellationToken
+                var data = await _userService.RetrieveData(path, CancellationToken.None);
+                remoteContent = data.ReadToEnd();
             }
-            var fileContent = await _storage.ReadFileAsync(path);
-            remoteContent = fileContent;
+
+            if (!isSigned)
+            {
+                if (!_storage.DoesFileExist(path))
+                {
+                    return null;
+                }
+                var fileContent = await _storage.ReadFileAsync(path);
+                remoteContent = fileContent;
+            }
+
+            //TODO Compare remote and local content
+
+            return JsonSerializer.Deserialize(remoteContent, type);
         }
-
-        //TODO Compare remote and local content
-
-        return JsonSerializer.Deserialize(remoteContent, type);
+        catch(Exception ex)
+        {
+            //TODO Log
+            Console.WriteLine(ex);
+            return null;
+        }
     }
 }

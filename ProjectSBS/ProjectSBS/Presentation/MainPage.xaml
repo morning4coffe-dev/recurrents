@@ -46,7 +46,7 @@
 
     </Page.Resources>
 
-    <comp:PageShell Title="{x:Bind ViewModel.Title}"
+    <comp:PageShell TitleBarTitle="{x:Bind ViewModel.Title}"
                     DesktopTitleVisibility="Visible">
         <comp:PageShell.ContentView>
 
@@ -64,6 +64,8 @@
                                 <VisualState.Setters>
                                     <Setter Target="navigation.IsPaneToggleButtonVisible"
                                             Value="False" />
+                                    <Setter Target="navigationBar.Visibility"
+                                            Value="Visible" />
                                 </VisualState.Setters>
                             </VisualState>
 
@@ -121,8 +123,8 @@
                                     IsPaneToggleButtonVisible="True"
                                     IsSettingsVisible="True"
                                     IsPaneVisible="True"
-                                    MenuItemsSource="{Binding Categories}"
-                                    SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
+                                    MenuItemsSource="{x:Bind ViewModel.DesktopCategories}"
+                                    SelectedItem="{x:Bind ViewModel.SelectedCategory, Mode=TwoWay}"
                                     SelectionChanged="OnNavigation_SelectionChanged">
 
                         <NavigationView.Resources>
@@ -184,10 +186,34 @@
                             </DataTemplate>
                         </NavigationView.MenuItemTemplate>
 
-                        <Frame x:Name="Frame"
-                               x:FieldModifier="public"
-                               not_win:CornerRadius="50,0,0,0"
-                               not_win:Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <Frame x:Name="Frame"
+                                   x:FieldModifier="public"
+                                   not_win:CornerRadius="50,0,0,0"
+                                   not_win:Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
+
+                            <utu:TabBar x:Name="navigationBar"
+                                        ItemsSource="{x:Bind ViewModel.DesktopCategories}"
+                                        SelectedItem="{x:Bind ViewModel.SelectedCategory, Mode=TwoWay}"
+                                        Background="{ThemeResource CardBackgroundFillColorDefault}"
+                                        Visibility="Collapsed"
+                                        Grid.Row="1">
+                                <utu:TabBar.ItemTemplate>
+                                    <DataTemplate x:DataType="models:NavigationCategory">
+                                        <StackPanel Spacing="4">
+                                            <FontIcon Glyph="{x:Bind Glyph}"
+                                                      FontSize="19" />
+                                            <TextBlock Text="{x:Bind Text}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </utu:TabBar.ItemTemplate>
+                            </utu:TabBar>
+                        </Grid>
                     </NavigationView>
 
                 </Grid>

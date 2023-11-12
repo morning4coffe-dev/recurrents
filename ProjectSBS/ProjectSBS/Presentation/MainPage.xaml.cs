@@ -15,19 +15,19 @@ public sealed partial class MainPage : Page
 
     private async void Page_Loaded(object sender, RoutedEventArgs e)
     {
-        while (App.Services?.GetRequiredService<MainViewModel>() == null)
-        {
-            //Wait till Host is created
-            await Task.Delay(200);
+        //TODO Impacts perf a lot, mainly on mobile
+        //while (App.Services?.GetRequiredService<MainViewModel>() == null)
+        //{
+        //    //Wait till Host is created
+        //    await Task.Delay(200);
 
-            //TODO Add loading indicator
-        }
+        //    //TODO Add loading indicator
+        //}
 
-        var nav = App.Services?.GetRequiredService<INavigation>();
-
+        var nav = App.Services?.GetRequiredService<INavigation>()!;
         nav.NestedFrame = Frame;
 
-        this.DataContext = App.Services?.GetRequiredService<MainViewModel>();
+        //this.DataContext = App.Services?.GetRequiredService<MainViewModel>();
 
         ViewModel.Load();
     }

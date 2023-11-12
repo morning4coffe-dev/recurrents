@@ -156,7 +156,8 @@
                                     Style="{StaticResource ContentStack}">
                             <win:StackPanel.ChildrenTransitions>
                                 <TransitionCollection>
-                                    <EntranceThemeTransition FromHorizontalOffset="50"
+                                    <EntranceThemeTransition FromHorizontalOffset="80"
+                                                             FromVerticalOffset="0"
                                                              IsStaggeringEnabled="False" />
                                 </TransitionCollection>
                             </win:StackPanel.ChildrenTransitions>
@@ -197,7 +198,7 @@
                             <local:DetailsBox Header="next payments">
                                 <local:DetailsBox.Content>
                                     <ScrollViewer HorizontalScrollMode="Auto"
-                                                  HorizontalScrollBarVisibility="Auto"
+                                                  HorizontalScrollBarVisibility="Hidden"
                                                   Margin="-16"
                                                   Padding="16">
                                         <ItemsRepeater VerticalAlignment="Top"

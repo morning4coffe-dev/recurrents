@@ -9,14 +9,16 @@ internal class NavigationService : INavigation
     public Frame? RootFrame { private get; set; }
     public Frame? NestedFrame { get; set; }
 
-    public NavigationService()
+    public NavigationService(IStringLocalizer localizer)
     {
         Categories = new()
         {
-            new("Home", "\uE80F", typeof(HomePage)),
-            new("Items", "\uF0B2", typeof(HomePage)),
-            new("Stats", "\uEAFC", typeof(HomePage)),
-            new("Dev", "\uE98F", typeof(HomePage)),
+            new(0, localizer["Home"], "\uE80F", typeof(HomePage)),
+            new(1, localizer["Items"], "\uF0B2", typeof(HomePage)),
+            new(2, localizer["Archive"], "\uE7B8", typeof(HomePage)),
+            new(3, localizer["Stats"], "\uEAFC", typeof(HomePage)),
+            new(4, localizer["Dev"], "\uE98F", typeof(HomePage), CategoryVisibility.Desktop),
+            new(5, localizer["Settings"], "\uE713", typeof(SettingsPage), CategoryVisibility.Mobile),
         };
 
         SelectedCategory = Categories[0];

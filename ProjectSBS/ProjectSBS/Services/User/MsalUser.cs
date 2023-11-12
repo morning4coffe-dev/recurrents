@@ -1,28 +1,82 @@
 ﻿using Microsoft.Graph;
 using Microsoft.Graph.Models;
+using Microsoft.Identity.Client;
 using Microsoft.Kiota.Abstractions.Authentication;
 using Microsoft.UI.Xaml.Media.Imaging;
 using System.Text;
+using Uno.UI.MSAL;
 using UserModel = ProjectSBS.Business.Models;
 
 namespace ProjectSBS.Services.User;
 
 public class MsalUser : IUserService
 {
-    private readonly ITokenCache _token;
-
     private GraphServiceClient? _client;
 
     private UserModel.User? _currentUser;
 
-    public MsalUser(ITokenCache token)
+    public MsalUser()
     {
-        _token = token;
+        //_token = token;
+    }
+
+    string token = "";
+
+    public bool IsLoggedIn { get; }
+
+    public async Task<bool> LoginUser()
+    {
+        IPublicClientApplication _app = PublicClientApplicationBuilder.Create("")
+        .WithRedirectUri("")
+        .WithAuthority("")
+        .WithIosKeychainSecurityGroup("com.microsoft.adalcache")
+        .WithUnoHelpers()
+        .Build();
+
+
+        string[] scopes = new string[] {
+
+            };
+
+
+        AuthenticationResult? result = null;
+        var accounts = await _app.GetAccountsAsync();
+
+        try
+        {
+            if (Enumerable.Any(accounts))
+            {
+                result = await _app.AcquireTokenSilent(scopes, accounts.FirstOrDefault())
+                       .ExecuteAsync();
+            }
+            else
+            {
+                result = await _app.AcquireTokenInteractive(scopes)
+                    .WithPrompt(Microsoft.Identity.Client.Prompt.SelectAccount)
+                    .WithUnoHelpers() // Add this line on interactive token acquisition flow
+                    .ExecuteAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            //TODO Log Login failed
+            return false;
+        }
+
+        if (result != null)
+        {
+            token = result.AccessToken;
+            // Use the token
+
+            return true;
+        }
+
+        return false;
     }
 
     private async void Initialize()
     {
-        var token = await _token.AccessTokenAsync();
+        //var token = await _token. .AccessTokenAsync();
 
         if (token is not null)
         {
@@ -41,6 +95,11 @@ public class MsalUser : IUserService
 
         if (_client is null)
         {
+            if (string.IsNullOrEmpty(token))
+            {
+                return null;
+            }
+
             Initialize();
 
             if (_client is null)
@@ -79,7 +138,8 @@ public class MsalUser : IUserService
             // TODO There is no profile picture
         }
 
-        return new UserModel.User(fullName, mail, photoBitmap);
+        _currentUser = new UserModel.User(fullName, mail, photoBitmap);
+        return _currentUser;
     }
 
     public async Task<bool> UploadData(string content, string relativeLocalPath, CancellationToken token = default)

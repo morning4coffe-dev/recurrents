@@ -1,5 +1,5 @@
 using Microsoft.UI.Xaml;
-using Uno.Resizetizer;
+//using Uno.Resizetizer;
 
 namespace ProjectSBS
 {
@@ -23,7 +23,7 @@ namespace ProjectSBS
         {
             base.OnLaunched(args);
 
-            MainWindow.SetWindowIcon();
+            //MainWindow.SetWindowIcon();
         }
     }
 }

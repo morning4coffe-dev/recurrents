@@ -11,6 +11,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.WinUI.Controls.Segmented" />
 		<PackageReference Include="CommunityToolkit.Labs.WinUI.SettingsControls" />
 		<PackageReference Include="CommunityToolkit.WinUI.Controls.Segmented" />
 		<PackageReference Include="CommunityToolkit.WinUI.Controls.SettingsControls" />

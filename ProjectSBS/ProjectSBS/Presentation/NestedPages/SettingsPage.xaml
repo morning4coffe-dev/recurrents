@@ -88,6 +88,12 @@
                                                HeaderIcon="{ui:FontIcon Glyph=&#xE774;}"
                                                IsClickEnabled="True" />
 
+                        <controls:SettingsCard Header="Notifications"
+                                               Description="You can manage them in the system settings."
+                                               ActionIcon="{ui:FontIcon Glyph=&#xE8A7;}"
+                                               HeaderIcon="{ui:FontIcon Glyph=&#xE774;}"
+                                               IsClickEnabled="True" />
+
                         <StackPanel>
                             <TextBlock Text="About"
                                        Margin="0,12,0,0"
