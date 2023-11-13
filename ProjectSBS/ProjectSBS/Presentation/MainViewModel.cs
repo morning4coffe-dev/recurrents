@@ -60,10 +60,6 @@ public partial class MainViewModel : ViewModelBase
 
         GoToSettingsCommand = new RelayCommand(GoToSettings);
         LogoutCommand = new AsyncRelayCommand(DoLogout);
-
-        SelectedCategory = DesktopCategories.FirstOrDefault();
-
-        _navigation.NavigateNested(SelectedCategory.Page);
     }
 
     public void Navigate(NavigationViewSelectionChangedEventArgs args)
@@ -85,10 +81,9 @@ public partial class MainViewModel : ViewModelBase
         await _itemService.InitializeAsync();
 
         User = await _userService.GetUser();
-
         IsSignedIn = User is { };
 
-        //HomePage is currently initialized with Categories
+        SelectedCategory = DesktopCategories.FirstOrDefault();
     }
 
     private void GoToSettings()

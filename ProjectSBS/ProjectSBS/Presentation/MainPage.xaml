@@ -185,7 +185,7 @@
                                 </NavigationViewItem>
                             </DataTemplate>
                         </NavigationView.MenuItemTemplate>
-
+                        
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*" />

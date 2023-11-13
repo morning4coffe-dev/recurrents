@@ -177,6 +177,7 @@
                                                Style="{StaticResource SubtitleTextBlockStyle}" />
 
                                     <TextBlock Text="{x:Bind ViewModel.User.Name, Mode=OneWay}"
+                                               Visibility="{x:Bind string.IsNullOrEmpty(ViewModel.User.Name), Mode=OneWay}"
                                                TextWrapping="WrapWholeWords"
                                                VerticalAlignment="Center"
                                                HorizontalAlignment="Left"

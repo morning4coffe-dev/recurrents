@@ -2,7 +2,6 @@
 
 public partial class SettingsViewModel : ViewModelBase
 {
-    private readonly IAuthenticationService _authentication;
     private readonly ICurrencyCache _currencyCache;
     private readonly ISettingsService _settingsService;
     private readonly IUserService _userService;
@@ -32,7 +31,6 @@ public partial class SettingsViewModel : ViewModelBase
     public readonly string TitleText;
     public SettingsViewModel(
     IStringLocalizer localizer,
-    IAuthenticationService authentication,
     ICurrencyCache currencyCache,
     ISettingsService settingsService,
     IUserService userService)
@@ -40,7 +38,6 @@ public partial class SettingsViewModel : ViewModelBase
         _userService = userService;
         _currencyCache = currencyCache;
         _settingsService = settingsService;
-        _authentication = authentication;
 
         TitleText = localizer["Settings"];
     }
