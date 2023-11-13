@@ -46,20 +46,20 @@
                             </VisualState>
                         </VisualStateGroup>
 
-                        <VisualStateGroup>
+                        <!--<VisualStateGroup>
                             <VisualState>
                                 <VisualState.StateTriggers>
                                     <triggers:IsNullOrEmptyStateTrigger Value="{x:Bind ViewModel.User, Mode=OneWay}" />
                                 </VisualState.StateTriggers>
                                 <VisualState.Setters>
-                                    <!--TODO [Login UI] Doesn't switch on login-->
+                                    --><!--TODO [Login UI] Doesn't switch on login--><!--
                                     <Setter Target="personPicture.Visibility"
                                             Value="Collapsed" />
                                     <Setter Target="secImage.Visibility"
                                             Value="Visible" />
                                 </VisualState.Setters>
                             </VisualState>
-                        </VisualStateGroup>
+                        </VisualStateGroup>-->
                     </VisualStateManager.VisualStateGroups>
 
                     <Image x:Name="backgroundImage"
@@ -107,7 +107,7 @@
                                    Style="{StaticResource TitleTextBlockStyle}" />
 
                         <Grid Grid.Row="1">
-                            <StackPanel x:Name="personPicture"
+                            <!--<StackPanel x:Name="personPicture"
                                         Visibility="Collapsed">
                                 <TextBlock Text="{x:Bind ViewModel.User.Name}"
                                            Style="{StaticResource TitleTextBlockStyle}" />
@@ -116,7 +116,7 @@
                                                DisplayName="{x:Bind ViewModel.User.Name}"
                                                MinHeight="45"
                                                MaxHeight="200" />
-                            </StackPanel>
+                            </StackPanel>-->
 
                             <Image x:Name="secImage"
                                    Visibility="Visible"

@@ -230,6 +230,7 @@
                             </local:DetailsBox>
 
                             <local:DetailsBox Header="description"
+                                              Visibility="{Binding SelectedItem.Item.Description, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}"
                                               Text="{x:Bind ViewModel.SelectedItem.Item.Description, Mode=OneWay}" />
                             <!--Visibility="{Binding SelectedItem.Item.Description, Mode=OneWay, Converter={StaticResource StringVisibilityConverter}, ConverterParameter=False}"-->
 

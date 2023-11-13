@@ -13,6 +13,9 @@ public partial class HomeViewModel : ViewModelBase
     private User? _user;
 
     [ObservableProperty]
+    private string? _displayName;
+
+    [ObservableProperty]
     private decimal _sum;
 
     [ObservableProperty]
@@ -26,6 +29,9 @@ public partial class HomeViewModel : ViewModelBase
 
     [ObservableProperty]
     public bool _isStatsVisible;
+
+    [ObservableProperty]
+    public bool _isLoggedIn;
 
     private ItemViewModel? _selectedItem;
     public ItemViewModel? SelectedItem
@@ -79,6 +85,7 @@ public partial class HomeViewModel : ViewModelBase
     //public ICommand Logout { get; }
     public ICommand AddNewCommand { get; }
     public ICommand DeleteCommand { get; }
+    public ICommand OpenSettingsCommand { get; }
 
     public HomeViewModel(
         IUserService userService,
@@ -93,8 +100,16 @@ public partial class HomeViewModel : ViewModelBase
 
         AddNewCommand = new RelayCommand(AddNew);
         DeleteCommand = new AsyncRelayCommand(() => DeleteItem());
+        OpenSettingsCommand = new RelayCommand(() => _navigation.NavigateNested(typeof(SettingsPage)));
 
         FilterCategories = filterService.Categories;
+
+        _userService.OnLoggedInChanged += (s, e) =>
+        {
+            User = e;
+            IsLoggedIn = e is null;
+            DisplayName = User?.Name;
+        };
 
         var welcome = DateTime.Now.Hour switch
         {
@@ -110,6 +125,7 @@ public partial class HomeViewModel : ViewModelBase
     public override async void Load()
     {
         User = await _userService.GetUser();
+        DisplayName = User?.Name;
 
         _itemService.OnItemsInitialized += (s, e) =>
         {

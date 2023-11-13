@@ -1,18 +1,11 @@
+using Microsoft.UI.Dispatching;
+using ProjectSBS.Services.Analytics;
+using ProjectSBS.Services.Interop;
+using ProjectSBS.Services.Items.Billing;
+using ProjectSBS.Services.Items.Tags;
+using ProjectSBS.Services.Notifications;
 using ProjectSBS.Services.Storage;
 using ProjectSBS.Services.Storage.Data;
-using ProjectSBS.Services.User;
-using ProjectSBS.Services.Notifications;
-using ProjectSBS.Services.Interop;
-using ProjectSBS.Services.Items;
-using ProjectSBS.Services.Items.Billing;
-using ProjectSBS.Services.Analytics;
-using ProjectSBS.Services.Items.Filtering;
-using ProjectSBS.Services.Items.Tags;
-using ProjectSBS.Presentation.NestedPages;
-using Microsoft.UI.Dispatching;
-using ProjectSBS.Services.Settings;
-using LiveChartsCore;
-using Uno.Extensions.Navigation;
 #if WINDOWS
 using Windows.Foundation.Collections;
 using CommunityToolkit.WinUI.Notifications;
@@ -87,11 +80,6 @@ public class App : Application
 #endif
                         .AddSingleton<ICurrencyCache, CurrencyCache>()
                         .AddRefitClient<IApiClient>(context))
-#if !__IOS__
-                //.UseAuthentication(auth =>
-                //    auth.AddMsal(name: "MsalAuthentication")
-                //)
-#endif
                 .ConfigureServices((context, services) =>
                 {
                     services.AddSingleton<IStorageService, StorageService>();

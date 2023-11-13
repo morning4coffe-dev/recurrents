@@ -20,9 +20,11 @@ public class MsalUser : IUserService
         //_token = token;
     }
 
-    string token = "";
+    private string token = "";
 
-    public bool IsLoggedIn { get; }
+    public bool IsLoggedIn => _currentUser is { };
+
+    public event EventHandler<UserModel.User?>? OnLoggedInChanged;
 
     public async Task<bool> LoginUser()
     {
@@ -42,6 +44,7 @@ public class MsalUser : IUserService
         AuthenticationResult? result = null;
         var accounts = await _app.GetAccountsAsync();
 
+        AuthenticationResult? result;
         try
         {
             if (Enumerable.Any(accounts))
@@ -138,6 +141,8 @@ public class MsalUser : IUserService
             // TODO There is no profile picture
         }
 
+        OnLoggedInChanged?.Invoke(this, _currentUser);
+
         _currentUser = new UserModel.User(fullName, mail, photoBitmap);
         return _currentUser;
     }
@@ -183,6 +188,8 @@ public class MsalUser : IUserService
     public void Logout()
     {
         _currentUser = null;
+
+        OnLoggedInChanged.Invoke(this, _currentUser);
     }
 }
 

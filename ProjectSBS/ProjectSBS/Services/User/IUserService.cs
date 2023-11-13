@@ -3,6 +3,7 @@
 public interface IUserService
 {
     bool IsLoggedIn { get; }
+    event EventHandler<Business.Models.User?>? OnLoggedInChanged;
     Task<bool> LoginUser();
     Task<Business.Models.User?> GetUser();
     Task<bool> UploadData(string content, string relativeLocalPath, CancellationToken token = default);

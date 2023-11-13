@@ -1,5 +1,3 @@
-using Microsoft.Identity.Client;
-using Uno.UI.MSAL;
 using Windows.System;
 using UserModel = ProjectSBS.Business.Models;
 
@@ -7,7 +5,6 @@ namespace ProjectSBS.Presentation;
 
 public partial class LoginViewModel : ObservableObject
 {
-    private readonly IAuthenticationService _authentication;
     private readonly IUserService _userService;
 
     private readonly IStringLocalizer _localization;
@@ -19,7 +16,6 @@ public partial class LoginViewModel : ObservableObject
 
     public LoginViewModel(
         INavigation navigation,
-        //IAuthenticationService authentication,
         IUserService userService,
         IStringLocalizer localization)
     {
@@ -43,8 +39,6 @@ public partial class LoginViewModel : ObservableObject
 
         try
         {
-            //success = await _authentication.LoginAsync(_dispatcher);
-
             success = await _userService.LoginUser();
 
             //App.Services.GetRequiredService<ILogger<LoginViewModel>>().LogInformation("Logging in");
@@ -64,7 +58,7 @@ public partial class LoginViewModel : ObservableObject
             });
 
             //TODO [Optimization] instead of waiting, maybe load items, or stuff like that here
-            await Task.Delay(100);
+            //await Task.Delay(100);
 
             App.Dispatcher.TryEnqueue(() =>
             {

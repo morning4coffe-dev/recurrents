@@ -20,7 +20,6 @@ global using Refit;
 global using System.Collections.Immutable;
 global using System.Windows.Input;
 global using Uno.Extensions;
-global using Uno.Extensions.Authentication;
 global using Uno.Extensions.Configuration;
 global using Uno.Extensions.Hosting;
 global using Uno.Extensions.Http;

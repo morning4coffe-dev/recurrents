@@ -26,8 +26,6 @@
         </ResourceDictionary>
     </Page.Resources>
 
-    <!--TODO Black blackground-->
-
     <Grid>
 
         <VisualStateManager.VisualStateGroups>
@@ -159,14 +157,16 @@
                                     <ColumnDefinition />
                                 </Grid.ColumnDefinitions>
 
-                                <!--<Button CornerRadius="30"
+                                <Button CornerRadius="30"
                                         Padding="0"
                                         BorderThickness="0"
-                                        Background="Transparent">-->
-                                <PersonPicture ProfilePicture="{x:Bind ViewModel.User.Photo, Mode=OneWay}"
-                                               DisplayName="{x:Bind ViewModel.User.Name, Mode=OneWay}"
-                                               Width="65" />
-                                <!--</Button>-->
+                                        Background="Transparent"
+                                        Command="{x:Bind ViewModel.OpenSettingsCommand}">
+                                    <PersonPicture ProfilePicture="{x:Bind ViewModel.User.Photo, Mode=OneWay}"
+                                                   DisplayName="{x:Bind ViewModel.User.Name, Mode=OneWay}"
+                                                   BorderThickness="0"
+                                                   Width="65" />
+                                </Button>
 
                                 <StackPanel Grid.Column="1">
                                     <TextBlock Text="{x:Bind ViewModel.WelcomeMessage, Mode=OneTime}"
@@ -176,8 +176,9 @@
                                                Opacity="0.6"
                                                Style="{StaticResource SubtitleTextBlockStyle}" />
 
+                                    <!--TODO Visibility change Doesnt work-->
                                     <TextBlock Text="{x:Bind ViewModel.User.Name, Mode=OneWay}"
-                                               Visibility="{x:Bind string.IsNullOrEmpty(ViewModel.User.Name), Mode=OneWay}"
+                                               Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay}"
                                                TextWrapping="WrapWholeWords"
                                                VerticalAlignment="Center"
                                                HorizontalAlignment="Left"
@@ -191,7 +192,7 @@
                                      IsClosable="False"
                                      IsOpen="True" />
 
-                            <comp:StatsBanner Visibility="{x:Bind ViewModel.IsStatsVisible, Mode=OneWay }" />
+                            <comp:StatsBanner Visibility="{x:Bind ViewModel.IsStatsVisible, Mode=OneWay}" />
 
                             <StackPanel Orientation="Horizontal"
                                         Spacing="8">
@@ -257,7 +258,7 @@
                                 <GridView.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <StackPanel Orientation="Vertical"
-                                                    Spacing="4"/>
+                                                    Spacing="4" />
                                     </ItemsPanelTemplate>
                                 </GridView.ItemsPanel>
 
@@ -343,15 +344,18 @@
                                        MaxHeight="200" />
 
                                 <TextBlock Text="You have no items here!"
+                                           TextWrapping="WrapWholeWords"
                                            HorizontalAlignment="Center"
                                            FontWeight="Bold" />
 
                                 <TextBlock Text="Improve your spending habbits by adding your subscriptions."
+                                           TextWrapping="WrapWholeWords"
+                                           TextAlignment="Center"
                                            HorizontalAlignment="Center" />
 
                                 <Button Content="Add Items"
                                         HorizontalAlignment="Center"
-                                        Padding="14, 8"
+                                        Padding="20, 8"
                                         Command="{x:Bind ViewModel.AddNewCommand}" />
 
                             </StackPanel>

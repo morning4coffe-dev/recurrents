@@ -7,7 +7,6 @@ public class DataService : IDataService
 {
     private readonly IStorageService _storage;
     private readonly IUserService _userService;
-    //private readonly IAuthenticationService _authentication;
 
     //TODO Rename
     private const string itemsPath = "appItems.json";
@@ -15,14 +14,10 @@ public class DataService : IDataService
 
     public DataService(
         IStorageService storage,
-        IUserService userService
-        )
+        IUserService userService)
     {
         _storage = storage;
         _userService = userService;
-#if !__IOS__
-        //_authentication = authentication;
-#endif
     }
 
     public async Task<(List<Item> items, List<ItemLog> logs)> InitializeDatabaseAsync()
@@ -32,7 +27,7 @@ public class DataService : IDataService
         //Check if the remote database is newer than the local one (or vice-versa)
 
         var data = await LoadDataAsync();
-        var logs = await LoadLogsAsync();
+        var logs = new List<ItemLog>();//await LoadLogsAsync();
 
         return (data, logs);
     }
@@ -56,15 +51,7 @@ public class DataService : IDataService
 
     private async Task<bool> SaveAsync(string content, string path)
     {
-
-#if !__IOS__
-        //TODO
-        var isSigned = true;
-#else
-        var isSigned = false;
-#endif
-
-        if (isSigned)
+        if (_userService.IsLoggedIn)
         {
             await _userService.UploadData(content, path);
         }
@@ -96,7 +83,7 @@ public class DataService : IDataService
         try
         {
             //TODO var isSigned = await _authentication.IsAuthenticated();
-            var isSigned = true;
+            var isSigned = _userService.IsLoggedIn;
             string remoteContent = "";
 
             if (isSigned)
@@ -117,6 +104,10 @@ public class DataService : IDataService
             }
 
             //TODO Compare remote and local content
+            if (remoteContent is not { })
+            {
+                return null;
+            }
 
             return JsonSerializer.Deserialize(remoteContent, type);
         }
