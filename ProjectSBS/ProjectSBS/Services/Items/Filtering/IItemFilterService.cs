@@ -2,6 +2,6 @@
 
 public interface IItemFilterService
 {
-    List<FilterCategory> Categories { get; }
-    FilterCategory SelectedCategory { get; set; }
+    List<Tag> Categories { get; }
+    Tag SelectedCategory { get; set; }
 }

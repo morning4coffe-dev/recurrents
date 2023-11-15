@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:not_win="http://uno.ui/not_win"
+      xmlns:not_skia="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       mc:Ignorable="d not_win"
       xmlns:utu="using:Uno.Toolkit.UI"
       xmlns:comp="using:ProjectSBS.Presentation.Components"
@@ -77,15 +78,15 @@
                         </VisualStateGroup>
 
                         <!--Navigation flexibility-->
-                        <VisualStateGroup>
+                        <not_skia:VisualStateGroup>
                             <VisualState>
                                 <VisualState.StateTriggers>
                                     <triggers:IsEqualStateTrigger Value="{Binding IsPaneOpen, ElementName=navigation, Mode=OneWay}"
                                                                   To="True" />
                                 </VisualState.StateTriggers>
                                 <VisualState.Setters>
-                                    <Setter Target="desktopPerson.Height"
-                                            Value="48" />
+                                    <Setter Target="desktopPerson.Visibility"
+                                            Value="Visible" />
                                 </VisualState.Setters>
                             </VisualState>
                             <VisualState>
@@ -94,34 +95,42 @@
                                                                   To="False" />
                                 </VisualState.StateTriggers>
                                 <VisualState.Setters>
-                                    <Setter Target="desktopPerson.Height"
-                                            Value="26" />
+                                    <Setter Target="desktopPerson.Visibility"
+                                            Value="Collapsed" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </not_skia:VisualStateGroup>
+
+                        <!--Network-->
+                        <VisualStateGroup>
+                            <VisualState>
+                                <VisualState.StateTriggers>
+                                    <triggers:NetworkConnectionStateTrigger ConnectionState="Connected" />
+                                </VisualState.StateTriggers>
+                                <VisualState.Setters>
+                                    <Setter Target="disconnectAlert.Visibility"
+                                            Value="Collapsed" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState>
+                                <VisualState.StateTriggers>
+                                    <triggers:NetworkConnectionStateTrigger ConnectionState="Disconnected" />
+                                </VisualState.StateTriggers>
+                                <VisualState.Setters>
+                                    <Setter Target="disconnectAlert.Visibility"
+                                            Value="Visible" />
                                 </VisualState.Setters>
                             </VisualState>
                         </VisualStateGroup>
 
-                        <!--User Login-->
-                        <!--<VisualStateGroup>
-                            <VisualState>
-                                <VisualState.StateTriggers>
-                                    <triggers:IsNullOrEmptyStateTrigger Value="{x:Bind ViewModel.User, Mode=OneWay, TargetNullValue=True}" />
-                                </VisualState.StateTriggers>
-                                <VisualState.Setters>
-                                    <Setter Target="userButton.Visibility"
-                                            Value="Collapsed" />
-                                    <Setter Target="notLoggedIn.Visibility"
-                                            Value="Visible" />
-                                </VisualState.Setters>
-                            </VisualState>
-                        </VisualStateGroup>-->
-
                     </VisualStateManager.VisualStateGroups>
 
+                    <!--TODO IsSettingsVisible="True"-->
                     <NavigationView x:Name="navigation"
                                     Grid.Row="1"
                                     IsBackButtonVisible="Collapsed"
                                     IsPaneToggleButtonVisible="True"
-                                    IsSettingsVisible="True"
+                                    IsSettingsVisible="False"
                                     IsPaneVisible="True"
                                     MenuItemsSource="{x:Bind ViewModel.DesktopCategories}"
                                     SelectedItem="{x:Bind ViewModel.SelectedCategory, Mode=TwoWay}"
@@ -140,7 +149,7 @@
                             </ResourceDictionary>
                         </NavigationView.Resources>
 
-                        <NavigationView.PaneCustomContent>
+                        <not_skia:NavigationView.PaneCustomContent>
                             <Grid>
                                 <Button x:Name="userButton"
                                         Background="Transparent"
@@ -151,14 +160,18 @@
                                         HorizontalContentAlignment="Left"
                                         Flyout="{StaticResource UserFlyout}">
 
-                                    <StackPanel Orientation="Horizontal"
+                                    <StackPanel x:Name="desktopPerson"
+                                                Orientation="Horizontal"
                                                 Spacing="12">
-                                        <PersonPicture x:Name="desktopPerson"
-                                                       ProfilePicture="{Binding User.Photo}"
-                                                       DisplayName="{Binding User.Name}"
+                                        <PersonPicture ProfilePicture="{x:Bind ViewModel.User.Photo}"
+                                                       DisplayName="{x:Bind ViewModel.User.Name}"
                                                        Height="48" />
-                                        <TextBlock  Text="{Binding User.Name}"
-                                                    VerticalAlignment="Center" />
+                                        <TextBlock Text="Click here to log in"
+                                                   Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
+                                                   VerticalAlignment="Center" />
+                                        <TextBlock Text="{x:Bind ViewModel.User.Name}"
+                                                   Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay, Converter={StaticResource TrueToVisibleConverter}}"
+                                                   VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Button>
 
@@ -173,7 +186,7 @@
                                         Content="You are not logged in" />
                                 <!--Command="{x:Bind ViewModel.}"-->
                             </Grid>
-                        </NavigationView.PaneCustomContent>
+                        </not_skia:NavigationView.PaneCustomContent>
 
                         <NavigationView.MenuItemTemplate>
                             <DataTemplate x:DataType="models:NavigationCategory">
@@ -185,7 +198,7 @@
                                 </NavigationViewItem>
                             </DataTemplate>
                         </NavigationView.MenuItemTemplate>
-                        
+
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*" />
@@ -196,6 +209,16 @@
                                    x:FieldModifier="public"
                                    not_win:CornerRadius="50,0,0,0"
                                    not_win:Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
+
+                            <InfoBar x:Name="disconnectAlert"
+                                     Title="You are offline"
+                                     Severity="Error"
+                                     IsClosable="False"
+                                     VerticalAlignment="Bottom"
+                                     HorizontalAlignment="Center"
+                                     Margin="0,0,0,12"
+                                     CornerRadius="28"
+                                     IsOpen="True" />
 
                             <utu:TabBar x:Name="navigationBar"
                                         ItemsSource="{x:Bind ViewModel.DesktopCategories}"

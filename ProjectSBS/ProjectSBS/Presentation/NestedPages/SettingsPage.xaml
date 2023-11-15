@@ -70,6 +70,11 @@
                                     Margin="6" />
                         </controls:SettingsCard>
 
+                        <controls:SettingsCard Description="You are not logged in! Your data will be stored locally and won't be synchronized. Click here to log in"
+                                               ActionIcon="{ui:FontIcon Glyph=&#xE8A7;}"
+                                               HeaderIcon="{ui:FontIcon Glyph=&#xE716;}"
+                                               IsClickEnabled="True" />
+
                         <controls:SettingsCard Header="{x:Bind ViewModel.TitleText}"
                                                Description="A SettingsCard can be made clickable and you can leverage the Command property or Click event.">
                             <ToggleSwitch />

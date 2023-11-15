@@ -5,10 +5,8 @@ namespace ProjectSBS.Presentation;
 
 public partial class MainViewModel : ViewModelBase
 {
-    //private readonly IAuthenticationService _authentication;
     private readonly IUserService _userService;
     private readonly IItemService _itemService;
-    private readonly IItemFilterService _filterService;
     private readonly INavigation _navigation;
 
     [ObservableProperty]
@@ -21,10 +19,17 @@ public partial class MainViewModel : ViewModelBase
     private Type? _pageType;
 
     [ObservableProperty]
-    private bool _isSignedIn;
+    public bool _isLoggedIn;
 
-    [ObservableProperty]
-    public NavigationCategory _selectedCategory;
+    public NavigationCategory SelectedCategory
+    {
+        set
+        {
+            _navigation.SelectedCategory = value;
+            OnPropertyChanged();
+        }
+        get => _navigation.SelectedCategory;
+    }
 
     public string? Title { get; }
 
@@ -39,11 +44,9 @@ public partial class MainViewModel : ViewModelBase
         IOptions<AppConfig> appInfo,
         IUserService userService,
         IItemService itemService,
-        IItemFilterService filterService,
         INavigation navigation)
     {
         _userService = userService;
-        _filterService = filterService;
         _navigation = navigation;
         _itemService = itemService;
 
@@ -58,8 +61,22 @@ public partial class MainViewModel : ViewModelBase
         Thread.CurrentThread.CurrentUICulture = ci;
         ApplicationLanguages.PrimaryLanguageOverride = "cs-CZ";
 
+        _userService.OnLoggedInChanged += (s, e) =>
+        {
+            User = e;
+            IsLoggedIn = e is null;
+        };
+
         GoToSettingsCommand = new RelayCommand(GoToSettings);
         LogoutCommand = new AsyncRelayCommand(DoLogout);
+    }
+    public async override void Load()
+    {
+        User = await _userService.GetUser();
+
+        await _itemService.InitializeAsync();
+
+        _navigation.NavigateNested(SelectedCategory.Page);
     }
 
     public void Navigate(NavigationViewSelectionChangedEventArgs args)
@@ -73,22 +90,12 @@ public partial class MainViewModel : ViewModelBase
             }
         }
 
-        _navigation.NavigateNested(SelectedCategory.Page);
-    }
-
-    public async override void Load()
-    {
-        await _itemService.InitializeAsync();
-
-        User = await _userService.GetUser();
-        IsSignedIn = User is { };
-
-        SelectedCategory = DesktopCategories.FirstOrDefault();
+        _navigation.NavigateNested((args.SelectedItem as NavigationCategory)?.Page ?? SelectedCategory.Page);
     }
 
     private void GoToSettings()
     {
-        _navigation.NavigateNested(typeof(SettingsPage)); 
+        _navigation.NavigateNested(typeof(SettingsPage));
     }
 
     public async Task DoLogout(CancellationToken token)

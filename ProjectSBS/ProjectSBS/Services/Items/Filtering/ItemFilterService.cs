@@ -1,21 +1,19 @@
-﻿namespace ProjectSBS.Services.Items.Filtering;
+﻿using ProjectSBS.Services.Items.Tags;
+
+namespace ProjectSBS.Services.Items.Filtering;
 
 public class ItemFilterService : IItemFilterService
 {
-    public List<FilterCategory> Categories { get; }
-    public FilterCategory SelectedCategory { get; set; }
+    public List<Tag> Categories { get; }
+    public Tag SelectedCategory { get; set; }
 
-    public ItemFilterService(IStringLocalizer localizer)
+    public ItemFilterService(IStringLocalizer localizer, ITagService tags)
     {
-        //TODO: Add proper Selectors for FilterCategories
         Categories = new()
         {
-            new(localizer["All"], "\uE80F"),
-            new(localizer["Home"], "\uE752"),
-            new(localizer["Overdue"], "\uEC92", i => i.Item?.Name is "Sample Item 1"),
-            new(localizer["Expensive"], "\uE717", i => i.Item?.Billing.BasePrice > 50),
+            new Tag(-1, localizer["All"], null)
         };
-
+        Categories.AddRange(tags.Tags);
         SelectedCategory = Categories[0];
     }
 }

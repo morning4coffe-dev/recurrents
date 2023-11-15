@@ -41,7 +41,6 @@ public class MsalUser : IUserService
             };
 
 
-        AuthenticationResult? result = null;
         var accounts = await _app.GetAccountsAsync();
 
         AuthenticationResult? result;

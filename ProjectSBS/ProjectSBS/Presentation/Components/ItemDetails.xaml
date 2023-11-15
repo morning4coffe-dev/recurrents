@@ -171,7 +171,7 @@
                                            Style="{StaticResource CaptionTextBlockStyle}" />
                             </Grid>
 
-                            <local:DetailsBox Header="for the price of">
+                            <local:DetailsBox HeaderText="for the price of">
                                 <local:DetailsBox.Content>
                                     <TextBlock TextWrapping="WrapWholeWords">
                                      <Run Text="{x:Bind ViewModel.SelectedItem.Item.Billing.BasePrice, Mode=OneWay}" />
@@ -180,7 +180,7 @@
                                 </local:DetailsBox.Content>
                             </local:DetailsBox>
 
-                            <local:DetailsBox Header="paid in total">
+                            <local:DetailsBox HeaderText="paid in total">
                                 <local:DetailsBox.Content>
                                     <TextBlock TextWrapping="WrapWholeWords">
                                        <Run Text="{x:Bind ViewModel.SelectedItem.TotalPrice, Mode=OneWay}" />
@@ -189,13 +189,13 @@
                                 </local:DetailsBox.Content>
                             </local:DetailsBox>
 
-                            <local:DetailsBox Header="billing period"
+                            <local:DetailsBox HeaderText="billing period"
                                               Text="{x:Bind ViewModel.SelectedItem.Item.Billing.PeriodType, Mode=OneWay}" />
 
-                            <local:DetailsBox Header="payment method"
+                            <local:DetailsBox HeaderText="payment method"
                                               Text="N/A" />
 
-                            <local:DetailsBox Header="next payments">
+                            <local:DetailsBox HeaderText="next payments">
                                 <local:DetailsBox.Content>
                                     <ScrollViewer HorizontalScrollMode="Auto"
                                                   HorizontalScrollBarVisibility="Hidden"
@@ -212,10 +212,10 @@
                                 </local:DetailsBox.Content>
                             </local:DetailsBox>
 
-                            <local:DetailsBox Header="paying since"
+                            <local:DetailsBox HeaderText="paying since"
                                               Text="{x:Bind ViewModel.SelectedItem.Item.Billing.InitialDate, Mode=OneWay}" /><!--, Converter={StaticResource DateOnlyToStringConverter}-->
 
-                            <local:DetailsBox Header="other">
+                            <local:DetailsBox HeaderText="other">
                                 <local:DetailsBox.Content>
                                     <StackPanel Orientation="Horizontal"
                                                 Spacing="12">
@@ -229,7 +229,7 @@
                                 </local:DetailsBox.Content>
                             </local:DetailsBox>
 
-                            <local:DetailsBox Header="description"
+                            <local:DetailsBox HeaderText="description"
                                               Visibility="{Binding SelectedItem.Item.Description, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}"
                                               Text="{x:Bind ViewModel.SelectedItem.Item.Description, Mode=OneWay}" />
                             <!--Visibility="{Binding SelectedItem.Item.Description, Mode=OneWay, Converter={StaticResource StringVisibilityConverter}, ConverterParameter=False}"-->

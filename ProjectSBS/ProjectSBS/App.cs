@@ -133,7 +133,7 @@ public class App : Application
         }
 
 #if __IOS__ || __ANDROID__
-    Uno.UI.FeatureConfiguration.Style.ConfigureNativeFrameNavigation();
+        Uno.UI.FeatureConfiguration.Style.ConfigureNativeFrameNavigation();
 #endif
 
         if (rootFrame.Content is not { })

@@ -7,14 +7,14 @@ public sealed partial class DetailsBox : UserControl
 		this.InitializeComponent();
 	}
 
-    public string Header
+    public string HeaderText
     {
-        get => (string)GetValue(HeaderProperty);
-        set => SetValue(HeaderProperty, value);
+        get => (string)GetValue(HeaderTextProperty);
+        set => SetValue(HeaderTextProperty, value);
     }
 
-    public static readonly DependencyProperty HeaderProperty = DependencyProperty.Register(
-      nameof(Header),
+    public static readonly DependencyProperty HeaderTextProperty = DependencyProperty.Register(
+      nameof(HeaderText),
       typeof(string),
       typeof(PageShell),
       new PropertyMetadata("")

@@ -49,8 +49,6 @@ public class ItemService : IItemService
     {
         ItemViewModel itemVM = new(item);
 
-        //logs ??= new();
-
         _items.Add(itemVM);
     }
 

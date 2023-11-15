@@ -62,27 +62,6 @@
                 </VisualState>
             </VisualStateGroup>
 
-            <VisualStateGroup>
-                <VisualState>
-                    <VisualState.StateTriggers>
-                        <triggers:NetworkConnectionStateTrigger ConnectionState="Connected" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="disconnectAlert.Visibility"
-                                Value="Collapsed" />
-                    </VisualState.Setters>
-                </VisualState>
-                <VisualState>
-                    <VisualState.StateTriggers>
-                        <triggers:NetworkConnectionStateTrigger ConnectionState="Disconnected" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="disconnectAlert.Visibility"
-                                Value="Visible" />
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
-
             <!--AdaptiveTriggers-->
             <VisualStateGroup>
                 <VisualState>
@@ -169,28 +148,21 @@
                                 </Button>
 
                                 <StackPanel Grid.Column="1">
-                                    <TextBlock Text="{x:Bind ViewModel.WelcomeMessage, Mode=OneTime}"
+                                    <TextBlock Text="{x:Bind ViewModel.WelcomeMessage}"
                                                TextWrapping="WrapWholeWords"
                                                VerticalAlignment="Center"
                                                HorizontalAlignment="Left"
                                                Opacity="0.6"
                                                Style="{StaticResource SubtitleTextBlockStyle}" />
 
-                                    <!--TODO Visibility change Doesnt work-->
                                     <TextBlock Text="{x:Bind ViewModel.User.Name, Mode=OneWay}"
-                                               Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay}"
+                                               Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay, Converter={StaticResource TrueToVisibleConverter}}"
                                                TextWrapping="WrapWholeWords"
                                                VerticalAlignment="Center"
                                                HorizontalAlignment="Left"
                                                Style="{StaticResource TitleTextBlockStyle}" />
                                 </StackPanel>
                             </Grid>
-
-                            <InfoBar x:Name="disconnectAlert"
-                                     Title="You are disconnected!"
-                                     Severity="Error"
-                                     IsClosable="False"
-                                     IsOpen="True" />
 
                             <comp:StatsBanner Visibility="{x:Bind ViewModel.IsStatsVisible, Mode=OneWay}" />
 
@@ -199,14 +171,13 @@
                                 <!--<Button Content="{toolkit:SymbolIcon Symbol=Find}"
                                         Height="40" />-->
 
-                                <ScrollViewer HorizontalScrollMode="Auto"
-                                              HorizontalScrollBarVisibility="Auto">
+                                <ScrollViewer>
                                     <controls:Segmented ItemsSource="{x:Bind ViewModel.FilterCategories}"
                                                         SelectedItem="{x:Bind ViewModel.SelectedFilter, Mode=TwoWay}"
                                                         Style="{StaticResource ButtonSegmentedStyle}">
                                         <controls:Segmented.ItemTemplate>
-                                            <DataTemplate x:DataType="models:FilterCategory">
-                                                <TextBlock Text="{x:Bind Text, Mode=OneWay}"
+                                            <DataTemplate x:DataType="models:Tag">
+                                                <TextBlock Text="{x:Bind Name, Mode=OneWay}"
                                                            Margin="4,-2" />
                                             </DataTemplate>
                                         </controls:Segmented.ItemTemplate>

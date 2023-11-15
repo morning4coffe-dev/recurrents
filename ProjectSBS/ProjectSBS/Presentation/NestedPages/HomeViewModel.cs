@@ -58,11 +58,11 @@ public partial class HomeViewModel : ViewModelBase
 
     public ObservableCollection<ItemViewModel> Items { get; } = new();
 
-    public List<FilterCategory> FilterCategories { get; }
+    public List<Tag> FilterCategories { get; }
 
-    public FilterCategory SelectedFilter
+    public Tag SelectedFilter
     {
-        get => _filterService.SelectedCategory;
+        get => _filterService.SelectedCategory == null ? _filterService.Categories[0] : _filterService.SelectedCategory;
         set
         {
             if (_filterService.SelectedCategory == value)
@@ -91,6 +91,7 @@ public partial class HomeViewModel : ViewModelBase
         IUserService userService,
         IItemService itemService,
         IItemFilterService filterService,
+        IStringLocalizer localizer,
         INavigation navigation)
     {
         _userService = userService;
@@ -111,15 +112,13 @@ public partial class HomeViewModel : ViewModelBase
             DisplayName = User?.Name;
         };
 
-        var welcome = DateTime.Now.Hour switch
+        WelcomeMessage = DateTime.Now.Hour switch
         {
-            >= 5 and < 12 => "Good Morning",
-            >= 12 and < 17 => "Good Afternoon",
-            >= 17 and < 20 => "Good Evening",
-            _ => "Good Night"
+            >= 5 and < 12 => localizer["GoodMorning"],
+            >= 12 and < 17 => localizer["GoodAfternoon"],
+            >= 17 and < 20 => localizer["GoodEvening"],
+            _ => localizer["GoodNight"]
         };
-
-        WelcomeMessage = welcome += ",";
     }
 
     public override async void Load()
@@ -191,8 +190,21 @@ public partial class HomeViewModel : ViewModelBase
 
     private IEnumerable<ItemViewModel> RefreshItems()
     {
-        var items = _itemService.GetItems(SelectedFilter.Selector)
+        //TODO Fails here when Filter item gets deselected
+
+        IEnumerable<ItemViewModel> items;
+
+        // Check for sentry value of -1 = None tag
+        if (SelectedFilter.Id == -1)
+        {
+            items = _itemService.GetItems()
             .OrderBy(i => i.PaymentDate);
+        }
+        else
+        {
+            items = _itemService.GetItems(item => item.Item.TagId == SelectedFilter.Id)
+            .OrderBy(i => i.PaymentDate);
+        }
 
         Items.Clear();
         //TODO Dont clear the whole thing, just removem update and add changed
