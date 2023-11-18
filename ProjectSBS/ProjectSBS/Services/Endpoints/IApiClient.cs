@@ -1,3 +1,5 @@
+using Refit;
+
 namespace ProjectSBS.Services.Endpoints;
 
 [Headers("Content-Type: application/json; charset=utf-8")]

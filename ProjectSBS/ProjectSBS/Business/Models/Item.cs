@@ -1,11 +1,11 @@
-﻿namespace ProjectSBS.Business.Models;
+namespace ProjectSBS.Business.Models;
 
 public partial record Item
 {
     public Item(
         string? id, 
         string name, 
-        BillingDetails billing = null, 
+        BillingDetails? billing = default, 
         int tagId = default, 
         bool isNotify = true,
         string description = "", 

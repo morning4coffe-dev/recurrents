@@ -1,4 +1,4 @@
-﻿namespace ProjectSBS.Business.Models;
+namespace ProjectSBS.Business.Models;
 
 public record BillingDetails
 {
@@ -14,14 +14,8 @@ public record BillingDetails
         RecurEvery = recurEvery;
     }
 
-    /// <summary>
-    /// Base price of the subscription in EUR. Multiply with the selected currency.
-    /// </summary>
     public decimal BasePrice { get; set; }
 
-    /// <summary>
-    /// The start Billing date of the subscription.
-    /// </summary>
     public DateOnly InitialDate { get; set; }
 
     public string CurrencyId { get; set; }

@@ -1,4 +1,4 @@
-<Page x:Class="ProjectSBS.Presentation.MainPage"
+﻿<Page x:Class="ProjectSBS.Presentation.MainPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:local="using:ProjectSBS.Presentation"
@@ -11,237 +11,229 @@
       xmlns:comp="using:ProjectSBS.Presentation.Components"
       xmlns:converters="using:CommunityToolkit.WinUI.Converters"
       xmlns:models="using:ProjectSBS.Business.Models"
-      xmlns:triggers="using:CommunityToolkit.WinUI.UI.Triggers"
       xmlns:toolkit="using:CommunityToolkit.WinUI">
 
-    <Page.Resources>
-        <converters:EmptyObjectToObjectConverter x:Key="EmptyToFalseConverter"
-                                                 EmptyValue="False"
-                                                 NotEmptyValue="True" />
+  <Page.Resources>
+    <MenuFlyout x:Key="UserFlyout">
+      <MenuFlyoutItem Text="Settings"
+                      Icon="{toolkit:FontIcon Glyph=&#xE713;}"
+                      AutomationProperties.AutomationId="SecondPageButton"
+                      Padding="100, 16"
+                      Command="{x:Bind ViewModel.GoToSettings}" />
 
-        <converters:BoolToObjectConverter x:Key="MobileToValueConverter"
-                                          TrueValue="0"
-                                          FalseValue="350" />
-
-        <MenuFlyout x:Key="UserFlyout">
-            <MenuFlyoutItem Text="Settings"
-                            Icon="{toolkit:FontIcon Glyph=&#xE713;}"
-                            AutomationProperties.AutomationId="SecondPageButton"
-                            Padding="100, 16"
-                            Command="{Binding GoToSettingsCommand}" />
-
-            <MenuFlyoutItem Text="Conversions"
+      <!--<MenuFlyoutItem Text="Conversions"
                             Icon="{toolkit:FontIcon Glyph=&#xE8C7;}"
                             Padding="100, 16"
-                            Command="{Binding}" />
+                            Command="{Binding}" />-->
 
-            <MenuFlyoutItem Text="Logout"
-                            Padding="100, 16"
-                            Command="{Binding LogoutCommand}">
-                <MenuFlyoutItem.Icon>
-                    <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                              Glyph="&#xF3B1;" />
-                </MenuFlyoutItem.Icon>
-            </MenuFlyoutItem>
-        </MenuFlyout>
+      <MenuFlyoutItem Text="Logout"
+                      Padding="100, 16"
+                      Command="{x:Bind ViewModel.Logout}">
+        <MenuFlyoutItem.Icon>
+          <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                    Glyph="&#xF3B1;" />
+        </MenuFlyoutItem.Icon>
+      </MenuFlyoutItem>
+    </MenuFlyout>
 
-    </Page.Resources>
+  </Page.Resources>
 
-    <comp:PageShell TitleBarTitle="{x:Bind ViewModel.Title}"
-                    DesktopTitleVisibility="Visible">
-        <comp:PageShell.ContentView>
+  <comp:PageShell TitleBarTitle="{x:Bind ViewModel.Title}"
+                  DesktopTitleVisibility="Visible">
+    <comp:PageShell.ContentView>
 
-            <UserControl>
-                <Grid>
-                    <VisualStateManager.VisualStateGroups>
+      <UserControl>
+        <Grid>
+          <VisualStateManager.VisualStateGroups>
 
-                        <!--AdaptiveTriggers-->
-                        <VisualStateGroup>
-                            <VisualState>
-                                <VisualState.StateTriggers>
-                                    <AdaptiveTrigger MinWindowWidth="0" />
-                                </VisualState.StateTriggers>
+            <!--AdaptiveTriggers-->
+            <VisualStateGroup>
+              <VisualState>
+                <VisualState.StateTriggers>
+                  <AdaptiveTrigger MinWindowWidth="0" />
+                </VisualState.StateTriggers>
 
-                                <VisualState.Setters>
-                                    <Setter Target="navigation.IsPaneToggleButtonVisible"
-                                            Value="False" />
-                                    <Setter Target="navigationBar.Visibility"
-                                            Value="Visible" />
-                                </VisualState.Setters>
-                            </VisualState>
+                <VisualState.Setters>
+                  <Setter Target="navigation.IsPaneToggleButtonVisible"
+                          Value="False" />
+                  <Setter Target="navigationBar.Visibility"
+                          Value="Visible" />
+                </VisualState.Setters>
+              </VisualState>
 
-                            <VisualState>
-                                <VisualState.StateTriggers>
-                                    <AdaptiveTrigger MinWindowWidth="640" />
-                                </VisualState.StateTriggers>
-                            </VisualState>
-                        </VisualStateGroup>
+              <VisualState>
+                <VisualState.StateTriggers>
+                  <AdaptiveTrigger MinWindowWidth="640" />
+                </VisualState.StateTriggers>
+              </VisualState>
+            </VisualStateGroup>
 
-                        <!--Navigation flexibility-->
-                        <not_skia:VisualStateGroup>
-                            <VisualState>
-                                <VisualState.StateTriggers>
-                                    <triggers:IsEqualStateTrigger Value="{Binding IsPaneOpen, ElementName=navigation, Mode=OneWay}"
-                                                                  To="True" />
-                                </VisualState.StateTriggers>
-                                <VisualState.Setters>
-                                    <Setter Target="desktopPerson.Visibility"
-                                            Value="Visible" />
-                                </VisualState.Setters>
-                            </VisualState>
-                            <VisualState>
-                                <VisualState.StateTriggers>
-                                    <triggers:IsEqualStateTrigger Value="{Binding IsPaneOpen, ElementName=navigation, Mode=OneWay}"
-                                                                  To="False" />
-                                </VisualState.StateTriggers>
-                                <VisualState.Setters>
-                                    <Setter Target="desktopPerson.Visibility"
-                                            Value="Collapsed" />
-                                </VisualState.Setters>
-                            </VisualState>
-                        </not_skia:VisualStateGroup>
+            <!--Navigation flexibility-->
+            <not_skia:VisualStateGroup>
+              <VisualState>
+                <VisualState.StateTriggers>
+                  <toolkit:IsEqualStateTrigger Value="{Binding IsPaneOpen, ElementName=navigation, Mode=OneWay}"
+                                               To="True" />
+                </VisualState.StateTriggers>
+                <VisualState.Setters>
+                  <Setter Target="desktopPerson.Visibility"
+                          Value="Visible" />
+                </VisualState.Setters>
+              </VisualState>
+              <VisualState>
+                <VisualState.StateTriggers>
+                  <toolkit:IsEqualStateTrigger Value="{Binding IsPaneOpen, ElementName=navigation, Mode=OneWay}"
+                                               To="False" />
+                </VisualState.StateTriggers>
+                <VisualState.Setters>
+                  <Setter Target="desktopPerson.Visibility"
+                          Value="Collapsed" />
+                </VisualState.Setters>
+              </VisualState>
+            </not_skia:VisualStateGroup>
 
-                        <!--Network-->
-                        <VisualStateGroup>
-                            <VisualState>
-                                <VisualState.StateTriggers>
-                                    <triggers:NetworkConnectionStateTrigger ConnectionState="Connected" />
-                                </VisualState.StateTriggers>
-                                <VisualState.Setters>
-                                    <Setter Target="disconnectAlert.Visibility"
-                                            Value="Collapsed" />
-                                </VisualState.Setters>
-                            </VisualState>
-                            <VisualState>
-                                <VisualState.StateTriggers>
-                                    <triggers:NetworkConnectionStateTrigger ConnectionState="Disconnected" />
-                                </VisualState.StateTriggers>
-                                <VisualState.Setters>
-                                    <Setter Target="disconnectAlert.Visibility"
-                                            Value="Visible" />
-                                </VisualState.Setters>
-                            </VisualState>
-                        </VisualStateGroup>
+            <!--Network-->
+            <VisualStateGroup>
+              <VisualState>
+                <VisualState.StateTriggers>
+                  <toolkit:NetworkConnectionStateTrigger ConnectionState="Connected" />
+                </VisualState.StateTriggers>
+                <VisualState.Setters>
+                  <Setter Target="disconnectAlert.Visibility"
+                          Value="Collapsed" />
+                </VisualState.Setters>
+              </VisualState>
+              <VisualState>
+                <VisualState.StateTriggers>
+                  <toolkit:NetworkConnectionStateTrigger ConnectionState="Disconnected" />
+                </VisualState.StateTriggers>
+                <VisualState.Setters>
+                  <Setter Target="disconnectAlert.Visibility"
+                          Value="Visible" />
+                </VisualState.Setters>
+              </VisualState>
+            </VisualStateGroup>
 
-                    </VisualStateManager.VisualStateGroups>
+          </VisualStateManager.VisualStateGroups>
 
-                    <!--TODO IsSettingsVisible="True"-->
-                    <NavigationView x:Name="navigation"
-                                    Grid.Row="1"
-                                    IsBackButtonVisible="Collapsed"
-                                    IsPaneToggleButtonVisible="True"
-                                    IsSettingsVisible="False"
-                                    IsPaneVisible="True"
-                                    MenuItemsSource="{x:Bind ViewModel.DesktopCategories}"
-                                    SelectedItem="{x:Bind ViewModel.SelectedCategory, Mode=TwoWay}"
-                                    SelectionChanged="OnNavigation_SelectionChanged">
+          <!--TODO IsSettingsVisible="True"-->
+          <NavigationView x:Name="navigation"
+                          Grid.Row="1"
+                          IsBackButtonVisible="Collapsed"
+                          IsPaneToggleButtonVisible="True"
+                          IsSettingsVisible="False"
+                          IsPaneVisible="True"
+                          MenuItemsSource="{x:Bind ViewModel.DesktopCategories}"
+                          SelectedItem="{x:Bind ViewModel.SelectedCategory, Mode=TwoWay}"
+                          SelectionChanged="OnNavigation_SelectionChanged">
 
-                        <NavigationView.Resources>
-                            <ResourceDictionary>
-                                <ResourceDictionary.ThemeDictionaries>
-                                    <ResourceDictionary x:Key="Default">
-                                        <SolidColorBrush x:Key="NavigationViewContentBackground"
-                                                         Color="Transparent" />
-                                        <SolidColorBrush x:Key="NavigationViewContentGridBorderBrush"
-                                                         Color="Transparent" />
-                                    </ResourceDictionary>
-                                </ResourceDictionary.ThemeDictionaries>
-                            </ResourceDictionary>
-                        </NavigationView.Resources>
+            <NavigationView.Resources>
+              <ResourceDictionary>
+                <ResourceDictionary.ThemeDictionaries>
+                  <ResourceDictionary x:Key="Default">
+                    <SolidColorBrush x:Key="NavigationViewContentBackground"
+                                     Color="Transparent" />
+                    <SolidColorBrush x:Key="NavigationViewContentGridBorderBrush"
+                                     Color="Transparent" />
+                  </ResourceDictionary>
+                </ResourceDictionary.ThemeDictionaries>
+              </ResourceDictionary>
+            </NavigationView.Resources>
 
-                        <not_skia:NavigationView.PaneCustomContent>
-                            <Grid>
-                                <Button x:Name="userButton"
-                                        Background="Transparent"
-                                        BorderThickness="0"
-                                        BorderBrush="Transparent"
-                                        HorizontalAlignment="Stretch"
-                                        Margin="4"
-                                        HorizontalContentAlignment="Left"
-                                        Flyout="{StaticResource UserFlyout}">
+            <not_skia:NavigationView.PaneCustomContent>
+              <Grid>
+                <Button x:Name="userButton"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        BorderBrush="Transparent"
+                        HorizontalAlignment="Stretch"
+                        Margin="4"
+                        Padding="12,8"
+                        HorizontalContentAlignment="Left"
+                        Flyout="{StaticResource UserFlyout}"
+                        Command="{x:Bind ViewModel.Login}">
 
-                                    <StackPanel x:Name="desktopPerson"
-                                                Orientation="Horizontal"
-                                                Spacing="12">
-                                        <PersonPicture ProfilePicture="{x:Bind ViewModel.User.Photo}"
-                                                       DisplayName="{x:Bind ViewModel.User.Name}"
-                                                       Height="48" />
-                                        <TextBlock Text="Click here to log in"
-                                                   Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
-                                                   VerticalAlignment="Center" />
-                                        <TextBlock Text="{x:Bind ViewModel.User.Name}"
-                                                   Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay, Converter={StaticResource TrueToVisibleConverter}}"
-                                                   VerticalAlignment="Center" />
-                                    </StackPanel>
-                                </Button>
+                  <StackPanel x:Name="desktopPerson"
+                              Orientation="Horizontal"
+                              Spacing="8">
+                    <PersonPicture ProfilePicture="{x:Bind ViewModel.User.Photo, Mode=OneWay}"
+                                   DisplayName="{x:Bind ViewModel.User.Name, Mode=OneWay}"
+                                   Height="48" />
+                    <TextBlock Text="Click to login"
+                               Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
+                               VerticalAlignment="Center" />
+                    <TextBlock Text="{x:Bind ViewModel.User.Name, Mode=OneWay}"
+                               Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay, Converter={StaticResource TrueToVisibleConverter}}"
+                               VerticalAlignment="Center" />
+                  </StackPanel>
+                </Button>
 
-                                <Button x:Name="notLoggedIn"
-                                        Visibility="Collapsed"
-                                        Background="Transparent"
-                                        BorderThickness="0"
-                                        BorderBrush="Transparent"
-                                        HorizontalAlignment="Stretch"
-                                        Margin="4"
-                                        Height="60"
-                                        Content="You are not logged in" />
-                                <!--Command="{x:Bind ViewModel.}"-->
-                            </Grid>
-                        </not_skia:NavigationView.PaneCustomContent>
+                <Button x:Name="notLoggedIn"
+                        Visibility="Collapsed"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        BorderBrush="Transparent"
+                        HorizontalAlignment="Stretch"
+                        Margin="4"
+                        Height="60"
+                        Content="You are not logged in" />
+              </Grid>
+            </not_skia:NavigationView.PaneCustomContent>
 
-                        <NavigationView.MenuItemTemplate>
-                            <DataTemplate x:DataType="models:NavigationCategory">
-                                <NavigationViewItem Content="{x:Bind Text}">
-                                    <!--ToolTip="{x:Bind Tooltip}">-->
-                                    <NavigationViewItem.Icon>
-                                        <FontIcon Glyph="{x:Bind Glyph}" />
-                                    </NavigationViewItem.Icon>
-                                </NavigationViewItem>
-                            </DataTemplate>
-                        </NavigationView.MenuItemTemplate>
+            <NavigationView.MenuItemTemplate>
+              <DataTemplate x:DataType="models:NavigationCategory">
+                <NavigationViewItem Content="{x:Bind Text}">
+                  <!--ToolTip="{x:Bind Tooltip}">-->
+                  <NavigationViewItem.Icon>
+                    <FontIcon Glyph="{x:Bind Glyph}" />
+                  </NavigationViewItem.Icon>
+                </NavigationViewItem>
+              </DataTemplate>
+            </NavigationView.MenuItemTemplate>
 
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
+            <Grid>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+              </Grid.RowDefinitions>
 
-                            <Frame x:Name="Frame"
-                                   x:FieldModifier="public"
-                                   not_win:CornerRadius="50,0,0,0"
-                                   not_win:Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
+              <Frame x:Name="Frame"
+                     x:FieldModifier="public"
+                     not_win:CornerRadius="50,0,0,0"
+                     not_win:Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
 
-                            <InfoBar x:Name="disconnectAlert"
-                                     Title="You are offline"
-                                     Severity="Error"
-                                     IsClosable="False"
-                                     VerticalAlignment="Bottom"
-                                     HorizontalAlignment="Center"
-                                     Margin="0,0,0,12"
-                                     CornerRadius="28"
-                                     IsOpen="True" />
+              <InfoBar x:Name="disconnectAlert"
+                       Title="You are offline"
+                       Severity="Error"
+                       IsClosable="False"
+                       VerticalAlignment="Bottom"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,12"
+                       CornerRadius="28"
+                       IsOpen="True" />
 
-                            <utu:TabBar x:Name="navigationBar"
-                                        ItemsSource="{x:Bind ViewModel.DesktopCategories}"
-                                        SelectedItem="{x:Bind ViewModel.SelectedCategory, Mode=TwoWay}"
-                                        Background="{ThemeResource CardBackgroundFillColorDefault}"
-                                        Visibility="Collapsed"
-                                        Grid.Row="1">
-                                <utu:TabBar.ItemTemplate>
-                                    <DataTemplate x:DataType="models:NavigationCategory">
-                                        <StackPanel Spacing="4">
-                                            <FontIcon Glyph="{x:Bind Glyph}"
-                                                      FontSize="19" />
-                                            <TextBlock Text="{x:Bind Text}" />
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </utu:TabBar.ItemTemplate>
-                            </utu:TabBar>
-                        </Grid>
-                    </NavigationView>
+              <utu:TabBar x:Name="navigationBar"
+                          ItemsSource="{x:Bind ViewModel.DesktopCategories}"
+                          SelectedItem="{x:Bind ViewModel.SelectedCategory, Mode=TwoWay}"
+                          Background="{ThemeResource CardBackgroundFillColorDefault}"
+                          Visibility="Collapsed"
+                          Grid.Row="1">
+                <utu:TabBar.ItemTemplate>
+                  <DataTemplate x:DataType="models:NavigationCategory">
+                    <StackPanel Spacing="4">
+                      <FontIcon Glyph="{x:Bind Glyph}"
+                                FontSize="19" />
+                      <TextBlock Text="{x:Bind Text}" />
+                    </StackPanel>
+                  </DataTemplate>
+                </utu:TabBar.ItemTemplate>
+              </utu:TabBar>
+            </Grid>
+          </NavigationView>
 
-                </Grid>
-            </UserControl>
+        </Grid>
+      </UserControl>
 
-        </comp:PageShell.ContentView>
-    </comp:PageShell>
+    </comp:PageShell.ContentView>
+  </comp:PageShell>
 </Page>

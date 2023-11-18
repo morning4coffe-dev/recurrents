@@ -5,11 +5,12 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:comp="using:ProjectSBS.Presentation.Components"
+      xmlns:viewModels="using:ProjectSBS.Business.ViewModels"
       xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
       xmlns:toolkit="using:CommunityToolkit.WinUI"
       xmlns:controls="using:CommunityToolkit.WinUI.Controls"
       xmlns:animations="using:CommunityToolkit.WinUI.Animations"
-      xmlns:triggers="using:CommunityToolkit.WinUI.UI.Triggers"
+      xmlns:triggers="using:CommunityToolkit.WinUI"
       xmlns:models="using:ProjectSBS.Business.Models"
       xmlns:utu="using:Uno.Toolkit.UI"
       xmlns:win="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -234,7 +235,7 @@
                                 </GridView.ItemsPanel>
 
                                 <GridView.ItemTemplate>
-                                    <DataTemplate x:DataType="comp:ItemViewModel">
+                                    <DataTemplate x:DataType="viewModels:ItemViewModel">
                                         <UserControl android:Height="100">
                                             <SwipeControl LeftItems="{StaticResource Left}"
                                                           RightItems="{StaticResource Right}"

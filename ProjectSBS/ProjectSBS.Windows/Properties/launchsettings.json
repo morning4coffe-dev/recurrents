@@ -1,10 +1,10 @@
 {
-  "profiles": {
-	"ProjectSBS.Windows (Package)": {
-	  "commandName": "MsixPackage"
-	},
-	"ProjectSBS.Windows (Unpackaged)": {
-	  "commandName": "Project"
+	"profiles": {
+		"ProjectSBS.Windows (Unpackaged)": {
+			"commandName": "Project"
+		},
+		"ProjectSBS.Windows (Package)": {
+			"commandName": "MsixPackage"
+		}
 	}
-  }
 }

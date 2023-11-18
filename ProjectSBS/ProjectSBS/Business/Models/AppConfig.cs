@@ -1,7 +1,6 @@
-namespace ProjectSBS.Business.Models
+namespace ProjectSBS.Business.Models;
+
+public record AppConfig
 {
-    public record AppConfig
-    {
-        public string? Environment { get; init; }
-    }
+    public string? Environment { get; init; }
 }

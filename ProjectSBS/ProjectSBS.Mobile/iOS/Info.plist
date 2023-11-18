@@ -30,7 +30,7 @@
 		<key>UIViewControllerBasedStatusBarAppearance</key>
 		<false/>
 		<key>XSAppIconAssets</key>
-		<string>Assets.xcassets/iconapp.appiconset</string>
+		<string>Assets.xcassets/icon.appiconset</string>
 		<key>UIApplicationSupportsIndirectInputEvents</key>
 		<true/>
 
@@ -39,9 +39,5 @@
 		<key>ITSAppUsesNonExemptEncryption</key>
 		<false/>
 		-->
-		<key>CFBundleURLSchemes</key>
-		<array>
-			<string>myprotocol</string>
-		</array>
 	</dict>
 </plist>

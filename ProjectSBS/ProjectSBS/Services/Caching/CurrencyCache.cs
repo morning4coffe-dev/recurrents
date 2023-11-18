@@ -80,6 +80,6 @@ public sealed class CurrencyCache : ICurrencyCache
     {
         var weatherText = _serializer.ToString(weather);
         var file = await GetFile(CreationCollisionOption.ReplaceExisting);
-        await File.WriteAllTextAsync(file.Path, weatherText);
+        await File.WriteAllTextAsync(file.Path, weatherText, token);
     }
 }

@@ -1,19 +1,15 @@
-﻿namespace ProjectSBS.Business.Models;
+namespace ProjectSBS.Business.Models;
 
-public class NavigationCategory
+public class NavigationCategory(
+    uint id,
+    string text,
+    string? glyph,
+    Type page,
+    CategoryVisibility visibility = CategoryVisibility.Both)
 {
-    public NavigationCategory(uint id, string text, string? glyph, Type page, CategoryVisibility visibility = CategoryVisibility.Both)
-    {
-        Id = id;
-        Text = text;
-        Glyph = glyph;
-        Page = page;
-        Visibility = visibility;
-    }
-
-    public uint Id { get; }
-    public string Text { get; }
-    public string? Glyph { get; }
-    public Type Page { get; }
-    public CategoryVisibility Visibility { get; }
+    public uint Id { get; } = id;
+    public string Text { get; } = text;
+    public string? Glyph { get; } = glyph;
+    public Type Page { get; } = page;
+    public CategoryVisibility Visibility { get; } = visibility;
 }

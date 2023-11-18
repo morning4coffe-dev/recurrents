@@ -9,105 +9,114 @@
       xmlns:ui="using:CommunityToolkit.WinUI"
       mc:Ignorable="d">
 
-    <comp:PageShell x:Name="pageShell"
-                    Title="{x:Bind ViewModel.TitleText}"
-                    MobileTitleVisibility="Visible">
-        <comp:PageShell.ContentView>
-            <UserControl>
-                <ScrollViewer>
-                    <VisualStateManager.VisualStateGroups>
-                        <!--AdaptiveTriggers-->
-                        <VisualStateGroup>
-                            <VisualState>
-                                <VisualState.StateTriggers>
-                                    <AdaptiveTrigger MinWindowWidth="0" />
-                                </VisualState.StateTriggers>
+  <comp:PageShell x:Name="pageShell"
+                  Title="{x:Bind ViewModel.TitleText}"
+                  MobileTitleVisibility="Visible">
+    <comp:PageShell.ContentView>
+      <UserControl>
+        <ScrollViewer>
+          <VisualStateManager.VisualStateGroups>
+            <!--AdaptiveTriggers-->
+            <VisualStateGroup>
+              <VisualState>
+                <VisualState.StateTriggers>
+                  <AdaptiveTrigger MinWindowWidth="0" />
+                </VisualState.StateTriggers>
 
-                                <VisualState.Setters>
-                                    <Setter Target="settingsHolder.Margin"
-                                            Value="8,8,8,0" />
-                                    <Setter Target="desktopHeader.Visibility"
-                                            Value="Collapsed" />
-                                </VisualState.Setters>
-                            </VisualState>
+                <VisualState.Setters>
+                  <Setter Target="settingsHolder.Margin"
+                          Value="8,8,8,0" />
+                  <Setter Target="desktopHeader.Visibility"
+                          Value="Collapsed" />
+                </VisualState.Setters>
+              </VisualState>
 
-                            <VisualState>
-                                <VisualState.StateTriggers>
-                                    <AdaptiveTrigger MinWindowWidth="640" />
-                                </VisualState.StateTriggers>
-                            </VisualState>
-                        </VisualStateGroup>
+              <VisualState>
+                <VisualState.StateTriggers>
+                  <AdaptiveTrigger MinWindowWidth="640" />
+                </VisualState.StateTriggers>
+              </VisualState>
+            </VisualStateGroup>
 
-                    </VisualStateManager.VisualStateGroups>
+          </VisualStateManager.VisualStateGroups>
 
-                    <StackPanel x:Name="settingsHolder"
-                                Spacing="4"
-                                Margin="48,48,48,0">
+          <StackPanel x:Name="settingsHolder"
+                      Spacing="4"
+                      Margin="48,48,48,0">
 
-                        <TextBlock x:Name="desktopHeader"
-                                   Visibility="Visible"
-                                   Text="{x:Bind ViewModel.TitleText}"
-                                   Margin="0,0,0,12"
-                                   Style="{StaticResource TitleTextBlockStyle}" />
+            <TextBlock x:Name="desktopHeader"
+                       Visibility="Visible"
+                       Text="{x:Bind ViewModel.TitleText}"
+                       Margin="0,0,0,12"
+                       Style="{StaticResource TitleTextBlockStyle}" />
 
-                        <controls:SettingsCard>
-                            <controls:SettingsCard.Header>
-                                <StackPanel Orientation="Horizontal"
-                                            Margin="6"
-                                            Spacing="20">
-                                    <PersonPicture ProfilePicture="{x:Bind ViewModel.User.Photo, Mode=OneWay}"
-                                                   DisplayName="{x:Bind ViewModel.User.Name, Mode=OneWay}"
-                                                   Width="80" />
-                                    <StackPanel VerticalAlignment="Center"
-                                                Spacing="6">
-                                        <TextBlock  Text="{x:Bind ViewModel.User.Name, Mode=OneWay}"
-                                                    Style="{StaticResource SubtitleTextBlockStyle}" />
-                                        <TextBlock  Text="{x:Bind ViewModel.User.Email, Mode=OneWay}" />
-                                    </StackPanel>
-                                </StackPanel>
-                            </controls:SettingsCard.Header>
-                            <Button Content="Sign out"
-                                    Margin="6" />
-                        </controls:SettingsCard>
+            <controls:SettingsCard Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay, Converter={StaticResource TrueToVisibleConverter}}">
+              <controls:SettingsCard.Header>
+                <StackPanel Orientation="Horizontal"
+                            Margin="6"
+                            Spacing="20">
+                  <PersonPicture ProfilePicture="{x:Bind ViewModel.User.Photo, Mode=OneWay}"
+                                 DisplayName="{x:Bind ViewModel.User.Name, Mode=OneWay}"
+                                 Width="80" />
+                  <StackPanel VerticalAlignment="Center"
+                              Spacing="6">
+                    <TextBlock  Text="{x:Bind ViewModel.User.Name, Mode=OneWay}"
+                                Style="{StaticResource SubtitleTextBlockStyle}" />
+                    <TextBlock  Text="{x:Bind ViewModel.User.Email, Mode=OneWay}" />
+                  </StackPanel>
+                </StackPanel>
+              </controls:SettingsCard.Header>
+              <Button Content="Logout"
+                      Margin="6"
+                      Command="{x:Bind ViewModel.Logout}" />
+            </controls:SettingsCard>
 
-                        <controls:SettingsCard Description="You are not logged in! Your data will be stored locally and won't be synchronized. Click here to log in"
-                                               ActionIcon="{ui:FontIcon Glyph=&#xE8A7;}"
-                                               HeaderIcon="{ui:FontIcon Glyph=&#xE716;}"
-                                               IsClickEnabled="True" />
+            <controls:SettingsCard Description="You are not logged in! Your data will be stored locally and won't be synchronized. Click here to log in"
+                                   Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
+                                   ActionIcon="{ui:FontIcon Glyph=&#xE8A7;}"
+                                   HeaderIcon="{ui:FontIcon Glyph=&#xE779;}"
+                                   IsClickEnabled="True"
+                                   Command="{x:Bind ViewModel.Login}" />
 
-                        <controls:SettingsCard Header="{x:Bind ViewModel.TitleText}"
-                                               Description="A SettingsCard can be made clickable and you can leverage the Command property or Click event.">
-                            <ToggleSwitch />
-                        </controls:SettingsCard>
+            <controls:SettingsCard Header="Default currency">
+              <ComboBox VerticalAlignment="Bottom"
+                        ItemsSource="{x:Bind ViewModel.Currencies, Mode=OneWay}"
+                        SelectedIndex="{x:Bind ViewModel.SelectedCurrency, Mode=TwoWay}"
+                        Grid.Column="1" />
+            </controls:SettingsCard>
 
-                        <controls:SettingsCard Header="Default currency">
-                            <ComboBox VerticalAlignment="Bottom"
-                                      ItemsSource="{x:Bind ViewModel.Currencies, Mode=OneWay}"
-                                      SelectedIndex="{x:Bind ViewModel.SelectedCurrency, Mode=TwoWay}"
-                                      Grid.Column="1" />
-                        </controls:SettingsCard>
+            <controls:SettingsCard Header="{x:Bind ViewModel.NotificationsText}"
+                                   ActionIcon="{ui:FontIcon Glyph=&#xE8A7;}"
+                                   HeaderIcon="{ui:FontIcon Glyph=&#xEA8F;}"
+                                   IsClickEnabled="True"
+                                   Command="{x:Bind ViewModel.LaunchNotificationSettingsCommand}" />
 
-                        <controls:SettingsCard Header="Currencies"
-                                               Description="You can customize the ActionIcon and ActionIconToolTip."
-                                               ActionIcon="{ui:FontIcon Glyph=&#xE8A7;}"
-                                               HeaderIcon="{ui:FontIcon Glyph=&#xE774;}"
-                                               IsClickEnabled="True" />
+            <TextBlock Text="{x:Bind ViewModel.AboutText}"
+                       Margin="0,12,0,0"
+                       Style="{StaticResource BaseTextBlockStyle}" />
 
-                        <controls:SettingsCard Header="Notifications"
-                                               Description="You can manage them in the system settings."
-                                               ActionIcon="{ui:FontIcon Glyph=&#xE8A7;}"
-                                               HeaderIcon="{ui:FontIcon Glyph=&#xE774;}"
-                                               IsClickEnabled="True" />
+            <controls:SettingsCard>
+              <controls:SettingsCard.Header>
+                <StackPanel Orientation="Horizontal"
+                            Margin="6"
+                            Spacing="20">
 
-                        <StackPanel>
-                            <TextBlock Text="About"
-                                       Margin="0,12,0,0"
-                                       Style="{StaticResource BaseTextBlockStyle}" />
-                        </StackPanel>
+                  <Image Source="ms-appx:///Assets/Icons/icon.png"
+                         Width="40" />
 
-                    </StackPanel>
-                </ScrollViewer>
-            </UserControl>
-        </comp:PageShell.ContentView>
-    </comp:PageShell>
+                  <StackPanel VerticalAlignment="Center"
+                              Spacing="4">
+                    <TextBlock Text="{x:Bind ViewModel.AppName}" />
+                    <TextBlock Text="{x:Bind ViewModel.AppVersion}"
+                               Opacity="0.75" />
+                  </StackPanel>
+                </StackPanel>
+              </controls:SettingsCard.Header>
+            </controls:SettingsCard>
+
+          </StackPanel>
+        </ScrollViewer>
+      </UserControl>
+    </comp:PageShell.ContentView>
+  </comp:PageShell>
 </Page>

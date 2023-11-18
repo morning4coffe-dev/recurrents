@@ -117,17 +117,26 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="About" xml:space="preserve">
+    <value>About</value>
+  </data>
   <data name="All" xml:space="preserve">
     <value>All</value>
   </data>
   <data name="ApplicationName" xml:space="preserve">
     <value>ProjectSBS-en</value>
   </data>
+  <data name="Archive" xml:space="preserve">
+    <value>Archive</value>
+  </data>
   <data name="Author" xml:space="preserve">
     <value>Morning4coffe</value>
   </data>
   <data name="ContinueWithoutLogin" xml:space="preserve">
     <value>Continue without Login</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Days</value>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Edit</value>
@@ -150,14 +159,20 @@
   <data name="Home" xml:space="preserve">
     <value>Home</value>
   </data>
+  <data name="InTime" xml:space="preserve">
+    <value>In</value>
+  </data>
+  <data name="Items" xml:space="preserve">
+    <value>Items</value>
+  </data>
   <data name="LoginWithMicrosoft" xml:space="preserve">
     <value>Login with Microsoft</value>
   </data>
   <data name="Music" xml:space="preserve">
     <value>Music</value>
   </data>
-  <data name="Overdue" xml:space="preserve">
-    <value>Overdue</value>
+  <data name="Notifications" xml:space="preserve">
+    <value>Notifications</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
     <value>Privacy Policy</value>
@@ -168,8 +183,17 @@
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
+  <data name="Stats" xml:space="preserve">
+    <value>Stats</value>
+  </data>
+  <data name="Tomorrow" xml:space="preserve">
+    <value>Tomorrow</value>
+  </data>
   <data name="TV" xml:space="preserve">
     <value>TV</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Version</value>
   </data>
   <data name="Video" xml:space="preserve">
     <value>Video</value>

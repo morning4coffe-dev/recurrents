@@ -1,4 +1,4 @@
-﻿using Microsoft.UI;
+using Microsoft.UI;
 using System.Reflection;
 using Windows.UI.ViewManagement;
 

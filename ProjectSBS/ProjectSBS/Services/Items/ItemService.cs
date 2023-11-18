@@ -1,4 +1,4 @@
-﻿using ProjectSBS.Services.Storage.Data;
+using ProjectSBS.Services.Storage.Data;
 
 namespace ProjectSBS.Services.Items;
 
@@ -40,7 +40,7 @@ public class ItemService : IItemService
 
     public void NewItem(Item item, List<ItemLog>? logs = null)
     {
-        AddNewItem(item, logs ?? new());
+        AddNewItem(item, logs ?? []);
 
         SaveDataAsync();
     }

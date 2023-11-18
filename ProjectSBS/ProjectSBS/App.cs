@@ -1,16 +1,6 @@
 using Microsoft.UI.Dispatching;
-using ProjectSBS.Services.Analytics;
-using ProjectSBS.Services.Interop;
-using ProjectSBS.Services.Items.Billing;
-using ProjectSBS.Services.Items.Tags;
-using ProjectSBS.Services.Notifications;
-using ProjectSBS.Services.Storage;
-using ProjectSBS.Services.Storage.Data;
 #if WINDOWS
-using Windows.Foundation.Collections;
-using CommunityToolkit.WinUI.Notifications;
 using Microsoft.UI.Composition.SystemBackdrops;
-using ProjectSBS.Infrastructure.Helpers;
 using WinUIEx;
 #endif
 
@@ -19,12 +9,12 @@ namespace ProjectSBS;
 public class App : Application
 {
     public Window? MainWindow { get; private set; }
-    private IHost? Host { get; set; }
+    protected IHost? Host { get; private set; }
 
     public static IServiceProvider? Services => (Current as App)!.Host?.Services;
     public static DispatcherQueue Dispatcher => (Current as App)!.MainWindow!.DispatcherQueue;
 
-    protected async override void OnLaunched(LaunchActivatedEventArgs args)
+    protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
         var builder = this.CreateBuilder(args)
             .Configure(host => host
@@ -47,16 +37,16 @@ public class App : Application
                     // Uno Platform namespace filter groups
                     // Uncomment individual methods to see more detailed logging
                     //// Generic Xaml events
-                    logBuilder.XamlLogLevel(LogLevel.Debug);
-                    //// Layouter specific messages
+                    //logBuilder.XamlLogLevel(LogLevel.Debug);
+                    //// Layout specific messages
                     //logBuilder.XamlLayoutLogLevel(LogLevel.Debug);
                     //// Storage messages
                     //logBuilder.StorageLogLevel(LogLevel.Debug);
                     //// Binding related messages
-                    logBuilder.XamlBindingLogLevel(LogLevel.Debug);
+                    //logBuilder.XamlBindingLogLevel(LogLevel.Debug);
                     //// Binder memory references tracking
                     //logBuilder.BinderMemoryReferenceLogLevel(LogLevel.Debug);
-                    //// RemoteControl and HotReload related
+                    //// DevServer and HotReload related
                     //logBuilder.HotReloadCoreLogLevel(LogLevel.Information);
                     //// Debug JS interop
                     //logBuilder.WebAssemblyLogLevel(LogLevel.Debug);
@@ -73,13 +63,13 @@ public class App : Application
                 .UseSerialization((context, services) => services
                     .AddContentSerializer(context))
                 .UseHttp((context, services) => services
-                        // Register HttpClient
+                    // Register HttpClient
 #if DEBUG
-                        // DelegatingHandler will be automatically injected into Refit Client
-                        .AddTransient<DelegatingHandler, DebugHttpHandler>()
+                    // DelegatingHandler will be automatically injected into Refit Client
+                    .AddTransient<DelegatingHandler, DebugHttpHandler>()
 #endif
-                        .AddSingleton<ICurrencyCache, CurrencyCache>()
-                        .AddRefitClient<IApiClient>(context))
+                    .AddSingleton<ICurrencyCache, CurrencyCache>()
+                    .AddRefitClient<IApiClient>(context))
                 .ConfigureServices((context, services) =>
                 {
                     services.AddSingleton<IStorageService, StorageService>();
@@ -113,8 +103,35 @@ public class App : Application
 #endif
                 })
             );
-
         MainWindow = builder.Window;
+
+#if DEBUG
+        MainWindow.EnableHotReload();
+#endif
+#if __IOS__ || __ANDROID__
+        Uno.UI.FeatureConfiguration.Style.ConfigureNativeFrameNavigation();
+#endif
+
+#if WINDOWS
+        var manager = WindowManager.Get(builder.Window);
+
+        manager.MinWidth = 500;
+        manager.MinHeight = 500;
+
+        var size = builder.Window.AppWindow.Size;
+
+        manager.PersistenceId = "ProjectSBSMainWindow";
+        builder.Window.SetWindowSize(size.Width / 1.55, size.Height / 1.1);
+        builder.Window.CenterOnScreen();
+        builder.Window.Title = "Project SBS";
+        //builder.Window.SetIcon();
+
+        if (MicaController.IsSupported())
+        {
+            //when implemented in Uno, this can be used on every platform
+            MainWindow.SystemBackdrop = new MicaBackdrop() { Kind = MicaKind.Base };
+        }
+#endif
 
         Host = builder.Build();
 
@@ -132,70 +149,14 @@ public class App : Application
             MainWindow.Content = rootFrame;
         }
 
-#if __IOS__ || __ANDROID__
-        Uno.UI.FeatureConfiguration.Style.ConfigureNativeFrameNavigation();
-#endif
-
-        if (rootFrame.Content is not { })
+        if (rootFrame.Content == null)
         {
             // When the navigation stack isn't restored navigate to the first page,
             // configuring the new page by passing required information as a navigation
             // parameter
             rootFrame.Navigate(typeof(LoginPage), args.Arguments);
         }
-
-
-#if WINDOWS
-        var manager = WindowManager.Get(builder.Window);
-
-        manager.MinWidth = 500;
-        manager.MinHeight = 500;
-
-        var size = builder.Window.AppWindow.Size;
-
-        builder.Window.SetWindowSize(size.Width / 1.55, size.Height / 1.1);
-        builder.Window.CenterOnScreen();
-        builder.Window.Title = "Project SBS";
-        //builder.Window.SetIcon();
-
-        ToastNotificationManagerCompat.OnActivated += toastArgs =>
-        {
-            ToastArguments args = ToastArguments.Parse(toastArgs.Argument);
-            ValueSet userInput = toastArgs.UserInput;
-
-            //TODO work with args
-            if (args.TryGetValue("action", out var action))
-            {
-                if (action == "openItem")
-                {
-                    var itemId = args["itemId"];
-
-                    if (itemId != null)
-                    {
-                        var shell = builder.Window.Content;
-
-                        if (shell != null)
-                        {
-                            //shell.NavigateToItem(itemId);
-                        }
-                    }
-                }
-            }
-        };
-#endif
-
         // Ensure the current window is active
         MainWindow.Activate();
-
-#if WINDOWS
-        if (MicaController.IsSupported())
-        {
-            MainWindow.SystemBackdrop = new MicaBackdrop() { Kind = MicaKind.Base };
-        }
-
-        Win32.SetTitleBackgroundTransparent(MainWindow);
-
-        //TODO Log MicaController.IsSupported()
-#endif
     }
 }

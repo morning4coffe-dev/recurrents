@@ -1,4 +1,4 @@
-﻿namespace ProjectSBS.Presentation;
+namespace ProjectSBS.Presentation;
 
 public sealed partial class MainPage : Page
 {
