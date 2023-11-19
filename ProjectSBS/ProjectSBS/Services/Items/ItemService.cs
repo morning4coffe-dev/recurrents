@@ -6,7 +6,7 @@ public class ItemService : IItemService
 {
     private readonly IDataService _dataService;
 
-    private readonly List<ItemViewModel> _items = new();
+    private readonly List<ItemViewModel> _items = [];
 
     public event EventHandler<IEnumerable<ItemViewModel>>? OnItemsInitialized;
     public event EventHandler<IEnumerable<ItemViewModel>>? OnItemsChanged;
@@ -59,8 +59,6 @@ public class ItemService : IItemService
 
         SaveDataAsync();
         item.Updated();
-
-        OnItemsChanged?.Invoke(this, _items);
     }
 
     public void DeleteItem(ItemViewModel item)
@@ -74,11 +72,13 @@ public class ItemService : IItemService
     {
         var itemsList = _items
             .Select(itemViewModel => itemViewModel.Item)
-            .ToList() ?? new();
+            .ToList() ?? [];
 
         if (itemsList is { })
         {
             _dataService.SaveDataAsync(itemsList);
         }
+
+        OnItemsChanged?.Invoke(this, _items);
     }
 }

@@ -19,368 +19,368 @@
       xmlns:android="http://uno.ui/android"
       mc:Ignorable="d not_win android">
 
-    <Page.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="ms-appx:///CommunityToolkit.WinUI.Controls.Segmented/Segmented/Segmented.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Page.Resources>
+  <Page.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="ms-appx:///CommunityToolkit.WinUI.Controls.Segmented/Segmented/Segmented.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Page.Resources>
 
-    <Grid>
+  <Grid>
 
-        <VisualStateManager.VisualStateGroups>
+    <VisualStateManager.VisualStateGroups>
 
-            <!--Pane Opening DetailsPane-->
-            <VisualStateGroup>
-                <VisualState>
-                    <VisualState.StateTriggers>
-                        <triggers:IsEqualStateTrigger Value="{x:Bind ViewModel.IsPaneOpen, Mode=OneWay}"
-                                                      To="False" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="pane2Holder.Visibility"
-                                Value="Collapsed" />
-                        <Setter Target="RootPanel.PanePriority"
-                                Value="Pane1" />
-                        <Setter Target="RootPanel.Pane2Length"
-                                Value="0" />
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
+      <!--Pane Opening DetailsPane-->
+      <VisualStateGroup>
+        <VisualState>
+          <VisualState.StateTriggers>
+            <triggers:IsEqualStateTrigger Value="{x:Bind ViewModel.IsPaneOpen, Mode=OneWay}"
+                                          To="False" />
+          </VisualState.StateTriggers>
+          <VisualState.Setters>
+            <Setter Target="pane2Holder.Visibility"
+                    Value="Collapsed" />
+            <Setter Target="RootPanel.PanePriority"
+                    Value="Pane1" />
+            <Setter Target="RootPanel.Pane2Length"
+                    Value="0" />
+          </VisualState.Setters>
+        </VisualState>
+      </VisualStateGroup>
 
-            <!--Pane1 Empty Image-->
-            <VisualStateGroup>
-                <VisualState />
-                <VisualState>
-                    <VisualState.StateTriggers>
-                        <triggers:IsNullOrEmptyStateTrigger Value="{x:Bind ViewModel.Items, Mode=OneWay}" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="itemsEmptyImage.Visibility"
-                                Value="Visible" />
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
+      <!--Pane1 Empty Image-->
+      <VisualStateGroup>
+        <VisualState />
+        <VisualState>
+          <VisualState.StateTriggers>
+            <triggers:IsNullOrEmptyStateTrigger Value="{x:Bind ViewModel.Items, Mode=OneWay}" />
+          </VisualState.StateTriggers>
+          <VisualState.Setters>
+            <Setter Target="itemsEmptyImage.Visibility"
+                    Value="Visible" />
+          </VisualState.Setters>
+        </VisualState>
+      </VisualStateGroup>
 
-            <!--AdaptiveTriggers-->
-            <VisualStateGroup>
-                <VisualState>
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="0" />
-                    </VisualState.StateTriggers>
+      <!--AdaptiveTriggers-->
+      <VisualStateGroup>
+        <VisualState>
+          <VisualState.StateTriggers>
+            <AdaptiveTrigger MinWindowWidth="0" />
+          </VisualState.StateTriggers>
 
-                    <VisualState.Setters>
-                        <Setter Target="mobileAddButton.Visibility"
-                                Value="Visible" />
-                        <Setter Target="mobileHeader.Visibility"
-                                Value="Visible" />
-                        <Setter Target="desktopHeader.Visibility"
-                                Value="Collapsed" />
-                        <Setter Target="contentHolder.Margin"
-                                Value="8,8,8,0" />
-                        <win:Setter Target="background.Background"
-                                    Value="Transparent" />
-                        <not_win:Setter Target="background.Background"
-                                        Value="{ThemeResource ApplicationBackground}" />
-                    </VisualState.Setters>
-                </VisualState>
+          <VisualState.Setters>
+            <Setter Target="mobileAddButton.Visibility"
+                    Value="Visible" />
+            <Setter Target="mobileHeader.Visibility"
+                    Value="Visible" />
+            <Setter Target="desktopHeader.Visibility"
+                    Value="Collapsed" />
+            <Setter Target="contentHolder.Margin"
+                    Value="8,8,8,0" />
+            <win:Setter Target="background.Background"
+                        Value="Transparent" />
+            <not_win:Setter Target="background.Background"
+                            Value="{ThemeResource ApplicationBackground}" />
+          </VisualState.Setters>
+        </VisualState>
 
-                <VisualState>
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="640" />
-                    </VisualState.StateTriggers>
-                </VisualState>
-            </VisualStateGroup>
+        <VisualState>
+          <VisualState.StateTriggers>
+            <AdaptiveTrigger MinWindowWidth="640" />
+          </VisualState.StateTriggers>
+        </VisualState>
+      </VisualStateGroup>
 
-        </VisualStateManager.VisualStateGroups>
+    </VisualStateManager.VisualStateGroups>
 
-        <muxc:TwoPaneView x:Name="RootPanel"
-                          x:FieldModifier="public"
-                          Pane1Length="*"
-                          Pane2Length="350"
-                          PanePriority="Pane2"
-                          TallModeConfiguration="SinglePane"
-                          WideModeConfiguration="LeftRight">
+    <muxc:TwoPaneView x:Name="RootPanel"
+                      x:FieldModifier="public"
+                      Pane1Length="*"
+                      Pane2Length="350"
+                      PanePriority="Pane2"
+                      TallModeConfiguration="SinglePane"
+                      WideModeConfiguration="LeftRight">
 
-            <muxc:TwoPaneView.Pane1>
+      <muxc:TwoPaneView.Pane1>
 
-                <Grid x:Name="background"
-                      CornerRadius="8,0,0,0"
-                      Background="{ThemeResource LayerFillColorDefaultBrush}">
+        <Grid x:Name="background"
+              CornerRadius="8,0,0,0"
+              Background="{ThemeResource LayerFillColorDefaultBrush}">
 
-                    <ScrollViewer>
-                        <!--<RefreshContainer x:Name="contentHolder"
+          <ScrollViewer>
+            <!--<RefreshContainer x:Name="contentHolder"
                                           Margin="48,48,48,0"
                                           RefreshRequested="RefreshContainer_RefreshRequested">-->
 
-                        <StackPanel x:Name="contentHolder"
-                                    Margin="48,48,48,0"
-                                    Spacing="8">
+            <StackPanel x:Name="contentHolder"
+                        Margin="48,48,48,0"
+                        Spacing="8">
 
-                            <StackPanel x:Name="desktopHeader"
-                                        Visibility="Visible"
-                                        Spacing="16">
-                                <TextBlock Text="{x:Bind ViewModel.SelectedCategory.Text}"
-                                           Style="{StaticResource TitleTextBlockStyle}" />
+              <StackPanel x:Name="desktopHeader"
+                          Visibility="Visible"
+                          Spacing="16">
+                <TextBlock Text="{x:Bind ViewModel.SelectedCategory.Text}"
+                           Style="{StaticResource TitleTextBlockStyle}" />
 
-                                <Button Visibility="Visible"
-                                        Content="New Item"
-                                        Command="{x:Bind ViewModel.AddNewCommand}" />
-                            </StackPanel>
+                <Button Visibility="Visible"
+                        Content="New Item"
+                        Command="{x:Bind ViewModel.AddNewCommand}" />
+              </StackPanel>
 
-                            <Grid x:Name="mobileHeader"
-                                  Visibility="Collapsed"
-                                  ColumnSpacing="16">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition />
-                                </Grid.ColumnDefinitions>
+              <Grid x:Name="mobileHeader"
+                    Visibility="Collapsed"
+                    ColumnSpacing="16">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition />
+                </Grid.ColumnDefinitions>
 
-                                <Button CornerRadius="30"
-                                        Padding="0"
-                                        BorderThickness="0"
-                                        Background="Transparent"
-                                        Command="{x:Bind ViewModel.OpenSettingsCommand}">
-                                    <PersonPicture ProfilePicture="{x:Bind ViewModel.User.Photo, Mode=OneWay}"
-                                                   DisplayName="{x:Bind ViewModel.User.Name, Mode=OneWay}"
-                                                   BorderThickness="0"
-                                                   Width="65" />
-                                </Button>
+                <Button CornerRadius="30"
+                        Padding="0"
+                        BorderThickness="0"
+                        Background="Transparent"
+                        Command="{x:Bind ViewModel.OpenSettingsCommand}">
+                  <PersonPicture ProfilePicture="{x:Bind ViewModel.User.Photo, Mode=OneWay}"
+                                 DisplayName="{x:Bind ViewModel.User.Name, Mode=OneWay}"
+                                 BorderThickness="0"
+                                 Width="65" />
+                </Button>
 
-                                <StackPanel Grid.Column="1">
-                                    <TextBlock Text="{x:Bind ViewModel.WelcomeMessage}"
-                                               TextWrapping="WrapWholeWords"
-                                               VerticalAlignment="Center"
-                                               HorizontalAlignment="Left"
-                                               Opacity="0.6"
-                                               Style="{StaticResource SubtitleTextBlockStyle}" />
+                <StackPanel Grid.Column="1">
+                  <TextBlock Text="{x:Bind ViewModel.WelcomeMessage}"
+                             TextWrapping="WrapWholeWords"
+                             VerticalAlignment="Center"
+                             HorizontalAlignment="Left"
+                             Opacity="0.6"
+                             Style="{StaticResource SubtitleTextBlockStyle}" />
 
-                                    <TextBlock Text="{x:Bind ViewModel.User.Name, Mode=OneWay}"
-                                               Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay, Converter={StaticResource TrueToVisibleConverter}}"
-                                               TextWrapping="WrapWholeWords"
-                                               VerticalAlignment="Center"
-                                               HorizontalAlignment="Left"
-                                               Style="{StaticResource TitleTextBlockStyle}" />
-                                </StackPanel>
-                            </Grid>
+                  <TextBlock Text="{x:Bind ViewModel.User.Name, Mode=OneWay}"
+                             Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay, Converter={StaticResource TrueToVisibleConverter}}"
+                             TextWrapping="WrapWholeWords"
+                             VerticalAlignment="Center"
+                             HorizontalAlignment="Left"
+                             Style="{StaticResource TitleTextBlockStyle}" />
+                </StackPanel>
+              </Grid>
 
-                            <comp:StatsBanner Visibility="{x:Bind ViewModel.IsStatsVisible, Mode=OneWay}" />
+              <comp:StatsBanner Visibility="{x:Bind ViewModel.IsStatsVisible, Mode=OneWay}" />
 
-                            <StackPanel Orientation="Horizontal"
-                                        Spacing="8">
-                                <!--<Button Content="{toolkit:SymbolIcon Symbol=Find}"
+              <StackPanel Orientation="Horizontal"
+                          Spacing="8">
+                <!--<Button Content="{toolkit:SymbolIcon Symbol=Find}"
                                         Height="40" />-->
 
-                                <ScrollViewer>
-                                    <controls:Segmented ItemsSource="{x:Bind ViewModel.FilterCategories}"
-                                                        SelectedItem="{x:Bind ViewModel.SelectedFilter, Mode=TwoWay}"
-                                                        Style="{StaticResource ButtonSegmentedStyle}">
-                                        <controls:Segmented.ItemTemplate>
-                                            <DataTemplate x:DataType="models:Tag">
-                                                <TextBlock Text="{x:Bind Name, Mode=OneWay}"
-                                                           Margin="4,-2" />
-                                            </DataTemplate>
-                                        </controls:Segmented.ItemTemplate>
+                <ScrollViewer>
+                  <controls:Segmented ItemsSource="{x:Bind ViewModel.FilterCategories}"
+                                      SelectedItem="{x:Bind ViewModel.SelectedFilter, Mode=TwoWay}"
+                                      Style="{StaticResource ButtonSegmentedStyle}">
+                    <controls:Segmented.ItemTemplate>
+                      <DataTemplate x:DataType="models:Tag">
+                        <TextBlock Text="{x:Bind Name, Mode=OneWay}"
+                                   Margin="4,-2" />
+                      </DataTemplate>
+                    </controls:Segmented.ItemTemplate>
 
-                                        <controls:Segmented.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <StackPanel Spacing="8"
-                                                            Orientation="Horizontal" />
-                                            </ItemsPanelTemplate>
-                                        </controls:Segmented.ItemsPanel>
+                    <controls:Segmented.ItemsPanel>
+                      <ItemsPanelTemplate>
+                        <StackPanel Spacing="8"
+                                    Orientation="Horizontal" />
+                      </ItemsPanelTemplate>
+                    </controls:Segmented.ItemsPanel>
 
-                                    </controls:Segmented>
-                                </ScrollViewer>
+                  </controls:Segmented>
+                </ScrollViewer>
+              </StackPanel>
+
+              <GridView ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                        ItemsSource="{x:Bind ViewModel.Items, Mode=OneWay}"
+                        SelectedItem="{x:Bind ViewModel.SelectedItem, Mode=TwoWay}">
+
+                <GridView.Resources>
+                  <FontIconSource x:Key="EditIcon"
+                                  Glyph="&#xE70F;" />
+                  <FontIconSource x:Key="ArchiveIcon"
+                                  Glyph="&#xE7B8;" />
+                  <FontIconSource x:Key="DeleteIcon"
+                                  Glyph="&#xE74D;" />
+
+                  <SwipeItems x:Key="Left"
+                              Mode="Reveal">
+                    <SwipeItem Text="Edit"
+                               Background="Transparent"
+                               IconSource="{StaticResource EditIcon}"
+                               Invoked="EditItem_Invoked" />
+                    <SwipeItem Text="Archive"
+                               Background="Transparent"
+                               IconSource="{StaticResource ArchiveIcon}"
+                               Invoked="ArchiveItem_Invoked" />
+                  </SwipeItems>
+                  <SwipeItems x:Key="Right"
+                              Mode="Execute">
+                    <SwipeItem Text="Delete"
+                               IconSource="{StaticResource DeleteIcon}"
+                               Foreground="{StaticResource TextOnAccentFillColorPrimaryBrush}"
+                               Background="{StaticResource SystemAccentColor}"
+                               Invoked="DeleteItem_Invoked" />
+                  </SwipeItems>
+                </GridView.Resources>
+
+                <GridView.ItemsPanel>
+                  <ItemsPanelTemplate>
+                    <StackPanel Orientation="Vertical"
+                                Spacing="4" />
+                  </ItemsPanelTemplate>
+                </GridView.ItemsPanel>
+
+                <GridView.ItemTemplate>
+                  <DataTemplate x:DataType="viewModels:ItemViewModel">
+                    <UserControl android:Height="100">
+                      <SwipeControl LeftItems="{StaticResource Left}"
+                                    RightItems="{StaticResource Right}"
+                                    Background="Transparent"
+                                    not_win:CornerRadius="20"
+                                    win:CornerRadius="8">
+
+                        <Border not_win:Background="{ThemeResource CardBackgroundFillColorDefault}"
+                                not_win:CornerRadius="20">
+
+                          <Grid Padding="20">
+                            <Grid.ColumnDefinitions>
+                              <ColumnDefinition Width="*" />
+                              <ColumnDefinition Width="*" />
+                              <!--<ColumnDefinition Width="60" />-->
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Spacing="12">
+                              <TextBlock Text="{x:Bind Item.Name, Mode=OneWay}"
+                                         Style="{StaticResource SubtitleTextBlockStyle}" />
+                              <TextBlock Text="{x:Bind PaymentDate, Mode=OneWay}" />
                             </StackPanel>
 
-                            <GridView ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                                      ItemsSource="{x:Bind ViewModel.Items, Mode=OneWay}"
-                                      SelectedItem="{x:Bind ViewModel.SelectedItem, Mode=TwoWay}">
-
-                                <GridView.Resources>
-                                    <FontIconSource x:Key="EditIcon"
-                                                    Glyph="&#xE70F;" />
-                                    <FontIconSource x:Key="ArchiveIcon"
-                                                    Glyph="&#xE7B8;" />
-                                    <FontIconSource x:Key="DeleteIcon"
-                                                    Glyph="&#xE74D;" />
-
-                                    <SwipeItems x:Key="Left"
-                                                Mode="Reveal">
-                                        <SwipeItem Text="Edit"
-                                                   Background="Transparent"
-                                                   IconSource="{StaticResource EditIcon}"
-                                                   Invoked="EditItem_Invoked" />
-                                        <SwipeItem Text="Archive"
-                                                   Background="Transparent"
-                                                   IconSource="{StaticResource ArchiveIcon}"
-                                                   Invoked="ArchiveItem_Invoked" />
-                                    </SwipeItems>
-                                    <SwipeItems x:Key="Right"
-                                                Mode="Execute">
-                                        <SwipeItem Text="Delete"
-                                                   IconSource="{StaticResource DeleteIcon}"
-                                                   Foreground="{StaticResource TextOnAccentFillColorPrimaryBrush}"
-                                                   Background="{StaticResource SystemAccentColor}"
-                                                   Invoked="DeleteItem_Invoked" />
-                                    </SwipeItems>
-                                </GridView.Resources>
-
-                                <GridView.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Vertical"
-                                                    Spacing="4" />
-                                    </ItemsPanelTemplate>
-                                </GridView.ItemsPanel>
-
-                                <GridView.ItemTemplate>
-                                    <DataTemplate x:DataType="viewModels:ItemViewModel">
-                                        <UserControl android:Height="100">
-                                            <SwipeControl LeftItems="{StaticResource Left}"
-                                                          RightItems="{StaticResource Right}"
-                                                          Background="Transparent"
-                                                          not_win:CornerRadius="20"
-                                                          win:CornerRadius="8">
-
-                                                <Border not_win:Background="{ThemeResource CardBackgroundFillColorDefault}"
-                                                        not_win:CornerRadius="20">
-
-                                                    <Grid Padding="20">
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="*" />
-                                                            <ColumnDefinition Width="*" />
-                                                            <!--<ColumnDefinition Width="60" />-->
-                                                        </Grid.ColumnDefinitions>
-
-                                                        <StackPanel Spacing="12">
-                                                            <TextBlock Text="{x:Bind Item.Name, Mode=OneWay}"
-                                                                       Style="{StaticResource SubtitleTextBlockStyle}" />
-                                                            <TextBlock Text="{x:Bind PaymentDate, Mode=OneWay}" />
-                                                        </StackPanel>
-
-                                                        <StackPanel Grid.Column="1"
-                                                                    Spacing="12"
-                                                                    HorizontalAlignment="Right"
-                                                                    VerticalAlignment="Center">
-                                                            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}"
-                                                                       HorizontalAlignment="Right">
-                                        
-                                                            <Run Text="{x:Bind Item.Billing.BasePrice, Mode=OneWay}" />
-                                                            <Run Text="{x:Bind Item.Billing.CurrencyId, Mode=OneWay}" />
-                                                            </TextBlock>
-                                                            <TextBlock Text="{x:Bind Item.Billing.PeriodType, Mode=OneWay}"
-                                                                       HorizontalAlignment="Right" />
-                                                        </StackPanel>
-
-                                                        <!--<Border Height="20"
-                                                                    Grid.Column="2">
-                                                                <CheckBox CornerRadius="20"
-                                                                          IsChecked="{x:Bind IsPaid, Mode=TwoWay}"
-                                                                          Command="{x:Bind OnPayCommand}"
-                                                                          Margin="20,0">
-                                                                    <CheckBox.Resources>
-                                                                        <ResourceDictionary>
-                                                                            <ResourceDictionary.ThemeDictionaries>
-                                                                                <ResourceDictionary x:Key="Dark">
-                                                                                    <SolidColorBrush x:Key="CheckBoxForegroundUnchecked"
-                                                                                                     Color="Purple" />
-                                                                                    <SolidColorBrush x:Key="CheckBoxForegroundChecked"
-                                                                                                     Color="Purple" />
-                                                                                    <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundChecked"
-                                                                                                     Color="White" />
-                                                                                    <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeChecked"
-                                                                                                     Color="Purple" />
-                                                                                    <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked"
-                                                                                                     Color="Purple" />
-
-                                                                                </ResourceDictionary>
-                                                                            </ResourceDictionary.ThemeDictionaries>
-                                                                        </ResourceDictionary>
-                                                                    </CheckBox.Resources>
-                                                                </CheckBox>
-                                                            </Border>-->
-                                                    </Grid>
-                                                </Border>
-                                            </SwipeControl>
-                                        </UserControl>
-                                    </DataTemplate>
-                                </GridView.ItemTemplate>
-                            </GridView>
-
-                            <StackPanel x:Name="itemsEmptyImage"
+                            <StackPanel Grid.Column="1"
                                         Spacing="12"
-                                        Visibility="Collapsed">
-
-                                <Image Source="/ProjectSBS/Assets/Illustrations/undraw_Newsletter_re_wrob.png"
-                                       MaxHeight="200" />
-
-                                <TextBlock Text="You have no items here!"
-                                           TextWrapping="WrapWholeWords"
-                                           HorizontalAlignment="Center"
-                                           FontWeight="Bold" />
-
-                                <TextBlock Text="Improve your spending habbits by adding your subscriptions."
-                                           TextWrapping="WrapWholeWords"
-                                           TextAlignment="Center"
-                                           HorizontalAlignment="Center" />
-
-                                <Button Content="Add Items"
-                                        HorizontalAlignment="Center"
-                                        Padding="20, 8"
-                                        Command="{x:Bind ViewModel.AddNewCommand}" />
-
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center">
+                              <TextBlock Style="{StaticResource SubtitleTextBlockStyle}"
+                                         HorizontalAlignment="Right">
+                                        
+                                                                <Run Text="{x:Bind Item.Billing.BasePrice, Mode=OneWay}" />
+                                                                <Run Text="{x:Bind Item.Billing.CurrencyId, Mode=OneWay}" />
+                              </TextBlock>
+                              <TextBlock Text="{x:Bind Item.Billing.PeriodType, Mode=OneWay}"
+                                         HorizontalAlignment="Right" />
                             </StackPanel>
-                        </StackPanel>
 
-                        <!--</RefreshContainer>-->
-                    </ScrollViewer>
+                            <!--<Border Height="20"
+                                    Grid.Column="2">
+                                <CheckBox CornerRadius="20"
+                                          IsChecked="{x:Bind IsPaid, Mode=TwoWay}"
+                                          Command="{x:Bind OnPayCommand}"
+                                          Margin="20,0">
+                                    <CheckBox.Resources>
+                                        <ResourceDictionary>
+                                            <ResourceDictionary.ThemeDictionaries>
+                                                <ResourceDictionary x:Key="Dark">
+                                                    <SolidColorBrush x:Key="CheckBoxForegroundUnchecked"
+                                                                     Color="Purple" />
+                                                    <SolidColorBrush x:Key="CheckBoxForegroundChecked"
+                                                                     Color="Purple" />
+                                                    <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundChecked"
+                                                                     Color="White" />
+                                                    <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeChecked"
+                                                                     Color="Purple" />
+                                                    <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked"
+                                                                     Color="Purple" />
 
-                    <StackPanel x:Name="mobileAddButton"
-                                VerticalAlignment="Bottom"
-                                Visibility="Collapsed">
+                                                </ResourceDictionary>
+                                            </ResourceDictionary.ThemeDictionaries>
+                                        </ResourceDictionary>
+                                    </CheckBox.Resources>
+                                </CheckBox>
+                            </Border>-->
+                          </Grid>
+                        </Border>
+                      </SwipeControl>
+                    </UserControl>
+                  </DataTemplate>
+                </GridView.ItemTemplate>
+              </GridView>
 
-                        <Button CornerRadius="22"
-                                Height="65"
-                                VerticalAlignment="Bottom"
-                                HorizontalAlignment="Right"
-                                ToolTipService.ToolTip="Add new"
-                                Style="{StaticResource AccentButtonStyle}"
-                                Margin="20"
-                                Padding="22,0"
-                                Command="{x:Bind ViewModel.AddNewCommand}">
+              <StackPanel x:Name="itemsEmptyImage"
+                          Spacing="12"
+                          Visibility="Collapsed">
 
-                            <!--TODO Rotate this icon - previous project Easter Egg-->
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" />
-                                    <ColumnDefinition Width="auto" />
-                                </Grid.ColumnDefinitions>
-                                <SymbolIcon x:Name="fabIcon"
-                                            Symbol="Add" />
+                <Image Source="/ProjectSBS/Assets/Illustrations/undraw_Newsletter_re_wrob.png"
+                       MaxHeight="200" />
 
-                                <TextBlock Text="Add"
-                                           Grid.Column="1"
-                                           Margin="12,0,0,0" />
-                            </Grid>
-                        </Button>
+                <TextBlock Text="You have no items here!"
+                           TextWrapping="WrapWholeWords"
+                           HorizontalAlignment="Center"
+                           FontWeight="Bold" />
 
-                    </StackPanel>
+                <TextBlock Text="Improve your spending habbits by adding your subscriptions."
+                           TextWrapping="WrapWholeWords"
+                           TextAlignment="Center"
+                           HorizontalAlignment="Center" />
 
-                </Grid>
+                <Button Content="Add Items"
+                        HorizontalAlignment="Center"
+                        Padding="20, 8"
+                        Command="{x:Bind ViewModel.AddNewCommand}" />
 
-            </muxc:TwoPaneView.Pane1>
+              </StackPanel>
+            </StackPanel>
 
-            <muxc:TwoPaneView.Pane2>
-                <Grid x:Name="pane2Holder"
-                      Visibility="Visible">
+            <!--</RefreshContainer>-->
+          </ScrollViewer>
 
-                    <comp:ItemDetails />
+          <StackPanel x:Name="mobileAddButton"
+                      VerticalAlignment="Bottom"
+                      Visibility="Collapsed">
 
-                </Grid>
-            </muxc:TwoPaneView.Pane2>
+            <Button CornerRadius="22"
+                    Height="65"
+                    VerticalAlignment="Bottom"
+                    HorizontalAlignment="Right"
+                    ToolTipService.ToolTip="Add new"
+                    Style="{StaticResource AccentButtonStyle}"
+                    Margin="20"
+                    Padding="22,0"
+                    Command="{x:Bind ViewModel.AddNewCommand}">
 
-        </muxc:TwoPaneView>
+              <!--TODO Rotate this icon - previous project Easter Egg-->
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="auto" />
+                  <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <SymbolIcon x:Name="fabIcon"
+                            Symbol="Add" />
 
-    </Grid>
+                <TextBlock Text="Add"
+                           Grid.Column="1"
+                           Margin="12,0,0,0" />
+              </Grid>
+            </Button>
+
+          </StackPanel>
+
+        </Grid>
+
+      </muxc:TwoPaneView.Pane1>
+
+      <muxc:TwoPaneView.Pane2>
+        <Grid x:Name="pane2Holder"
+              Visibility="Visible">
+
+          <comp:ItemDetails />
+
+        </Grid>
+      </muxc:TwoPaneView.Pane2>
+
+    </muxc:TwoPaneView>
+
+  </Grid>
 </Page>

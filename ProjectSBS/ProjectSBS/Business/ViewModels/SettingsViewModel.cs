@@ -5,6 +5,7 @@ public partial class SettingsViewModel : ViewModelBase
     private readonly ICurrencyCache _currencyCache;
     private readonly ISettingsService _settingsService;
     private readonly IUserService _userService;
+
     public string TitleText { get; init; }
     public string DefaultCurrencyText { get; init; }
     public string AppName { get; init; }
@@ -18,25 +19,25 @@ public partial class SettingsViewModel : ViewModelBase
     [ObservableProperty]
     public bool _isLoggedIn;
 
-    public int SelectedCurrency
+    private string _selectedCurrency;
+    public string SelectedCurrency
     {
-        set => _settingsService.DefaultCurrency = Currencies[value];
-        get
+        get => _selectedCurrency;
+        set
         {
-            for (int i = 0; i < Currencies.Count; i++)
+            if (_selectedCurrency == value)
             {
-                if (Currencies[i] == _settingsService.DefaultCurrency)
-                {
-                    return i;
-                }
-
+                return;
             }
-            return 0;
+
+            _selectedCurrency = value;
+            _settingsService.DefaultCurrency = value;
+
+            OnPropertyChanged();
         }
     }
 
     public ObservableCollection<string> Currencies { get; } = [];
-
 
     public ICommand Logout { get; }
     public ICommand Login { get; }
@@ -92,6 +93,8 @@ public partial class SettingsViewModel : ViewModelBase
         //TODO sets the value on the open of the Settings
         Currencies.AddRange(currency?.Rates.Keys);
         Currencies.Add(currency?.BaseCurrency ?? "EUR");
+
+        SelectedCurrency = _settingsService.DefaultCurrency;
     }
 
     [RelayCommand]

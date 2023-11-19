@@ -1,4 +1,4 @@
-﻿namespace ProjectSBS.Presentation.NestedPages;
+namespace ProjectSBS.Presentation.NestedPages;
 
 public sealed partial class SettingsPage : Page
 {

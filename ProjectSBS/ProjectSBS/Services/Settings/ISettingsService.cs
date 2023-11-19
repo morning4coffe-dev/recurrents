@@ -1,4 +1,4 @@
-﻿namespace ProjectSBS.Services.Settings;
+namespace ProjectSBS.Services.Settings;
 
 public interface ISettingsService
 {

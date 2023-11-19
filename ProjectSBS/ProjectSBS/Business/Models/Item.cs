@@ -13,7 +13,7 @@ public partial record Item
     {
         Id = id ?? Guid.NewGuid().ToString();
         Name = name;
-        Billing = billing ?? new BillingDetails(5.99M, DateOnly.FromDateTime(DateTime.Today));
+        Billing = billing ?? new BillingDetails(5, DateOnly.FromDateTime(DateTime.Today));
         TagId = tagId;
         IsNotify = isNotify;
         Description = description;

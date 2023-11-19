@@ -1,4 +1,4 @@
-<Page x:Class="ProjectSBS.Presentation.LoginPage"
+﻿<Page x:Class="ProjectSBS.Presentation.LoginPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:local="using:ProjectSBS.Presentation"
@@ -12,47 +12,49 @@
       xmlns:page="using:ProjectSBS.Presentation.Components"
       NavigationCacheMode="Required">
 
-    <page:PageShell>
-        <page:PageShell.ContentView>
+  <page:PageShell>
+    <page:PageShell.ContentView>
 
-            <UserControl>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition x:Name="firstColumn"
-                                          Width="500" />
-                        <ColumnDefinition x:Name="secondColumn"
-                                          Width="*" />
-                    </Grid.ColumnDefinitions>
+      <UserControl>
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="firstColumn"
+                              Width="500" />
+            <ColumnDefinition x:Name="secondColumn"
+                              Width="*" />
+          </Grid.ColumnDefinitions>
 
-                    <VisualStateManager.VisualStateGroups>
-                        <VisualStateGroup>
-                            <VisualState x:Name="SmallScreen">
-                                <VisualState.StateTriggers>
-                                    <AdaptiveTrigger MinWindowWidth="0" />
-                                </VisualState.StateTriggers>
-                                <VisualState.Setters>
-                                    <Setter Target="backgroundImage.Visibility"
-                                            Value="Collapsed" />
-                                    <Setter Target="firstColumn.Width"
-                                            Value="*" />
-                                    <Setter Target="secondColumn.Width"
-                                            Value="0" />
-                                </VisualState.Setters>
-                            </VisualState>
-                            <VisualState x:Name="LargeScreen">
-                                <VisualState.StateTriggers>
-                                    <AdaptiveTrigger MinWindowWidth="1000" />
-                                </VisualState.StateTriggers>
-                            </VisualState>
-                        </VisualStateGroup>
+          <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+              <VisualState x:Name="SmallScreen">
+                <VisualState.StateTriggers>
+                  <AdaptiveTrigger MinWindowWidth="0" />
+                </VisualState.StateTriggers>
+                <VisualState.Setters>
+                  <Setter Target="backgroundImage.Visibility"
+                          Value="Collapsed" />
+                  <Setter Target="firstColumn.Width"
+                          Value="*" />
+                  <Setter Target="secondColumn.Width"
+                          Value="0" />
+                </VisualState.Setters>
+              </VisualState>
+              <VisualState x:Name="LargeScreen">
+                <VisualState.StateTriggers>
+                  <AdaptiveTrigger MinWindowWidth="1000" />
+                </VisualState.StateTriggers>
+              </VisualState>
+            </VisualStateGroup>
 
-                        <!--<VisualStateGroup>
+            <!--<VisualStateGroup>
                             <VisualState>
                                 <VisualState.StateTriggers>
                                     <triggers:IsNullOrEmptyStateTrigger Value="{x:Bind ViewModel.User, Mode=OneWay}" />
                                 </VisualState.StateTriggers>
                                 <VisualState.Setters>
-                                    --><!--TODO [Login UI] Doesn't switch on login--><!--
+                                    -->
+            <!--TODO [Login UI] Doesn't switch on login-->
+            <!--
                                     <Setter Target="personPicture.Visibility"
                                             Value="Collapsed" />
                                     <Setter Target="secImage.Visibility"
@@ -60,54 +62,57 @@
                                 </VisualState.Setters>
                             </VisualState>
                         </VisualStateGroup>-->
-                    </VisualStateManager.VisualStateGroups>
+          </VisualStateManager.VisualStateGroups>
 
-                    <Image x:Name="backgroundImage"
-                           Source="/ProjectSBS/Assets/login-background.jpg"
-                           MinWidth="2000"
-                           Stretch="UniformToFill"
-                           Visibility="Visible"
-                           HorizontalAlignment="Center"
-                           Grid.Column="1"
-                           VerticalAlignment="Center" />
+          <Image x:Name="backgroundImage"
+                 MinWidth="2000"
+                 Stretch="UniformToFill"
+                 Visibility="Visible"
+                 HorizontalAlignment="Center"
+                 Grid.Column="1"
+                 VerticalAlignment="Center">
+            <Image.Source>
+              <BitmapImage UriSource="ms-appx:///Assets/login-background2.jpg" />
+            </Image.Source>
+          </Image>
 
-                    <Grid not_win:Background="{ThemeResource ApplicationBackground}">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="1.1*" />
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="auto" />
-                        </Grid.RowDefinitions>
+          <Grid not_win:Background="{ThemeResource ApplicationBackground}">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*" />
+              <RowDefinition Height="1.1*" />
+              <RowDefinition Height="*" />
+              <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
 
-                        <Ellipse Height="350"
-                                 Width="350"
-                                 Opacity="0.2"
-                                 HorizontalAlignment="Center"
-                                 VerticalAlignment="Center"
-                                 Grid.RowSpan="3">
+            <Ellipse Height="350"
+                     Width="350"
+                     Opacity="0.2"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center"
+                     Grid.RowSpan="3">
 
-                            <Ellipse.Fill>
-                                <RadialGradientBrush GradientOrigin="0.5,0.5"
-                                                     Center="0.5,0.5"
-                                                     RadiusX="0.5"
-                                                     RadiusY="0.5">
-                                    <RadialGradientBrush.GradientStops>
-                                        <GradientStop Color="Red"
-                                                      Offset="0" />
-                                        <GradientStop Color="Transparent"
-                                                      Offset="1" />
-                                    </RadialGradientBrush.GradientStops>
-                                </RadialGradientBrush>
-                            </Ellipse.Fill>
-                        </Ellipse>
+              <Ellipse.Fill>
+                <RadialGradientBrush GradientOrigin="0.5,0.5"
+                                     Center="0.5,0.5"
+                                     RadiusX="0.5"
+                                     RadiusY="0.5">
+                  <RadialGradientBrush.GradientStops>
+                    <GradientStop Color="DarkGreen"
+                                  Offset="0" />
+                    <GradientStop Color="Transparent"
+                                  Offset="1" />
+                  </RadialGradientBrush.GradientStops>
+                </RadialGradientBrush>
+              </Ellipse.Fill>
+            </Ellipse>
 
-                        <TextBlock Text="{x:Bind ViewModel.TitleText}"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Bottom"
-                                   Style="{StaticResource TitleTextBlockStyle}" />
+            <TextBlock Text="{x:Bind ViewModel.TitleText}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Bottom"
+                       Style="{StaticResource TitleTextBlockStyle}" />
 
-                        <Grid Grid.Row="1">
-                            <!--<StackPanel x:Name="personPicture"
+            <Grid Grid.Row="1">
+              <!--<StackPanel x:Name="personPicture"
                                         Visibility="Collapsed">
                                 <TextBlock Text="{x:Bind ViewModel.User.Name}"
                                            Style="{StaticResource TitleTextBlockStyle}" />
@@ -118,47 +123,47 @@
                                                MaxHeight="200" />
                             </StackPanel>-->
 
-                            <Image x:Name="secImage"
-                                   Visibility="Visible"
-                                   Source="/ProjectSBS/Assets/Illustrations/undraw_Newsletter_re_wrob.png"
-                                   Margin="0, 50"
-                                   MinHeight="45"
-                                   MaxHeight="220" />
-                        </Grid>
+              <Image x:Name="secImage"
+                     Visibility="Visible"
+                     Source="ms-appx:///Assets/Icons/icon.png"
+                     Margin="0, 112"
+                     MinHeight="45"
+                     MaxHeight="220" />
+            </Grid>
 
-                        <StackPanel Grid.Row="2"
-                                    Spacing="20"
-                                    VerticalAlignment="Top"
-                                    HorizontalAlignment="Center">
+            <StackPanel Grid.Row="2"
+                        Spacing="20"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Center">
 
-                            <StackPanel Spacing="8">
-                                <Button Content="{x:Bind ViewModel.LoginWithMicrosoftText}"
-                                        Width="200"
-                                        Height="45"
-                                        Command="{x:Bind ViewModel.Login}" />
-                                <HyperlinkButton Content="{x:Bind ViewModel.ContinueWithoutLoginText}"
-                                                 Width="200"
-                                                 Command="{x:Bind ViewModel.WithoutLogin}" />
-                            </StackPanel>
+              <StackPanel Spacing="8">
+                <Button Content="{x:Bind ViewModel.LoginWithMicrosoftText}"
+                        Width="200"
+                        Height="45"
+                        Command="{x:Bind ViewModel.Login}" />
+                <HyperlinkButton Content="{x:Bind ViewModel.ContinueWithoutLoginText}"
+                                 Width="200"
+                                 Command="{x:Bind ViewModel.WithoutLogin}" />
+              </StackPanel>
 
-                            <muxc:ProgressRing IsActive="{Binding Login.IsRunning}" />
-                        </StackPanel>
+              <muxc:ProgressRing IsActive="{Binding Login.IsRunning}" />
+            </StackPanel>
 
-                        <StackPanel Orientation="Horizontal"
-                                    HorizontalAlignment="Center"
-                                    Spacing="8"
-                                    Margin="0, 8"
-                                    Grid.Row="4">
-                            <HyperlinkButton Content="{x:Bind ViewModel.PrivacyPolicyText}"
-                                             /><!--TODO Command="{x:Bind ViewModel.PrivacyPolicy}"--> 
-                            <TextBlock Text="{x:Bind ViewModel.AuthorText}"
-                                       VerticalAlignment="Center" />
-                        </StackPanel>
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        Spacing="8"
+                        Margin="0, 8"
+                        Grid.Row="4">
+              <HyperlinkButton Content="{x:Bind ViewModel.PrivacyPolicyText}" />
+              <!--TODO Command="{x:Bind ViewModel.PrivacyPolicy}"-->
+              <TextBlock Text="{x:Bind ViewModel.AuthorText}"
+                         VerticalAlignment="Center" />
+            </StackPanel>
 
-                    </Grid>
-                </Grid>
-            </UserControl>
+          </Grid>
+        </Grid>
+      </UserControl>
 
-        </page:PageShell.ContentView>
-    </page:PageShell>
+    </page:PageShell.ContentView>
+  </page:PageShell>
 </Page>

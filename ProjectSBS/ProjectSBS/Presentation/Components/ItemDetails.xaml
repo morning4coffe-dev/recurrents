@@ -174,8 +174,8 @@
               <local:DetailsBox HeaderText="for the price of">
                 <local:DetailsBox.Content>
                   <TextBlock TextWrapping="WrapWholeWords">
-                                     <Run Text="{x:Bind ViewModel.SelectedItem.Item.Billing.BasePrice, Mode=OneWay}" />
-                                     <Run Text="{x:Bind ViewModel.SelectedItem.Item.Billing.CurrencyId, Mode=OneWay}" />
+                      <Run Text="{x:Bind ViewModel.SelectedItem.Item.Billing.BasePrice, Mode=OneWay}" />
+                      <Run Text="{x:Bind ViewModel.SelectedItem.Item.Billing.CurrencyId, Mode=OneWay}" />
                   </TextBlock>
                 </local:DetailsBox.Content>
               </local:DetailsBox>
@@ -183,8 +183,8 @@
               <local:DetailsBox HeaderText="paid in total">
                 <local:DetailsBox.Content>
                   <TextBlock TextWrapping="WrapWholeWords">
-                                       <Run Text="{x:Bind ViewModel.SelectedItem.TotalPrice, Mode=OneWay}" />
-                                       <Run Text="{x:Bind ViewModel.SelectedItem.Item.Billing.CurrencyId, Mode=OneWay}" />
+                     <Run Text="{x:Bind ViewModel.SelectedItem.TotalPrice, Mode=OneWay}" />
+                     <Run Text="{x:Bind ViewModel.SelectedItem.Item.Billing.CurrencyId, Mode=OneWay}" />
                   </TextBlock>
                 </local:DetailsBox.Content>
               </local:DetailsBox>
@@ -264,6 +264,7 @@
                             Grid.Column="1" />
                 </Grid>
 
+                <!--TODO SelectedIndex is not future proof-->
                 <ComboBox Header="Tag"
                           ItemsSource="{x:Bind ViewModel.Tags, Mode=OneTime}"
                           SelectedIndex="{x:Bind ViewModel.SelectedItem.Item.TagId, Mode=TwoWay}"

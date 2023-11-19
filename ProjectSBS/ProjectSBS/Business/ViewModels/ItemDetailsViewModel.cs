@@ -1,5 +1,3 @@
-using ProjectSBS.Services.Items.Tags;
-using System.Globalization;
 using Windows.UI.Core;
 
 namespace ProjectSBS.Business.ViewModels;
@@ -19,9 +17,8 @@ public partial class ItemDetailsViewModel : ObservableObject
     private bool _isNew = false;
 
     public ObservableCollection<Tag> Tags { get; }
-
-    public ObservableCollection<string> Currencies { get; } = new();
-    public ObservableCollection<string> FuturePayments { get; } = new();
+    public ObservableCollection<string> Currencies { get; } = [];
+    public ObservableCollection<string> FuturePayments { get; } = [];
 
     public string SaveText { get; }
     public string EditText { get; }

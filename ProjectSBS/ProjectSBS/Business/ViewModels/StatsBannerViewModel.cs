@@ -7,13 +7,23 @@ public partial class StatsBannerViewModel : ObservableObject
 {
     private readonly IItemService _itemService;
     private readonly ISettingsService _settingsService;
+    private readonly ICurrencyCache _currencyCache;
 
-    ObservableCollection<double> _values = new();
+    private readonly ObservableCollection<double> _values = [];
 
-    public StatsBannerViewModel(IItemService itemService, ISettingsService settingsService)
+    [ObservableProperty]
+    private string _sum = "0";
+
+    public ObservableCollection<ISeries> Series { get; set; }
+
+    public StatsBannerViewModel(
+        IItemService itemService,
+        ISettingsService settingsService,
+        ICurrencyCache currencyCache)
     {
         _itemService = itemService;
         _settingsService = settingsService;
+        _currencyCache = currencyCache;
 
         //observe ItemService that items have changed
         //_sum = $"{new Random().Next(0, 50000)} CZK";
@@ -21,7 +31,7 @@ public partial class StatsBannerViewModel : ObservableObject
         _itemService.OnItemsChanged += ItemService_OnItemsChanged;
         _itemService.OnItemsInitialized += ItemService_OnItemsChanged;
 
-        //Task.Run(Load);
+        SetSum(_itemService.GetItems());
 
         ObservableCollection<ISeries> series = new()
             {
@@ -38,8 +48,7 @@ public partial class StatsBannerViewModel : ObservableObject
     private void ItemService_OnItemsChanged(object? sender, IEnumerable<ItemViewModel> e)
     {
         //TODO Sum for current period
-        var sum = e.Sum(item => item?.Item?.Billing.BasePrice);
-        Sum = $"{sum} CZK";
+        SetSum(e);
         //    _values.Add(e.ToList().Count);
 
         //    ObservableCollection<ISeries> series = new()
@@ -54,7 +63,23 @@ public partial class StatsBannerViewModel : ObservableObject
         //    Series = series;
     }
 
-    private async Task Load() 
+    private async void SetSum(IEnumerable<ItemViewModel> e)
+    {
+        var items = e
+            .Where(item => item?.PaymentDate <= DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
+
+        var tasks = items.Select(async item => await _currencyCache.ConvertToDefaultCurrency(
+            item.Item?.Billing.BasePrice ?? 0,
+            item?.Item?.Billing?.CurrencyId ?? "EUR",
+            _settingsService.DefaultCurrency));
+
+        var values = await Task.WhenAll(tasks);
+        var sum = values.Sum();
+
+        Sum = $"≈ {Math.Round(sum, 2)} {_settingsService.DefaultCurrency}";
+    }
+
+    private async Task Load()
     {
         var items = _itemService.GetItems().ToList();
         while (items.Count == 0)
@@ -63,11 +88,5 @@ public partial class StatsBannerViewModel : ObservableObject
             return;
         }
 
-        Sum = _itemService.GetItems().Sum(item => item.Item.Billing.BasePrice).ToString("c", CultureInfo.CurrentCulture);
     }
-
-    [ObservableProperty]
-    private string _sum;
-
-    public ObservableCollection<ISeries> Series { get; set; }
 }

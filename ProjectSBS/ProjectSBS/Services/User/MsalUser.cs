@@ -1,4 +1,4 @@
-﻿using Microsoft.Graph;
+using Microsoft.Graph;
 using Microsoft.Graph.Models;
 using Microsoft.Identity.Client;
 using Microsoft.Kiota.Abstractions.Authentication;
@@ -12,13 +12,7 @@ namespace ProjectSBS.Services.User;
 public class MsalUser : IUserService
 {
     private GraphServiceClient? _client;
-
     private UserModel.User? _currentUser;
-
-    public MsalUser()
-    {
-        //_token = token;
-    }
 
     private string token = "";
 
@@ -26,9 +20,9 @@ public class MsalUser : IUserService
 
     public event EventHandler<UserModel.User?>? OnLoggedInChanged;
 
+    IPublicClientApplication? _app;
     public async Task<bool> LoginUser()
     {
-        IPublicClientApplication _app = PublicClientApplicationBuilder.Create("")
         .WithRedirectUri("")
         .WithAuthority("")
         .WithIosKeychainSecurityGroup("com.microsoft.adalcache")
@@ -76,10 +70,8 @@ public class MsalUser : IUserService
         return false;
     }
 
-    private async void Initialize()
+    private void Initialize()
     {
-        //var token = await _token. .AccessTokenAsync();
-
         if (token is not null)
         {
             var authenticationProvider = new BaseBearerTokenAuthenticationProvider(new TokenProvider(token));
@@ -114,7 +106,7 @@ public class MsalUser : IUserService
             .GetAsync(requestConfiguration =>
             {
                 requestConfiguration.QueryParameters.Select =
-                    new string[] { "displayName", "mail" };
+                    ["displayName", "mail"];
             });
 
         var fullName = user?.DisplayName;
@@ -187,19 +179,16 @@ public class MsalUser : IUserService
     public void Logout()
     {
         _currentUser = null;
+        //TODO Clear token, clear items
+        _app?.RemoveAsync(_app.GetAccountsAsync().Result.FirstOrDefault());
 
-        OnLoggedInChanged.Invoke(this, _currentUser);
+        OnLoggedInChanged?.Invoke(this, _currentUser);
     }
 }
 
-class TokenProvider : IAccessTokenProvider
+class TokenProvider(string token) : IAccessTokenProvider
 {
-    private readonly string _token;
-
-    public TokenProvider(string token)
-    {
-        _token = token;
-    }
+    private readonly string _token = token;
 
     public Task<string> GetAuthorizationTokenAsync(Uri uri, Dictionary<string, object> additionalAuthenticationContext = default,
         CancellationToken cancellationToken = default)

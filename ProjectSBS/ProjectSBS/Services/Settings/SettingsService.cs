@@ -1,4 +1,4 @@
-﻿using Windows.Foundation.Collections;
+using Windows.Foundation.Collections;
 
 namespace ProjectSBS.Services.Settings;
 
@@ -35,7 +35,7 @@ public class SettingsService : ISettingsService
         return defaultValue;
     }
 
-    private string _defaultCurrencyId = "DefaultCurrency";
+    private readonly string _defaultCurrencyId = "DefaultCurrency";
     public string DefaultCurrency
     {
         get => GetValue(_defaultCurrencyId, "EUR");

@@ -33,11 +33,19 @@ public partial class ItemViewModel : ObservableObject
         }
     }
 
-    public string PaymentDate
+    public int PaymentDate
     {
         get
         {
-            var remaining = (GetFuturePayments(1).First().ToDateTime(new TimeOnly()) - DateTime.Today).Days;
+            return (GetFuturePayments(1).First().ToDateTime(new TimeOnly()) - DateTime.Today).Days;
+        }
+    }
+
+    public string PaymentDateString
+    {
+        get
+        {
+            var remaining = PaymentDate;
 
             if (remaining == 1)
             {
@@ -63,6 +71,12 @@ public partial class ItemViewModel : ObservableObject
             return Enumerable.Count(dates) * billing.BasePrice;
         }
     }
+
+    //TODO
+    //public int GetPaymentsInPeriod(int periodDays) 
+    //{
+      //  while 
+    //}
 
     public List<DateOnly> GetFuturePayments(int numberOfPayments = 12)
     {

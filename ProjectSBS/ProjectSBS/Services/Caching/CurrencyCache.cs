@@ -1,17 +1,15 @@
 namespace ProjectSBS.Services.Caching;
 
-public sealed class CurrencyCache : ICurrencyCache
+public sealed class CurrencyCache(
+    IApiClient api,
+    ISerializer serializer,
+    ILogger<CurrencyCache> logger) : ICurrencyCache
 {
-    private readonly IApiClient _api;
-    private readonly ISerializer _serializer;
-    private readonly ILogger _logger;
+    private readonly IApiClient _api = api;
+    private readonly ISerializer _serializer = serializer;
+    private readonly ILogger _logger = logger;
 
-    public CurrencyCache(IApiClient api, ISerializer serializer, ILogger<CurrencyCache> logger)
-    {
-        _api = api;
-        _serializer = serializer;
-        _logger = logger;
-    }
+    private Currency? _current;
 
     private bool IsConnected
     {
@@ -56,6 +54,23 @@ public sealed class CurrencyCache : ICurrencyCache
         {
             return null;
         }
+    }
+
+    public async ValueTask<decimal> ConvertToDefaultCurrency(decimal value, string currency, string defaultCurrency = "EUR")
+    {
+        if (_current?.Rates is not { })
+        {
+            _current = await GetCurrency(CancellationToken.None) ?? new();
+        }
+
+        if (!_current.Rates.Keys.Contains("EUR"))
+        {
+            _current.Rates.Add("EUR", 1);
+        }
+
+        var d = value / Convert.ToDecimal(_current.Rates[currency]);
+
+        return d * Convert.ToDecimal(_current.Rates[defaultCurrency]);
     }
 
     private async ValueTask<StorageFile> GetFile(CreationCollisionOption option) =>
