@@ -26,7 +26,7 @@ public partial class ItemDetailsViewModel : ObservableObject
     public ICommand EnableEditingCommand { get; }
     public ICommand CloseCommand { get; }
     public ICommand SaveCommand { get; }
-    public ICommand DeleteCommand { get; }
+    public ICommand ArchiveCommand { get; }
 
     public ItemDetailsViewModel(
         IStringLocalizer localizer,
@@ -38,7 +38,7 @@ public partial class ItemDetailsViewModel : ObservableObject
         EnableEditingCommand = new AsyncRelayCommand(EnableEditing);
         CloseCommand = new AsyncRelayCommand(Close);
         SaveCommand = new AsyncRelayCommand(Save);
-        DeleteCommand = new AsyncRelayCommand(DeleteItem);
+        ArchiveCommand = new AsyncRelayCommand(ArchiveItem);
 
         SaveText = localizer["Save"];
         EditText = localizer["Edit"];
@@ -130,7 +130,7 @@ public partial class ItemDetailsViewModel : ObservableObject
         WeakReferenceMessenger.Default.Send(new ItemUpdated(SelectedItem, ToSave: true));
     }
 
-    private async Task DeleteItem()
+    private async Task ArchiveItem()
     {
         WeakReferenceMessenger.Default.Send(new ItemDeleted(SelectedItem));
     }

@@ -20,6 +20,7 @@
     <!-- Required for C# Hot Reload -->
     <UseInterpreter Condition="'$(Configuration)' == 'Debug' and $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) != 'maccatalyst'">True</UseInterpreter>
     <IsUnoHead>true</IsUnoHead>
+    <UserSecretsId>1a1c5c78-c108-4b70-af65-e8bb5267e21b</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

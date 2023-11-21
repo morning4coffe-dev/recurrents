@@ -93,6 +93,8 @@ public partial class ItemViewModel : ObservableObject
         ScheduleBilling();
     }
 
+#pragma warning disable CS1998 
+    // Async method lacks 'await' operators and will run synchronously as it is currently implemented only for Windows
     public async void ScheduleBilling()
     {
         if (Item is not { } item || !Item.IsNotify)

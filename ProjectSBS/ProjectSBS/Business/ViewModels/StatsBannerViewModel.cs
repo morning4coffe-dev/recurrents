@@ -25,22 +25,19 @@ public partial class StatsBannerViewModel : ObservableObject
         _settingsService = settingsService;
         _currencyCache = currencyCache;
 
-        //observe ItemService that items have changed
-        //_sum = $"{new Random().Next(0, 50000)} CZK";
-
         _itemService.OnItemsChanged += ItemService_OnItemsChanged;
         _itemService.OnItemsInitialized += ItemService_OnItemsChanged;
 
         SetSum(_itemService.GetItems());
 
-        ObservableCollection<ISeries> series = new()
+        ObservableCollection<ISeries> series =
+        [
+            new LineSeries<double>
             {
-                new LineSeries<double>
-                {
-                    Values = _values,
-                    Fill = null
-                }
-            };
+                Values = _values,
+                Fill = null
+            }
+        ];
 
         Series = series;
     }
@@ -77,16 +74,5 @@ public partial class StatsBannerViewModel : ObservableObject
         var sum = values.Sum();
 
         Sum = $"≈ {Math.Round(sum, 2)} {_settingsService.DefaultCurrency}";
-    }
-
-    private async Task Load()
-    {
-        var items = _itemService.GetItems().ToList();
-        while (items.Count == 0)
-        {
-            items = _itemService.GetItems().ToList();
-            return;
-        }
-
     }
 }

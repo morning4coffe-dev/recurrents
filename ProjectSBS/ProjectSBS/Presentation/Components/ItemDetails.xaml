@@ -18,7 +18,7 @@
       <MenuFlyoutItem Text="Archive"
                       Icon="{toolkit:FontIcon Glyph=&#xE7B8;}"
                       Padding="100, 16"
-                      Command="{Binding GoToSettingsCommand}" />
+                      Command="{x:Bind ViewModel.ArchiveCommand}" />
 
       <!--<MenuFlyoutItem Text="Delete"
                       Icon="{toolkit:FontIcon Glyph=&#xE74D;}"
@@ -129,23 +129,26 @@
                         Spacing="8"
                         Grid.Column="1">
               <Button Visibility="{x:Bind ViewModel.IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
-                      Command="{Binding EnableEditingCommand}"
+                      Command="{x:Bind ViewModel.EnableEditingCommand}"
+                      ToolTipService.ToolTip="Edit"
                       Padding="14, 10">
                 <FontIcon Glyph="&#xE70F;"
-                          FontSize="14" />
+                          FontSize="13" />
               </Button>
 
               <Button Visibility="{x:Bind ViewModel.IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
-                      Command="{x:Bind ViewModel.DeleteCommand}"
+                      Command="{x:Bind ViewModel.ArchiveCommand}"
+                      ToolTipService.ToolTip="Archive"
                       Padding="14, 10">
-                <FontIcon Glyph="&#xE74D;"
-                          FontSize="14" />
+                <FontIcon Glyph="&#xE7B8;"
+                          FontSize="13" />
               </Button>
 
               <Button Command="{x:Bind ViewModel.CloseCommand}"
+                      ToolTipService.ToolTip="Close Details"
                       Padding="14, 10">
                 <FontIcon Glyph="&#xE8BB;"
-                          FontSize="14" />
+                          FontSize="13" />
               </Button>
             </StackPanel>
           </Grid>
@@ -287,6 +290,7 @@
                     </DataTemplate>
                   </ComboBox.ItemTemplate>
                 </ComboBox>
+
                 <CalendarDatePicker Header="Billing Date"
                                     Date="{x:Bind ViewModel.SelectedItem.Item.Billing.InitialDate, Mode=TwoWay, Converter={StaticResource DateOnlyToDateTimeOffsetConverter}}"
                                     HorizontalAlignment="Stretch" />
@@ -318,14 +322,15 @@
                                     FalseIcon="{toolkit:FontIcon Glyph=&#xE7ED;}" />
                 </Grid>
 
-                <Grid>
-                  <CheckBox Content="Split between people {NI}"
-                            IsEnabled="False" />
+                <!--<Grid>
+                  <CheckBox Content="Split between people {NI}" />
+
                   <local:ToggleIcon IsChecked="True"
                                     HorizontalAlignment="Right"
                                     TrueIcon="{toolkit:FontIcon Glyph=&#xE713;}"
                                     FalseIcon="{toolkit:FontIcon Glyph=&#xE748;}" />
-                </Grid>
+                </Grid>-->
+
                 <TextBox Header="Description"
                          Text="{x:Bind ViewModel.SelectedItem.Item.Description, Mode=TwoWay}"
                          Height="120"
@@ -335,18 +340,23 @@
               </StackPanel>
             </ScrollViewer>
 
-            <Button Content="{x:Bind ViewModel.SaveText, Mode=OneWay}"
-                    Command="{x:Bind ViewModel.SaveCommand}"
+            <Button Command="{x:Bind ViewModel.SaveCommand}"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
-                    Height="42"
+                    Height="46"
                     Margin="12"
-                    Grid.Row="1" />
+                    Grid.Row="1">
+              <StackPanel Orientation="Horizontal"
+                          Spacing="8">
+                <FontIcon Glyph="&#xE74E;"
+                          FontSize="16" />
+                <TextBlock Text="{x:Bind ViewModel.SaveText, Mode=OneWay}" />
+              </StackPanel>
+            </Button>
 
           </Grid>
         </Grid>
       </UserControl>
-
     </local:PageShell.ContentView>
   </local:PageShell>
 </Page>

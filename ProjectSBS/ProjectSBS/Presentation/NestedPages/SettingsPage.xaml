@@ -4,6 +4,7 @@
       xmlns:local="using:ProjectSBS.Presentation.NestedPages"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:win="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:comp="using:ProjectSBS.Presentation.Components"
       xmlns:controls="using:CommunityToolkit.WinUI.Controls"
       xmlns:ui="using:CommunityToolkit.WinUI"
@@ -43,6 +44,12 @@
           <StackPanel x:Name="settingsHolder"
                       Spacing="4"
                       Margin="48,48,48,0">
+          <!--<win:StackPanel.ChildrenTransitions>
+            <TransitionCollection>
+              <EntranceThemeTransition FromVerticalOffset="-100"
+                                       IsStaggeringEnabled="True" />
+            </TransitionCollection>
+          </win:StackPanel.ChildrenTransitions>-->
 
             <TextBlock x:Name="desktopHeader"
                        Visibility="Visible"
@@ -77,6 +84,11 @@
                                    HeaderIcon="{ui:FontIcon Glyph=&#xE779;}"
                                    IsClickEnabled="True"
                                    Command="{x:Bind ViewModel.Login}" />
+
+            <!--TODO A/B test with testers and decide which one is better
+            <InfoBar Message="You are not logged in! Your data will be stored locally and won't be synchronized. Click here to log in"
+                     IsOpen="True"
+                     Severity="Warning"/>-->
 
             <controls:SettingsCard Header="Default currency">
               <ComboBox VerticalAlignment="Bottom"
@@ -117,7 +129,7 @@
               <controls:SettingsExpander.Items>
                 <controls:SettingsCard Header="Made with love and loads of coffee in Czechia"
                                        HeaderIcon="{ui:FontIcon Glyph=&#xE909;}" />
-                
+
                 <controls:SettingsCard HorizontalContentAlignment="Left"
                                        ContentAlignment="Left">
                   <StackPanel Margin="-12,0,0,0"
@@ -129,11 +141,11 @@
                 </controls:SettingsCard>
 
               </controls:SettingsExpander.Items>
-              
+
               <TextBlock Text="{x:Bind ViewModel.AppVersion}"
                          Opacity="0.75"
                          IsTextSelectionEnabled="True"
-                         Style="{StaticResource CaptionTextBlockStyle}"/>
+                         Style="{StaticResource CaptionTextBlockStyle}" />
             </controls:SettingsExpander>
 
           </StackPanel>

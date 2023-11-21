@@ -172,14 +172,18 @@
                 <!--<Button Content="{toolkit:SymbolIcon Symbol=Find}"
                                         Height="40" />-->
 
-                <ScrollViewer>
+                <!--TODO The Horizontal scroll doesn't work with the latest WinUI-->
+                <ScrollViewer HorizontalScrollMode="Enabled"
+                              HorizontalScrollBarVisibility="Auto"
+                              VerticalScrollMode="Enabled"
+                              VerticalScrollBarVisibility="Auto">
                   <controls:Segmented ItemsSource="{x:Bind ViewModel.FilterCategories}"
                                       SelectedItem="{x:Bind ViewModel.SelectedFilter, Mode=TwoWay}"
                                       Style="{StaticResource ButtonSegmentedStyle}">
                     <controls:Segmented.ItemTemplate>
                       <DataTemplate x:DataType="models:Tag">
                         <TextBlock Text="{x:Bind Name, Mode=OneWay}"
-                                   Margin="4,-2" />
+                                   Margin="5,-3" />
                       </DataTemplate>
                     </controls:Segmented.ItemTemplate>
 

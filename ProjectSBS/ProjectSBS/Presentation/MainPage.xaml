@@ -28,11 +28,8 @@
 
       <MenuFlyoutItem Text="Logout"
                       Padding="100, 16"
+                      Icon="{toolkit:FontIcon Glyph=&#xF3B1;}"
                       Command="{x:Bind ViewModel.Logout}">
-        <MenuFlyoutItem.Icon>
-          <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                    Glyph="&#xF3B1;" />
-        </MenuFlyoutItem.Icon>
       </MenuFlyoutItem>
     </MenuFlyout>
 
@@ -76,7 +73,7 @@
                                                To="True" />
                 </VisualState.StateTriggers>
                 <VisualState.Setters>
-                  <Setter Target="desktopPerson.Visibility"
+                  <Setter Target="userButton.Visibility"
                           Value="Visible" />
                 </VisualState.Setters>
               </VisualState>
@@ -86,7 +83,7 @@
                                                To="False" />
                 </VisualState.StateTriggers>
                 <VisualState.Setters>
-                  <Setter Target="desktopPerson.Visibility"
+                  <Setter Target="userButton.Visibility"
                           Value="Collapsed" />
                 </VisualState.Setters>
               </VisualState>
@@ -182,7 +179,7 @@
 
             <NavigationView.MenuItemTemplate>
               <DataTemplate x:DataType="models:NavigationCategory">
-                <NavigationViewItem Content="{x:Bind Text}">
+                <NavigationViewItem Content="{x:Bind Text}" Padding="0,12">
                   <!--ToolTip="{x:Bind Tooltip}">-->
                   <NavigationViewItem.Icon>
                     <FontIcon Glyph="{x:Bind Glyph}" />
