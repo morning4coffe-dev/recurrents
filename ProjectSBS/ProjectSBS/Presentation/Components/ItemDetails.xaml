@@ -20,10 +20,10 @@
                       Padding="100, 16"
                       Command="{Binding GoToSettingsCommand}" />
 
-      <MenuFlyoutItem Text="Delete"
+      <!--<MenuFlyoutItem Text="Delete"
                       Icon="{toolkit:FontIcon Glyph=&#xE74D;}"
-                      Padding="100, 16"
-                      Command="{x:Bind ViewModel.DeleteCommand}" />
+                      Padding="100, 16
+                      Command="{x:Bind ViewModel.DeleteCommand}" />-->
     </MenuFlyout>
 
     <Style x:Key="ContentStack"
@@ -183,8 +183,8 @@
               <local:DetailsBox HeaderText="paid in total">
                 <local:DetailsBox.Content>
                   <TextBlock TextWrapping="WrapWholeWords">
-                     <Run Text="{x:Bind ViewModel.SelectedItem.TotalPrice, Mode=OneWay}" />
-                     <Run Text="{x:Bind ViewModel.SelectedItem.Item.Billing.CurrencyId, Mode=OneWay}" />
+                      <Run Text="{x:Bind ViewModel.SelectedItem.TotalPrice, Mode=OneWay}" />
+                      <Run Text="{x:Bind ViewModel.SelectedItem.Item.Billing.CurrencyId, Mode=OneWay}" />
                   </TextBlock>
                 </local:DetailsBox.Content>
               </local:DetailsBox>
@@ -228,7 +228,7 @@
               </local:DetailsBox>
 
               <local:DetailsBox HeaderText="description"
-                                Visibility="{Binding SelectedItem.Item.Description, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}"
+                                Visibility="{x:Bind ViewModel.SelectedItem.Item.Description, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}"
                                 Text="{x:Bind ViewModel.SelectedItem.Item.Description, Mode=OneWay}" />
 
             </StackPanel>
@@ -247,7 +247,8 @@
                           Style="{StaticResource ContentStack}">
 
                 <TextBox Header="Name"
-                         Text="{x:Bind ViewModel.SelectedItem.Item.Name, Mode=TwoWay}" />
+                         Text="{x:Bind ViewModel.SelectedItem.Item.Name, Mode=TwoWay}"
+                         MaxLength="400" />
 
                 <Grid ColumnSpacing="8">
                   <Grid.ColumnDefinitions>
@@ -257,7 +258,9 @@
 
                   <NumberBox Header="Price"
                              Value="{Binding SelectedItem.Item.Billing.BasePrice, Mode=TwoWay, Converter={StaticResource DecimalToDoubleConverter}}"
-                             SpinButtonPlacementMode="Inline" />
+                             SpinButtonPlacementMode="Inline"
+                             Maximum="99999999999999"
+                             Minimum="-9999999999999" />
                   <ComboBox VerticalAlignment="Bottom"
                             ItemsSource="{x:Bind ViewModel.Currencies, Mode=OneWay}"
                             SelectedItem="{x:Bind ViewModel.SelectedItem.Item.Billing.CurrencyId, Mode=TwoWay}"
@@ -296,7 +299,9 @@
 
                   <NumberBox Header="Repete every"
                              Value="{x:Bind ViewModel.SelectedItem.Item.Billing.RecurEvery, Mode=TwoWay}"
-                             SpinButtonPlacementMode="Inline" />
+                             SpinButtonPlacementMode="Inline"
+                             Maximum="999"
+                             Minimum="0" />
                   <ComboBox VerticalAlignment="Bottom"
                             ItemsSource="{toolkit:EnumValues Type=models:Period}"
                             SelectedItem="{x:Bind ViewModel.SelectedItem.Item.Billing.PeriodType, Mode=TwoWay}"
@@ -325,7 +330,8 @@
                          Text="{x:Bind ViewModel.SelectedItem.Item.Description, Mode=TwoWay}"
                          Height="120"
                          TextWrapping="Wrap"
-                         AcceptsReturn="True" />
+                         AcceptsReturn="True"
+                         MaxLength="999999" />
               </StackPanel>
             </ScrollViewer>
 
