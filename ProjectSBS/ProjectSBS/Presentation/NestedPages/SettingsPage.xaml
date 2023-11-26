@@ -85,10 +85,10 @@
                                    IsClickEnabled="True"
                                    Command="{x:Bind ViewModel.Login}" />
 
-            <!--TODO A/B test with testers and decide which one is better
+            <!--TODO A/B test with testers and decide which one is better-->
             <InfoBar Message="You are not logged in! Your data will be stored locally and won't be synchronized. Click here to log in"
                      IsOpen="True"
-                     Severity="Warning"/>-->
+                     Severity="Warning"/>
 
             <controls:SettingsCard Header="Default currency">
               <ComboBox VerticalAlignment="Bottom"

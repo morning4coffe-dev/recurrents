@@ -1,4 +1,4 @@
-﻿namespace ProjectSBS.Services.Items;
+namespace ProjectSBS.Services.Items;
 
 public interface IItemService
 {
@@ -8,5 +8,6 @@ public interface IItemService
     IEnumerable<ItemViewModel> GetItems(Func<ItemViewModel, bool>? selector = null);
     void NewItem(Item item, List<ItemLog>? logs = null);
     void UpdateItem(ItemViewModel item);
+    void ArchiveItem(ItemViewModel item);
     void DeleteItem(ItemViewModel item);
 }

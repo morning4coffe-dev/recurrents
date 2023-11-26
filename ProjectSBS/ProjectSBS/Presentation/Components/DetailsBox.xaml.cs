@@ -1,4 +1,4 @@
-﻿namespace ProjectSBS.Presentation.Components;
+namespace ProjectSBS.Presentation.Components;
 
 public sealed partial class DetailsBox : UserControl
 {
@@ -16,7 +16,7 @@ public sealed partial class DetailsBox : UserControl
     public static readonly DependencyProperty HeaderTextProperty = DependencyProperty.Register(
       nameof(HeaderText),
       typeof(string),
-      typeof(PageShell),
+      typeof(DetailsBox),
       new PropertyMetadata("")
     );
 
@@ -29,7 +29,7 @@ public sealed partial class DetailsBox : UserControl
     public static readonly DependencyProperty TextProperty = DependencyProperty.Register(
       nameof(Text),
       typeof(string),
-      typeof(PageShell),
+      typeof(DetailsBox),
       new PropertyMetadata(null)
     );
 
@@ -42,7 +42,7 @@ public sealed partial class DetailsBox : UserControl
     public new static readonly DependencyProperty ContentProperty = DependencyProperty.Register(
       nameof(Content),
       typeof(UIElement),
-      typeof(PageShell),
+      typeof(DetailsBox),
       new PropertyMetadata(null)
     );
 }

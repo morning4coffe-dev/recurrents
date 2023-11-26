@@ -19,13 +19,13 @@
       xmlns:android="http://uno.ui/android"
       mc:Ignorable="d not_win android">
 
-  <Page.Resources>
+  <!--<Page.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="ms-appx:///CommunityToolkit.WinUI.Controls.Segmented/Segmented/Segmented.xaml" />
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
-  </Page.Resources>
+  </Page.Resources>-->
 
   <Grid>
 
@@ -106,7 +106,7 @@
       <muxc:TwoPaneView.Pane1>
 
         <Grid x:Name="background"
-              CornerRadius="8,0,0,0"
+              CornerRadius="80,0,0,0"
               Background="{ThemeResource LayerFillColorDefaultBrush}">
 
           <ScrollViewer>
@@ -173,7 +173,7 @@
                                         Height="40" />-->
 
                 <!--TODO The Horizontal scroll doesn't work with the latest WinUI-->
-                <ScrollViewer HorizontalScrollMode="Enabled"
+                <!--<ScrollViewer HorizontalScrollMode="Enabled"
                               HorizontalScrollBarVisibility="Auto"
                               VerticalScrollMode="Enabled"
                               VerticalScrollBarVisibility="Auto">
@@ -195,7 +195,7 @@
                     </controls:Segmented.ItemsPanel>
 
                   </controls:Segmented>
-                </ScrollViewer>
+                </ScrollViewer>-->
               </StackPanel>
 
               <GridView ScrollViewer.VerticalScrollBarVisibility="Disabled"

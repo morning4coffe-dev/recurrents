@@ -36,7 +36,6 @@
           Background="{ThemeResource LayerFillColorDefaultBrush}">
 
       <ScrollViewer>
-
         <StackPanel x:Name="contentHolder"
                     Margin="48,48,48,0"
                     Spacing="8">
@@ -110,9 +109,7 @@
           </StackPanel>
 
         </StackPanel>
-
       </ScrollViewer>
     </Grid>
-
   </Grid>
 </Page>

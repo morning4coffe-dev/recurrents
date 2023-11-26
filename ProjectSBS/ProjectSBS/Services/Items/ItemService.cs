@@ -61,6 +61,13 @@ public class ItemService : IItemService
         item.Updated();
     }
 
+    public void ArchiveItem(ItemViewModel item)
+    {
+
+
+        SaveDataAsync();
+    }
+
     public void DeleteItem(ItemViewModel item)
     {
         _items.Remove(item);
