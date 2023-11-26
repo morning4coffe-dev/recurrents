@@ -1,5 +1,3 @@
-using ProjectSBS.Services.Storage.Data;
-
 namespace ProjectSBS.Services.Items;
 
 public class ItemService : IItemService
@@ -63,9 +61,10 @@ public class ItemService : IItemService
 
     public void ArchiveItem(ItemViewModel item)
     {
-
+        item.Item?.Status.Push(new(item.IsArchived ? State.Active : State.Archived, DateOnly.FromDateTime(DateTime.Now)));
 
         SaveDataAsync();
+        item.Updated();
     }
 
     public void DeleteItem(ItemViewModel item)
@@ -73,6 +72,7 @@ public class ItemService : IItemService
         _items.Remove(item);
 
         SaveDataAsync();
+        item.Updated();
     }
 
     private void SaveDataAsync()

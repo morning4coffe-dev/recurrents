@@ -4,6 +4,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:viewModels="using:ProjectSBS.Business.ViewModels"
+      xmlns:ui="using:CommunityToolkit.WinUI"
       mc:Ignorable="d">
 
   <Grid>
@@ -19,6 +20,10 @@
           <VisualState.Setters>
             <Setter Target="contentHolder.Margin"
                     Value="8,8,8,0" />
+            <Setter Target="mobileHeader.Visibility"
+                    Value="Visible" />
+            <Setter Target="desktopHeader.Visibility"
+                    Value="Collapsed" />
           </VisualState.Setters>
         </VisualState>
 
@@ -31,16 +36,15 @@
 
     </VisualStateManager.VisualStateGroups>
 
-    <Grid x:Name="background"
-          CornerRadius="8,0,0,0"
-          Background="{ThemeResource LayerFillColorDefaultBrush}">
+    <Grid Style="{StaticResource PageBackground}">
 
       <ScrollViewer>
         <StackPanel x:Name="contentHolder"
                     Margin="48,48,48,0"
                     Spacing="8">
 
-          <TextBlock Text="{x:Bind ViewModel.SelectedCategory.Text}"
+          <TextBlock x:Name="desktopHeader"
+                     Text="{x:Bind ViewModel.SelectedCategory.Text}"
                      Style="{StaticResource TitleTextBlockStyle}" />
 
           <Grid x:Name="mobileHeader"
@@ -79,11 +83,28 @@
             </StackPanel>
           </Grid>
 
-          <ListView ItemsSource="{x:Bind ViewModel.Items}">
+          <ListView ItemsSource="{x:Bind ViewModel.Items}"
+                    SelectionMode="None"
+                    IsItemClickEnabled="True"
+                    ItemClick="ListView_ItemClick">
+
             <ListView.ItemTemplate>
               <DataTemplate x:DataType="viewModels:ItemViewModel">
 
-                <TextBlock Text="{x:Bind Item.Name, Mode=OneWay}" />
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                  </Grid.ColumnDefinitions>
+
+                  <TextBlock Text="{x:Bind Item.Name, Mode=OneWay}"
+                             Padding="0,12" />
+
+                  <FontIcon Glyph="&#xE7A7;"
+                            Opacity="0.7"
+                            FontSize="16"
+                            Grid.Column="1" />
+                </Grid>
 
               </DataTemplate>
             </ListView.ItemTemplate>

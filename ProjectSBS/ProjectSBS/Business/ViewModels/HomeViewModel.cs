@@ -47,7 +47,7 @@ public partial class HomeViewModel : ViewModelBase
             }
 
             //Created only after user first requests opening item
-                //TODO ItemDetails ??= typeof(ItemDetails);
+            //TODO ItemDetails ??= typeof(ItemDetails);
 
             WeakReferenceMessenger.Default.Send(new ItemSelectionChanged(value, (value?.Item is null)));
 
@@ -62,7 +62,7 @@ public partial class HomeViewModel : ViewModelBase
 
     public Tag SelectedFilter
     {
-        get => _filterService.SelectedCategory == null ? _filterService.Categories[0] : _filterService.SelectedCategory;
+        get => _filterService.SelectedCategory ?? _filterService.Categories[0];
         set
         {
             if (_filterService.SelectedCategory == value)
@@ -84,7 +84,7 @@ public partial class HomeViewModel : ViewModelBase
 
     //public ICommand Logout { get; }
     public ICommand AddNewCommand { get; }
-    public ICommand DeleteCommand { get; }
+    public ICommand ArchiveCommand { get; }
     public ICommand OpenSettingsCommand { get; }
 
     public HomeViewModel(
@@ -100,7 +100,7 @@ public partial class HomeViewModel : ViewModelBase
         _navigation = navigation;
 
         AddNewCommand = new RelayCommand(AddNew);
-        DeleteCommand = new AsyncRelayCommand(() => DeleteItem());
+        ArchiveCommand = new AsyncRelayCommand(() => Archive());
         OpenSettingsCommand = new RelayCommand(() => _navigation.NavigateNested(typeof(SettingsPage)));
 
         FilterCategories = filterService.Categories;
@@ -173,9 +173,9 @@ public partial class HomeViewModel : ViewModelBase
             Sum = items.Sum(i => i.Item.Billing.BasePrice);
         });
 
-        WeakReferenceMessenger.Default.Register<ItemDeleted>(this, (r, m) =>
+        WeakReferenceMessenger.Default.Register<ItemArchived>(this, (r, m) =>
         {
-            DeleteItem(m.Item);
+            _ = Archive(m.Item);
         });
     }
 
@@ -190,20 +190,27 @@ public partial class HomeViewModel : ViewModelBase
 
     private IEnumerable<ItemViewModel> RefreshItems()
     {
-        //TODO Fails here when Filter item gets deselected
-
         IEnumerable<ItemViewModel> items;
 
-        // Check for sentry value of -1 = None tag
-        if (SelectedFilter.Id == -1)
+        //If ArchivePage is selected, show archived items
+        if (_navigation.SelectedCategory.Id == 2)
         {
-            items = _itemService.GetItems()
+            items = _itemService.GetItems(item => item.IsArchived)
             .OrderBy(i => i.PaymentDate);
         }
         else
         {
-            items = _itemService.GetItems(item => item.Item.TagId == SelectedFilter.Id)
-            .OrderBy(i => i.PaymentDate);
+            // Check for sentry value of -1 = None tag
+            if (SelectedFilter.Id == -1)
+            {
+                items = _itemService.GetItems(item => !item.IsArchived)
+                .OrderBy(i => i.PaymentDate);
+            }
+            else
+            {
+                items = _itemService.GetItems(item => !item.IsArchived && item.Item?.TagId == SelectedFilter.Id)
+                .OrderBy(i => i.PaymentDate);
+            }
         }
 
         Items.Clear();
@@ -232,13 +239,11 @@ public partial class HomeViewModel : ViewModelBase
         IsPaneOpen = true;
     }
 
-    public async Task DeleteItem(ItemViewModel? item = null)
+    public async Task Archive(ItemViewModel? item = null)
     {
-        _itemService.DeleteItem(item ?? SelectedItem);
+        _itemService.ArchiveItem(item ?? SelectedItem);
 
         SelectedItem = null;
         RefreshItems();
-
-        return;
     }
 }

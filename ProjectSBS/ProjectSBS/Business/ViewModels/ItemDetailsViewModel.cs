@@ -38,7 +38,7 @@ public partial class ItemDetailsViewModel : ObservableObject
         EnableEditingCommand = new AsyncRelayCommand(EnableEditing);
         CloseCommand = new AsyncRelayCommand(Close);
         SaveCommand = new AsyncRelayCommand(Save);
-        ArchiveCommand = new AsyncRelayCommand(ArchiveItem);
+        ArchiveCommand = new AsyncRelayCommand(Archive);
 
         SaveText = localizer["Save"];
         EditText = localizer["Edit"];
@@ -59,7 +59,7 @@ public partial class ItemDetailsViewModel : ObservableObject
 
                 App.Dispatcher.TryEnqueue(() =>
                 {
-                    ItemName = (m.SelectedItem?.Item?.Name) != string.Empty ? m.SelectedItem?.Item?.Name : "New Item";
+                    ItemName = (m.SelectedItem?.Item?.Name) != string.Empty ? m.SelectedItem?.Item?.Name : localizer["NewItem"];
                     SelectedItem = item;
                 });
 
@@ -130,9 +130,9 @@ public partial class ItemDetailsViewModel : ObservableObject
         WeakReferenceMessenger.Default.Send(new ItemUpdated(SelectedItem, ToSave: true));
     }
 
-    private async Task ArchiveItem()
+    private async Task Archive()
     {
-        WeakReferenceMessenger.Default.Send(new ItemDeleted(SelectedItem));
+        WeakReferenceMessenger.Default.Send(new ItemArchived(SelectedItem));
     }
 
     private async void System_BackRequested(object? sender, BackRequestedEventArgs e)

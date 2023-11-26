@@ -15,141 +15,147 @@
                   MobileTitleVisibility="Visible">
     <comp:PageShell.ContentView>
       <UserControl>
-        <ScrollViewer>
-          <VisualStateManager.VisualStateGroups>
-            <!--AdaptiveTriggers-->
-            <VisualStateGroup>
-              <VisualState>
-                <VisualState.StateTriggers>
-                  <AdaptiveTrigger MinWindowWidth="0" />
-                </VisualState.StateTriggers>
+        <Grid Style="{StaticResource PageBackground}">
+            <VisualStateManager.VisualStateGroups>
+              <!--AdaptiveTriggers-->
+              <VisualStateGroup>
+                <VisualState>
+                  <VisualState.StateTriggers>
+                    <AdaptiveTrigger MinWindowWidth="0" />
+                  </VisualState.StateTriggers>
 
-                <VisualState.Setters>
-                  <Setter Target="settingsHolder.Margin"
-                          Value="8,8,8,0" />
-                  <Setter Target="desktopHeader.Visibility"
-                          Value="Collapsed" />
-                </VisualState.Setters>
-              </VisualState>
+                  <VisualState.Setters>
+                    <Setter Target="settingsHolder.Margin"
+                            Value="8,8,8,0" />
+                    <Setter Target="desktopHeader.Visibility"
+                            Value="Collapsed" />
+                  </VisualState.Setters>
+                </VisualState>
 
-              <VisualState>
-                <VisualState.StateTriggers>
-                  <AdaptiveTrigger MinWindowWidth="640" />
-                </VisualState.StateTriggers>
-              </VisualState>
-            </VisualStateGroup>
+                <VisualState>
+                  <VisualState.StateTriggers>
+                    <AdaptiveTrigger MinWindowWidth="640" />
+                  </VisualState.StateTriggers>
+                </VisualState>
+              </VisualStateGroup>
 
-          </VisualStateManager.VisualStateGroups>
-
-          <StackPanel x:Name="settingsHolder"
-                      Spacing="4"
-                      Margin="48,48,48,0">
-          <!--<win:StackPanel.ChildrenTransitions>
+            </VisualStateManager.VisualStateGroups>
+          
+          <ScrollViewer>
+            <StackPanel x:Name="settingsHolder"
+                        Spacing="4"
+                        Margin="48,48,48,0">
+              <!--<win:StackPanel.ChildrenTransitions>
             <TransitionCollection>
               <EntranceThemeTransition FromVerticalOffset="-100"
                                        IsStaggeringEnabled="True" />
             </TransitionCollection>
           </win:StackPanel.ChildrenTransitions>-->
 
-            <TextBlock x:Name="desktopHeader"
-                       Visibility="Visible"
-                       Text="{x:Bind ViewModel.TitleText}"
-                       Margin="0,0,0,12"
-                       Style="{StaticResource TitleTextBlockStyle}" />
+              <TextBlock x:Name="desktopHeader"
+                         Visibility="Visible"
+                         Text="{x:Bind ViewModel.TitleText}"
+                         Margin="0,0,0,12"
+                         Style="{StaticResource TitleTextBlockStyle}" />
 
-            <controls:SettingsCard Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay, Converter={StaticResource TrueToVisibleConverter}}">
-              <controls:SettingsCard.Header>
-                <StackPanel Orientation="Horizontal"
-                            Margin="6"
-                            Spacing="20">
-                  <PersonPicture ProfilePicture="{x:Bind ViewModel.User.Photo, Mode=OneWay}"
-                                 DisplayName="{x:Bind ViewModel.User.Name, Mode=OneWay}"
-                                 Width="80" />
-                  <StackPanel VerticalAlignment="Center"
-                              Spacing="6">
-                    <TextBlock  Text="{x:Bind ViewModel.User.Name, Mode=OneWay}"
-                                Style="{StaticResource SubtitleTextBlockStyle}" />
-                    <TextBlock  Text="{x:Bind ViewModel.User.Email, Mode=OneWay}" />
+              <controls:SettingsCard Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay, Converter={StaticResource TrueToVisibleConverter}}">
+                <controls:SettingsCard.Header>
+                  <StackPanel Orientation="Horizontal"
+                              Margin="6"
+                              Spacing="20">
+                    <PersonPicture ProfilePicture="{x:Bind ViewModel.User.Photo, Mode=OneWay}"
+                                   DisplayName="{x:Bind ViewModel.User.Name, Mode=OneWay}"
+                                   Width="80" />
+                    <StackPanel VerticalAlignment="Center"
+                                Spacing="6">
+                      <TextBlock  Text="{x:Bind ViewModel.User.Name, Mode=OneWay}"
+                                  Style="{StaticResource SubtitleTextBlockStyle}" />
+                      <TextBlock  Text="{x:Bind ViewModel.User.Email, Mode=OneWay}" />
+                    </StackPanel>
                   </StackPanel>
-                </StackPanel>
-              </controls:SettingsCard.Header>
-              <Button Content="Logout"
-                      Margin="6"
-                      Command="{x:Bind ViewModel.Logout}" />
-            </controls:SettingsCard>
+                </controls:SettingsCard.Header>
+                <Button Content="Logout"
+                        Margin="6"
+                        Command="{x:Bind ViewModel.Logout}" />
+              </controls:SettingsCard>
 
-            <controls:SettingsCard Description="You are not logged in! Your data will be stored locally and won't be synchronized. Click here to log in"
-                                   Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
-                                   ActionIcon="{ui:FontIcon Glyph=&#xE8A7;}"
-                                   HeaderIcon="{ui:FontIcon Glyph=&#xE779;}"
-                                   IsClickEnabled="True"
-                                   Command="{x:Bind ViewModel.Login}" />
+              <InfoBar Title="You are not logged in!"
+                       Message="Your data will be stored locally and won't be synchronized."
+                       Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
+                       IsOpen="True"
+                       Severity="Warning"
+                       IsClosable="False">
+                <InfoBar.IconSource>
+                  <FontIconSource Glyph="&#xE779;" />
+                </InfoBar.IconSource>
+                <InfoBar.ActionButton>
+                  <Button Content="Login"
+                          HorizontalAlignment="Right"
+                          Command="{x:Bind ViewModel.Login}" />
+                </InfoBar.ActionButton>
+              </InfoBar>
 
-            <!--TODO A/B test with testers and decide which one is better-->
-            <InfoBar Message="You are not logged in! Your data will be stored locally and won't be synchronized. Click here to log in"
-                     IsOpen="True"
-                     Severity="Warning"/>
+              <controls:SettingsCard Header="Default currency">
+                <ComboBox VerticalAlignment="Bottom"
+                          ItemsSource="{x:Bind ViewModel.Currencies, Mode=OneWay}"
+                          SelectedItem="{x:Bind ViewModel.SelectedCurrency, Mode=TwoWay}"
+                          Grid.Column="1" />
+              </controls:SettingsCard>
 
-            <controls:SettingsCard Header="Default currency">
-              <ComboBox VerticalAlignment="Bottom"
-                        ItemsSource="{x:Bind ViewModel.Currencies, Mode=OneWay}"
-                        SelectedItem="{x:Bind ViewModel.SelectedCurrency, Mode=TwoWay}"
-                        Grid.Column="1" />
-            </controls:SettingsCard>
+              <controls:SettingsCard Header="{x:Bind ViewModel.NotificationsText}"
+                                     ActionIcon="{ui:FontIcon Glyph=&#xE8A7;}"
+                                     HeaderIcon="{ui:FontIcon Glyph=&#xEA8F;}"
+                                     IsClickEnabled="True"
+                                     Command="{x:Bind ViewModel.LaunchNotificationSettingsCommand}" />
 
-            <controls:SettingsCard Header="{x:Bind ViewModel.NotificationsText}"
-                                   ActionIcon="{ui:FontIcon Glyph=&#xE8A7;}"
-                                   HeaderIcon="{ui:FontIcon Glyph=&#xEA8F;}"
-                                   IsClickEnabled="True"
-                                   Command="{x:Bind ViewModel.LaunchNotificationSettingsCommand}" />
+              <TextBlock Text="{x:Bind ViewModel.AboutText}"
+                         Margin="0,12,0,0"
+                         Style="{StaticResource BaseTextBlockStyle}" />
 
-            <TextBlock Text="{x:Bind ViewModel.AboutText}"
-                       Margin="0,12,0,0"
-                       Style="{StaticResource BaseTextBlockStyle}" />
+              <controls:SettingsExpander IsExpanded="True">
+                <controls:SettingsExpander.Header>
+                  <StackPanel Orientation="Horizontal"
+                              Margin="6"
+                              Spacing="20">
 
-            <controls:SettingsExpander IsExpanded="True">
-              <controls:SettingsExpander.Header>
-                <StackPanel Orientation="Horizontal"
-                            Margin="6"
-                            Spacing="20">
+                    <Image Source="ms-appx:///Assets/Icons/icon.png"
+                           Width="36" />
 
-                  <Image Source="ms-appx:///Assets/Icons/icon.png"
-                         Width="36" />
-
-                  <StackPanel VerticalAlignment="Center"
-                              Spacing="4">
-                    <TextBlock Text="{x:Bind ViewModel.AppName}" />
-                    <TextBlock Text="Morning4coffe ©️ 2023"
-                               Opacity="0.75"
-                               Style="{StaticResource CaptionTextBlockStyle}" />
+                    <StackPanel VerticalAlignment="Center"
+                                Spacing="4">
+                      <TextBlock Text="{x:Bind ViewModel.AppName}" />
+                      <TextBlock Text="Morning4coffe ©️ 2023"
+                                 Opacity="0.75"
+                                 Style="{StaticResource CaptionTextBlockStyle}" />
+                    </StackPanel>
                   </StackPanel>
-                </StackPanel>
-              </controls:SettingsExpander.Header>
+                </controls:SettingsExpander.Header>
 
-              <controls:SettingsExpander.Items>
-                <controls:SettingsCard Header="Made with love and loads of coffee in Czechia"
-                                       HeaderIcon="{ui:FontIcon Glyph=&#xE909;}" />
+                <controls:SettingsExpander.Items>
+                  <controls:SettingsCard Header="Made with love and loads of coffee in Czechia"
+                                         HeaderIcon="{ui:FontIcon Glyph=&#xE909;}" />
 
-                <controls:SettingsCard HorizontalContentAlignment="Left"
-                                       ContentAlignment="Left">
-                  <StackPanel Margin="-12,0,0,0"
-                              Orientation="Vertical">
-                    <HyperlinkButton Content="Link 1" />
-                    <HyperlinkButton Content="Link 2" />
-                    <HyperlinkButton Content="Link 3" />
-                  </StackPanel>
-                </controls:SettingsCard>
+                  <controls:SettingsCard HorizontalContentAlignment="Left"
+                                         ContentAlignment="Left">
+                    <StackPanel Margin="-12,0,0,0"
+                                Orientation="Vertical">
+                      <HyperlinkButton Content="Link 1" />
+                      <HyperlinkButton Content="Link 2" />
+                      <HyperlinkButton Content="Link 3" />
+                    </StackPanel>
+                  </controls:SettingsCard>
 
-              </controls:SettingsExpander.Items>
+                </controls:SettingsExpander.Items>
 
-              <TextBlock Text="{x:Bind ViewModel.AppVersion}"
-                         Opacity="0.75"
-                         IsTextSelectionEnabled="True"
-                         Style="{StaticResource CaptionTextBlockStyle}" />
-            </controls:SettingsExpander>
+                <TextBlock Text="{x:Bind ViewModel.AppVersion}"
+                           Opacity="0.75"
+                           IsTextSelectionEnabled="True"
+                           Style="{StaticResource CaptionTextBlockStyle}" />
+              </controls:SettingsExpander>
 
-          </StackPanel>
-        </ScrollViewer>
+            </StackPanel>
+          </ScrollViewer>
+        </Grid>
       </UserControl>
     </comp:PageShell.ContentView>
   </comp:PageShell>

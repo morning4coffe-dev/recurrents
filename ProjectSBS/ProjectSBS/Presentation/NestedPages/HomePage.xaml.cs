@@ -1,4 +1,4 @@
-﻿namespace ProjectSBS.Presentation.NestedPages;
+namespace ProjectSBS.Presentation.NestedPages;
 
 public sealed partial class HomePage : Page
 {
@@ -6,11 +6,11 @@ public sealed partial class HomePage : Page
 
     public HomePage()
     {
-        this.InitializeComponent();
-
-        this.DataContext = App.Services?.GetRequiredService<HomeViewModel>()!;
-        this.Loaded += Page_Loaded;
-        this.Unloaded += Page_Unloaded;
+        InitializeComponent();
+        
+        DataContext = App.Services?.GetRequiredService<HomeViewModel>()!;
+        Loaded += Page_Loaded;
+        Unloaded += Page_Unloaded;
     }
 
     private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -23,13 +23,9 @@ public sealed partial class HomePage : Page
         ViewModel.Unload();
     }
 
-    private async void DeleteItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
+    private async void ArchiveItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
     {
-        await ViewModel.DeleteItem(args.SwipeControl.DataContext as ItemViewModel);
-    }
-    private void ArchiveItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
-    {
-        //ArchiveItemCommand.Execute(args.SwipeControl.DataContext);
+        await ViewModel.Archive(args.SwipeControl.DataContext as ItemViewModel);
     }
     private void EditItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
     {

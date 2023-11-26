@@ -63,7 +63,7 @@ public partial class StatsBannerViewModel : ObservableObject
     private async void SetSum(IEnumerable<ItemViewModel> e)
     {
         var items = e
-            .Where(item => item?.PaymentDate <= DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
+            .Where(item => !item.IsArchived && item?.PaymentDate <= DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
 
         var tasks = items.Select(async item => await _currencyCache.ConvertToDefaultCurrency(
             item.Item?.Billing.BasePrice ?? 0,
@@ -73,6 +73,6 @@ public partial class StatsBannerViewModel : ObservableObject
         var values = await Task.WhenAll(tasks);
         var sum = values.Sum();
 
-        Sum = $"≈ {Math.Round(sum, 2)} {_settingsService.DefaultCurrency}";
+        Sum = $"≈ {Math.Round(sum, 2):n} {_settingsService.DefaultCurrency}";
     }
 }

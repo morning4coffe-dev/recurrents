@@ -9,6 +9,8 @@ public sealed class CurrencyCache(
     private readonly ISerializer _serializer = serializer;
     private readonly ILogger _logger = logger;
 
+    private static SemaphoreSlim fileLock = new SemaphoreSlim(1, 1);
+
     private Currency? _current;
 
     private bool IsConnected
@@ -73,8 +75,19 @@ public sealed class CurrencyCache(
         return d * Convert.ToDecimal(_current.Rates[defaultCurrency]);
     }
 
-    private async ValueTask<StorageFile> GetFile(CreationCollisionOption option) =>
-        await ApplicationData.Current.TemporaryFolder.CreateFileAsync("currency.json", option);
+    private async ValueTask<StorageFile> GetFile(CreationCollisionOption option)
+    {
+        await fileLock.WaitAsync();
+
+        try
+        {
+            return await ApplicationData.Current.TemporaryFolder.CreateFileAsync("currency.json", option);
+        }
+        finally
+        {
+            fileLock.Release();
+        }
+    }
 
     private async ValueTask<string?> GetCachedCurrency()
     {

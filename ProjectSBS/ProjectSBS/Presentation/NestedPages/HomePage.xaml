@@ -19,13 +19,13 @@
       xmlns:android="http://uno.ui/android"
       mc:Ignorable="d not_win android">
 
-  <!--<Page.Resources>
-    <ResourceDictionary>
+  <Page.Resources>
+    <win:ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="ms-appx:///CommunityToolkit.WinUI.Controls.Segmented/Segmented/Segmented.xaml" />
       </ResourceDictionary.MergedDictionaries>
-    </ResourceDictionary>
-  </Page.Resources>-->
+    </win:ResourceDictionary>
+  </Page.Resources>
 
   <Grid>
 
@@ -79,10 +79,6 @@
                     Value="Collapsed" />
             <Setter Target="contentHolder.Margin"
                     Value="8,8,8,0" />
-            <win:Setter Target="background.Background"
-                        Value="Transparent" />
-            <not_win:Setter Target="background.Background"
-                            Value="{ThemeResource ApplicationBackground}" />
           </VisualState.Setters>
         </VisualState>
 
@@ -105,9 +101,7 @@
 
       <muxc:TwoPaneView.Pane1>
 
-        <Grid x:Name="background"
-              CornerRadius="80,0,0,0"
-              Background="{ThemeResource LayerFillColorDefaultBrush}">
+        <Grid Style="{StaticResource PageBackground}">
 
           <ScrollViewer>
             <!--<RefreshContainer x:Name="contentHolder"
@@ -167,36 +161,36 @@
 
               <comp:StatsBanner Visibility="{x:Bind ViewModel.IsStatsVisible, Mode=OneWay}" />
 
-              <StackPanel Orientation="Horizontal"
-                          Spacing="8">
-                <!--<Button Content="{toolkit:SymbolIcon Symbol=Find}"
+
+              <!--<Button Content="{toolkit:SymbolIcon Symbol=Find}"
                                         Height="40" />-->
 
-                <!--TODO The Horizontal scroll doesn't work with the latest WinUI-->
-                <!--<ScrollViewer HorizontalScrollMode="Enabled"
-                              HorizontalScrollBarVisibility="Auto"
-                              VerticalScrollMode="Enabled"
-                              VerticalScrollBarVisibility="Auto">
-                  <controls:Segmented ItemsSource="{x:Bind ViewModel.FilterCategories}"
-                                      SelectedItem="{x:Bind ViewModel.SelectedFilter, Mode=TwoWay}"
-                                      Style="{StaticResource ButtonSegmentedStyle}">
-                    <controls:Segmented.ItemTemplate>
-                      <DataTemplate x:DataType="models:Tag">
-                        <TextBlock Text="{x:Bind Name, Mode=OneWay}"
-                                   Margin="5,-3" />
-                      </DataTemplate>
-                    </controls:Segmented.ItemTemplate>
+              <!--TODO The Horizontal scroll doesn't work with the latest WinUI-->
+              <win:ScrollViewer HorizontalScrollMode="Enabled"
+                                HorizontalScrollBarVisibility="Auto"
+                                VerticalScrollMode="Enabled"
+                                VerticalScrollBarVisibility="Auto"
+                                Margin="-8"
+                                Padding="8,12">
+                <controls:Segmented ItemsSource="{x:Bind ViewModel.FilterCategories}"
+                                    SelectedItem="{x:Bind ViewModel.SelectedFilter, Mode=TwoWay}"
+                                    Style="{StaticResource ButtonSegmentedStyle}">
+                  <controls:Segmented.ItemTemplate>
+                    <DataTemplate x:DataType="models:Tag">
+                      <TextBlock Text="{x:Bind Name}"
+                                 Margin="5,-3" />
+                    </DataTemplate>
+                  </controls:Segmented.ItemTemplate>
 
-                    <controls:Segmented.ItemsPanel>
-                      <ItemsPanelTemplate>
-                        <StackPanel Spacing="8"
-                                    Orientation="Horizontal" />
-                      </ItemsPanelTemplate>
-                    </controls:Segmented.ItemsPanel>
+                  <controls:Segmented.ItemsPanel>
+                    <ItemsPanelTemplate>
+                      <StackPanel Spacing="8"
+                                  Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                  </controls:Segmented.ItemsPanel>
 
-                  </controls:Segmented>
-                </ScrollViewer>-->
-              </StackPanel>
+                </controls:Segmented>
+              </win:ScrollViewer>
 
               <GridView ScrollViewer.VerticalScrollBarVisibility="Disabled"
                         ItemsSource="{x:Bind ViewModel.Items, Mode=OneWay}"
@@ -262,7 +256,7 @@
                             <StackPanel Spacing="12">
                               <TextBlock Text="{x:Bind Item.Name, Mode=OneWay}"
                                          Style="{StaticResource SubtitleTextBlockStyle}" />
-                              <TextBlock Text="{x:Bind PaymentDate, Mode=OneWay}" />
+                              <TextBlock Text="{x:Bind FormattedPaymentDate, Mode=OneWay}" />
                             </StackPanel>
 
                             <StackPanel Grid.Column="1"
@@ -272,40 +266,40 @@
                               <TextBlock Style="{StaticResource SubtitleTextBlockStyle}"
                                          HorizontalAlignment="Right">
                                         
-                                                            <Run Text="{x:Bind Item.Billing.BasePrice, Mode=OneWay}" />
-                                                            <Run Text="{x:Bind Item.Billing.CurrencyId, Mode=OneWay}" />
+                                <Run Text="{x:Bind FormattedPrice, Mode=OneWay}" />
+                                <Run Text="{x:Bind Item.Billing.CurrencyId, Mode=OneWay}" />
                               </TextBlock>
                               <TextBlock Text="{x:Bind Item.Billing.PeriodType, Mode=OneWay}"
                                          HorizontalAlignment="Right" />
                             </StackPanel>
 
                             <!--<Border Height="20"
-                                                                    Grid.Column="2">
-                                                                <CheckBox CornerRadius="20"
-                                                                          IsChecked="{x:Bind IsPaid, Mode=TwoWay}"
-                                                                          Command="{x:Bind OnPayCommand}"
-                                                                          Margin="20,0">
-                                                                    <CheckBox.Resources>
-                                                                        <ResourceDictionary>
-                                                                            <ResourceDictionary.ThemeDictionaries>
-                                                                                <ResourceDictionary x:Key="Dark">
-                                                                                    <SolidColorBrush x:Key="CheckBoxForegroundUnchecked"
-                                                                                                     Color="Purple" />
-                                                                                    <SolidColorBrush x:Key="CheckBoxForegroundChecked"
-                                                                                                     Color="Purple" />
-                                                                                    <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundChecked"
-                                                                                                     Color="White" />
-                                                                                    <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeChecked"
-                                                                                                     Color="Purple" />
-                                                                                    <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked"
-                                                                                                     Color="Purple" />
+                                      Grid.Column="2">
+                                      <CheckBox CornerRadius="20"
+                                                IsChecked="{x:Bind IsPaid, Mode=TwoWay}"
+                                                Command="{x:Bind OnPayCommand}"
+                                                Margin="20,0">
+                                          <CheckBox.Resources>
+                                              <ResourceDictionary>
+                                                  <ResourceDictionary.ThemeDictionaries>
+                                                      <ResourceDictionary x:Key="Dark">
+                                                          <SolidColorBrush x:Key="CheckBoxForegroundUnchecked"
+                                                                           Color="Purple" />
+                                                          <SolidColorBrush x:Key="CheckBoxForegroundChecked"
+                                                                           Color="Purple" />
+                                                          <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundChecked"
+                                                                           Color="White" />
+                                                          <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeChecked"
+                                                                           Color="Purple" />
+                                                          <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked"
+                                                                           Color="Purple" />
 
-                                                                                </ResourceDictionary>
-                                                                            </ResourceDictionary.ThemeDictionaries>
-                                                                        </ResourceDictionary>
-                                                                    </CheckBox.Resources>
-                                                                </CheckBox>
-                                                            </Border>-->
+                                                      </ResourceDictionary>
+                                                  </ResourceDictionary.ThemeDictionaries>
+                                              </ResourceDictionary>
+                                          </CheckBox.Resources>
+                                      </CheckBox>
+                                  </Border>-->
                           </Grid>
                         </Border>
                       </SwipeControl>

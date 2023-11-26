@@ -6,11 +6,11 @@ public sealed partial class ArchivePage : Page
 
     public ArchivePage()
     {
-        this.InitializeComponent();
+        InitializeComponent();
 
-        this.DataContext = App.Services?.GetRequiredService<HomeViewModel>()!;
-        this.Loaded += Page_Loaded;
-        this.Unloaded += Page_Unloaded;
+        DataContext = App.Services?.GetRequiredService<HomeViewModel>()!;
+        Loaded += Page_Loaded;
+        Unloaded += Page_Unloaded;
     }
 
     private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -21,5 +21,10 @@ public sealed partial class ArchivePage : Page
     private void Page_Unloaded(object sender, RoutedEventArgs e)
     {
         ViewModel.Unload();
+    }
+
+    private void ListView_ItemClick(object sender, ItemClickEventArgs e)
+    {
+        _ = ViewModel.Archive(e.ClickedItem as ItemViewModel);
     }
 }

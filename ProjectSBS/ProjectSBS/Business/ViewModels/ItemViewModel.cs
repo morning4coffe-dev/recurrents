@@ -41,7 +41,7 @@ public partial class ItemViewModel : ObservableObject
         }
     }
 
-    public string PaymentDateString
+    public string FormattedPaymentDate
     {
         get
         {
@@ -72,10 +72,29 @@ public partial class ItemViewModel : ObservableObject
         }
     }
 
-    //TODO
+    public string FormattedTotalPrice => TotalPrice.ToString("n");
+    public string FormattedPrice => Item?.Billing.BasePrice.ToString("n") ?? "0";
+
+
+    public bool IsArchived
+    {
+        get
+        {
+
+            if (Item?.Status?.TryPeek(out var status) is not { })
+            {
+                return false;
+            }
+
+            return status?.State == State.Archived;
+
+        }
+    }
+
     //public int GetPaymentsInPeriod(int periodDays) 
     //{
-      //  while 
+    //    //_billingService.GetNextBillingDate(Item.Billing.da);
+    //    periodDays / Item.Billing.RecurEvery * _billingService.;
     //}
 
     public List<DateOnly> GetFuturePayments(int numberOfPayments = 12)
@@ -121,8 +140,10 @@ public partial class ItemViewModel : ObservableObject
             var text = string.Format("Your {0}{1} payment for {2} is due tomorrow!", item.Billing.BasePrice, item.Billing.CurrencyId, item.Name);
 
             //- time period before e.g. one day, time that user selected
-            //DEBUG _notification.ScheduleNotification(item.Id, title, text, DateOnly.FromDateTime(DateTime.Now), TimeOnly.FromDateTime(DateTime.Now.AddSeconds(15)));
-            _notification.ScheduleNotification(item.Id, title, text, date.AddDays(-1), new TimeOnly(8, 00));
+            //DEBUG
+            _notification.ScheduleNotification(item.Id, title, text, DateOnly.FromDateTime(DateTime.Now), TimeOnly.FromDateTime(DateTime.Now.AddSeconds(2)));
+
+            //_notification.ScheduleNotification(item.Id, title, text, date.AddDays(-1), new TimeOnly(8, 00));
         })).ToArray();
 
         await Task.WhenAll(tasks);

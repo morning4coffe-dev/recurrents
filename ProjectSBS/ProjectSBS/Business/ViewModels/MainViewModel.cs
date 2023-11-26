@@ -6,7 +6,6 @@ public partial class MainViewModel : ViewModelBase
 {
     private readonly IUserService _userService;
     private readonly IItemService _itemService;
-    private readonly ICurrencyCache _currencyCache;
     private readonly INavigation _navigation;
 
     [ObservableProperty]
@@ -44,12 +43,10 @@ public partial class MainViewModel : ViewModelBase
         IOptions<AppConfig> appInfo,
         IUserService userService,
         IItemService itemService,
-        ICurrencyCache currencyCache,
         INavigation navigation)
     {
         _userService = userService;
         _navigation = navigation;
-        _currencyCache = currencyCache;
         _itemService = itemService;
 
         Title = $"{localizer["ApplicationName"]}";
@@ -89,12 +86,13 @@ public partial class MainViewModel : ViewModelBase
             navigation.Navigate(typeof(LoginPage));
         });
     }
+    
     public async override void Load()
     {
+        _navigation.NavigateNested(SelectedCategory.Page);
+
         User = await _userService.GetUser();
         IsLoggedIn = User is { };
-
-        _navigation.NavigateNested(SelectedCategory.Page);
 
         _ = _itemService.InitializeAsync();
     }

@@ -186,7 +186,7 @@
               <local:DetailsBox HeaderText="paid in total">
                 <local:DetailsBox.Content>
                   <TextBlock TextWrapping="WrapWholeWords">
-                      <Run Text="{x:Bind ViewModel.SelectedItem.TotalPrice, Mode=OneWay}" />
+                      <Run Text="{x:Bind ViewModel.SelectedItem.FormattedTotalPrice, Mode=OneWay}" />
                       <Run Text="{x:Bind ViewModel.SelectedItem.Item.Billing.CurrencyId, Mode=OneWay}" />
                   </TextBlock>
                 </local:DetailsBox.Content>
@@ -200,8 +200,8 @@
 
               <local:DetailsBox HeaderText="next payments">
                 <local:DetailsBox.Content>
-                  <ScrollViewer HorizontalScrollMode="Auto"
-                                HorizontalScrollBarVisibility="Hidden"
+                  <ScrollViewer HorizontalScrollMode="Enabled"
+                                HorizontalScrollBarVisibility="Auto"
                                 Margin="-16"
                                 Padding="16">
                     <ItemsRepeater VerticalAlignment="Top"
@@ -262,6 +262,7 @@
                   <NumberBox Header="Price"
                              Value="{Binding SelectedItem.Item.Billing.BasePrice, Mode=TwoWay, Converter={StaticResource DecimalToDoubleConverter}}"
                              SpinButtonPlacementMode="Inline"
+                             AcceptsExpression="True"
                              Maximum="99999999999999"
                              Minimum="-9999999999999" />
                   <ComboBox VerticalAlignment="Bottom"
@@ -304,6 +305,7 @@
                   <NumberBox Header="Repete every"
                              Value="{x:Bind ViewModel.SelectedItem.Item.Billing.RecurEvery, Mode=TwoWay}"
                              SpinButtonPlacementMode="Inline"
+                             AcceptsExpression="True"
                              Maximum="999"
                              Minimum="1" />
                   <ComboBox VerticalAlignment="Bottom"
