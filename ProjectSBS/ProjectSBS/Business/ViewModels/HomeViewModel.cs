@@ -28,10 +28,12 @@ public partial class HomeViewModel : ViewModelBase
     private bool _isPaneOpen;
 
     [ObservableProperty]
-    public bool _isStatsVisible;
+    private bool _isStatsVisible;
 
     [ObservableProperty]
-    public bool _isLoggedIn;
+    private bool _isLoggedIn;
+
+    public bool IsEdit;
 
     private ItemViewModel? _selectedItem;
     public ItemViewModel? SelectedItem
@@ -46,17 +48,15 @@ public partial class HomeViewModel : ViewModelBase
                 return;
             }
 
-            //Created only after user first requests opening item
-            //TODO ItemDetails ??= typeof(ItemDetails);
-
-            WeakReferenceMessenger.Default.Send(new ItemSelectionChanged(value, (value?.Item is null)));
+            WeakReferenceMessenger.Default.Send(new ItemSelectionChanged(value, IsEdit, (value?.Item is null)));
+            IsEdit = false;
 
             _selectedItem = value;
             OnPropertyChanged();
         }
     }
 
-    public ObservableCollection<ItemViewModel> Items { get; } = new();
+    public ObservableCollection<ItemViewModel> Items { get; } = [];
 
     public List<Tag> FilterCategories { get; }
 

@@ -1,4 +1,4 @@
-﻿namespace ProjectSBS.Services.Items.Billing;
+namespace ProjectSBS.Services.Items.Billing;
 
 class BillingService : IBillingService
 {
@@ -44,7 +44,7 @@ class BillingService : IBillingService
     {
         var nextBillingDate = GetBillingDates(initialDate, periodType, recurEvery).upcomingBillingDate;
 
-        List<DateOnly> paymentList = new();
+        List<DateOnly> paymentList = [];
 
         for (int i = 0; i < numberOfPayments; i++)
         {
@@ -64,7 +64,7 @@ class BillingService : IBillingService
     public IEnumerable<DateOnly> GetLastPayments(DateOnly initialDate, Period periodType, int recurEvery)
     {
         var today = DateOnly.FromDateTime(DateTime.Now.Date);
-        var paymentList = new List<DateOnly>();
+        List<DateOnly> paymentList = [];
 
         while (initialDate <= today)
         {

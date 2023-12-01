@@ -9,7 +9,7 @@ public sealed class CurrencyCache(
     private readonly ISerializer _serializer = serializer;
     private readonly ILogger _logger = logger;
 
-    private static SemaphoreSlim fileLock = new SemaphoreSlim(1, 1);
+    private static readonly SemaphoreSlim fileLock = new(1, 1);
 
     private Currency? _current;
 

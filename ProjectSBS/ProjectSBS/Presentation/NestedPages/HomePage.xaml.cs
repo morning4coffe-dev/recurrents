@@ -29,9 +29,8 @@ public sealed partial class HomePage : Page
     }
     private void EditItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
     {
-        //SelectedItem = (ItemViewModel)args.SwipeControl.DataContext;
-
-        //EditItemCommand.Execute(args.SwipeControl.DataContext);
+        ViewModel.IsEdit = true;
+        ViewModel.SelectedItem = (ItemViewModel)args.SwipeControl.DataContext;
     }
 
     private void RefreshContainer_RefreshRequested(RefreshContainer sender, RefreshRequestedEventArgs args)

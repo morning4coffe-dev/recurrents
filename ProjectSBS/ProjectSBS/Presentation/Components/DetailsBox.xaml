@@ -6,25 +6,27 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d">
 
-    <Border CornerRadius="4"
-            Padding="16"
-            Background="{ThemeResource CardBackgroundFillColorDefault}">
-        <Grid RowSpacing="8">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+  <Border CornerRadius="4"
+          Padding="16"
+          Background="{ThemeResource CardBackgroundFillColorDefault}"
+          BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+          BorderThickness="1">
+    <Grid RowSpacing="8">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+      </Grid.RowDefinitions>
 
-            <TextBlock Text="{x:Bind HeaderText}"
-                       Opacity="0.6"
-                       TextWrapping="WrapWholeWords" />
+      <TextBlock Text="{x:Bind HeaderText}"
+                 Opacity="0.7"
+                 TextWrapping="WrapWholeWords" />
 
-            <TextBlock TextWrapping="WrapWholeWords"
-                       Text="{x:Bind Text, Mode=OneWay}"
-                       Grid.Row="1" />
+      <TextBlock TextWrapping="WrapWholeWords"
+                 Text="{x:Bind Text, Mode=OneWay}"
+                 Grid.Row="1" />
 
-            <ContentPresenter Content="{x:Bind Content}"
-                              Grid.Row="1" />
-        </Grid>
-    </Border>
+      <ContentPresenter Content="{x:Bind Content}"
+                        Grid.Row="1" />
+    </Grid>
+  </Border>
 </UserControl>

@@ -96,6 +96,7 @@
   <ItemGroup>
     <None Remove="Presentation\Components\DetailsBox.xaml" />
     <None Remove="Presentation\Components\ItemDetails.xaml" />
+    <None Remove="Presentation\Components\MobileUser.xaml" />
     <None Remove="Presentation\Components\PageShell.xaml" />
     <None Remove="Presentation\Components\StatsBanner.xaml" />
     <None Remove="Presentation\Components\ToggleIcon.xaml" />
@@ -110,6 +111,7 @@
   <ItemGroup>
     <UpToDateCheckInput Remove="Presentation\Components\DetailsBox.xaml" />
     <UpToDateCheckInput Remove="Presentation\Components\ItemDetails.xaml" />
+    <UpToDateCheckInput Remove="Presentation\Components\MobileUser.xaml" />
     <UpToDateCheckInput Remove="Presentation\Components\PageShell.xaml" />
     <UpToDateCheckInput Remove="Presentation\Components\StatsBanner.xaml" />
     <UpToDateCheckInput Remove="Presentation\Components\ToggleIcon.xaml" />

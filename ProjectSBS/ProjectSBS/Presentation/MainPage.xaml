@@ -13,28 +13,6 @@
       xmlns:models="using:ProjectSBS.Business.Models"
       xmlns:toolkit="using:CommunityToolkit.WinUI">
 
-  <Page.Resources>
-    <MenuFlyout x:Key="UserFlyout">
-      <MenuFlyoutItem Text="Settings"
-                      Icon="{toolkit:FontIcon Glyph=&#xE713;}"
-                      AutomationProperties.AutomationId="SecondPageButton"
-                      Padding="100, 16"
-                      Command="{x:Bind ViewModel.GoToSettings}" />
-
-      <!--<MenuFlyoutItem Text="Conversions"
-                            Icon="{toolkit:FontIcon Glyph=&#xE8C7;}"
-                            Padding="100, 16"
-                            Command="{Binding}" />-->
-
-      <MenuFlyoutItem Text="Logout"
-                      Padding="100, 16"
-                      Icon="{toolkit:FontIcon Glyph=&#xF3B1;}"
-                      Command="{x:Bind ViewModel.Logout}">
-      </MenuFlyoutItem>
-    </MenuFlyout>
-
-  </Page.Resources>
-
   <comp:PageShell TitleBarTitle="{x:Bind ViewModel.Title}"
                   DesktopTitleVisibility="Visible">
     <comp:PageShell.ContentView>
@@ -147,8 +125,21 @@
                         Margin="4"
                         Padding="12,8"
                         HorizontalContentAlignment="Left"
-                        Flyout="{StaticResource UserFlyout}"
-                        Command="{x:Bind ViewModel.Login}">
+                        Command="{x:Bind ViewModel.Login}">                  
+                  <Button.Flyout>
+                    <MenuFlyout x:Name="userFlyout">
+                      <MenuFlyoutItem Text="Settings"
+                                      Icon="{toolkit:FontIcon Glyph=&#xE713;}"
+                                      Padding="100, 16"
+                                      Command="{x:Bind ViewModel.GoToSettings}" />
+
+                      <MenuFlyoutItem Text="Logout"
+                                      Padding="100, 16"
+                                      Icon="{toolkit:FontIcon Glyph=&#xF3B1;}"
+                                      Command="{x:Bind ViewModel.Logout}">
+                      </MenuFlyoutItem>
+                    </MenuFlyout>
+                  </Button.Flyout>
 
                   <StackPanel x:Name="desktopPerson"
                               Orientation="Horizontal"
@@ -205,7 +196,11 @@
                        HorizontalAlignment="Center"
                        Margin="0,0,0,12"
                        CornerRadius="28"
-                       IsOpen="True" />
+                       IsOpen="True">
+                <InfoBar.IconSource>
+                  <FontIconSource Glyph="&#xF384;" />
+                </InfoBar.IconSource>
+              </InfoBar>
 
               <utu:TabBar x:Name="navigationBar"
                           ItemsSource="{x:Bind ViewModel.DesktopCategories}"

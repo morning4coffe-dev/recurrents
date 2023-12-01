@@ -6,11 +6,14 @@ public sealed partial class MainPage : Page
 
     public MainPage()
     {
-        this.InitializeComponent();
+        InitializeComponent();
 
-        this.DataContext = App.Services?.GetRequiredService<MainViewModel>();
-        this.Loaded += Page_Loaded;
-        this.Unloaded += Page_Unloaded;
+        DataContext = App.Services?.GetRequiredService<MainViewModel>();
+        Loaded += Page_Loaded;
+        Unloaded += Page_Unloaded;
+
+        ViewModel.MenuFlyout = userFlyout;
+        ViewModel.UserButton = userButton;
     }
 
     private void Page_Loaded(object sender, RoutedEventArgs e)

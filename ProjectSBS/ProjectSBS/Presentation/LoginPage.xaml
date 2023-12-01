@@ -140,6 +140,7 @@
                 <Button Content="{x:Bind ViewModel.LoginWithMicrosoftText}"
                         Width="200"
                         Height="45"
+                        AutomationProperties.AutomationId="LoginWithMicrosoft"
                         Command="{x:Bind ViewModel.Login}" />
                 <HyperlinkButton Content="{x:Bind ViewModel.ContinueWithoutLoginText}"
                                  Width="200"

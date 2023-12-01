@@ -11,16 +11,16 @@
 
   <Border CornerRadius="16"
           Visibility="Visible"
-          not_win:Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-          win:Background="{ThemeResource CardBackgroundFillColorDefault}"
+          Background="{ThemeResource CardBackgroundFillColorDefault}"
+          BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+          BorderThickness="1"
           Grid.Row="1">
     <StackPanel>
       <StackPanel Margin="26"
                   Spacing="2">
         <!--Margin="30,30,0,0"-->
-        <TextBlock Text="this month"
-                   Opacity="0.75"
-                   Style="{StaticResource CaptionTextBlockStyle}" />
+        <TextBlock Text="{x:Bind ViewModel.Header}"
+                   Opacity="0.75" />
         <TextBlock Text="{x:Bind ViewModel.Sum, Mode=OneWay}"
                    Style="{StaticResource SubtitleTextBlockStyle}" />
       </StackPanel>

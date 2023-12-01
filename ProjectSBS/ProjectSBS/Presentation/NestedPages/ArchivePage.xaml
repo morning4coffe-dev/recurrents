@@ -3,8 +3,8 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:triggers="using:CommunityToolkit.WinUI"
       xmlns:viewModels="using:ProjectSBS.Business.ViewModels"
-      xmlns:ui="using:CommunityToolkit.WinUI"
       mc:Ignorable="d">
 
   <Grid>
@@ -34,14 +34,33 @@
         </VisualState>
       </VisualStateGroup>
 
+      <!--Pane1 Empty Image-->
+      <VisualStateGroup>
+        <VisualState />
+        <VisualState>
+          <VisualState.StateTriggers>
+            <triggers:IsNullOrEmptyStateTrigger Value="{x:Bind ViewModel.Items, Mode=OneWay}" />
+          </VisualState.StateTriggers>
+          <VisualState.Setters>
+            <Setter Target="itemsEmptyImage.Visibility"
+                    Value="Visible" />
+          </VisualState.Setters>
+        </VisualState>
+      </VisualStateGroup>
+
     </VisualStateManager.VisualStateGroups>
 
-    <Grid Style="{StaticResource PageBackground}">
+    <Grid Style="{ThemeResource PageBackground}">
 
       <ScrollViewer>
-        <StackPanel x:Name="contentHolder"
-                    Margin="48,48,48,0"
-                    Spacing="8">
+        <Grid x:Name="contentHolder"
+              Margin="48,48,48,0">
+
+          <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+          </Grid.RowDefinitions>
 
           <TextBlock x:Name="desktopHeader"
                      Text="{x:Bind ViewModel.SelectedCategory.Text}"
@@ -84,26 +103,35 @@
           </Grid>
 
           <ListView ItemsSource="{x:Bind ViewModel.Items}"
+                    ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                    ScrollViewer.VerticalScrollMode="Disabled"
                     SelectionMode="None"
                     IsItemClickEnabled="True"
+                    Grid.Row="1"
                     ItemClick="ListView_ItemClick">
 
             <ListView.ItemTemplate>
               <DataTemplate x:DataType="viewModels:ItemViewModel">
 
-                <Grid>
+                <Grid ColumnSpacing="12">
                   <Grid.ColumnDefinitions>
                     <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                   </Grid.ColumnDefinitions>
 
                   <TextBlock Text="{x:Bind Item.Name, Mode=OneWay}"
-                             Padding="0,12" />
+                             Padding="0,14" />
+
+                  <TextBlock Text="{x:Bind ArchivationDate, Mode=OneWay}"
+                             Opacity="0.7"
+                             VerticalAlignment="Center"
+                             Grid.Column="1" />
 
                   <FontIcon Glyph="&#xE7A7;"
                             Opacity="0.7"
                             FontSize="16"
-                            Grid.Column="1" />
+                            Grid.Column="2" />
                 </Grid>
 
               </DataTemplate>
@@ -112,9 +140,12 @@
 
           <StackPanel x:Name="itemsEmptyImage"
                       Spacing="12"
+                      Grid.Row="2"
+                      VerticalAlignment="Center"
                       Visibility="Collapsed">
 
-            <Image Source="/ProjectSBS/Assets/Illustrations/undraw_Newsletter_re_wrob.png"
+            <Image Source="ms-appx:///Assets/Icons/icon.png"
+                   Margin="20"
                    MaxHeight="200" />
 
             <TextBlock Text="You have no items here!"
@@ -129,7 +160,7 @@
 
           </StackPanel>
 
-        </StackPanel>
+        </Grid>
       </ScrollViewer>
     </Grid>
   </Grid>

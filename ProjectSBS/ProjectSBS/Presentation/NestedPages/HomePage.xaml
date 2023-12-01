@@ -101,8 +101,7 @@
 
       <muxc:TwoPaneView.Pane1>
 
-        <Grid Style="{StaticResource PageBackground}">
-
+        <Grid Style="{ThemeResource PageBackground}">
           <ScrollViewer>
             <!--<RefreshContainer x:Name="contentHolder"
                                           Margin="48,48,48,0"
@@ -142,19 +141,16 @@
                                  Width="65" />
                 </Button>
 
-                <StackPanel Grid.Column="1">
+                <StackPanel Grid.Column="1"
+                            VerticalAlignment="Center">
                   <TextBlock Text="{x:Bind ViewModel.WelcomeMessage}"
                              TextWrapping="WrapWholeWords"
-                             VerticalAlignment="Center"
-                             HorizontalAlignment="Left"
                              Opacity="0.6"
                              Style="{StaticResource SubtitleTextBlockStyle}" />
 
                   <TextBlock Text="{x:Bind ViewModel.User.Name, Mode=OneWay}"
                              Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay, Converter={StaticResource TrueToVisibleConverter}}"
                              TextWrapping="WrapWholeWords"
-                             VerticalAlignment="Center"
-                             HorizontalAlignment="Left"
                              Style="{StaticResource TitleTextBlockStyle}" />
                 </StackPanel>
               </Grid>
@@ -193,6 +189,7 @@
               </win:ScrollViewer>
 
               <GridView ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                        ScrollViewer.VerticalScrollMode="Disabled"
                         ItemsSource="{x:Bind ViewModel.Items, Mode=OneWay}"
                         SelectedItem="{x:Bind ViewModel.SelectedItem, Mode=TwoWay}">
 
@@ -217,13 +214,8 @@
                     <SwipeItem Text="Archive"
                                IconSource="{StaticResource ArchiveIcon}"
                                Foreground="{StaticResource TextOnAccentFillColorPrimaryBrush}"
-                               Background="{StaticResource SystemAccentColor}"
+                               Background="{ThemeResource SystemFillColorCriticalBrush}"
                                Invoked="ArchiveItem_Invoked" />
-                    <!--<SwipeItem Text="Delete"
-                          IconSource="{StaticResource DeleteIcon}"
-                          Foreground="{StaticResource TextOnAccentFillColorPrimaryBrush}"
-                          Background="{StaticResource SystemAccentColor}"
-                          Invoked="DeleteItem_Invoked" />-->
                   </SwipeItems>
                 </GridView.Resources>
 
@@ -312,7 +304,7 @@
                           Spacing="12"
                           Visibility="Collapsed">
 
-                <Image Source="/ProjectSBS/Assets/Illustrations/undraw_Newsletter_re_wrob.png"
+                <Image Source="ms-appx:///Assets/Icons/icon.png"
                        MaxHeight="200" />
 
                 <TextBlock Text="You have no items here!"

@@ -1,29 +1,32 @@
 namespace ProjectSBS.Services.Items;
 
-public class ItemService : IItemService
+public class ItemService(IDataService dataService) : IItemService
 {
-    private readonly IDataService _dataService;
+    private readonly IDataService _dataService = dataService;
+
+    private bool _isInitialized;
 
     private readonly List<ItemViewModel> _items = [];
 
     public event EventHandler<IEnumerable<ItemViewModel>>? OnItemsInitialized;
     public event EventHandler<IEnumerable<ItemViewModel>>? OnItemsChanged;
 
-    public ItemService(IDataService dataService)
-    {
-        _dataService = dataService;
-    }
-
     public async Task InitializeAsync()
     {
-        var (items, logs) = await _dataService.InitializeDatabaseAsync();
+        if (_isInitialized)
+        {
+            return;
+        }
+
+        var (items, _) = await _dataService.InitializeDatabaseAsync();
 
         foreach (var item in items)
         {
-            AddNewItem(item, logs);
+            AddNewItem(item);
         }
 
         OnItemsInitialized?.Invoke(this, _items);
+        _isInitialized = true;
     }
 
     public IEnumerable<ItemViewModel> GetItems(Func<ItemViewModel, bool>? selector = null)
@@ -34,6 +37,21 @@ public class ItemService : IItemService
         }
 
         return _items.Where(selector);
+    }
+
+    public bool ClearItems()
+    {
+        try
+        {
+            _items.Clear();
+            OnItemsChanged?.Invoke(this, _items);
+            _isInitialized = false;
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     public void NewItem(Item item, List<ItemLog>? logs = null)
@@ -61,7 +79,12 @@ public class ItemService : IItemService
 
     public void ArchiveItem(ItemViewModel item)
     {
-        item.Item?.Status.Push(new(item.IsArchived ? State.Active : State.Archived, DateOnly.FromDateTime(DateTime.Now)));
+        if (item?.Item is not { } i)
+        {
+            return;   
+        }
+
+        i.Status.Push(new(item.IsArchived ? State.Active : State.Archived, DateOnly.FromDateTime(DateTime.Now)));
 
         SaveDataAsync();
         item.Updated();

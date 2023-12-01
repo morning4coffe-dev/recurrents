@@ -18,7 +18,13 @@ public partial class MainViewModel : ViewModelBase
     private Type? _pageType;
 
     [ObservableProperty]
-    public bool _isLoggedIn;
+    private bool _isLoggedIn;
+
+    [ObservableProperty]
+    private MenuFlyout _menuFlyout;
+
+    [ObservableProperty]
+    private FrameworkElement _userButton;
 
     public NavigationCategory SelectedCategory
     {
@@ -80,10 +86,13 @@ public partial class MainViewModel : ViewModelBase
         {
             if (IsLoggedIn)
             {
+                MenuFlyout.ShowAttachedFlyout(UserButton);
                 return;
             }
 
             navigation.Navigate(typeof(LoginPage));
+
+            _itemService.ClearItems();
         });
     }
     

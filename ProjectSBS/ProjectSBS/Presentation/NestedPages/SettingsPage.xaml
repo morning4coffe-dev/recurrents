@@ -15,32 +15,33 @@
                   MobileTitleVisibility="Visible">
     <comp:PageShell.ContentView>
       <UserControl>
-        <Grid Style="{StaticResource PageBackground}">
-            <VisualStateManager.VisualStateGroups>
-              <!--AdaptiveTriggers-->
-              <VisualStateGroup>
-                <VisualState>
-                  <VisualState.StateTriggers>
-                    <AdaptiveTrigger MinWindowWidth="0" />
-                  </VisualState.StateTriggers>
+        <Grid Style="{ThemeResource PageBackground}">
 
-                  <VisualState.Setters>
-                    <Setter Target="settingsHolder.Margin"
-                            Value="8,8,8,0" />
-                    <Setter Target="desktopHeader.Visibility"
-                            Value="Collapsed" />
-                  </VisualState.Setters>
-                </VisualState>
+          <VisualStateManager.VisualStateGroups>
+            <!--AdaptiveTriggers-->
+            <VisualStateGroup>
+              <VisualState>
+                <VisualState.StateTriggers>
+                  <AdaptiveTrigger MinWindowWidth="0" />
+                </VisualState.StateTriggers>
 
-                <VisualState>
-                  <VisualState.StateTriggers>
-                    <AdaptiveTrigger MinWindowWidth="640" />
-                  </VisualState.StateTriggers>
-                </VisualState>
-              </VisualStateGroup>
+                <VisualState.Setters>
+                  <Setter Target="settingsHolder.Margin"
+                          Value="8,8,8,0" />
+                  <Setter Target="desktopHeader.Visibility"
+                          Value="Collapsed" />
+                </VisualState.Setters>
+              </VisualState>
 
-            </VisualStateManager.VisualStateGroups>
-          
+              <VisualState>
+                <VisualState.StateTriggers>
+                  <AdaptiveTrigger MinWindowWidth="640" />
+                </VisualState.StateTriggers>
+              </VisualState>
+            </VisualStateGroup>
+
+          </VisualStateManager.VisualStateGroups>
+
           <ScrollViewer>
             <StackPanel x:Name="settingsHolder"
                         Spacing="4"
@@ -102,11 +103,39 @@
                           Grid.Column="1" />
               </controls:SettingsCard>
 
-              <controls:SettingsCard Header="{x:Bind ViewModel.NotificationsText}"
+              <TextBlock Text="{x:Bind ViewModel.NotificationsText}"
+                         Margin="0,12,0,0"
+                         Style="{StaticResource BaseTextBlockStyle}" />
+
+              <win:Border>
+                <!--TODO TimePicker is not yet supported on Uno targets-->
+                <controls:SettingsCard Header="Notification time"
+                                       HeaderIcon="{ui:FontIcon Glyph=&#xE823;}">
+                  <TimePicker />
+                </controls:SettingsCard>
+              </win:Border>
+
+              <controls:SettingsCard Header="System notifications"
                                      ActionIcon="{ui:FontIcon Glyph=&#xE8A7;}"
                                      HeaderIcon="{ui:FontIcon Glyph=&#xEA8F;}"
                                      IsClickEnabled="True"
                                      Command="{x:Bind ViewModel.LaunchNotificationSettingsCommand}" />
+
+              <InfoBar Title="Notifications are disabled!"
+                       Message="You will not be able to recive notifications until you enable it in the settings."
+                       Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
+                       IsOpen="True"
+                       Severity="Warning"
+                       IsClosable="False">
+                <InfoBar.IconSource>
+                  <FontIconSource Glyph="&#xEE79;" />
+                </InfoBar.IconSource>
+                <InfoBar.ActionButton>
+                  <Button Content="Go to settings"
+                          HorizontalAlignment="Right"
+                          Command="{x:Bind ViewModel.LaunchNotificationSettingsCommand}" />
+                </InfoBar.ActionButton>
+              </InfoBar>
 
               <TextBlock Text="{x:Bind ViewModel.AboutText}"
                          Margin="0,12,0,0"

@@ -9,6 +9,7 @@ public partial class LoginViewModel : ObservableObject
 
     private readonly IStringLocalizer _localization;
     private readonly INavigation _navigation;
+    private readonly IItemService _itemService;
 
     [ObservableProperty]
     private UserModel.User? _user;
@@ -16,11 +17,13 @@ public partial class LoginViewModel : ObservableObject
     public LoginViewModel(
         INavigation navigation,
         IUserService userService,
+        IItemService itemService,
         IStringLocalizer localization)
     {
         _navigation = navigation;
         _userService = userService;
         _localization = localization;
+        _itemService = itemService;
 
         Login = new AsyncRelayCommand(DoLogin);
         WithoutLogin = new RelayCommand(() => _navigation.Navigate(typeof(MainPage)));
@@ -30,6 +33,8 @@ public partial class LoginViewModel : ObservableObject
         _privacyPolicyText = _localization["PrivacyPolicy"];
         _loginWithMicrosoftText = _localization["LoginWithMicrosoft"];
         _continueWithoutLoginText = _localization["ContinueWithoutLogin"];
+
+        itemService.ClearItems();
     }
 
     private async Task DoLogin()
@@ -55,6 +60,8 @@ public partial class LoginViewModel : ObservableObject
             {
                 User = user;
             });
+
+            await _itemService.InitializeAsync();
 
             //TODO [Optimization] instead of waiting, maybe load items, or stuff like that here
             //await Task.Delay(100);

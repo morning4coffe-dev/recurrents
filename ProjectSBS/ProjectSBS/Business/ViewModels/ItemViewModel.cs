@@ -11,7 +11,9 @@ public partial class ItemViewModel : ObservableObject
         _item = item;
 
         _billingService = App.Services?.GetRequiredService<IBillingService>()!;
+#if !HAS_UNO_SKIA
         _notification = App.Services?.GetRequiredService<INotificationService>()!;
+#endif
         _localization = App.Services?.GetRequiredService<IStringLocalizer>()!;
 
         ScheduleBilling();
@@ -75,29 +77,43 @@ public partial class ItemViewModel : ObservableObject
     public string FormattedTotalPrice => TotalPrice.ToString("n");
     public string FormattedPrice => Item?.Billing.BasePrice.ToString("n") ?? "0";
 
-
     public bool IsArchived
     {
         get
         {
-
             if (Item?.Status?.TryPeek(out var status) is not { })
             {
                 return false;
             }
 
             return status?.State == State.Archived;
-
         }
     }
 
-    //public int GetPaymentsInPeriod(int periodDays) 
-    //{
-    //    //_billingService.GetNextBillingDate(Item.Billing.da);
-    //    periodDays / Item.Billing.RecurEvery * _billingService.;
-    //}
+    public DateOnly? ArchivationDate 
+    { 
+        get
+        {
+            if (Item?.Status?.TryPeek(out var status) is not { })
+            {
+                return null;
+            }
 
-    public List<DateOnly> GetFuturePayments(int numberOfPayments = 12)
+            return status?.Date;
+        }
+}
+
+    public int GetPaymentsInPeriod(int periodDays) 
+    {
+        var dates = GetLastPayments().ToArray();
+
+        var startDate = DateOnly.FromDateTime(DateTime.Now.AddDays(-(periodDays-1)));
+        var endDate = DateOnly.FromDateTime(DateTime.Now);
+
+        return dates.Count(date => date >= startDate && date <= endDate);
+    }
+
+    public IEnumerable<DateOnly> GetFuturePayments(int numberOfPayments = 12)
     {
         if (Item?.Billing is not { } billing)
         {
@@ -105,6 +121,16 @@ public partial class ItemViewModel : ObservableObject
         }
 
         return _billingService.GetFuturePayments(billing.InitialDate, billing.PeriodType, billing.RecurEvery, numberOfPayments);
+    }
+
+    public IEnumerable<DateOnly> GetLastPayments()
+    {
+        if (Item?.Billing is not { } billing)
+        {
+            return [];
+        }
+
+        return _billingService.GetLastPayments(billing.InitialDate, billing.PeriodType, billing.RecurEvery);
     }
 
     public void Updated()
@@ -141,9 +167,9 @@ public partial class ItemViewModel : ObservableObject
 
             //- time period before e.g. one day, time that user selected
             //DEBUG
-            _notification.ScheduleNotification(item.Id, title, text, DateOnly.FromDateTime(DateTime.Now), TimeOnly.FromDateTime(DateTime.Now.AddSeconds(2)));
+            //_notification.ScheduleNotification(item.Id, title, text, DateOnly.FromDateTime(DateTime.Now), TimeOnly.FromDateTime(DateTime.Now.AddSeconds(2)));
 
-            //_notification.ScheduleNotification(item.Id, title, text, date.AddDays(-1), new TimeOnly(8, 00));
+            _notification.ScheduleNotification(item.Id, title, text, date.AddDays(-1), new TimeOnly(8, 00));
         })).ToArray();
 
         await Task.WhenAll(tasks);
