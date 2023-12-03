@@ -166,11 +166,11 @@
               </win:StackPanel.ChildrenTransitions>
 
               <Grid HorizontalAlignment="Left">
-                <Rectangle Fill="{x:Bind ViewModel.SelectedItem.DisplayTag.Color, Mode=OneWay,Converter={StaticResource ColorToBrushConverter}}"
+                <Rectangle Fill="{x:Bind ViewModel.SelectedItem.DisplayTag.Color, Mode=OneWay, Converter={StaticResource ColorToBrushConverter}}"
                            RadiusY="12"
                            RadiusX="12" />
                 <TextBlock Text="{x:Bind ViewModel.SelectedItem.DisplayTag.Name, Mode=OneWay}"
-                           Margin="12,3"
+                           Margin="12,4"
                            Style="{StaticResource CaptionTextBlockStyle}" />
               </Grid>
 
@@ -250,7 +250,7 @@
                           Style="{StaticResource ContentStack}">
 
                 <TextBox Header="Name"
-                         Text="{x:Bind ViewModel.SelectedItem.Item.Name, Mode=TwoWay}"
+                         Text="{x:Bind ViewModel.EditItem.Name, Mode=TwoWay}"
                          MaxLength="400" />
 
                 <Grid ColumnSpacing="8">
@@ -260,21 +260,65 @@
                   </Grid.ColumnDefinitions>
 
                   <NumberBox Header="Price"
-                             Value="{Binding SelectedItem.Item.Billing.BasePrice, Mode=TwoWay, Converter={StaticResource DecimalToDoubleConverter}}"
+                             Value="{x:Bind ViewModel.EditItem.Billing.BasePrice, Mode=TwoWay, Converter={StaticResource DecimalToDoubleConverter}}"
                              SpinButtonPlacementMode="Inline"
                              AcceptsExpression="True"
                              Maximum="99999999999999"
                              Minimum="-9999999999999" />
                   <ComboBox VerticalAlignment="Bottom"
                             ItemsSource="{x:Bind ViewModel.Currencies, Mode=OneWay}"
-                            SelectedItem="{x:Bind ViewModel.SelectedItem.Item.Billing.CurrencyId, Mode=TwoWay}"
+                            SelectedItem="{x:Bind ViewModel.EditItem.Billing.CurrencyId, Mode=TwoWay}"
+                            MinWidth="80"
                             Grid.Column="1" />
                 </Grid>
+
+                <CalendarDatePicker Header="Paying since"
+                                    Date="{x:Bind ViewModel.EditItem.Billing.InitialDate, Mode=TwoWay, Converter={StaticResource DateOnlyToDateTimeOffsetConverter}}"
+                                    IsTodayHighlighted="True"
+                                    HorizontalAlignment="Stretch" />
+
+                <Grid ColumnSpacing="8">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                  </Grid.ColumnDefinitions>
+
+                  <NumberBox Header="Billing cycle"
+                             Value="{x:Bind ViewModel.EditItem.Billing.RecurEvery, Mode=TwoWay}"
+                             SpinButtonPlacementMode="Inline"
+                             AcceptsExpression="True"
+                             Maximum="999"
+                             Minimum="1" />
+                  <ComboBox VerticalAlignment="Bottom"
+                            ItemsSource="{toolkit:EnumValues Type=models:Period}"
+                            SelectedItem="{x:Bind ViewModel.EditItem.Billing.PeriodType, Mode=TwoWay}"
+                            MinWidth="120"
+                            Grid.Column="1" />
+                </Grid>
+
+                <Grid>
+                  <!--TODO Add changing icon here-->
+                  <CheckBox Content="Get notified"
+                            IsChecked="{x:Bind ViewModel.EditItem.IsNotify, Mode=TwoWay}" />
+                  <local:ToggleIcon IsChecked="{x:Bind ViewModel.EditItem.IsNotify, Mode=OneWay}"
+                                    HorizontalAlignment="Right"
+                                    TrueIcon="{toolkit:FontIcon Glyph=&#xEA8F;}"
+                                    FalseIcon="{toolkit:FontIcon Glyph=&#xE7ED;}" />
+                </Grid>
+
+                <!--<Grid>
+                  <CheckBox Content="Split between people {NI}" />
+
+                  <local:ToggleIcon IsChecked="True"
+                                    HorizontalAlignment="Right"
+                                    TrueIcon="{toolkit:FontIcon Glyph=&#xE713;}"
+                                    FalseIcon="{toolkit:FontIcon Glyph=&#xE748;}" />
+                </Grid>-->
 
                 <!--TODO SelectedIndex is not future proof-->
                 <ComboBox Header="Tag"
                           ItemsSource="{x:Bind ViewModel.Tags, Mode=OneTime}"
-                          SelectedIndex="{x:Bind ViewModel.SelectedItem.Item.TagId, Mode=TwoWay}"
+                          SelectedIndex="{x:Bind ViewModel.EditItem.TagId, Mode=TwoWay}"
                           VerticalAlignment="Bottom"
                           HorizontalAlignment="Stretch">
                   <ComboBox.ItemTemplate>
@@ -292,53 +336,31 @@
                   </ComboBox.ItemTemplate>
                 </ComboBox>
 
-                <CalendarDatePicker Header="Billing Date"
-                                    Date="{x:Bind ViewModel.SelectedItem.Item.Billing.InitialDate, Mode=TwoWay, Converter={StaticResource DateOnlyToDateTimeOffsetConverter}}"
-                                    HorizontalAlignment="Stretch" />
+                <ComboBox HorizontalAlignment="Stretch">
+                  <ComboBox.Header>
+                    <StackPanel Orientation="Horizontal"
+                                Spacing="4">
+                      <TextBlock Text="Payment method" />
+                      <TextBlock Text="(Optional)"
+                                 Opacity="0.5" />
+                    </StackPanel>
+                  </ComboBox.Header>
+                </ComboBox>
 
-                <Grid ColumnSpacing="8">
-                  <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="Auto" />
-                  </Grid.ColumnDefinitions>
-
-                  <NumberBox Header="Repete every"
-                             Value="{x:Bind ViewModel.SelectedItem.Item.Billing.RecurEvery, Mode=TwoWay}"
-                             SpinButtonPlacementMode="Inline"
-                             AcceptsExpression="True"
-                             Maximum="999"
-                             Minimum="1" />
-                  <ComboBox VerticalAlignment="Bottom"
-                            ItemsSource="{toolkit:EnumValues Type=models:Period}"
-                            SelectedItem="{x:Bind ViewModel.SelectedItem.Item.Billing.PeriodType, Mode=TwoWay}"
-                            Grid.Column="1" />
-                </Grid>
-
-                <Grid>
-                  <!--TODO Add changing icon here-->
-                  <CheckBox Content="Get notified"
-                            IsChecked="{x:Bind ViewModel.SelectedItem.Item.IsNotify, Mode=TwoWay}" />
-                  <local:ToggleIcon IsChecked="{x:Bind ViewModel.SelectedItem.Item.IsNotify, Mode=OneWay}"
-                                    HorizontalAlignment="Right"
-                                    TrueIcon="{toolkit:FontIcon Glyph=&#xEA8F;}"
-                                    FalseIcon="{toolkit:FontIcon Glyph=&#xE7ED;}" />
-                </Grid>
-
-                <!--<Grid>
-                  <CheckBox Content="Split between people {NI}" />
-
-                  <local:ToggleIcon IsChecked="True"
-                                    HorizontalAlignment="Right"
-                                    TrueIcon="{toolkit:FontIcon Glyph=&#xE713;}"
-                                    FalseIcon="{toolkit:FontIcon Glyph=&#xE748;}" />
-                </Grid>-->
-
-                <TextBox Header="Description"
-                         Text="{x:Bind ViewModel.SelectedItem.Item.Description, Mode=TwoWay}"
+                <TextBox Text="{x:Bind ViewModel.EditItem.Description, Mode=TwoWay}"
+                         PlaceholderText="Give your subscription a description..."
                          Height="120"
                          TextWrapping="Wrap"
                          AcceptsReturn="True"
-                         MaxLength="999999" />
+                         MaxLength="999999">
+                  <TextBox.Header>
+                    <StackPanel Orientation="Horizontal" Spacing="4">
+                      <TextBlock Text="Description" />
+                      <TextBlock Text="(Optional)"
+                                 Opacity="0.5" />
+                    </StackPanel>
+                  </TextBox.Header>
+                </TextBox>
               </StackPanel>
             </ScrollViewer>
 

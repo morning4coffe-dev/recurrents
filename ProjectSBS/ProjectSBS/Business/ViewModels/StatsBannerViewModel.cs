@@ -3,7 +3,7 @@ using LiveChartsCore.SkiaSharpView;
 
 namespace ProjectSBS.Business.ViewModels;
 
-public partial class StatsBannerViewModel : ObservableObject
+public partial class StatsBannerViewModel : ViewModelBase
 {
     private readonly IItemService _itemService;
     private readonly ISettingsService _settingsService;
@@ -81,5 +81,16 @@ public partial class StatsBannerViewModel : ObservableObject
         var sum = values.Sum();
 
         Sum = $"≈ {Math.Round(sum, 2):n} {_settingsService.DefaultCurrency}";
+    }
+
+    public override void Load()
+    {
+        //throw new NotImplementedException();
+    }
+
+    public override void Unload()
+    {
+        _itemService.OnItemsChanged -= ItemService_OnItemsChanged;
+        _itemService.OnItemsInitialized -= ItemService_OnItemsChanged;
     }
 }

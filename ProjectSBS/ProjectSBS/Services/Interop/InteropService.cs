@@ -60,8 +60,9 @@ public class InteropService : IInteropService
 
     public async Task OpenStoreReviewUrlAsync()
     {
+        //TODO: Implement on all platforms
 #if !HAS_UNO
-        await Windows.System.Launcher.LaunchUriAsync(new Uri("ms-windows-store://review/?ProductId=9PN77P9WJ3CX"));
+        await Windows.System.Launcher.LaunchUriAsync(new Uri("ms-windows-store://review/?ProductId=9N5MJT8G06KC"));
 #else
         throw new NotImplementedException("OpenStoreReviewUrlAsync is not yet implemented on this platform!");
 #endif

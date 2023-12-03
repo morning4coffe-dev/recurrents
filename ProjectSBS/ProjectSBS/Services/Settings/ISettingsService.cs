@@ -20,4 +20,5 @@ public interface ISettingsService
     T GetValue<T>(string key, T defaultValue = default);
 
     string DefaultCurrency { set; get; }
+    TimeOnly NotificationTime { set; get; }
 }

@@ -120,6 +120,9 @@
   <data name="About" xml:space="preserve">
     <value>About</value>
   </data>
+  <data name="AboutDescription" xml:space="preserve">
+    <value>Made with love and loads of coffee in Czechia</value>
+  </data>
   <data name="All" xml:space="preserve">
     <value>All</value>
   </data>
@@ -138,11 +141,17 @@
   <data name="Days" xml:space="preserve">
     <value>Days</value>
   </data>
+  <data name="DefaultCurrency" xml:space="preserve">
+    <value>Default currency</value>
+  </data>
   <data name="Edit" xml:space="preserve">
     <value>Edit</value>
   </data>
   <data name="Gaming" xml:space="preserve">
     <value>Gaming</value>
+  </data>
+  <data name="GitHub" xml:space="preserve">
+    <value>GitHub</value>
   </data>
   <data name="GoodAfternoon" xml:space="preserve">
     <value>Good Afternoon</value>
@@ -155,6 +164,9 @@
   </data>
   <data name="GoodNight" xml:space="preserve">
     <value>Good Night</value>
+  </data>
+  <data name="GoToSettings" xml:space="preserve">
+    <value>Go to Settings</value>
   </data>
   <data name="Home" xml:space="preserve">
     <value>Home</value>
@@ -181,8 +193,29 @@
   <data name="Notifications" xml:space="preserve">
     <value>Notifications</value>
   </data>
+  <data name="NotificationsDisabled" xml:space="preserve">
+    <value>Notifications are disabled!</value>
+  </data>
+  <data name="NotificationsDisabledDescription" xml:space="preserve">
+    <value>You won't be able to recive notifications until you enable them in the settings.</value>
+  </data>
+  <data name="NotificationTime" xml:space="preserve">
+    <value>Notification time</value>
+  </data>
+  <data name="NotLoggedIn" xml:space="preserve">
+    <value>You are not logged in!</value>
+  </data>
+  <data name="NotLoggedInDescription" xml:space="preserve">
+    <value>Your data are be stored locally and aren't being synchronized.</value>
+  </data>
   <data name="PrivacyPolicy" xml:space="preserve">
     <value>Privacy Policy</value>
+  </data>
+  <data name="RateAndReview" xml:space="preserve">
+    <value>Rate and review</value>
+  </data>
+  <data name="ReportABug" xml:space="preserve">
+    <value>Report a bug</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Save</value>
@@ -192,6 +225,9 @@
   </data>
   <data name="Stats" xml:space="preserve">
     <value>Stats</value>
+  </data>
+  <data name="SystemNotifications" xml:space="preserve">
+    <value>System notifications</value>
   </data>
   <data name="Tomorrow" xml:space="preserve">
     <value>Tomorrow</value>

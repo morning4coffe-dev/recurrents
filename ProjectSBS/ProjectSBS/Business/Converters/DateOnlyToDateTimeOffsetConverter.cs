@@ -1,4 +1,4 @@
-﻿using Microsoft.UI.Xaml.Data;
+using Microsoft.UI.Xaml.Data;
 
 namespace ProjectSBS.Business.Converters;
 
@@ -13,12 +13,12 @@ public class DateOnlyToDateTimeOffsetConverter : IValueConverter
         return value;
     }
 
-    public object ConvertBack(object value, Type targetType, object parameter, string language)
+    public object ConvertBack(object? value, Type targetType, object parameter, string language)
     {
         if (value is DateTimeOffset dateTimeOffset)
         {
             return new DateOnly(dateTimeOffset.Year, dateTimeOffset.Month, dateTimeOffset.Day);
         }
-        return value;
+        return value ?? DateOnly.FromDateTime(DateTime.Today);
     }
 }

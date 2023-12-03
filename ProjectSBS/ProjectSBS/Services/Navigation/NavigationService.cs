@@ -3,7 +3,6 @@ namespace ProjectSBS.Services.Navigation;
 internal class NavigationService : INavigation
 {
     public List<NavigationCategory> Categories { get; private init; }
-
     public NavigationCategory SelectedCategory { get; set; }
 
     public Frame? RootFrame { private get; set; }

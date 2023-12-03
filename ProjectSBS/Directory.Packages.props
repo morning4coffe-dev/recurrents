@@ -1,6 +1,6 @@
 <Project ToolsVersion="15.0">
   <ItemGroup>
-    <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="8.0.0-rc.2.23479.6" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
     <PackageVersion Include="coverlet.collector" Version="6.0.0" />
     <PackageVersion Include="FluentAssertions" Version="6.12.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
@@ -8,7 +8,7 @@
     <PackageVersion Include="NUnit3TestAdapter" Version="4.5.0" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageVersion Include="Microsoft.Windows.Compatibility" Version="8.0.0-rc.2.23479.10" />
-    <PackageVersion Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.756" />
+    <PackageVersion Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.2428" />
     <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.4.231115000" />
     <PackageVersion Include="SkiaSharp.Skottie" Version="2.88.6" />
     <PackageVersion Include="SkiaSharp.Views.Uno.WinUI" Version="2.88.6" />
@@ -36,7 +36,7 @@
     <PackageVersion Include="Uno.Wasm.Bootstrap" Version="8.0.4" />
     <PackageVersion Include="Uno.Wasm.Bootstrap.DevServer" Version="8.0.4" />
     <PackageVersion Include="Uno.Wasm.Bootstrap.Server" Version="8.0.4" />
-    <PackageVersion Include="Uno.WinUI" Version="5.0.48" />
+    <PackageVersion Include="Uno.WinUI" Version="5.0.64" />
     <PackageVersion Include="Uno.WinUI.Lottie" Version="5.0.48" />
     <PackageVersion Include="Uno.WinUI.DevServer" Version="5.0.48" />
     <PackageVersion Include="Uno.WinUI.Skia.Gtk" Version="5.0.48" />
@@ -46,8 +46,8 @@
     <PackageVersion Include="Xamarin.UITest" Version="4.3.0" />
     <PackageVersion Include="WinUIEx" Version="2.3.3" />
     <PackageVersion Include="Uno.WinUI.MSAL" Version="5.0.48" />
-    <PackageVersion Include="Microsoft.Graph" Version="5.35.0" />
-    <PackageVersion Include="Microsoft.Identity.Client" Version="4.57.0" />
+    <PackageVersion Include="Microsoft.Graph" Version="5.36.0" />
+    <PackageVersion Include="Microsoft.Identity.Client" Version="4.58.0" />
     <PackageVersion Include="LiveChartsCore.SkiaSharpView.Uno.WinUI" Version="2.0.0-rc2" />
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageVersion Include="CommunityToolkit.WinUI.Notifications" Version="7.1.2" />

@@ -2,21 +2,25 @@ using Windows.UI.Core;
 
 namespace ProjectSBS.Business.ViewModels;
 
-public partial class ItemDetailsViewModel : ObservableObject
+public partial class ItemDetailsViewModel : ViewModelBase
 {
     private readonly IStringLocalizer _localizer;
+    private readonly ITagService _tagService;
+    private readonly ICurrencyCache _currencyCache;
 
     [ObservableProperty]
     private ItemViewModel? _selectedItem;
+
+    [ObservableProperty]
+    private Item? _editItem;
 
     [ObservableProperty]
     private string _itemName = "";
 
     [ObservableProperty]
     private bool _isEditing = false;
-    private bool _isNew = false;
 
-    public ObservableCollection<Tag> Tags { get; }
+    public ObservableCollection<Tag> Tags { get; } = [];
     public ObservableCollection<string> Currencies { get; } = [];
     public ObservableCollection<string> FuturePayments { get; } = [];
 
@@ -34,74 +38,76 @@ public partial class ItemDetailsViewModel : ObservableObject
         ICurrencyCache currencyCache)
     {
         _localizer = localizer;
+        _tagService = tagService;
+        _currencyCache = currencyCache;
 
-        EnableEditingCommand = new AsyncRelayCommand(EnableEditing);
+        EnableEditingCommand = new RelayCommand(() => EnableEditing());
         CloseCommand = new AsyncRelayCommand(Close);
-        SaveCommand = new AsyncRelayCommand(Save);
-        ArchiveCommand = new AsyncRelayCommand(Archive);
+        SaveCommand = new RelayCommand(Save);
+        ArchiveCommand = new RelayCommand(Archive);
 
         SaveText = localizer["Save"];
         EditText = localizer["Edit"];
+    }
 
-        Tags = tagService.Tags.ToObservableCollection();
+    public async override void Load()
+    {
+        Tags.AddRange(_tagService.Tags.ToObservableCollection());
 
-        InitializeCurrency(currencyCache);
-
-        //TODO Doesn't unregister when switching pages and registers again
-        WeakReferenceMessenger.Default.Register<ItemSelectionChanged>(this, async (r, m) =>
+        WeakReferenceMessenger.Default.Register<ItemSelectionChanged>(this, (r, m) =>
         {
 #if HAS_UNO
             SystemNavigationManager.GetForCurrentView().BackRequested += System_BackRequested;
 #endif
             if (m.SelectedItem is { } item)
             {
-                _isNew = m.IsNew;
+                ItemName = item.Item?.Name ?? "";
 
-                App.Dispatcher.TryEnqueue(() =>
-                {
-                    ItemName = (m.SelectedItem?.Item?.Name) != string.Empty ? m.SelectedItem?.Item?.Name : localizer["NewItem"];
-                    SelectedItem = item;
-                });
+                SelectedItem = item;
+                OnPropertyChanged(nameof(SelectedItem));
 
-                IsEditing = m.IsEdit;
-
-                FuturePayments.Clear();
+                EnableEditing(m.IsEdit);
 
                 var localizedDateStrings
                     = item.GetFuturePayments()
                           .Select(date => date.ToString(CultureInfo.CurrentCulture))
                           .ToList();
 
+                FuturePayments.Clear();
                 FuturePayments.AddRange(localizedDateStrings);
             }
         });
-    }
 
-    private async void InitializeCurrency(ICurrencyCache currencyCache)
-    {
-        var currency = await currencyCache.GetCurrency(CancellationToken.None);
+        var currency = await _currencyCache.GetCurrency(CancellationToken.None);
 
-        if (currency?.Rates.Count == 0)
-        {
-            return;
-        }
-
-        App.Dispatcher.TryEnqueue(() =>
+        if (currency?.Rates.Count > 0)
         {
             Currencies.Add(currency.BaseCurrency);
             Currencies.AddRange(currency.Rates.Keys);
-        });
+        }
+    }
+
+    public override void Unload()
+    {
+        WeakReferenceMessenger.Default.UnregisterAll(this);
     }
 
 
-    private async Task EnableEditing()
+    private void EnableEditing(bool isTrue = true)
     {
-        IsEditing = true;
+        IsEditing = isTrue;
+
+        if (isTrue)
+        {
+            // take a copy of the item
+            EditItem = SelectedItem?.Item with { };
+            ItemName = _localizer[string.IsNullOrEmpty(SelectedItem?.Item.Name) ? "NewItem" : "Edit"];
+        }
     }
 
     private async Task<bool> Close()
     {
-        if (IsEditing && !_isNew)
+        if (IsEditing)
         {
             //TODO Switch to new Dialog on Dispatcher
             //await MainViewModel.Navigator.ShowMessageDialogAsync(
@@ -125,12 +131,18 @@ public partial class ItemDetailsViewModel : ObservableObject
         return true;
     }
 
-    private async Task Save()
+    private void Save()
     {
+        if (EditItem is not { } item || SelectedItem is not { })
+        {
+            return;
+        }
+
+        SelectedItem.Item = item;
         WeakReferenceMessenger.Default.Send(new ItemUpdated(SelectedItem, ToSave: true));
     }
 
-    private async Task Archive()
+    private void Archive()
     {
         WeakReferenceMessenger.Default.Send(new ItemArchived(SelectedItem));
     }

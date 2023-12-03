@@ -38,18 +38,31 @@
 
   </ResourceDictionary.ThemeDictionaries>
 
+  <Color x:Key="SystemAccentColor">#238C31</Color>
+  <Color x:Key="SystemAccentColorDark1">#238C31</Color>
+  <Color x:Key="SystemAccentColorDark2">#238C31</Color>
+  <Color x:Key="SystemAccentColorDark3">#238C31</Color>
+  <Color x:Key="SystemAccentColorLight1">#238C31</Color>
+  <Color x:Key="SystemAccentColorLight2">#238C31</Color>
+  <Color x:Key="SystemAccentColorLight3">#238C31</Color>
+
   <Style x:Key="PageBackground"
          TargetType="Grid">
     <Setter Target="CornerRadius"
             Value="8,0,0,0" />
     <Setter Target="Background"
             not_win:Value="{ThemeResource ApplicationBackground}"
-            win:Value="{StaticResource LayerFillColorDefaultBrush}"/>
+            win:Value="{ThemeResource LayerFillColorDefaultBrush}" />
   </Style>
+
 
   <converters:EmptyObjectToObjectConverter x:Key="EmptyToFalseConverter"
                                            EmptyValue="False"
                                            NotEmptyValue="True" />
+
+  <converters:EmptyObjectToObjectConverter x:Key="EmptyToVisibilityConverter"
+                                           EmptyValue="Collapsed"
+                                           NotEmptyValue="Visible" />
 
   <converters:BoolToObjectConverter x:Key="MobileToValueConverter"
                                     TrueValue="0"
@@ -61,6 +74,7 @@
                                         TrueValue="Collapsed"
                                         FalseValue="Visible" />
   <localConverters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
+  <localConverters:TimeOnlyToTimeSpanConverter x:Key="TimeOnlyToTimeSpanConverter" />
   <localConverters:DecimalToDoubleConverter x:Key="DecimalToDoubleConverter" />
   <localConverters:DateOnlyToDateTimeOffsetConverter x:Key="DateOnlyToDateTimeOffsetConverter" />
   <localConverters:ColorToBrushConverter x:Key="ColorToBrushConverter" />

@@ -1,13 +1,26 @@
-﻿namespace ProjectSBS.Presentation.Components;
+namespace ProjectSBS.Presentation.Components;
 
 public sealed partial class StatsBanner : Page
 {
+    public StatsBannerViewModel ViewModel => (StatsBannerViewModel)DataContext;
+
     public StatsBanner()
     {
-        this.InitializeComponent();
+        InitializeComponent();
 
-        this.DataContext = App.Services?.GetRequiredService<StatsBannerViewModel>()!;
+        DataContext = App.Services?.GetRequiredService<StatsBannerViewModel>()!;
+        Loaded += Page_Loaded;
+        Unloaded += Page_Unloaded;
+
     }
 
-    public StatsBannerViewModel ViewModel => (StatsBannerViewModel)DataContext;
+    private void Page_Loaded(object sender, RoutedEventArgs e)
+    {
+        ViewModel.Load();
+    }
+
+    private void Page_Unloaded(object sender, RoutedEventArgs e)
+    {
+        ViewModel.Unload();
+    }
 }

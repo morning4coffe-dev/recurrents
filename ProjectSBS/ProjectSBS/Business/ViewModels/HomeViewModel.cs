@@ -82,7 +82,6 @@ public partial class HomeViewModel : ViewModelBase
 
     public NavigationCategory SelectedCategory => _navigation.SelectedCategory;
 
-    //public ICommand Logout { get; }
     public ICommand AddNewCommand { get; }
     public ICommand ArchiveCommand { get; }
     public ICommand OpenSettingsCommand { get; }

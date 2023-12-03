@@ -72,6 +72,7 @@
                   BorderBrush="Transparent"
                   BorderThickness="0"
                   Padding="12"
+                  Visibility="{x:Bind BackCommand, Converter={StaticResource EmptyToVisibilityConverter}}"
                   Command="{x:Bind BackCommand}">
             <SymbolIcon Symbol="Back" />
           </Button>

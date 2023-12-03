@@ -5,16 +5,18 @@ public partial class ItemViewModel : ObservableObject
     private readonly IBillingService _billingService;
     private readonly INotificationService _notification;
     private readonly IStringLocalizer _localization;
+    private readonly ISettingsService _settingsService;
 
     public ItemViewModel(Item? item)
     {
         _item = item;
 
         _billingService = App.Services?.GetRequiredService<IBillingService>()!;
-#if !HAS_UNO_SKIA
+#if !HAS_UNO || __ANDROID__
         _notification = App.Services?.GetRequiredService<INotificationService>()!;
 #endif
         _localization = App.Services?.GetRequiredService<IStringLocalizer>()!;
+        _settingsService = App.Services?.GetRequiredService<ISettingsService>()!;
 
         ScheduleBilling();
     }
@@ -90,7 +92,7 @@ public partial class ItemViewModel : ObservableObject
         }
     }
 
-    public DateOnly? ArchivationDate 
+    public DateOnly? ArchiveDate 
     { 
         get
         {
@@ -169,7 +171,7 @@ public partial class ItemViewModel : ObservableObject
             //DEBUG
             //_notification.ScheduleNotification(item.Id, title, text, DateOnly.FromDateTime(DateTime.Now), TimeOnly.FromDateTime(DateTime.Now.AddSeconds(2)));
 
-            _notification.ScheduleNotification(item.Id, title, text, date.AddDays(-1), new TimeOnly(8, 00));
+            _notification.ScheduleNotification(item.Id, title, text, date.AddDays(-1), _settingsService.NotificationTime);
         })).ToArray();
 
         await Task.WhenAll(tasks);

@@ -12,7 +12,7 @@ public partial class MainViewModel : ViewModelBase
     private User? _user;
 
     [ObservableProperty]
-    private bool _isEditing;
+    private bool _isMobileNavigationVisible;
 
     [ObservableProperty]
     private Type? _pageType;
@@ -95,7 +95,7 @@ public partial class MainViewModel : ViewModelBase
             _itemService.ClearItems();
         });
     }
-    
+
     public async override void Load()
     {
         _navigation.NavigateNested(SelectedCategory.Page);

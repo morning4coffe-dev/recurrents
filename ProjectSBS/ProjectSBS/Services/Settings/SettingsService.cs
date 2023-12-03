@@ -19,7 +19,7 @@ public class SettingsService : ISettingsService
 
     public T GetValue<T>(string key, T defaultValue = default)
     {
-        if (SettingsStorage.TryGetValue(key, out object value))
+        if (SettingsStorage.TryGetValue(key, out object? value))
         {
             try
             {
@@ -40,5 +40,13 @@ public class SettingsService : ISettingsService
     {
         get => GetValue(_defaultCurrencyId, "EUR");
         set => SetValue(_defaultCurrencyId, value);
+    }
+
+    private readonly string _notificationTimeId = "NotificationTime";
+    public TimeOnly NotificationTime
+    {
+        // 288000000000 is 8:00 AM
+        get => new(GetValue(_notificationTimeId, 288000000000));
+        set => SetValue(_notificationTimeId, value.Ticks);
     }
 }

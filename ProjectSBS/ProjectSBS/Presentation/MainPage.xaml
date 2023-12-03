@@ -207,6 +207,7 @@
                           SelectedItem="{x:Bind ViewModel.SelectedCategory, Mode=TwoWay}"
                           Background="{ThemeResource CardBackgroundFillColorDefault}"
                           Visibility="Collapsed"
+                          CornerRadius="0"
                           Grid.Row="1">
                 <utu:TabBar.ItemTemplate>
                   <DataTemplate x:DataType="models:NavigationCategory">
