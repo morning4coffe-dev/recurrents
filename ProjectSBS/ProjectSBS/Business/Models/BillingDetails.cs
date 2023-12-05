@@ -4,7 +4,8 @@ public record BillingDetails
 {
     public BillingDetails(decimal basePrice, DateOnly initialDate,
         string currencyId = "EUR",
-        Period periodType = Period.Monthly, short recurEvery = 1)
+        Period periodType = Period.Monthly, short recurEvery = 1,
+        string paymentMethod = "")
     {
 
         BasePrice = basePrice;
@@ -12,6 +13,7 @@ public record BillingDetails
         CurrencyId = currencyId;
         PeriodType = periodType;
         RecurEvery = recurEvery;
+        PaymentMethod = paymentMethod;
     }
 
     public decimal BasePrice { get; set; }
@@ -23,4 +25,6 @@ public record BillingDetails
     public Period PeriodType { get; set; }
 
     public short RecurEvery { get; set; }
+
+    public string PaymentMethod { get; set; }
 }

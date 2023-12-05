@@ -1,4 +1,7 @@
+using ProjectSBS.Services.Dialogs;
 using Windows.UI.Core;
+using static System.Net.Mime.MediaTypeNames;
+using static SkiaSharp.HarfBuzz.SKShaper;
 
 namespace ProjectSBS.Business.ViewModels;
 
@@ -7,6 +10,7 @@ public partial class ItemDetailsViewModel : ViewModelBase
     private readonly IStringLocalizer _localizer;
     private readonly ITagService _tagService;
     private readonly ICurrencyCache _currencyCache;
+    private readonly IDialogService _dialog;
 
     [ObservableProperty]
     private ItemViewModel? _selectedItem;
@@ -23,6 +27,7 @@ public partial class ItemDetailsViewModel : ViewModelBase
     public ObservableCollection<Tag> Tags { get; } = [];
     public ObservableCollection<string> Currencies { get; } = [];
     public ObservableCollection<string> FuturePayments { get; } = [];
+    public ObservableCollection<string> PaymentMethods { get; }
 
     public string SaveText { get; }
     public string EditText { get; }
@@ -35,16 +40,29 @@ public partial class ItemDetailsViewModel : ViewModelBase
     public ItemDetailsViewModel(
         IStringLocalizer localizer,
         ITagService tagService,
-        ICurrencyCache currencyCache)
+        ICurrencyCache currencyCache,
+        IDialogService dialog)
     {
         _localizer = localizer;
         _tagService = tagService;
         _currencyCache = currencyCache;
+        _dialog = dialog;
 
         EnableEditingCommand = new RelayCommand(() => EnableEditing());
         CloseCommand = new AsyncRelayCommand(Close);
         SaveCommand = new RelayCommand(Save);
         ArchiveCommand = new RelayCommand(Archive);
+
+        PaymentMethods =
+        [
+            _localizer["CreditCard"],
+            _localizer["DebitCard"],
+            _localizer["DigitalWallet"],
+            _localizer["BankTransfer"],
+            _localizer["Cryptocurrency"],
+            _localizer["Invoice"],
+            _localizer["Cash"]
+        ];
 
         SaveText = localizer["Save"];
         EditText = localizer["Edit"];
@@ -107,28 +125,22 @@ public partial class ItemDetailsViewModel : ViewModelBase
 
     private async Task<bool> Close()
     {
+        ContentDialogResult result = ContentDialogResult.Primary;
+
         if (IsEditing)
         {
-            //TODO Switch to new Dialog on Dispatcher
-            //await MainViewModel.Navigator.ShowMessageDialogAsync(
-            //    this,
-            //    title: _localizer?["Leave"] ?? "Really wanna leave?",
-            //    content: _localizer?["Dialog_Ok"] ?? "Really?",
-            //    buttons: new[]
-            //    {
-            //        new DialogAction(
-            //            Label: _localizer?["Ok"] ?? "Ok",
-            //            Action: () => { IsEditing = false; }),
-            //        new DialogAction(
-            //            Label: _localizer?["Cancel"] ?? "Cancel")
-            //    });
-
-            //return false;
+            result = await _dialog.ShowAsync(
+                _localizer["CloseDialogTitle"],
+                _localizer["CloseDialogDescription"],
+                _localizer["Ok"]);
         }
 
-        WeakReferenceMessenger.Default.Send(new ItemUpdated(SelectedItem, Canceled: true));
+        if (result == ContentDialogResult.Primary)
+        {
+            WeakReferenceMessenger.Default.Send(new ItemUpdated(SelectedItem, Canceled: true));
+        }
 
-        return true;
+        return result == ContentDialogResult.Primary;
     }
 
     private void Save()
@@ -144,6 +156,11 @@ public partial class ItemDetailsViewModel : ViewModelBase
 
     private void Archive()
     {
+        if (SelectedItem is not { })
+        {
+            return;
+        }
+
         WeakReferenceMessenger.Default.Send(new ItemArchived(SelectedItem));
     }
 

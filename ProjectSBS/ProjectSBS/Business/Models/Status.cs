@@ -6,8 +6,8 @@ public enum State
     Archived
 }
 
-public record Status(State State, DateOnly Date)
+public record Status(State State, DateTime Date)
 {
     public State State { get; set; } = State;
-    public DateOnly Date { get; set; } = Date;
+    public DateTime Date { get; set; } = Date;
 }

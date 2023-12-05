@@ -10,4 +10,6 @@ public interface INavigation
 
     void Navigate(Type page);
     void NavigateNested(Type page);
+
+    Task<ContentDialogResult> ShowDialogAsync(ContentDialog dialog);
 }

@@ -196,7 +196,7 @@
                                 Text="{x:Bind ViewModel.SelectedItem.Item.Billing.PeriodType, Mode=OneWay}" />
 
               <local:DetailsBox HeaderText="payment method"
-                                Text="N/A" />
+                                Text="{x:Bind ViewModel.SelectedItem.Item.Billing.PaymentMethod, Mode=OneWay}" />
 
               <local:DetailsBox HeaderText="next payments">
                 <local:DetailsBox.Content>
@@ -336,7 +336,10 @@
                   </ComboBox.ItemTemplate>
                 </ComboBox>
 
-                <ComboBox HorizontalAlignment="Stretch">
+                <ComboBox ItemsSource="{x:Bind ViewModel.PaymentMethods}"
+                          SelectedValue="{x:Bind ViewModel.EditItem.Billing.PaymentMethod, Mode=TwoWay}"
+                          HorizontalAlignment="Stretch"
+                          IsEditable="True">
                   <ComboBox.Header>
                     <StackPanel Orientation="Horizontal"
                                 Spacing="4">
@@ -354,7 +357,8 @@
                          AcceptsReturn="True"
                          MaxLength="999999">
                   <TextBox.Header>
-                    <StackPanel Orientation="Horizontal" Spacing="4">
+                    <StackPanel Orientation="Horizontal"
+                                Spacing="4">
                       <TextBlock Text="Description" />
                       <TextBlock Text="(Optional)"
                                  Opacity="0.5" />

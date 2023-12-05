@@ -1,4 +1,6 @@
 using Microsoft.UI.Dispatching;
+using ProjectSBS.Services.Dialogs;
+
 #if WINDOWS
 using Microsoft.UI.Composition.SystemBackdrops;
 using WinUIEx;
@@ -83,6 +85,7 @@ public class App : Application
                     services.AddSingleton<IItemFilterService, ItemFilterService>();
                     services.AddSingleton<ITagService, TagService>();
                     services.AddSingleton<INavigation, NavigationService>();
+                    services.AddSingleton<IDialogService, DialogService>();
 
                     services.AddTransient<MainViewModel>();
                     services.AddTransient<LoginViewModel>();
