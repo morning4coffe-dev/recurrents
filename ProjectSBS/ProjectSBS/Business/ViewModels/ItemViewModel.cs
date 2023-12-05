@@ -79,37 +79,36 @@ public partial class ItemViewModel : ObservableObject
     public string FormattedTotalPrice => TotalPrice.ToString("n");
     public string FormattedPrice => Item?.Billing.BasePrice.ToString("n") ?? "0";
 
-    public bool IsArchived
+    private Status? GetLastStatus()
+    {
+        if (Item?.Status is not { } itemStatus)
+        {
+            return null;
+        }
+
+        return itemStatus.OrderByDescending(s => s.Date).First();
+    }
+
+    public bool IsArchived => GetLastStatus()?.State == State.Archived;
+
+    public DateOnly? ArchiveDate
     {
         get
         {
-            if (Item?.Status?.TryPeek(out var status) is not { })
-            {
-                return false;
-            }
-
-            return status?.State == State.Archived;
-        }
-    }
-
-    public DateOnly? ArchiveDate 
-    { 
-        get
-        {
-            if (Item?.Status?.TryPeek(out var status) is not { })
+            if (GetLastStatus() is not { } dateTime)
             {
                 return null;
             }
 
-            return status?.Date;
+            return DateOnly.FromDateTime(dateTime.Date);
         }
-}
+    }
 
-    public int GetPaymentsInPeriod(int periodDays) 
+    public int GetPaymentsInPeriod(int periodDays)
     {
         var dates = GetLastPayments().ToArray();
 
-        var startDate = DateOnly.FromDateTime(DateTime.Now.AddDays(-(periodDays-1)));
+        var startDate = DateOnly.FromDateTime(DateTime.Now.AddDays(-(periodDays - 1)));
         var endDate = DateOnly.FromDateTime(DateTime.Now);
 
         return dates.Count(date => date >= startDate && date <= endDate);
@@ -144,6 +143,7 @@ public partial class ItemViewModel : ObservableObject
     // Async method lacks 'await' operators and will run synchronously as it is currently implemented only for Windows
     public async void ScheduleBilling()
     {
+#if !HAS_UNO
         if (Item is not { } item || !Item.IsNotify)
         {
             return;
@@ -157,7 +157,7 @@ public partial class ItemViewModel : ObservableObject
             return;
         }
 
-#if !HAS_UNO
+
         var paymentDates = GetFuturePayments();
 
         var tasks = paymentDates.Select(date =>

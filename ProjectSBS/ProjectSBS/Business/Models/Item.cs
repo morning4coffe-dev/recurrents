@@ -10,7 +10,7 @@ public partial record Item
         bool isNotify = true,
         string description = "", 
         DateTime creationDate = default,
-        Stack<Status>? status = default)
+        List<Status>? status = default)
     {
         Id = id ?? Guid.NewGuid().ToString();
         Name = name;
@@ -29,5 +29,5 @@ public partial record Item
     public string? Description { get; set; }
     public bool IsNotify { get; set; }
     public DateTime CreationDate { get; set; }
-    public Stack<Status> Status { get; }
+    public List<Status> Status { get; }
 }

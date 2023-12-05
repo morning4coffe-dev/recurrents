@@ -84,7 +84,7 @@ public class ItemService(IDataService dataService) : IItemService
             return;   
         }
 
-        i.Status.Push(new(item.IsArchived ? State.Active : State.Archived, DateOnly.FromDateTime(DateTime.Now)));
+        i.Status.Add(new(item.IsArchived ? State.Active : State.Archived, DateTime.Now));
 
         SaveDataAsync();
         item.Updated();
