@@ -75,13 +75,18 @@ public sealed class CurrencyCache(
         return d * Convert.ToDecimal(_current.Rates[defaultCurrency]);
     }
 
-    private async ValueTask<StorageFile> GetFile(CreationCollisionOption option)
+    private async ValueTask<StorageFile?> GetFile(CreationCollisionOption option)
     {
         await fileLock.WaitAsync();
 
         try
         {
             return await ApplicationData.Current.TemporaryFolder.CreateFileAsync("currency.json", option);
+        }
+        catch 
+        {
+            //TODO Log
+            return null;
         }
         finally
         {
@@ -92,6 +97,12 @@ public sealed class CurrencyCache(
     private async ValueTask<string?> GetCachedCurrency()
     {
         var file = await GetFile(CreationCollisionOption.OpenIfExists);
+
+        if (file is null)
+        {
+            return null;
+        }
+
         var properties = await file.GetBasicPropertiesAsync();
 
         // Reuse latest cache file if offline
@@ -108,6 +119,11 @@ public sealed class CurrencyCache(
     {
         var weatherText = _serializer.ToString(weather);
         var file = await GetFile(CreationCollisionOption.ReplaceExisting);
+
+        if (file is null)
+        {
+            return;
+        }
         await File.WriteAllTextAsync(file.Path, weatherText, token);
     }
 }

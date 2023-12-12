@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Localization;
+
 namespace ProjectSBS.Tests;
 
 public class AppInfoTests
@@ -14,5 +16,19 @@ public class AppInfoTests
 
         appInfo.Should().NotBeNull();
         appInfo.Environment.Should().Be("Test");
+    }
+
+    [Test]
+    public void When_TagsIdsAreUnique()
+    {
+        var tagService = new TagService(null);
+
+        tagService.Should().NotBeNull();
+        tagService.Tags.Should().NotBeNull();
+
+        tagService.Tags
+            .GroupBy(tag => new { tag.Id })
+            .Where(group => group.Count() > 1)
+            .Should().BeEmpty("Duplicate tags IDs found");
     }
 }

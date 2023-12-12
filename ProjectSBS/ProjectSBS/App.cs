@@ -1,5 +1,7 @@
 using Microsoft.UI.Dispatching;
 using ProjectSBS.Services.Dialogs;
+using Windows.System.Profile;
+
 
 #if WINDOWS
 using Microsoft.UI.Composition.SystemBackdrops;
@@ -86,6 +88,7 @@ public class App : Application
                     services.AddSingleton<ITagService, TagService>();
                     services.AddSingleton<INavigation, NavigationService>();
                     services.AddSingleton<IDialogService, DialogService>();
+                    services.AddSingleton<IAnalyticsService, AnalyticsService>();
 
                     services.AddTransient<MainViewModel>();
                     services.AddTransient<LoginViewModel>();
@@ -161,5 +164,18 @@ public class App : Application
         }
         // Ensure the current window is active
         MainWindow.Activate();
+
+        var version = Services.GetRequiredService<IInteropService>().GetAppVersion();
+
+        Dictionary<string, string> appLaunchSettings = new()
+        {
+            { "App Version", string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision) },
+            { "App Install", AppInfo.Current.Package.InstalledDate.ToString("d",new CultureInfo("en-US")) },
+            { "OS Device", AnalyticsInfo.VersionInfo.DeviceFamily },
+            { "OS Form", AnalyticsInfo.DeviceForm },
+            { "OS Version", AnalyticsInfo.VersionInfo.DeviceFamilyVersion },
+        };
+
+        Services.GetRequiredService<IAnalyticsService>().TrackEvent(AnalyticsConst.Launched, appLaunchSettings);
     }
 }

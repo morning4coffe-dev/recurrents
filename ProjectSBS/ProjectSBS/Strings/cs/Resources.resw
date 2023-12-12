@@ -117,8 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="About" xml:space="preserve">
+    <value>O aplikaci</value>
+  </data>
   <data name="All" xml:space="preserve">
-    <value>All</value>
+    <value>Vše</value>
   </data>
   <data name="ApplicationName" xml:space="preserve">
     <value>ProjectSBS-cs</value>
@@ -126,17 +129,74 @@
   <data name="Archive" xml:space="preserve">
     <value>Archiv</value>
   </data>
+  <data name="ArchiveVerb" xml:space="preserve">
+    <value>Archivovat</value>
+  </data>
   <data name="Author" xml:space="preserve">
     <value>Morning4coffe</value>
+  </data>
+  <data name="BankTransfer" xml:space="preserve">
+    <value>Bankovní převod</value>
+  </data>
+  <data name="BillingCycle" xml:space="preserve">
+    <value>Zúčtovací cyklus</value>
+  </data>
+  <data name="Cash" xml:space="preserve">
+    <value>Hotovost</value>
+  </data>
+  <data name="CloseDetails" xml:space="preserve">
+    <value>Zavřít podrobnosti</value>
   </data>
   <data name="ContinueWithoutLogin" xml:space="preserve">
     <value>Pokračovat bez přihlášení</value>
   </data>
+  <data name="CreditCard" xml:space="preserve">
+    <value>Kreditní karta</value>
+  </data>
+  <data name="Cryptocurrency" xml:space="preserve">
+    <value>Kryptoměna</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Dny</value>
+  </data>
+  <data name="DebitCard" xml:space="preserve">
+    <value>Debetní karta</value>
+  </data>
+  <data name="DefaultCurrency" xml:space="preserve">
+    <value>Výchozí měna</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Popis</value>
+  </data>
+  <data name="DigitalWallet" xml:space="preserve">
+    <value>Digitální peněženka</value>
+  </data>
   <data name="Edit" xml:space="preserve">
     <value>Upravit</value>
   </data>
-  <data name="Gaming" xml:space="preserve">
-    <value>Hry</value>
+  <data name="Education" xml:space="preserve">
+    <value>Vzdělávání</value>
+  </data>
+  <data name="Entertainment" xml:space="preserve">
+    <value>Zábava</value>
+  </data>
+  <data name="Finance" xml:space="preserve">
+    <value>Finance</value>
+  </data>
+  <data name="Fitness" xml:space="preserve">
+    <value>Fitness</value>
+  </data>
+  <data name="Food" xml:space="preserve">
+    <value>Strava</value>
+  </data>
+  <data name="ForThePriceOf" xml:space="preserve">
+    <value>Za cenu</value>
+  </data>
+  <data name="GetNotified" xml:space="preserve">
+    <value>Dostávat upozornění</value>
+  </data>
+  <data name="GitHub" xml:space="preserve">
+    <value>GitHub</value>
   </data>
   <data name="GoodAfternoon" xml:space="preserve">
     <value>Dobré odpoledne</value>
@@ -150,20 +210,84 @@
   <data name="GoodNight" xml:space="preserve">
     <value>Dobrou noc</value>
   </data>
+  <data name="Health" xml:space="preserve">
+    <value>Zdraví</value>
+  </data>
   <data name="Home" xml:space="preserve">
     <value>Domů</value>
+  </data>
+  <data name="InTime" xml:space="preserve">
+    <value>V</value>
+  </data>
+  <data name="Invoice" xml:space="preserve">
+    <value>Faktura</value>
   </data>
   <data name="Items" xml:space="preserve">
     <value>Items</value>
   </data>
-  <data name="LoginWithMicrosoft" xml:space="preserve">
-    <value>Login with Microsoft</value>
+  <data name="LastDays" xml:space="preserve">
+    <value>Posledních {0} dnů</value>
+    <comment>{0} is the number of days in current month</comment>
   </data>
-  <data name="Music" xml:space="preserve">
-    <value>Hudba</value>
+  <data name="LoginWithMicrosoft" xml:space="preserve">
+    <value>Přihlášení pomocí účtu Microsoft</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Název</value>
+  </data>
+  <data name="NewItem" xml:space="preserve">
+    <value>Nový předmět</value>
+  </data>
+  <data name="News" xml:space="preserve">
+    <value>Zprávy</value>
+  </data>
+  <data name="NextPayments" xml:space="preserve">
+    <value>Nadcházející platby</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>Oznámení</value>
+  </data>
+  <data name="NotificationsDisabled" xml:space="preserve">
+    <value>Oznámení jsou vypnuta!</value>
+  </data>
+  <data name="NotificationsDisabledDescription" xml:space="preserve">
+    <value>Chcete-li začít přijímat oznámení, zkontrolujte, zda jsou povolena v nastavení.</value>
+  </data>
+  <data name="NotificationTime" xml:space="preserve">
+    <value>Čas oznámení</value>
+  </data>
+  <data name="NotLoggedIn" xml:space="preserve">
+    <value>Nejste přihlášeni!</value>
+  </data>
+  <data name="NotLoggedInDescription" xml:space="preserve">
+    <value>Vaše data jsou uložena lokálně a nejsou synchronizována.</value>
+  </data>
+  <data name="Optional" xml:space="preserve">
+    <value>Volitelné</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Ostatní</value>
+  </data>
+  <data name="PaidInTotal" xml:space="preserve">
+    <value>Zaplaceno celkem</value>
+  </data>
+  <data name="PayingSince" xml:space="preserve">
+    <value>Placeno od</value>
+  </data>
+  <data name="PaymentMethod" xml:space="preserve">
+    <value>Platební metoda</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Cena</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
-    <value>Privacy Policy</value>
+    <value>Zásady ochrany osobních údajů</value>
+  </data>
+  <data name="RateAndReview" xml:space="preserve">
+    <value>Hodnocení a recenze</value>
+  </data>
+  <data name="ReportABug" xml:space="preserve">
+    <value>Nahlásit chybu</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Uložit</value>
@@ -171,16 +295,28 @@
   <data name="Settings" xml:space="preserve">
     <value>Nastavení</value>
   </data>
+  <data name="Social" xml:space="preserve">
+    <value>Social</value>
+  </data>
   <data name="Stats" xml:space="preserve">
     <value>Statistiky</value>
   </data>
-  <data name="TV" xml:space="preserve">
-    <value>TV</value>
+  <data name="Tag" xml:space="preserve">
+    <value>Štítek</value>
   </data>
-  <data name="Video" xml:space="preserve">
-    <value>Video</value>
+  <data name="Tomorrow" xml:space="preserve">
+    <value>Zítra</value>
+  </data>
+  <data name="Travel" xml:space="preserve">
+    <value>Cestování</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Verze</value>
   </data>
   <data name="Welcome" xml:space="preserve">
     <value>Vítejte</value>
+  </data>
+  <data name="Work" xml:space="preserve">
+    <value>Práce</value>
   </data>
 </root>

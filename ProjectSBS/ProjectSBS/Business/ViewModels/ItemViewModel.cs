@@ -81,7 +81,7 @@ public partial class ItemViewModel : ObservableObject
 
     private Status? GetLastStatus()
     {
-        if (Item?.Status is not { } itemStatus)
+        if (Item?.Status is not { } itemStatus || Item?.Status.Count == 0)
         {
             return null;
         }

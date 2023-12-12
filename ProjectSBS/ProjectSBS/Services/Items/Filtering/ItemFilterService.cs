@@ -1,5 +1,3 @@
-﻿using ProjectSBS.Services.Items.Tags;
-
 namespace ProjectSBS.Services.Items.Filtering;
 
 public class ItemFilterService : IItemFilterService
@@ -9,11 +7,10 @@ public class ItemFilterService : IItemFilterService
 
     public ItemFilterService(IStringLocalizer localizer, ITagService tags)
     {
-        Categories = new()
-        {
-            new Tag(-1, localizer["All"], null)
-        };
-        Categories.AddRange(tags.Tags);
+        Categories =
+        [
+            new Tag(-1, localizer["All"], null), .. tags.Tags
+        ];
         SelectedCategory = Categories[0];
     }
 }

@@ -73,6 +73,8 @@
           <VisualState.Setters>
             <Setter Target="mobileAddButton.Visibility"
                     Value="Visible" />
+            <Setter Target="desktopAdd.Visibility"
+                    Value="Collapsed" />
             <Setter Target="mobileHeader.Visibility"
                     Value="Visible" />
             <Setter Target="desktopHeader.Visibility"
@@ -107,20 +109,21 @@
                                           Margin="48,48,48,0"
                                           RefreshRequested="RefreshContainer_RefreshRequested">-->
 
-            <StackPanel x:Name="contentHolder"
-                        Margin="48,48,48,0"
-                        Spacing="8">
+            <Grid x:Name="contentHolder"
+                  Margin="48,48,48,0">
 
-              <StackPanel x:Name="desktopHeader"
-                          Visibility="Visible"
-                          Spacing="16">
-                <TextBlock Text="{x:Bind ViewModel.SelectedCategory.Text}"
-                           Style="{StaticResource TitleTextBlockStyle}" />
+              <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition />
+              </Grid.RowDefinitions>
 
-                <Button Visibility="Visible"
-                        Content="New Item"
-                        Command="{x:Bind ViewModel.AddNewCommand}" />
-              </StackPanel>
+              <TextBlock x:Name="desktopHeader"
+                         Visibility="Visible"
+                         Text="{x:Bind ViewModel.SelectedCategory.Text}"
+                         Style="{StaticResource TitleTextBlockStyle}" />
 
               <Grid x:Name="mobileHeader"
                     Visibility="Collapsed"
@@ -155,17 +158,20 @@
                 </StackPanel>
               </Grid>
 
-              <comp:StatsBanner Visibility="{x:Bind ViewModel.IsStatsVisible, Mode=OneWay}" />
+              <Button x:Name="desktopAdd"
+                      Visibility="Visible"
+                      Grid.Row="1"
+                      Content="{x:Bind ViewModel.NewItemText}"
+                      Command="{x:Bind ViewModel.AddNewCommand}" />
 
+              <comp:StatsBanner Visibility="{x:Bind ViewModel.IsStatsVisible, Mode=OneWay}"
+                                Grid.Row="2" />
 
-              <!--<Button Content="{toolkit:SymbolIcon Symbol=Find}"
-                                        Height="40" />-->
-
-              <!--TODO The Horizontal scroll doesn't work with the latest WinUI-->
-              <win:ScrollViewer HorizontalScrollMode="Enabled"
+              <win:ScrollViewer HorizontalScrollMode="Auto"
                                 HorizontalScrollBarVisibility="Auto"
-                                VerticalScrollMode="Enabled"
-                                VerticalScrollBarVisibility="Auto"
+                                VerticalScrollMode="Disabled"
+                                VerticalScrollBarVisibility="Hidden"
+                                Grid.Row="3"
                                 Margin="-8"
                                 Padding="8,12">
                 <controls:Segmented ItemsSource="{x:Bind ViewModel.FilterCategories}"
@@ -191,7 +197,8 @@
               <GridView ScrollViewer.VerticalScrollBarVisibility="Disabled"
                         ScrollViewer.VerticalScrollMode="Disabled"
                         ItemsSource="{x:Bind ViewModel.Items, Mode=OneWay}"
-                        SelectedItem="{x:Bind ViewModel.SelectedItem, Mode=TwoWay}">
+                        SelectedItem="{x:Bind ViewModel.SelectedItem, Mode=TwoWay}"
+                        Grid.Row="4">
 
                 <GridView.Resources>
                   <FontIconSource x:Key="EditIcon"
@@ -302,34 +309,37 @@
 
               <StackPanel x:Name="itemsEmptyImage"
                           Spacing="12"
+                          Grid.Row="4"
+                          VerticalAlignment="Center"
                           Visibility="Collapsed">
 
                 <Image Source="ms-appx:///Assets/Icons/icon.png"
                        MaxHeight="200" />
 
-                <TextBlock Text="You have no items here!"
+                <TextBlock Text="{x:Bind ViewModel.ItemsEmptyTitleText}"
                            TextWrapping="WrapWholeWords"
                            HorizontalAlignment="Center"
                            FontWeight="Bold" />
 
-                <TextBlock Text="Improve your spending habbits by adding your subscriptions."
+                <TextBlock Text="{x:Bind ViewModel.ItemsEmptyDescriptionText}"
                            TextWrapping="WrapWholeWords"
                            TextAlignment="Center"
                            HorizontalAlignment="Center" />
 
-                <Button Content="Add Items"
+                <Button Content="{x:Bind ViewModel.NewItemText}"
                         HorizontalAlignment="Center"
                         Padding="20, 8"
                         Command="{x:Bind ViewModel.AddNewCommand}" />
 
               </StackPanel>
-            </StackPanel>
+            </Grid>
 
             <!--</RefreshContainer>-->
           </ScrollViewer>
 
           <StackPanel x:Name="mobileAddButton"
                       VerticalAlignment="Bottom"
+                      Grid.Row="4"
                       Visibility="Collapsed">
 
             <Button CornerRadius="22"

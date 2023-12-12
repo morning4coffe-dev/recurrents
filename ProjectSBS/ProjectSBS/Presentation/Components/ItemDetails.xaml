@@ -50,6 +50,8 @@
                 BorderThickness="0"
                 Padding="12"
                 VerticalAlignment="Top"
+                AutomationProperties.PositionInSet="1"
+                AutomationProperties.SizeOfSet="2"
                 Visibility="{x:Bind ViewModel.IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
                 Command="{x:Bind ViewModel.EnableEditingCommand}">
 
@@ -61,6 +63,8 @@
                 BorderThickness="0"
                 Padding="12"
                 VerticalAlignment="Top"
+                AutomationProperties.PositionInSet="1"
+                AutomationProperties.SizeOfSet="2"
                 Visibility="{x:Bind ViewModel.IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
                 Flyout="{StaticResource MoreFlyout}">
 
@@ -130,7 +134,7 @@
                         Grid.Column="1">
               <Button Visibility="{x:Bind ViewModel.IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
                       Command="{x:Bind ViewModel.EnableEditingCommand}"
-                      ToolTipService.ToolTip="Edit"
+                      ToolTipService.ToolTip="{x:Bind ViewModel.EditText}"
                       Padding="14, 10">
                 <FontIcon Glyph="&#xE70F;"
                           FontSize="13" />
@@ -138,14 +142,14 @@
 
               <Button Visibility="{x:Bind ViewModel.IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
                       Command="{x:Bind ViewModel.ArchiveCommand}"
-                      ToolTipService.ToolTip="Archive"
+                      ToolTipService.ToolTip="{x:Bind ViewModel.ArchiveText}"
                       Padding="14, 10">
                 <FontIcon Glyph="&#xE7B8;"
                           FontSize="13" />
               </Button>
 
               <Button Command="{x:Bind ViewModel.CloseCommand}"
-                      ToolTipService.ToolTip="Close Details"
+                      ToolTipService.ToolTip="{x:Bind ViewModel.CloseDetailsText}"
                       Padding="14, 10">
                 <FontIcon Glyph="&#xE8BB;"
                           FontSize="13" />
@@ -174,7 +178,7 @@
                            Style="{StaticResource CaptionTextBlockStyle}" />
               </Grid>
 
-              <local:DetailsBox HeaderText="for the price of">
+              <local:DetailsBox HeaderText="{x:Bind ViewModel.ForThePriceOfText.ToLower()}">
                 <local:DetailsBox.Content>
                   <TextBlock TextWrapping="WrapWholeWords">
                       <Run Text="{x:Bind ViewModel.SelectedItem.Item.Billing.BasePrice, Mode=OneWay}" />
@@ -183,7 +187,7 @@
                 </local:DetailsBox.Content>
               </local:DetailsBox>
 
-              <local:DetailsBox HeaderText="paid in total">
+              <local:DetailsBox HeaderText="{x:Bind ViewModel.PaidInTotalText.ToLower()}">
                 <local:DetailsBox.Content>
                   <TextBlock TextWrapping="WrapWholeWords">
                       <Run Text="{x:Bind ViewModel.SelectedItem.FormattedTotalPrice, Mode=OneWay}" />
@@ -192,13 +196,13 @@
                 </local:DetailsBox.Content>
               </local:DetailsBox>
 
-              <local:DetailsBox HeaderText="billing period"
+              <local:DetailsBox HeaderText="{x:Bind ViewModel.BillingCycleText.ToLower()}"
                                 Text="{x:Bind ViewModel.SelectedItem.Item.Billing.PeriodType, Mode=OneWay}" />
 
-              <local:DetailsBox HeaderText="payment method"
+              <local:DetailsBox HeaderText="{x:Bind ViewModel.PaymentMethodText.ToLower()}"
                                 Text="{x:Bind ViewModel.SelectedItem.Item.Billing.PaymentMethod, Mode=OneWay}" />
 
-              <local:DetailsBox HeaderText="next payments">
+              <local:DetailsBox HeaderText="{x:Bind ViewModel.NextPaymentsText.ToLower()}">
                 <local:DetailsBox.Content>
                   <ScrollViewer HorizontalScrollMode="Enabled"
                                 HorizontalScrollBarVisibility="Auto"
@@ -215,14 +219,14 @@
                 </local:DetailsBox.Content>
               </local:DetailsBox>
 
-              <local:DetailsBox HeaderText="paying since"
+              <local:DetailsBox HeaderText="{x:Bind ViewModel.PayingSinceText.ToLower()}"
                                 Text="{x:Bind ViewModel.SelectedItem.Item.Billing.InitialDate, Mode=OneWay}" />
 
-              <local:DetailsBox HeaderText="other">
+              <local:DetailsBox HeaderText="{x:Bind ViewModel.OtherText.ToLower()}">
                 <local:DetailsBox.Content>
                   <StackPanel Orientation="Horizontal"
                               Spacing="12">
-                    <local:ToggleIcon ToolTipService.ToolTip="Get notified"
+                    <local:ToggleIcon ToolTipService.ToolTip="{x:Bind ViewModel.GetNotifiedText}"
                                       IsChecked="{x:Bind ViewModel.SelectedItem.Item.IsNotify, Mode=OneWay}"
                                       TrueIcon="{toolkit:FontIcon Glyph=&#xEA8F;}"
                                       FalseIcon="{toolkit:FontIcon Glyph=&#xE7ED;}" />
@@ -230,7 +234,7 @@
                 </local:DetailsBox.Content>
               </local:DetailsBox>
 
-              <local:DetailsBox HeaderText="description"
+              <local:DetailsBox HeaderText="{x:Bind ViewModel.DescriptionText.ToLower()}"
                                 Visibility="{x:Bind ViewModel.SelectedItem.Item.Description, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}"
                                 Text="{x:Bind ViewModel.SelectedItem.Item.Description, Mode=OneWay}" />
 
@@ -249,9 +253,9 @@
               <StackPanel Spacing="20"
                           Style="{StaticResource ContentStack}">
 
-                <TextBox Header="Name"
+                <TextBox Header="{x:Bind ViewModel.NameText}"
                          Text="{x:Bind ViewModel.EditItem.Name, Mode=TwoWay}"
-                         MaxLength="400" />
+                         MaxLength="80" />
 
                 <Grid ColumnSpacing="8">
                   <Grid.ColumnDefinitions>
@@ -259,12 +263,12 @@
                     <ColumnDefinition Width="Auto" />
                   </Grid.ColumnDefinitions>
 
-                  <NumberBox Header="Price"
+                  <NumberBox Header="{x:Bind ViewModel.PriceText}"
                              Value="{x:Bind ViewModel.EditItem.Billing.BasePrice, Mode=TwoWay, Converter={StaticResource DecimalToDoubleConverter}}"
                              SpinButtonPlacementMode="Inline"
                              AcceptsExpression="True"
-                             Maximum="99999999999999"
-                             Minimum="-9999999999999" />
+                             Maximum="9999999999999"
+                             Minimum="-999999999999" />
                   <ComboBox VerticalAlignment="Bottom"
                             ItemsSource="{x:Bind ViewModel.Currencies, Mode=OneWay}"
                             SelectedItem="{x:Bind ViewModel.EditItem.Billing.CurrencyId, Mode=TwoWay}"
@@ -272,7 +276,7 @@
                             Grid.Column="1" />
                 </Grid>
 
-                <CalendarDatePicker Header="Paying since"
+                <CalendarDatePicker Header="{x:Bind ViewModel.PayingSinceText}"
                                     Date="{x:Bind ViewModel.EditItem.Billing.InitialDate, Mode=TwoWay, Converter={StaticResource DateOnlyToDateTimeOffsetConverter}}"
                                     IsTodayHighlighted="True"
                                     HorizontalAlignment="Stretch" />
@@ -283,7 +287,7 @@
                     <ColumnDefinition Width="Auto" />
                   </Grid.ColumnDefinitions>
 
-                  <NumberBox Header="Billing cycle"
+                  <NumberBox Header="{x:Bind ViewModel.BillingCycleText}"
                              Value="{x:Bind ViewModel.EditItem.Billing.RecurEvery, Mode=TwoWay}"
                              SpinButtonPlacementMode="Inline"
                              AcceptsExpression="True"
@@ -298,7 +302,7 @@
 
                 <Grid>
                   <!--TODO Add changing icon here-->
-                  <CheckBox Content="Get notified"
+                  <CheckBox Content="{x:Bind ViewModel.GetNotifiedText}"
                             IsChecked="{x:Bind ViewModel.EditItem.IsNotify, Mode=TwoWay}" />
                   <local:ToggleIcon IsChecked="{x:Bind ViewModel.EditItem.IsNotify, Mode=OneWay}"
                                     HorizontalAlignment="Right"
@@ -316,7 +320,7 @@
                 </Grid>-->
 
                 <!--TODO SelectedIndex is not future proof-->
-                <ComboBox Header="Tag"
+                <ComboBox Header="{x:Bind ViewModel.TagText}"
                           ItemsSource="{x:Bind ViewModel.Tags, Mode=OneTime}"
                           SelectedIndex="{x:Bind ViewModel.EditItem.TagId, Mode=TwoWay}"
                           VerticalAlignment="Bottom"
@@ -343,8 +347,8 @@
                   <ComboBox.Header>
                     <StackPanel Orientation="Horizontal"
                                 Spacing="4">
-                      <TextBlock Text="Payment method" />
-                      <TextBlock Text="(Optional)"
+                      <TextBlock Text="{x:Bind ViewModel.PaymentMethodText}" />
+                      <TextBlock Text="{x:Bind ViewModel.OptionalText}"
                                  Opacity="0.5" />
                     </StackPanel>
                   </ComboBox.Header>
@@ -355,12 +359,12 @@
                          Height="120"
                          TextWrapping="Wrap"
                          AcceptsReturn="True"
-                         MaxLength="999999">
+                         MaxLength="9999">
                   <TextBox.Header>
                     <StackPanel Orientation="Horizontal"
                                 Spacing="4">
-                      <TextBlock Text="Description" />
-                      <TextBlock Text="(Optional)"
+                      <TextBlock Text="{x:Bind ViewModel.DescriptionText}" />
+                      <TextBlock Text="{x:Bind ViewModel.OptionalText}"
                                  Opacity="0.5" />
                     </StackPanel>
                   </TextBox.Header>
@@ -372,7 +376,7 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
                     Height="46"
-                    Margin="12"
+                    Margin="12,0,12,12"
                     Grid.Row="1">
               <StackPanel Orientation="Horizontal"
                           Spacing="8">

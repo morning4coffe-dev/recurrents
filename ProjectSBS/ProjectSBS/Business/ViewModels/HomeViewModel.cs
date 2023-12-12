@@ -1,13 +1,26 @@
+using ProjectSBS.Services.Dialogs;
 using Windows.UI.Core;
 
 namespace ProjectSBS.Business.ViewModels;
 
 public partial class HomeViewModel : ViewModelBase
 {
+    #region Services
+    private readonly IStringLocalizer _localizer;
     private readonly IUserService _userService;
     private readonly IItemService _itemService;
     private readonly IItemFilterService _filterService;
     private readonly INavigation _navigation;
+    private readonly IDialogService _dialog;
+    #endregion
+
+    #region Localization Strings
+    public string NewItemText => _localizer["NewItem"];
+    public string DeleteText => _localizer["Delete"];
+    public string UnarchiveText => _localizer["Unarchive"];
+    public string ItemsEmptyTitleText => _localizer["ItemsEmptyTitle"];
+    public string ItemsEmptyDescriptionText => _localizer["ItemsEmptyDescription"];
+    #endregion
 
     [ObservableProperty]
     private User? _user;
@@ -84,6 +97,7 @@ public partial class HomeViewModel : ViewModelBase
 
     public ICommand AddNewCommand { get; }
     public ICommand ArchiveCommand { get; }
+    public ICommand DeleteCommand { get; }
     public ICommand OpenSettingsCommand { get; }
 
     public HomeViewModel(
@@ -91,15 +105,19 @@ public partial class HomeViewModel : ViewModelBase
         IItemService itemService,
         IItemFilterService filterService,
         IStringLocalizer localizer,
-        INavigation navigation)
+        INavigation navigation,
+        IDialogService dialog)
     {
+        _localizer = localizer;
         _userService = userService;
         _itemService = itemService;
         _filterService = filterService;
         _navigation = navigation;
+        _dialog = dialog;
 
         AddNewCommand = new RelayCommand(AddNew);
         ArchiveCommand = new AsyncRelayCommand(() => Archive());
+        DeleteCommand = new AsyncRelayCommand(() => Delete());
         OpenSettingsCommand = new RelayCommand(() => _navigation.NavigateNested(typeof(SettingsPage)));
 
         FilterCategories = filterService.Categories;
@@ -244,5 +262,21 @@ public partial class HomeViewModel : ViewModelBase
 
         SelectedItem = null;
         RefreshItems();
+    }
+
+    public async Task Delete(ItemViewModel? item = null)
+    {
+        var result = await _dialog.ShowAsync(
+            _localizer["DeleteDialogTitle"], 
+            _localizer["DeleteDialogDescription"],
+            _localizer["Delete"]);
+
+        if (result == ContentDialogResult.Primary)
+        {
+            _itemService.DeleteItem(item ?? SelectedItem);
+
+            SelectedItem = null;
+            RefreshItems();
+        }
     }
 }

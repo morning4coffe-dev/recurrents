@@ -132,23 +132,80 @@
   <data name="Archive" xml:space="preserve">
     <value>Archive</value>
   </data>
+  <data name="ArchiveVerb" xml:space="preserve">
+    <value>Archive</value>
+  </data>
   <data name="Author" xml:space="preserve">
     <value>Morning4coffe</value>
+  </data>
+  <data name="BankTransfer" xml:space="preserve">
+    <value>Bank Transfer</value>
+  </data>
+  <data name="BillingCycle" xml:space="preserve">
+    <value>Billing cycle</value>
+  </data>
+  <data name="Cash" xml:space="preserve">
+    <value>Cash</value>
+  </data>
+  <data name="CloseDetails" xml:space="preserve">
+    <value>Close details</value>
   </data>
   <data name="ContinueWithoutLogin" xml:space="preserve">
     <value>Continue without Login</value>
   </data>
+  <data name="CreditCard" xml:space="preserve">
+    <value>Credit Card</value>
+  </data>
+  <data name="Cryptocurrency" xml:space="preserve">
+    <value>Cryptocurrency</value>
+  </data>
   <data name="Days" xml:space="preserve">
     <value>Days</value>
+  </data>
+  <data name="DebitCard" xml:space="preserve">
+    <value>Debit Card</value>
   </data>
   <data name="DefaultCurrency" xml:space="preserve">
     <value>Default currency</value>
   </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="DeleteDialogDescription" xml:space="preserve">
+    <value>DeleteDialogDescription</value>
+  </data>
+  <data name="DeleteDialogTitle" xml:space="preserve">
+    <value>DeleteDialogTitle</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="DigitalWallet" xml:space="preserve">
+    <value>Digital Wallet</value>
+  </data>
   <data name="Edit" xml:space="preserve">
     <value>Edit</value>
   </data>
-  <data name="Gaming" xml:space="preserve">
-    <value>Gaming</value>
+  <data name="Education" xml:space="preserve">
+    <value>Education</value>
+  </data>
+  <data name="Entertainment" xml:space="preserve">
+    <value>Entertainment</value>
+  </data>
+  <data name="Finance" xml:space="preserve">
+    <value>Finance</value>
+  </data>
+  <data name="Fitness" xml:space="preserve">
+    <value>Fitness</value>
+  </data>
+  <data name="Food" xml:space="preserve">
+    <value>Food</value>
+  </data>
+  <data name="ForThePriceOf" xml:space="preserve">
+    <value>For the price of</value>
+  </data>
+  <data name="GetNotified" xml:space="preserve">
+    <value>Get notified</value>
   </data>
   <data name="GitHub" xml:space="preserve">
     <value>GitHub</value>
@@ -168,14 +225,26 @@
   <data name="GoToSettings" xml:space="preserve">
     <value>Go to Settings</value>
   </data>
+  <data name="Health" xml:space="preserve">
+    <value>Health</value>
+  </data>
   <data name="Home" xml:space="preserve">
     <value>Home</value>
   </data>
   <data name="InTime" xml:space="preserve">
     <value>In</value>
   </data>
+  <data name="Invoice" xml:space="preserve">
+    <value>Invoice</value>
+  </data>
   <data name="Items" xml:space="preserve">
     <value>Items</value>
+  </data>
+  <data name="ItemsEmptyDescription" xml:space="preserve">
+    <value>Improve your spending habbits by adding your subscriptions.</value>
+  </data>
+  <data name="ItemsEmptyTitle" xml:space="preserve">
+    <value>You have no items here!</value>
   </data>
   <data name="LastDays" xml:space="preserve">
     <value>Last {0} days</value>
@@ -184,11 +253,17 @@
   <data name="LoginWithMicrosoft" xml:space="preserve">
     <value>Login with Microsoft</value>
   </data>
-  <data name="Music" xml:space="preserve">
-    <value>Music</value>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
   </data>
   <data name="NewItem" xml:space="preserve">
     <value>New Item</value>
+  </data>
+  <data name="News" xml:space="preserve">
+    <value>News</value>
+  </data>
+  <data name="NextPayments" xml:space="preserve">
+    <value>Next payments</value>
   </data>
   <data name="Notifications" xml:space="preserve">
     <value>Notifications</value>
@@ -197,7 +272,7 @@
     <value>Notifications are disabled!</value>
   </data>
   <data name="NotificationsDisabledDescription" xml:space="preserve">
-    <value>You won't be able to recive notifications until you enable them in the settings.</value>
+    <value>To start receiving notifications, ensure they are enabled in your settings.</value>
   </data>
   <data name="NotificationTime" xml:space="preserve">
     <value>Notification time</value>
@@ -207,6 +282,24 @@
   </data>
   <data name="NotLoggedInDescription" xml:space="preserve">
     <value>Your data are be stored locally and aren't being synchronized.</value>
+  </data>
+  <data name="Optional" xml:space="preserve">
+    <value>Optional</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="PaidInTotal" xml:space="preserve">
+    <value>Paid in total</value>
+  </data>
+  <data name="PayingSince" xml:space="preserve">
+    <value>Paying since</value>
+  </data>
+  <data name="PaymentMethod" xml:space="preserve">
+    <value>Payment method</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Price</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
     <value>Privacy Policy</value>
@@ -223,25 +316,34 @@
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
+  <data name="Social" xml:space="preserve">
+    <value>Social</value>
+  </data>
   <data name="Stats" xml:space="preserve">
     <value>Stats</value>
   </data>
   <data name="SystemNotifications" xml:space="preserve">
     <value>System notifications</value>
   </data>
+  <data name="Tag" xml:space="preserve">
+    <value>Tag</value>
+  </data>
   <data name="Tomorrow" xml:space="preserve">
     <value>Tomorrow</value>
   </data>
-  <data name="TV" xml:space="preserve">
-    <value>TV</value>
+  <data name="Travel" xml:space="preserve">
+    <value>Travel</value>
+  </data>
+  <data name="Unarchive" xml:space="preserve">
+    <value>Unarchive</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Version</value>
   </data>
-  <data name="Video" xml:space="preserve">
-    <value>Video</value>
-  </data>
   <data name="Welcome" xml:space="preserve">
     <value>Welcome</value>
+  </data>
+  <data name="Work" xml:space="preserve">
+    <value>Work</value>
   </data>
 </root>

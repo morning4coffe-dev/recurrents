@@ -21,8 +21,8 @@
                  Opacity="0.7"
                  TextWrapping="WrapWholeWords" />
 
-      <TextBlock TextWrapping="WrapWholeWords"
-                 Text="{x:Bind Text, Mode=OneWay}"
+      <TextBlock Text="{x:Bind Text, Mode=OneWay}"
+                 TextWrapping="WrapWholeWords"
                  Grid.Row="1" />
 
       <ContentPresenter Content="{x:Bind Content}"
