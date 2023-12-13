@@ -110,7 +110,7 @@ public partial class MainViewModel : ViewModelBase
     {
         _navigation.NavigateNested(SelectedCategory.Page);
 
-        User = await _userService.GetUser();
+        User = await _userService.RetrieveUser();
         IsLoggedIn = User is { };
 
         _ = _itemService.InitializeAsync();

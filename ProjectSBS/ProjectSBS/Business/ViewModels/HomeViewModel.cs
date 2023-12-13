@@ -140,7 +140,7 @@ public partial class HomeViewModel : ViewModelBase
 
     public override async void Load()
     {
-        User = await _userService.GetUser();
+        User = await _userService.RetrieveUser();
         DisplayName = User?.Name;
 
         _itemService.OnItemsInitialized += (s, e) =>

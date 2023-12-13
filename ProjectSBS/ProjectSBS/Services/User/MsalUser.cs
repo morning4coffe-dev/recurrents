@@ -1,9 +1,12 @@
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using Microsoft.Graph;
 using Microsoft.Graph.Models;
 using Microsoft.Identity.Client;
+using Microsoft.Identity.Client.Extensions.Msal;
 using Microsoft.Kiota.Abstractions.Authentication;
 using Microsoft.UI.Xaml.Media.Imaging;
-using System.Text;
 using Uno.UI.MSAL;
 using UserModel = ProjectSBS.Business.Models;
 
@@ -11,76 +14,81 @@ namespace ProjectSBS.Services.User;
 
 public class MsalUser : IUserService
 {
+    private IPublicClientApplication? _app;
+    private AuthenticationInfo? _authenticationInfo;
     private GraphServiceClient? _client;
     private UserModel.User? _currentUser;
 
-    private string token = "";
-
     public bool IsLoggedIn => _currentUser is { };
+    public bool NeedsRefresh => _authenticationInfo?.ExpiresOn < DateTimeOffset.UtcNow.AddMinutes(-5);
 
     public event EventHandler<UserModel.User?>? OnLoggedInChanged;
 
-    IPublicClientApplication? _app;
-    public async Task<bool> LoginUser()
+
+    public async Task<bool> AuthenticateAsync()
     {
-        .WithRedirectUri("")
-        .WithAuthority("")
-        .WithIosKeychainSecurityGroup("com.microsoft.adalcache")
-        .WithUnoHelpers()
-        .Build();
-
-
-        string[] scopes = new string[] {
-
-            };
-
-
-        var accounts = await _app.GetAccountsAsync();
-
-        AuthenticationResult? result;
-        try
+        if (IsLoggedIn && !NeedsRefresh)
         {
-            if (Enumerable.Any(accounts))
-            {
-                result = await _app.AcquireTokenSilent(scopes, accounts.FirstOrDefault())
-                       .ExecuteAsync();
-            }
-            else
-            {
-                result = await _app.AcquireTokenInteractive(scopes)
-                    .WithPrompt(Microsoft.Identity.Client.Prompt.SelectAccount)
-                    .WithUnoHelpers() // Add this line on interactive token acquisition flow
-                    .ExecuteAsync();
-            }
-        }
-        catch (Exception ex)
-        {
-            //TODO Log Login failed
-            return false;
-        }
-
-        if (result != null)
-        {
-            token = result.AccessToken;
-            // Use the token
-
             return true;
         }
 
-        return false;
+        await EnsureIdentityClientAsync();
+
+        var accounts = await _app.GetAccountsAsync();
+        AuthenticationResult? result = null;
+        bool tryInteractiveLogin = false;
+
+        try
+        {
+            result = await _app
+                .AcquireTokenSilent(AppConfig.Scopes, accounts.FirstOrDefault())
+                .ExecuteAsync();
+        }
+        catch (MsalUiRequiredException)
+        {
+            tryInteractiveLogin = true;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"MSAL Silent Error: {ex.Message}");
+            return false;
+        }
+
+        if (tryInteractiveLogin)
+        {
+            try
+            {
+                result = await _app
+                    .AcquireTokenInteractive(AppConfig.Scopes)
+                    .ExecuteAsync();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"MSAL Interactive Error: {ex.Message}");
+                return false;
+            }
+        }
+
+        _authenticationInfo = new AuthenticationInfo
+        {
+            ExpiresOn = result?.ExpiresOn ?? DateTimeOffset.MinValue,
+            Token = result?.AccessToken ?? "",
+        };
+
+        return !string.IsNullOrEmpty(_authenticationInfo.Token);
     }
 
     private void Initialize()
     {
-        if (token is not null)
+        if (_authenticationInfo?.Token is not null)
         {
-            var authenticationProvider = new BaseBearerTokenAuthenticationProvider(new TokenProvider(token));
+            var authenticationProvider = new BaseBearerTokenAuthenticationProvider(new TokenProvider(_authenticationInfo.Token));
 
-            _client = new GraphServiceClient(authenticationProvider);//.WithIosKeychainSecurityGroup("com.microsoft.adalcache
+            _client = new GraphServiceClient(authenticationProvider);
         }
     }
 
-    public async Task<UserModel.User?> GetUser()
+    public async Task<UserModel.User?> RetrieveUser()
     {
         if (_currentUser is { })
         {
@@ -89,7 +97,7 @@ public class MsalUser : IUserService
 
         if (_client is null)
         {
-            if (string.IsNullOrEmpty(token))
+            if (string.IsNullOrEmpty(_authenticationInfo?.Token))
             {
                 return null;
             }
@@ -129,7 +137,7 @@ public class MsalUser : IUserService
         }
         catch
         {
-            // TODO There is no profile picture
+            Debug.WriteLine("User: No profile picture");
         }
 
         OnLoggedInChanged?.Invoke(this, _currentUser);
@@ -184,14 +192,66 @@ public class MsalUser : IUserService
 
         OnLoggedInChanged?.Invoke(this, _currentUser);
     }
+
+    [MemberNotNull(nameof(_app))]
+    private async Task EnsureIdentityClientAsync()
+    {
+        if (_app == null)
+        {
+#if __ANDROID__
+            _app = PublicClientApplicationBuilder
+                .Create(AppConfig.ApplicationId)
+                .WithAuthority(AzureCloudInstance.AzurePublic, AppConfig.TenantId)
+                .WithRedirectUri($"msal{AppConfig.ApplicationId}://auth")
+                .WithParentActivityOrWindow(() => ContextHelper.Current)
+                .Build();
+
+            await Task.CompletedTask;
+#elif __IOS__
+			_app = PublicClientApplicationBuilder
+				.Create(AppConfig.ApplicationId)
+				.WithAuthority(AzureCloudInstance.AzurePublic, AppConfig.TenantId)
+				.WithIosKeychainSecurityGroup("com.microsoft.adalcache")
+				.WithRedirectUri($"msal{AppConfig.ApplicationId}://auth")
+				.Build();
+
+			await Task.CompletedTask;
+#else
+            _app = PublicClientApplicationBuilder
+                .Create(AppConfig.ApplicationId)
+                .WithRedirectUri("https://login.microsoftonline.com/common/oauth2/nativeclient")
+                .WithUnoHelpers()
+                .Build();
+
+            await AttachTokenCacheAsync();
+#endif
+        }
+    }
+
+#if !__ANDROID__ && !__IOS__
+    private async Task AttachTokenCacheAsync()
+    {
+#if !HAS_UNO
+        // Cache configuration and hook-up to public application. Refer to https://github.com/AzureAD/microsoft-authentication-extensions-for-dotnet/wiki/Cross-platform-Token-Cache#configuring-the-token-cache
+        var storageProperties = new StorageCreationPropertiesBuilder("msal.cache", ApplicationData.Current.LocalFolder.Path)
+                .Build();
+
+        var msalcachehelper = await MsalCacheHelper.CreateAsync(storageProperties);
+        msalcachehelper.RegisterCache(_app!.UserTokenCache);
+#else
+		await Task.CompletedTask;
+#endif
+    }
+#endif
 }
 
+#pragma warning disable CA1812 // Avoid uninstantiated internal classes
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 class TokenProvider(string token) : IAccessTokenProvider
 {
-    private readonly string _token = token;
+    private readonly string _token = token ?? throw new ArgumentNullException(nameof(token));
 
-    public Task<string> GetAuthorizationTokenAsync(Uri uri, Dictionary<string, object> additionalAuthenticationContext = default,
-        CancellationToken cancellationToken = default)
+    public Task<string> GetAuthorizationTokenAsync(Uri uri, Dictionary<string, object>? additionalAuthenticationContext = null, CancellationToken cancellationToken = default)
     {
         return Task.FromResult(_token);
     }

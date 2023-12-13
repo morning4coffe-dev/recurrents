@@ -43,7 +43,7 @@ public partial class LoginViewModel : ObservableObject
 
         try
         {
-            success = await _userService.LoginUser();
+            success = await _userService.AuthenticateAsync();
 
             //App.Services.GetRequiredService<ILogger<LoginViewModel>>().LogInformation("Logging in");
         }
@@ -54,7 +54,7 @@ public partial class LoginViewModel : ObservableObject
 
         if (success)
         {
-            var user = await _userService.GetUser();
+            var user = await _userService.RetrieveUser();
 
             App.Dispatcher.TryEnqueue(() =>
             {
