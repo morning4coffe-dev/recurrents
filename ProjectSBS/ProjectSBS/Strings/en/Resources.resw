@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -121,7 +121,7 @@
     <value>About</value>
   </data>
   <data name="AboutDescription" xml:space="preserve">
-    <value>Made with love and loads of coffee in Czechia</value>
+    <value>Made with love and loads of coffee in Czechia 🏰</value>
   </data>
   <data name="All" xml:space="preserve">
     <value>All</value>
@@ -131,6 +131,12 @@
   </data>
   <data name="Archive" xml:space="preserve">
     <value>Archive</value>
+  </data>
+  <data name="ArchiveDialogDescription" xml:space="preserve">
+    <value>By doing so, you will no longer receive notifications about upcoming payments.</value>
+  </data>
+  <data name="ArchiveDialogTitle" xml:space="preserve">
+    <value>Are you sure you want to archive your subscription?</value>
   </data>
   <data name="ArchiveVerb" xml:space="preserve">
     <value>Archive</value>
@@ -144,11 +150,23 @@
   <data name="BillingCycle" xml:space="preserve">
     <value>Billing cycle</value>
   </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
   <data name="Cash" xml:space="preserve">
     <value>Cash</value>
   </data>
+  <data name="ClickToLogout" xml:space="preserve">
+    <value>ClickToLogout</value>
+  </data>
   <data name="CloseDetails" xml:space="preserve">
     <value>Close details</value>
+  </data>
+  <data name="CloseDialogDescription" xml:space="preserve">
+    <value>You may lose some unsaved changes.</value>
+  </data>
+  <data name="CloseDialogTitle" xml:space="preserve">
+    <value>Are you sure you want to close?</value>
   </data>
   <data name="ContinueWithoutLogin" xml:space="preserve">
     <value>Continue without Login</value>
@@ -172,13 +190,16 @@
     <value>Delete</value>
   </data>
   <data name="DeleteDialogDescription" xml:space="preserve">
-    <value>DeleteDialogDescription</value>
+    <value>By doing so, this subscription will be removed from the summaries as well. Please note that this action is irreversible.</value>
   </data>
   <data name="DeleteDialogTitle" xml:space="preserve">
-    <value>DeleteDialogTitle</value>
+    <value>Are you sure you want to delete your subscription?</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>Description</value>
+  </data>
+  <data name="DescriptionPlaceholder" xml:space="preserve">
+    <value>Give your subscription a description</value>
   </data>
   <data name="DigitalWallet" xml:space="preserve">
     <value>Digital Wallet</value>
@@ -233,6 +254,7 @@
   </data>
   <data name="InTime" xml:space="preserve">
     <value>In</value>
+    <comment>In a specific time in days</comment>
   </data>
   <data name="Invoice" xml:space="preserve">
     <value>Invoice</value>
@@ -282,6 +304,9 @@
   </data>
   <data name="NotLoggedInDescription" xml:space="preserve">
     <value>Your data are be stored locally and aren't being synchronized.</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Ok</value>
   </data>
   <data name="Optional" xml:space="preserve">
     <value>Optional</value>

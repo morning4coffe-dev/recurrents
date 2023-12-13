@@ -127,6 +127,7 @@
 
               <Grid x:Name="mobileHeader"
                     Visibility="Collapsed"
+                    Margin="0,0,0,12"
                     ColumnSpacing="16">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="Auto" />
@@ -161,6 +162,7 @@
               <Button x:Name="desktopAdd"
                       Visibility="Visible"
                       Grid.Row="1"
+                      Margin="0,12"
                       Content="{x:Bind ViewModel.NewItemText}"
                       Command="{x:Bind ViewModel.AddNewCommand}" />
 
@@ -172,7 +174,7 @@
                                 VerticalScrollMode="Disabled"
                                 VerticalScrollBarVisibility="Hidden"
                                 Grid.Row="3"
-                                Margin="-8"
+                                Margin="-8, 0"
                                 Padding="8,12">
                 <controls:Segmented ItemsSource="{x:Bind ViewModel.FilterCategories}"
                                     SelectedItem="{x:Bind ViewModel.SelectedFilter, Mode=TwoWay}"
@@ -249,26 +251,24 @@
                             <Grid.ColumnDefinitions>
                               <ColumnDefinition Width="*" />
                               <ColumnDefinition Width="*" />
-                              <!--<ColumnDefinition Width="60" />-->
                             </Grid.ColumnDefinitions>
 
-                            <StackPanel Spacing="12">
-                              <TextBlock Text="{x:Bind Item.Name, Mode=OneWay}"
-                                         Style="{StaticResource SubtitleTextBlockStyle}" />
-                              <TextBlock Text="{x:Bind FormattedPaymentDate, Mode=OneWay}" />
-                            </StackPanel>
+                            <!-- Left Column -->
+                            <TextBlock Text="{x:Bind Item.Name, Mode=OneWay}"
+                                       VerticalAlignment="Center"
+                                       Style="{StaticResource SubtitleTextBlockStyle}" />
 
+                            <!-- Right Column -->
                             <StackPanel Grid.Column="1"
                                         Spacing="12"
                                         HorizontalAlignment="Right"
                                         VerticalAlignment="Center">
                               <TextBlock Style="{StaticResource SubtitleTextBlockStyle}"
                                          HorizontalAlignment="Right">
-                                        
                                 <Run Text="{x:Bind FormattedPrice, Mode=OneWay}" />
                                 <Run Text="{x:Bind Item.Billing.CurrencyId, Mode=OneWay}" />
                               </TextBlock>
-                              <TextBlock Text="{x:Bind Item.Billing.PeriodType, Mode=OneWay}"
+                              <TextBlock Text="{x:Bind FormattedPaymentDate, Mode=OneWay}"
                                          HorizontalAlignment="Right" />
                             </StackPanel>
 

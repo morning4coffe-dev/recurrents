@@ -4,9 +4,18 @@ namespace ProjectSBS.Business.ViewModels;
 
 public partial class MainViewModel : ViewModelBase
 {
+    #region Services
     private readonly IUserService _userService;
+    private readonly IStringLocalizer _localizer;
     private readonly IItemService _itemService;
     private readonly INavigation _navigation;
+    #endregion
+
+    #region Localization Strings
+    public string ClickToLogoutText => _localizer["ClickToLogout"];
+    public string SettingsText => _localizer["Settings"];
+    public string LogoutText => _localizer["Logout"];
+    #endregion
 
     [ObservableProperty]
     private User? _user;
@@ -53,6 +62,7 @@ public partial class MainViewModel : ViewModelBase
     {
         _userService = userService;
         _navigation = navigation;
+        _localizer = localizer;
         _itemService = itemService;
 
         Title = $"{localizer["ApplicationName"]}";

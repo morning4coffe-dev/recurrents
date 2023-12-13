@@ -19,11 +19,6 @@
                       Icon="{toolkit:FontIcon Glyph=&#xE7B8;}"
                       Padding="100, 16"
                       Command="{x:Bind ViewModel.ArchiveCommand}" />
-
-      <!--<MenuFlyoutItem Text="Delete"
-                      Icon="{toolkit:FontIcon Glyph=&#xE74D;}"
-                      Padding="100, 16
-                      Command="{x:Bind ViewModel.DeleteCommand}" />-->
     </MenuFlyout>
 
     <Style x:Key="ContentStack"
@@ -355,7 +350,7 @@
                 </ComboBox>
 
                 <TextBox Text="{x:Bind ViewModel.EditItem.Description, Mode=TwoWay}"
-                         PlaceholderText="Give your subscription a description..."
+                         PlaceholderText="{x:Bind ViewModel.DescriptionPlaceholder}"
                          Height="120"
                          TextWrapping="Wrap"
                          AcceptsReturn="True"

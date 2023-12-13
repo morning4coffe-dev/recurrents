@@ -25,6 +25,7 @@ public partial class ItemDetailsViewModel : ViewModelBase
     public string OtherText => _localizer["Other"];
     public string GetNotifiedText => _localizer["GetNotified"];
     public string DescriptionText => _localizer["Description"];
+    public string DescriptionPlaceholder => _localizer["DescriptionPlaceholder"];
 
     public string NameText => _localizer["Name"];
     public string PriceText => _localizer["Price"];

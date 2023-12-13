@@ -2,7 +2,6 @@ using Microsoft.UI.Dispatching;
 using ProjectSBS.Services.Dialogs;
 using Windows.System.Profile;
 
-
 #if WINDOWS
 using Microsoft.UI.Composition.SystemBackdrops;
 using WinUIEx;
@@ -165,7 +164,7 @@ public class App : Application
         // Ensure the current window is active
         MainWindow.Activate();
 
-        var version = Services.GetRequiredService<IInteropService>().GetAppVersion();
+        var version = Services?.GetRequiredService<IInteropService>().GetAppVersion();
 
         Dictionary<string, string> appLaunchSettings = new()
         {

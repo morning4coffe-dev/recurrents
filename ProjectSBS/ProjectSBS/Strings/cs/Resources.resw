@@ -120,6 +120,9 @@
   <data name="About" xml:space="preserve">
     <value>O aplikaci</value>
   </data>
+  <data name="AboutDescription" xml:space="preserve">
+    <value>Vyvinuto v České Republice 🏰</value>
+  </data>
   <data name="All" xml:space="preserve">
     <value>Vše</value>
   </data>
@@ -128,6 +131,12 @@
   </data>
   <data name="Archive" xml:space="preserve">
     <value>Archiv</value>
+  </data>
+  <data name="ArchiveDialogDescription" xml:space="preserve">
+    <value>Nadále již nebudete moci dostávat oznámení o nadcházejících platbách.</value>
+  </data>
+  <data name="ArchiveDialogTitle" xml:space="preserve">
+    <value>Jste si jisti, že chcete předplatné archivovat?</value>
   </data>
   <data name="ArchiveVerb" xml:space="preserve">
     <value>Archivovat</value>
@@ -141,11 +150,23 @@
   <data name="BillingCycle" xml:space="preserve">
     <value>Zúčtovací cyklus</value>
   </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Zrušit</value>
+  </data>
   <data name="Cash" xml:space="preserve">
     <value>Hotovost</value>
   </data>
+  <data name="ClickToLogout" xml:space="preserve">
+    <value>ClickToLogout</value>
+  </data>
   <data name="CloseDetails" xml:space="preserve">
     <value>Zavřít podrobnosti</value>
+  </data>
+  <data name="CloseDialogDescription" xml:space="preserve">
+    <value>Můžete přijít o některé neuložené změny.</value>
+  </data>
+  <data name="CloseDialogTitle" xml:space="preserve">
+    <value>Určitě chcete zavřít?</value>
   </data>
   <data name="ContinueWithoutLogin" xml:space="preserve">
     <value>Pokračovat bez přihlášení</value>
@@ -157,7 +178,7 @@
     <value>Kryptoměna</value>
   </data>
   <data name="Days" xml:space="preserve">
-    <value>Dny</value>
+    <value>Dnů</value>
   </data>
   <data name="DebitCard" xml:space="preserve">
     <value>Debetní karta</value>
@@ -165,8 +186,20 @@
   <data name="DefaultCurrency" xml:space="preserve">
     <value>Výchozí měna</value>
   </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Smazat</value>
+  </data>
+  <data name="DeleteDialogDescription" xml:space="preserve">
+    <value>Opravdu chcete odstranit své předplatné?</value>
+  </data>
+  <data name="DeleteDialogTitle" xml:space="preserve">
+    <value>Tímto způsobem bude toto předplatné odstraněno i ze souhrnů. Upozorňujeme, že tato akce je nevratná.</value>
+  </data>
   <data name="Description" xml:space="preserve">
     <value>Popis</value>
+  </data>
+  <data name="DescriptionPlaceholder" xml:space="preserve">
+    <value>Přidejte vašemu předplatnému popis</value>
   </data>
   <data name="DigitalWallet" xml:space="preserve">
     <value>Digitální peněženka</value>
@@ -217,13 +250,20 @@
     <value>Domů</value>
   </data>
   <data name="InTime" xml:space="preserve">
-    <value>V</value>
+    <value>Za</value>
+    <comment>In a specific time in days</comment>
   </data>
   <data name="Invoice" xml:space="preserve">
     <value>Faktura</value>
   </data>
   <data name="Items" xml:space="preserve">
     <value>Items</value>
+  </data>
+  <data name="ItemsEmptyDescription" xml:space="preserve">
+    <value>Improve your spending habbits by adding your subscriptions.</value>
+  </data>
+  <data name="ItemsEmptyTitle" xml:space="preserve">
+    <value>You have no items here!</value>
   </data>
   <data name="LastDays" xml:space="preserve">
     <value>Posledních {0} dnů</value>
@@ -261,6 +301,9 @@
   </data>
   <data name="NotLoggedInDescription" xml:space="preserve">
     <value>Vaše data jsou uložena lokálně a nejsou synchronizována.</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Ok</value>
   </data>
   <data name="Optional" xml:space="preserve">
     <value>Volitelné</value>
@@ -309,6 +352,9 @@
   </data>
   <data name="Travel" xml:space="preserve">
     <value>Cestování</value>
+  </data>
+  <data name="Unarchive" xml:space="preserve">
+    <value>Odarchivovat</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Verze</value>

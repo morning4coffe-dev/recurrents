@@ -1,4 +1,4 @@
-﻿#if !HAS_UNO
+#if !HAS_UNO
 using CommunityToolkit.WinUI.Notifications;
 using System;
 using Windows.Foundation.Collections;
@@ -43,10 +43,12 @@ public class WindowsNotificationService : NotificationServiceBase
             return;
         }
 
-        CreateNotification(id, title, text).Schedule(date, toast =>
-        {
-            //toast.Id = new Guid().ToString().Take(4).ToString();
-        });
+
+        // TODO Notification scheduling is disabled, fails sometimes
+        //CreateNotification(id, title, text).Schedule(date, toast =>
+        //{
+        //    //toast.Id = new Guid().ToString().Take(4).ToString();
+        //});
     }
 
     private ToastContentBuilder CreateNotification(string id, string title, string text)

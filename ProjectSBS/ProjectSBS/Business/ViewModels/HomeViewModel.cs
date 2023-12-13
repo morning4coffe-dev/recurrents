@@ -258,10 +258,27 @@ public partial class HomeViewModel : ViewModelBase
 
     public async Task Archive(ItemViewModel? item = null)
     {
-        _itemService.ArchiveItem(item ?? SelectedItem);
+        ContentDialogResult result;
 
-        SelectedItem = null;
-        RefreshItems();
+        if (!(item ?? SelectedItem).IsArchived)
+        {
+            result = await _dialog.ShowAsync(
+                _localizer["ArchiveDialogTitle"],
+                _localizer["ArchiveDialogDescription"],
+                _localizer["ArchiveVerb"]);
+        }
+        else 
+        {
+            result = ContentDialogResult.Primary;
+        }
+
+        if (result == ContentDialogResult.Primary)
+        {
+            _itemService.ArchiveItem(item ?? SelectedItem);
+
+            SelectedItem = null;
+            RefreshItems();
+        }
     }
 
     public async Task Delete(ItemViewModel? item = null)

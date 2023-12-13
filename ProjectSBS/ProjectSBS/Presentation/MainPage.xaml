@@ -91,7 +91,6 @@
 
           </VisualStateManager.VisualStateGroups>
 
-          <!--TODO IsSettingsVisible="True"-->
           <NavigationView x:Name="navigation"
                           Grid.Row="1"
                           IsBackButtonVisible="Collapsed"
@@ -116,61 +115,51 @@
             </NavigationView.Resources>
 
             <not_skia:NavigationView.PaneCustomContent>
-              <Grid>
-                <Button x:Name="userButton"
-                        Background="Transparent"
-                        BorderThickness="0"
-                        BorderBrush="Transparent"
-                        HorizontalAlignment="Stretch"
-                        Margin="4"
-                        Padding="12,8"
-                        HorizontalContentAlignment="Left"
-                        Command="{x:Bind ViewModel.Login}">                  
-                  <Button.Flyout>
-                    <MenuFlyout x:Name="userFlyout">
-                      <MenuFlyoutItem Text="Settings"
-                                      Icon="{toolkit:FontIcon Glyph=&#xE713;}"
-                                      Padding="100, 16"
-                                      Command="{x:Bind ViewModel.GoToSettings}" />
+              <Button x:Name="userButton"
+                      Background="Transparent"
+                      BorderThickness="0"
+                      BorderBrush="Transparent"
+                      HorizontalAlignment="Stretch"
+                      Margin="4"
+                      Padding="12,8"
+                      HorizontalContentAlignment="Left"
+                      Command="{x:Bind ViewModel.Login}">
+                <Button.Flyout>
+                  <MenuFlyout x:Name="userFlyout">
+                    <MenuFlyoutItem Text="{x:Bind ViewModel.SettingsText}"
+                                    Icon="{toolkit:FontIcon Glyph=&#xE713;}"
+                                    Padding="100, 16"
+                                    Command="{x:Bind ViewModel.GoToSettings}" />
 
-                      <MenuFlyoutItem Text="Logout"
-                                      Padding="100, 16"
-                                      Icon="{toolkit:FontIcon Glyph=&#xF3B1;}"
-                                      Command="{x:Bind ViewModel.Logout}">
-                      </MenuFlyoutItem>
-                    </MenuFlyout>
-                  </Button.Flyout>
+                    <MenuFlyoutItem Text="{x:Bind ViewModel.LogoutText}"
+                                    Padding="100, 16"
+                                    Icon="{toolkit:FontIcon Glyph=&#xF3B1;}"
+                                    Command="{x:Bind ViewModel.Logout}">
+                    </MenuFlyoutItem>
+                  </MenuFlyout>
+                </Button.Flyout>
 
-                  <StackPanel x:Name="desktopPerson"
-                              Orientation="Horizontal"
-                              Spacing="8">
-                    <PersonPicture ProfilePicture="{x:Bind ViewModel.User.Photo, Mode=OneWay}"
-                                   DisplayName="{x:Bind ViewModel.User.Name, Mode=OneWay}"
-                                   Height="48" />
-                    <TextBlock Text="Click to login"
-                               Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
-                               VerticalAlignment="Center" />
-                    <TextBlock Text="{x:Bind ViewModel.User.Name, Mode=OneWay}"
-                               Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay, Converter={StaticResource TrueToVisibleConverter}}"
-                               VerticalAlignment="Center" />
-                  </StackPanel>
-                </Button>
-
-                <Button x:Name="notLoggedIn"
-                        Visibility="Collapsed"
-                        Background="Transparent"
-                        BorderThickness="0"
-                        BorderBrush="Transparent"
-                        HorizontalAlignment="Stretch"
-                        Margin="4"
-                        Height="60"
-                        Content="You are not logged in" />
-              </Grid>
+                <StackPanel x:Name="desktopPerson"
+                            Orientation="Horizontal"
+                            Spacing="8">
+                  <PersonPicture ProfilePicture="{x:Bind ViewModel.User.Photo, Mode=OneWay}"
+                                 DisplayName="{x:Bind ViewModel.User.Name, Mode=OneWay}"
+                                 Height="48" />
+                  <TextBlock Text="{x:Bind ViewModel.ClickToLogoutText}"
+                             Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
+                             VerticalAlignment="Center" />
+                  <TextBlock Text="{x:Bind ViewModel.User.Name, Mode=OneWay}"
+                             Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay, Converter={StaticResource TrueToVisibleConverter}}"
+                             VerticalAlignment="Center" />
+                </StackPanel>
+              </Button>
             </not_skia:NavigationView.PaneCustomContent>
 
             <NavigationView.MenuItemTemplate>
               <DataTemplate x:DataType="models:NavigationCategory">
-                <NavigationViewItem Content="{x:Bind Text}" Padding="0,12">
+                <NavigationViewItem Content="{x:Bind Text}"
+                                    Padding="0,12"
+                                    ToolTipService.ToolTip="{x:Bind Text}">
                   <!--ToolTip="{x:Bind Tooltip}">-->
                   <NavigationViewItem.Icon>
                     <FontIcon Glyph="{x:Bind Glyph}" />
