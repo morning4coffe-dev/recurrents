@@ -38,13 +38,13 @@
 
   </ResourceDictionary.ThemeDictionaries>
 
-  <Color x:Key="SystemAccentColor">#238C31</Color>
-  <Color x:Key="SystemAccentColorDark1">#238C31</Color>
-  <Color x:Key="SystemAccentColorDark2">#238C31</Color>
-  <Color x:Key="SystemAccentColorDark3">#238C31</Color>
-  <Color x:Key="SystemAccentColorLight1">#238C31</Color>
-  <Color x:Key="SystemAccentColorLight2">#238C31</Color>
-  <Color x:Key="SystemAccentColorLight3">#238C31</Color>
+  <Color x:Key="SystemAccentColorLight3">#17cfa4</Color>
+  <Color x:Key="SystemAccentColorLight2">#13a986</Color>
+  <Color x:Key="SystemAccentColorLight1">#128268</Color>
+  <Color x:Key="SystemAccentColor">#138469</Color>
+  <Color x:Key="SystemAccentColorDark1">#138469</Color>
+  <Color x:Key="SystemAccentColorDark2">#0b5d4a</Color>
+  <Color x:Key="SystemAccentColorDark3">#07372c</Color>
 
   <Style x:Key="PageBackground"
          TargetType="Grid">

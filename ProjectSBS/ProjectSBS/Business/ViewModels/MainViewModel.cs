@@ -70,10 +70,10 @@ public partial class MainViewModel : ViewModelBase
         Title += $" (Dev)";
 
         //TODO Don't use static CultureInfo
-        CultureInfo ci = new("cs-CZ");
-        Thread.CurrentThread.CurrentCulture = ci;
-        Thread.CurrentThread.CurrentUICulture = ci;
-        ApplicationLanguages.PrimaryLanguageOverride = "cs-CZ";
+        //CultureInfo ci = new("cs-CZ");
+        //Thread.CurrentThread.CurrentCulture = ci;
+        //Thread.CurrentThread.CurrentUICulture = ci;
+        //ApplicationLanguages.PrimaryLanguageOverride = "cs-CZ";
 #endif
 
         DesktopCategories = _navigation.Categories.Where(c => c.Visibility == CategoryVisibility.Desktop || c.Visibility == CategoryVisibility.Both);
@@ -96,7 +96,7 @@ public partial class MainViewModel : ViewModelBase
         {
             if (IsLoggedIn)
             {
-                MenuFlyout.ShowAttachedFlyout(UserButton);
+                //MenuFlyout.ShowAttachedFlyout(UserButton);
                 return;
             }
 

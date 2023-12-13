@@ -149,7 +149,7 @@ public partial class SettingsViewModel : ViewModelBase
 
     public override async void Load()
     {
-        User = await _userService.GetUser();
+        User = await _userService.RetrieveUser();
         IsLoggedIn = User is { };
 
         var currency = await _currencyCache.GetCurrency(CancellationToken.None);
