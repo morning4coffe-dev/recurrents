@@ -1,5 +1,3 @@
-using ProjectSBS.Services.Dialogs;
-
 namespace ProjectSBS.Services.Navigation;
 
 internal class NavigationService : INavigation

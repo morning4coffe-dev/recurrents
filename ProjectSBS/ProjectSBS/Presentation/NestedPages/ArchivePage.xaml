@@ -153,18 +153,20 @@
                       Spacing="12"
                       Grid.Row="3"
                       VerticalAlignment="Center"
-                      Visibility="Collapsed">
+                      Visibility="Collapsed"
+                      Margin="0,0,0,20">
 
-            <Image Source="ms-appx:///Assets/Icons/icon.png"
-                   Margin="20"
-                   MaxHeight="200" />
+            <Image Source="/ProjectSBS/Assets/Illustrations/archive_empty_illustration.png"
+                   HorizontalAlignment="Center"
+                   MaxWidth="300"
+                   Margin="20" />
 
-            <TextBlock Text="You have no items here!"
+            <TextBlock Text="{x:Bind ViewModel.ArchiveEmptyTitleText}"
                        TextWrapping="WrapWholeWords"
                        HorizontalAlignment="Center"
                        FontWeight="Bold" />
 
-            <TextBlock Text="Improve your spending habbits by adding your subscriptions."
+            <TextBlock Text="{x:Bind ViewModel.ArchiveEmptyDescriptionText}"
                        TextWrapping="WrapWholeWords"
                        TextAlignment="Center"
                        Opacity="0.7"

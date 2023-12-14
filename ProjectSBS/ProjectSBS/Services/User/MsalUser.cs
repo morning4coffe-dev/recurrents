@@ -25,7 +25,7 @@ public class MsalUser : IUserService
     public event EventHandler<UserModel.User?>? OnLoggedInChanged;
 
 
-    public async Task<bool> AuthenticateAsync()
+    public async Task<bool> AuthenticateAsync(bool silentOnly = false)
     {
         if (IsLoggedIn && !NeedsRefresh)
         {
@@ -54,7 +54,7 @@ public class MsalUser : IUserService
             return false;
         }
 
-        if (tryInteractiveLogin)
+        if (tryInteractiveLogin && !silentOnly)
         {
             try
             {
@@ -187,7 +187,6 @@ public class MsalUser : IUserService
     public void Logout()
     {
         _currentUser = null;
-        //TODO Clear token, clear items
         _app?.RemoveAsync(_app.GetAccountsAsync().Result.FirstOrDefault());
 
         OnLoggedInChanged?.Invoke(this, _currentUser);
@@ -245,8 +244,6 @@ public class MsalUser : IUserService
 #endif
 }
 
-#pragma warning disable CA1812 // Avoid uninstantiated internal classes
-#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 class TokenProvider(string token) : IAccessTokenProvider
 {
     private readonly string _token = token ?? throw new ArgumentNullException(nameof(token));
@@ -256,5 +253,5 @@ class TokenProvider(string token) : IAccessTokenProvider
         return Task.FromResult(_token);
     }
 
-    public AllowedHostsValidator AllowedHostsValidator { get; }
+    public AllowedHostsValidator? AllowedHostsValidator { get; }
 }

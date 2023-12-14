@@ -1,5 +1,3 @@
-using Windows.Globalization;
-
 namespace ProjectSBS.Business.ViewModels;
 
 public partial class MainViewModel : ViewModelBase
@@ -12,7 +10,7 @@ public partial class MainViewModel : ViewModelBase
     #endregion
 
     #region Localization Strings
-    public string ClickToLogoutText => _localizer["ClickToLogout"];
+    public string ClickToLoginText => _localizer["ClickToLogin"];
     public string SettingsText => _localizer["Settings"];
     public string LogoutText => _localizer["Logout"];
     #endregion

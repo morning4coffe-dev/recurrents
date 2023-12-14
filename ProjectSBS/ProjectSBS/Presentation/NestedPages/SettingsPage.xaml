@@ -147,7 +147,7 @@
                               Margin="6"
                               Spacing="20">
 
-                    <Image Source="ms-appx:///Assets/Icons/icon.png"
+                    <Image Source="/ProjectSBS/Assets/Icons/icon.png"
                            Width="36" />
 
                     <StackPanel VerticalAlignment="Center"

@@ -1,4 +1,3 @@
-using ProjectSBS.Services.Dialogs;
 using Windows.UI.Core;
 
 namespace ProjectSBS.Business.ViewModels;
@@ -20,6 +19,8 @@ public partial class HomeViewModel : ViewModelBase
     public string UnarchiveText => _localizer["Unarchive"];
     public string ItemsEmptyTitleText => _localizer["ItemsEmptyTitle"];
     public string ItemsEmptyDescriptionText => _localizer["ItemsEmptyDescription"];
+    public string ArchiveEmptyTitleText => _localizer["ItemsEmptyTitle"];
+    public string ArchiveEmptyDescriptionText => _localizer["ArchiveEmptyDescription"];
     #endregion
 
     [ObservableProperty]

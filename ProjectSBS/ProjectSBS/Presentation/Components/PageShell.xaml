@@ -46,10 +46,10 @@
                     Background="Transparent"
                     Visibility="{x:Bind DesktopTitleVisibility}"
                     Height="48">
-      <Image Source="ms-appx:///Assets/Icons/icon.png"
+
+      <Image Source="/ProjectSBS/Assets/Icons/icon.png"
              HorizontalAlignment="Left"
-             Width="16"
-             Height="30"
+             Width="20"
              Margin="16,0" />
       <TextBlock Text="{x:Bind TitleBarTitle, Mode=OneWay}"
                  Style="{StaticResource CaptionTextBlockStyle}"

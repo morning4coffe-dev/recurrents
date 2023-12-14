@@ -45,23 +45,6 @@
                 </VisualState.StateTriggers>
               </VisualState>
             </VisualStateGroup>
-
-            <!--<VisualStateGroup>
-                            <VisualState>
-                                <VisualState.StateTriggers>
-                                    <triggers:IsNullOrEmptyStateTrigger Value="{x:Bind ViewModel.User, Mode=OneWay}" />
-                                </VisualState.StateTriggers>
-                                <VisualState.Setters>
-                                    -->
-            <!--TODO [Login UI] Doesn't switch on login-->
-            <!--
-                                    <Setter Target="personPicture.Visibility"
-                                            Value="Collapsed" />
-                                    <Setter Target="secImage.Visibility"
-                                            Value="Visible" />
-                                </VisualState.Setters>
-                            </VisualState>
-                        </VisualStateGroup>-->
           </VisualStateManager.VisualStateGroups>
 
           <Image x:Name="backgroundImage"
@@ -97,8 +80,8 @@
                                      RadiusX="0.5"
                                      RadiusY="0.5">
                   <RadialGradientBrush.GradientStops>
-                    <GradientStop Color="DarkGreen"
-                                  Offset="0" />
+                    <GradientStop Color="#1c8522"
+                                  Offset="0.3" />
                     <GradientStop Color="Transparent"
                                   Offset="1" />
                   </RadialGradientBrush.GradientStops>
@@ -111,25 +94,13 @@
                        VerticalAlignment="Bottom"
                        Style="{StaticResource TitleTextBlockStyle}" />
 
-            <Grid Grid.Row="1">
-              <!--<StackPanel x:Name="personPicture"
-                                        Visibility="Collapsed">
-                                <TextBlock Text="{x:Bind ViewModel.User.Name}"
-                                           Style="{StaticResource TitleTextBlockStyle}" />
-
-                                <PersonPicture ProfilePicture="{x:Bind ViewModel.User.Photo}"
-                                               DisplayName="{x:Bind ViewModel.User.Name}"
-                                               MinHeight="45"
-                                               MaxHeight="200" />
-                            </StackPanel>-->
-
-              <Image x:Name="secImage"
-                     Visibility="Visible"
-                     Source="ms-appx:///Assets/Icons/icon.png"
-                     Margin="0, 112"
-                     MinHeight="45"
-                     MaxHeight="220" />
-            </Grid>
+            <Image x:Name="secImage"
+                   Visibility="Visible"
+                   Source="/ProjectSBS/Assets/Illustrations/welcome_illustration.png"
+                   Margin="0, 40"
+                   MinHeight="60"
+                   MaxHeight="210"
+                   Grid.Row="1" />
 
             <StackPanel Grid.Row="2"
                         Spacing="20"
@@ -138,6 +109,7 @@
 
               <StackPanel Spacing="8">
                 <Button Content="{x:Bind ViewModel.LoginWithMicrosoftText}"
+                        HorizontalAlignment="Stretch"
                         Padding="20, 12"
                         AutomationProperties.AutomationId="LoginWithMicrosoft"
                         Command="{x:Bind ViewModel.Login}" />

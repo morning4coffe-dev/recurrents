@@ -23,11 +23,11 @@
 
             <!--AdaptiveTriggers-->
             <VisualStateGroup>
-              <VisualState>
+              <VisualState x:Name="SmallScreen">
                 <VisualState.StateTriggers>
                   <AdaptiveTrigger MinWindowWidth="0" />
                 </VisualState.StateTriggers>
-
+                
                 <VisualState.Setters>
                   <Setter Target="navigation.IsPaneToggleButtonVisible"
                           Value="False" />
@@ -35,8 +35,8 @@
                           Value="Visible" />
                 </VisualState.Setters>
               </VisualState>
-
-              <VisualState>
+              
+              <VisualState x:Name="LargeScreen">
                 <VisualState.StateTriggers>
                   <AdaptiveTrigger MinWindowWidth="640" />
                 </VisualState.StateTriggers>
@@ -145,7 +145,7 @@
                   <PersonPicture ProfilePicture="{x:Bind ViewModel.User.Photo, Mode=OneWay}"
                                  DisplayName="{x:Bind ViewModel.User.Name, Mode=OneWay}"
                                  Height="48" />
-                  <TextBlock Text="{x:Bind ViewModel.ClickToLogoutText}"
+                  <TextBlock Text="{x:Bind ViewModel.ClickToLoginText}"
                              Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
                              VerticalAlignment="Center" />
                   <TextBlock Text="{x:Bind ViewModel.User.Name, Mode=OneWay}"

@@ -1,6 +1,7 @@
+using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.UI.Dispatching;
-using ProjectSBS.Services.Dialogs;
 using Windows.System.Profile;
+
 
 #if WINDOWS
 using Microsoft.UI.Composition.SystemBackdrops;
@@ -17,7 +18,7 @@ public class App : Application
     public static IServiceProvider? Services => (Current as App)!.Host?.Services;
     public static DispatcherQueue Dispatcher => (Current as App)!.MainWindow!.DispatcherQueue;
 
-    protected override void OnLaunched(LaunchActivatedEventArgs args)
+    protected override async void OnLaunched(LaunchActivatedEventArgs args)
     {
         var builder = this.CreateBuilder(args)
             .Configure(host => host
@@ -159,22 +160,33 @@ public class App : Application
             // When the navigation stack isn't restored navigate to the first page,
             // configuring the new page by passing required information as a navigation
             // parameter
-            rootFrame.Navigate(typeof(LoginPage), args.Arguments);
+            var isLoggedIn = await Services.GetRequiredService<IUserService>().AuthenticateAsync(true);
+
+            if (isLoggedIn)
+            {
+                rootFrame.Navigate(typeof(MainPage), args.Arguments);
+            }
+            else
+            {
+                rootFrame.Navigate(typeof(LoginPage), args.Arguments);
+            }
         }
         // Ensure the current window is active
         MainWindow.Activate();
 
+#if !HAS_UNO
         var version = Services?.GetRequiredService<IInteropService>().GetAppVersion();
 
         Dictionary<string, string> appLaunchSettings = new()
         {
             { "App Version", string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision) },
-            { "App Install", AppInfo.Current.Package.InstalledDate.ToString("d",new CultureInfo("en-US")) },
+            { "App Install", AppInfo.Current.Package.InstalledDate.ToString("d", new CultureInfo("en-US")) },
             { "OS Device", AnalyticsInfo.VersionInfo.DeviceFamily },
             { "OS Form", AnalyticsInfo.DeviceForm },
             { "OS Version", AnalyticsInfo.VersionInfo.DeviceFamilyVersion },
         };
 
-        Services.GetRequiredService<IAnalyticsService>().TrackEvent(AnalyticsConst.Launched, appLaunchSettings);
+        Services?.GetRequiredService<IAnalyticsService>().TrackEvent(AnalyticsConst.Launched, appLaunchSettings);
+#endif
     }
 }

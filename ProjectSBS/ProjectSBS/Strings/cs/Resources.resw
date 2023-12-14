@@ -138,6 +138,9 @@
   <data name="ArchiveDialogTitle" xml:space="preserve">
     <value>Jste si jisti, že chcete předplatné archivovat?</value>
   </data>
+  <data name="ArchiveEmptyDescription" xml:space="preserve">
+    <value>ArchiveEmptyDescription</value>
+  </data>
   <data name="ArchiveVerb" xml:space="preserve">
     <value>Archivovat</value>
   </data>
@@ -156,8 +159,8 @@
   <data name="Cash" xml:space="preserve">
     <value>Hotovost</value>
   </data>
-  <data name="ClickToLogout" xml:space="preserve">
-    <value>ClickToLogout</value>
+  <data name="ClickToLogin" xml:space="preserve">
+    <value>Přihlásit se</value>
   </data>
   <data name="CloseDetails" xml:space="preserve">
     <value>Zavřít podrobnosti</value>
@@ -190,10 +193,10 @@
     <value>Smazat</value>
   </data>
   <data name="DeleteDialogDescription" xml:space="preserve">
-    <value>Opravdu chcete odstranit své předplatné?</value>
+    <value>Tímto způsobem bude toto předplatné odstraněno i ze souhrnů. Upozorňujeme, že tato akce je nevratná.</value>
   </data>
   <data name="DeleteDialogTitle" xml:space="preserve">
-    <value>Tímto způsobem bude toto předplatné odstraněno i ze souhrnů. Upozorňujeme, že tato akce je nevratná.</value>
+    <value>Opravdu chcete odstranit své předplatné?</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>Popis</value>
@@ -257,13 +260,13 @@
     <value>Faktura</value>
   </data>
   <data name="Items" xml:space="preserve">
-    <value>Items</value>
+    <value>Předplatné</value>
   </data>
   <data name="ItemsEmptyDescription" xml:space="preserve">
-    <value>Improve your spending habbits by adding your subscriptions.</value>
+    <value>Vylepšte své návyky při utrácení tím, že přidáte své předplatné.</value>
   </data>
   <data name="ItemsEmptyTitle" xml:space="preserve">
-    <value>You have no items here!</value>
+    <value>Nemáte zde žádná předplatná!</value>
   </data>
   <data name="LastDays" xml:space="preserve">
     <value>Posledních {0} dnů</value>

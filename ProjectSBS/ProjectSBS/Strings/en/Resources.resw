@@ -138,6 +138,9 @@
   <data name="ArchiveDialogTitle" xml:space="preserve">
     <value>Are you sure you want to archive your subscription?</value>
   </data>
+  <data name="ArchiveEmptyDescription" xml:space="preserve">
+    <value>ArchiveEmptyDescription</value>
+  </data>
   <data name="ArchiveVerb" xml:space="preserve">
     <value>Archive</value>
   </data>
@@ -156,8 +159,8 @@
   <data name="Cash" xml:space="preserve">
     <value>Cash</value>
   </data>
-  <data name="ClickToLogout" xml:space="preserve">
-    <value>ClickToLogout</value>
+  <data name="ClickToLogin" xml:space="preserve">
+    <value>Click to Login</value>
   </data>
   <data name="CloseDetails" xml:space="preserve">
     <value>Close details</value>
@@ -260,13 +263,13 @@
     <value>Invoice</value>
   </data>
   <data name="Items" xml:space="preserve">
-    <value>Items</value>
+    <value>Subscriptions</value>
   </data>
   <data name="ItemsEmptyDescription" xml:space="preserve">
-    <value>Improve your spending habbits by adding your subscriptions.</value>
+    <value>Improve your spending habits by adding your subscriptions.</value>
   </data>
   <data name="ItemsEmptyTitle" xml:space="preserve">
-    <value>You have no items here!</value>
+    <value>You have no subscriptions here!</value>
   </data>
   <data name="LastDays" xml:space="preserve">
     <value>Last {0} days</value>
@@ -279,7 +282,7 @@
     <value>Name</value>
   </data>
   <data name="NewItem" xml:space="preserve">
-    <value>New Item</value>
+    <value>New subscription</value>
   </data>
   <data name="News" xml:space="preserve">
     <value>News</value>

@@ -7,7 +7,7 @@ public interface IUserService
 
     event EventHandler<Business.Models.User?>? OnLoggedInChanged;
 
-    Task<bool> AuthenticateAsync();
+    Task<bool> AuthenticateAsync(bool silentOnly = false);
     Task<Business.Models.User?> RetrieveUser();
 
     Task<bool> UploadData(string content, string relativeLocalPath, CancellationToken token = default);

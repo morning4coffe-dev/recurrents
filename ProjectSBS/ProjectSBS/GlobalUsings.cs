@@ -40,5 +40,6 @@ global using ProjectSBS.Services.Settings;
 global using ProjectSBS.Services.Storage;
 global using ProjectSBS.Services.Storage.Data;
 global using ProjectSBS.Services.User;
+global using ProjectSBS.Services.Dialogs;
 global using CommunityToolkit.Mvvm.Messaging;
 global using ProjectSBS.Presentation.NestedPages;
