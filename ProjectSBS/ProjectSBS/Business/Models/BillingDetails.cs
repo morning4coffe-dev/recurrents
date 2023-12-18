@@ -5,7 +5,7 @@ public record BillingDetails
     public BillingDetails(decimal basePrice, DateOnly initialDate,
         string currencyId = "EUR",
         Period periodType = Period.Monthly, short recurEvery = 1,
-        string paymentMethod = "")
+        string paymentMethod = "N/A")
     {
 
         BasePrice = basePrice;

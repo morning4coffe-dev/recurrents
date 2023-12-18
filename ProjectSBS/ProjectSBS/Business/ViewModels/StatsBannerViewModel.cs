@@ -49,7 +49,6 @@ public partial class StatsBannerViewModel : ViewModelBase
 
     private void ItemService_OnItemsChanged(object? sender, IEnumerable<ItemViewModel> e)
     {
-        //TODO Sum for current period
         SetSum(e);
         //    _values.Add(e.ToList().Count);
 
@@ -80,7 +79,7 @@ public partial class StatsBannerViewModel : ViewModelBase
         var values = await Task.WhenAll(tasks);
         var sum = values.Sum();
 
-        Sum = $"≈ {Math.Round(sum, 2):n} {_settingsService.DefaultCurrency}";
+        Sum = $"≈ {Math.Round(sum, 2).ToString("C", CurrencyCache.CurrencyCultures[_settingsService.DefaultCurrency])}";
     }
 
     public override void Load()

@@ -65,7 +65,7 @@ public sealed class CurrencyCache(
             _current = await GetCurrency(CancellationToken.None) ?? new();
         }
 
-        if (!_current.Rates.Keys.Contains("EUR"))
+        if (!_current.Rates.ContainsKey("EUR"))
         {
             _current.Rates.Add("EUR", 1);
         }
@@ -75,7 +75,7 @@ public sealed class CurrencyCache(
         return d * Convert.ToDecimal(_current.Rates[defaultCurrency]);
     }
 
-    private async ValueTask<StorageFile?> GetFile(CreationCollisionOption option)
+    private static async ValueTask<StorageFile?> GetFile(CreationCollisionOption option)
     {
         await fileLock.WaitAsync();
 
@@ -83,7 +83,7 @@ public sealed class CurrencyCache(
         {
             return await ApplicationData.Current.TemporaryFolder.CreateFileAsync("currency.json", option);
         }
-        catch 
+        catch
         {
             //TODO Log
             return null;
@@ -126,4 +126,40 @@ public sealed class CurrencyCache(
         }
         await File.WriteAllTextAsync(file.Path, weatherText, token);
     }
+
+    public static IReadOnlyDictionary<string, CultureInfo> CurrencyCultures = new Dictionary<string, CultureInfo>
+    {
+        { "AUD", new CultureInfo("en-AU") },
+        { "BGN", new CultureInfo("bg-BG") },
+        { "BRL", new CultureInfo("pt-BR") },
+        { "CAD", new CultureInfo("en-CA") },
+        { "CHF", new CultureInfo("fr-CH") },
+        { "CNY", new CultureInfo("zh-CN") },
+        { "CZK", new CultureInfo("cs-CZ") },
+        { "DKK", new CultureInfo("da-DK") },
+        { "GBP", new CultureInfo("en-GB") },
+        { "HKD", new CultureInfo("zh-HK") },
+        { "HUF", new CultureInfo("hu-HU") },
+        { "IDR", new CultureInfo("id-ID") },
+        { "ILS", new CultureInfo("he-IL") },
+        { "INR", new CultureInfo("en-IN") },
+        { "ISK", new CultureInfo("is-IS") },
+        { "JPY", new CultureInfo("ja-JP") },
+        { "KRW", new CultureInfo("ko-KR") },
+        { "MXN", new CultureInfo("es-MX") },
+        { "MYR", new CultureInfo("ms-MY") },
+        { "NOK", new CultureInfo("nb-NO") },
+        { "NZD", new CultureInfo("en-NZ") },
+        { "PHP", new CultureInfo("en-PH") },
+        { "PLN", new CultureInfo("pl-PL") },
+        { "RON", new CultureInfo("ro-RO") },
+        { "SEK", new CultureInfo("sv-SE") },
+        { "SGD", new CultureInfo("en-SG") },
+        { "THB", new CultureInfo("th-TH") },
+        { "TRY", new CultureInfo("tr-TR") },
+        { "USD", new CultureInfo("en-US") },
+        { "ZAR", new CultureInfo("en-ZA") },
+        { "EUR", new CultureInfo("en-EU") }
+    };
+
 }

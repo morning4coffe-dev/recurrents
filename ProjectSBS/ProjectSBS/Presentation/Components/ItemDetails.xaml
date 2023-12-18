@@ -173,23 +173,11 @@
                            Style="{StaticResource CaptionTextBlockStyle}" />
               </Grid>
 
-              <local:DetailsBox HeaderText="{x:Bind ViewModel.ForThePriceOfText.ToLower()}">
-                <local:DetailsBox.Content>
-                  <TextBlock TextWrapping="WrapWholeWords">
-                      <Run Text="{x:Bind ViewModel.SelectedItem.Item.Billing.BasePrice, Mode=OneWay}" />
-                      <Run Text="{x:Bind ViewModel.SelectedItem.Item.Billing.CurrencyId, Mode=OneWay}" />
-                  </TextBlock>
-                </local:DetailsBox.Content>
-              </local:DetailsBox>
+              <local:DetailsBox HeaderText="{x:Bind ViewModel.ForThePriceOfText.ToLower()}"
+                                Text="{x:Bind ViewModel.SelectedItem.FormattedPrice, Mode=OneWay}" />
 
-              <local:DetailsBox HeaderText="{x:Bind ViewModel.PaidInTotalText.ToLower()}">
-                <local:DetailsBox.Content>
-                  <TextBlock TextWrapping="WrapWholeWords">
-                      <Run Text="{x:Bind ViewModel.SelectedItem.FormattedTotalPrice, Mode=OneWay}" />
-                      <Run Text="{x:Bind ViewModel.SelectedItem.Item.Billing.CurrencyId, Mode=OneWay}" />
-                  </TextBlock>
-                </local:DetailsBox.Content>
-              </local:DetailsBox>
+              <local:DetailsBox HeaderText="{x:Bind ViewModel.PaidInTotalText.ToLower()}"
+                                Text="{x:Bind ViewModel.SelectedItem.FormattedTotalPrice, Mode=OneWay}" />
 
               <local:DetailsBox HeaderText="{x:Bind ViewModel.BillingCycleText.ToLower()}"
                                 Text="{x:Bind ViewModel.SelectedItem.Item.Billing.PeriodType, Mode=OneWay}" />

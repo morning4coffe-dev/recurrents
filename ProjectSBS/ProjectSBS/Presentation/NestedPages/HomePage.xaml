@@ -252,9 +252,17 @@
                             </Grid.ColumnDefinitions>
 
                             <!-- Left Column -->
-                            <TextBlock Text="{x:Bind Item.Name, Mode=OneWay}"
-                                       VerticalAlignment="Center"
-                                       Style="{StaticResource SubtitleTextBlockStyle}" />
+                            <StackPanel Spacing="6">
+                              <Rectangle Fill="{x:Bind DisplayTag.Color, Mode=OneWay, Converter={StaticResource ColorToBrushConverter}}"
+                                         Height="6"
+                                         Width="80"
+                                         RadiusY="3"
+                                         RadiusX="3"
+                                         HorizontalAlignment="Left" />
+                              <TextBlock Text="{x:Bind Item.Name, Mode=OneWay}"
+                                         VerticalAlignment="Center"
+                                         Style="{StaticResource SubtitleTextBlockStyle}" />
+                            </StackPanel>
 
                             <!-- Right Column -->
                             <StackPanel Grid.Column="1"
@@ -262,10 +270,8 @@
                                         HorizontalAlignment="Right"
                                         VerticalAlignment="Center">
                               <TextBlock Style="{StaticResource SubtitleTextBlockStyle}"
-                                         HorizontalAlignment="Right">
-                                <Run Text="{x:Bind FormattedPrice, Mode=OneWay}" />
-                                <Run Text="{x:Bind Item.Billing.CurrencyId, Mode=OneWay}" />
-                              </TextBlock>
+                                         HorizontalAlignment="Right"
+                                         Text="{x:Bind FormattedPrice, Mode=OneWay}" />
                               <TextBlock Text="{x:Bind FormattedPaymentDate, Mode=OneWay}"
                                          HorizontalAlignment="Right" />
                             </StackPanel>

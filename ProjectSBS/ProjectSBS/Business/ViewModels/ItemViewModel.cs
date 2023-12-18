@@ -6,6 +6,7 @@ public partial class ItemViewModel : ObservableObject
     private readonly INotificationService _notification;
     private readonly IStringLocalizer _localization;
     private readonly ISettingsService _settingsService;
+    private readonly ICurrencyCache _currencyCache;
 
     public ItemViewModel(Item? item)
     {
@@ -17,6 +18,7 @@ public partial class ItemViewModel : ObservableObject
 #endif
         _localization = App.Services?.GetRequiredService<IStringLocalizer>()!;
         _settingsService = App.Services?.GetRequiredService<ISettingsService>()!;
+        _currencyCache = App.Services?.GetService<ICurrencyCache>()!;
 
         ScheduleBilling();
     }
@@ -76,8 +78,15 @@ public partial class ItemViewModel : ObservableObject
         }
     }
 
-    public string FormattedTotalPrice => TotalPrice.ToString("n");
-    public string FormattedPrice => Item?.Billing.BasePrice.ToString("n") ?? "0";
+    public string FormattedTotalPrice => TotalPrice.ToString("C", CurrencyCache.CurrencyCultures[Item?.Billing.CurrencyId]);
+    public string FormattedPrice
+        //var task = _currencyCache.ConvertToDefaultCurrency(
+        //    Item?.Billing.BasePrice ?? 0,
+        //    Item?.Billing.CurrencyId ?? "EUR",
+        //    _settingsService.DefaultCurrency);
+
+        => $"{Item?.Billing.BasePrice.ToString("C", CurrencyCache.CurrencyCultures[Item?.Billing.CurrencyId])}";
+
 
     private Status? GetLastStatus()
     {
@@ -139,7 +148,7 @@ public partial class ItemViewModel : ObservableObject
         ScheduleBilling();
     }
 
-#pragma warning disable CS1998 
+#pragma warning disable CS1998
     // Async method lacks 'await' operators and will run synchronously as it is currently implemented only for Windows
     public async void ScheduleBilling()
     {
