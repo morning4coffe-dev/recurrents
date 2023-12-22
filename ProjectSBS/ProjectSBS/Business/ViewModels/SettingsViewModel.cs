@@ -6,27 +6,28 @@ public partial class SettingsViewModel : ViewModelBase
     private readonly ISettingsService _settingsService;
     private readonly IItemService _itemService;
     private readonly IUserService _userService;
+    private readonly IStringLocalizer _localizer;
 
     #region Localization Strings
-    public string TitleText { get; init; }
-    public string DefaultCurrencyText { get; init; }
-    public string GoToSettingsText { get; init; }
-    public string LogoutText { get; init; }
-    public string NotLoggedInText { get; init; }
-    public string NotLoggedInDescription { get; init; }
-    public string SystemNotificationsText { get; init; }
-    public string NotificationTimeText { get; init; }
-    public string NotificationsDisabledText { get; init; }
-    public string NotificationsDisabledDescription { get; init; }
-    public string AppName { get; init; }
+    public string TitleText => _localizer["Settings"];
+    public string DefaultCurrencyText => _localizer["DefaultCurrency"];
+    public string GoToSettingsText => _localizer["GoToSettings"];
+    public string LogoutText => _localizer["Logout"];
+    public string NotLoggedInText => _localizer["NotLoggedIn"];
+    public string NotLoggedInDescription => _localizer["NotLoggedInDescription"];
+    public string SystemNotificationsText => _localizer["SystemNotifications"];
+    public string NotificationTimeText => _localizer["NotificationTime"];
+    public string NotificationsDisabledText => _localizer["NotificationsDisabled"];
+    public string NotificationsDisabledDescription => _localizer["NotificationsDisabledDescription"];
+    public string AppName => _localizer["ApplicationName"];
     public string AppVersion { get; init; }
-    public string NotificationsText { get; init; }
-    public string AboutText { get; init; }
-    public string AboutDescription { get; init; }
-    public string GitHubText { get; init; }
-    public string RateAndReviewText { get; init; }
-    public string PrivacyPolicyText { get; init; }
-    public string ReportABugText { get; init; }
+    public string NotificationsText => _localizer["Notifications"];
+    public string AboutText => _localizer["About"];
+    public string AboutDescription => _localizer["AboutDescription"];
+    public string GitHubText => _localizer["GitHub"];
+    public string RateAndReviewText => _localizer["RateAndReview"];
+    public string PrivacyPolicyText => _localizer["PrivacyPolicy"];
+    public string ReportABugText => _localizer["ReportABug"];
     #endregion
 
     [ObservableProperty]
@@ -84,7 +85,7 @@ public partial class SettingsViewModel : ViewModelBase
     public ICommand PrivacyPolicy { get; }
     public ICommand ReportABug { get; }
     public SettingsViewModel(
-    IStringLocalizer localization,
+    IStringLocalizer localizer,
     ICurrencyCache currencyCache,
     ISettingsService settingsService,
     INavigation navigation,
@@ -93,6 +94,7 @@ public partial class SettingsViewModel : ViewModelBase
     IInteropService interopService,
     IUserService userService)
     {
+        _localizer = localizer;
         _userService = userService;
         _currencyCache = currencyCache;
         _itemService = itemService;
@@ -120,31 +122,12 @@ public partial class SettingsViewModel : ViewModelBase
         ReportABug = new AsyncRelayCommand(async () =>
             await Windows.System.Launcher.LaunchUriAsync(new Uri("https://github.com/morning4coffe-dev/project-sbs/issues/new")));
 
-        TitleText = localization["Settings"];
-        DefaultCurrencyText = localization["DefaultCurrency"];
-        LogoutText = localization["Logout"];
-        GoToSettingsText = localization["GoToSettings"];
-        NotLoggedInText = localization["NotLoggedIn"];
-        NotLoggedInDescription = localization["NotLoggedInDescription"];
-        SystemNotificationsText = localization["SystemNotifications"];
-        NotificationTimeText = localization["NotificationTime"];
-        NotificationsDisabledText = localization["NotificationsDisabled"];
-        NotificationsDisabledDescription = localization["NotificationsDisabledDescription"];
-        AppName = localization["ApplicationName"];
-        NotificationsText = localization["Notifications"];
-        AboutText = localization["About"];
-        AboutDescription = localization["AboutDescription"];
-        GitHubText = localization["GitHub"];
-        RateAndReviewText = localization["RateAndReview"];
-        PrivacyPolicyText = localization["PrivacyPolicy"];
-        ReportABugText = localization["ReportABug"];
-
         IsNotificationsEnabled = notificationService.IsEnabledOnDevice();
 
         Package package = Package.Current;
         PackageId packageId = package.Id;
         PackageVersion version = packageId.Version;
-        AppVersion = string.Format("{0}: {1}.{2}.{3}.{4}", localization["Version"], version.Major, version.Minor, version.Build, version.Revision);
+        AppVersion = string.Format("{0}: {1}.{2}.{3}.{4}", localizer["Version"], version.Major, version.Minor, version.Build, version.Revision);
     }
 
     public override async void Load()
@@ -159,22 +142,17 @@ public partial class SettingsViewModel : ViewModelBase
             return;
         }
 
-        //TODO sets the value on the open of the Settings
         Currencies.AddRange(currency?.Rates.Keys);
-        Currencies.Add(currency?.BaseCurrency ?? "EUR");
 
         SelectedCurrency = _settingsService.DefaultCurrency;
         NotificationTime = _settingsService.NotificationTime;
     }
 
     [RelayCommand]
-    public void LaunchNotificationSettings()
-    {
-        _ = Windows.System.Launcher.LaunchUriAsync(new Uri("ms-settings:notifications"));
-    }
+    public void LaunchNotificationSettings() => _ = Windows.System.Launcher.LaunchUriAsync(new Uri("ms-settings:notifications"));
 
     public override void Unload()
     {
-        //throw new NotImplementedException();
+        
     }
 }

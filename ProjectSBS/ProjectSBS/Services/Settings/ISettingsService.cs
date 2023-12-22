@@ -21,4 +21,5 @@ public interface ISettingsService
 
     string DefaultCurrency { set; get; }
     TimeOnly NotificationTime { set; get; }
+    bool ContinueWithoutLogin { set; get; }
 }

@@ -26,7 +26,11 @@ public partial class LoginViewModel : ObservableObject
         _itemService = itemService;
 
         Login = new AsyncRelayCommand(DoLogin);
-        WithoutLogin = new RelayCommand(() => _navigation.Navigate(typeof(MainPage)));
+        WithoutLogin = new RelayCommand(() =>
+        {
+            App.Services!.GetRequiredService<ISettingsService>().ContinueWithoutLogin = true;
+            _navigation.Navigate(typeof(MainPage));
+        });
 
         _titleText = _localization["Welcome"];
         _authorText = _localization["Author"];

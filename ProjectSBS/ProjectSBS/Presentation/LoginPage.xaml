@@ -55,7 +55,7 @@
                  Grid.Column="1"
                  VerticalAlignment="Center">
             <Image.Source>
-              <BitmapImage UriSource="ms-appx:///Assets/login-background2.jpg" />
+              <BitmapImage UriSource="ms-appx:///Assets/login-background3.jpg" />
             </Image.Source>
           </Image>
 

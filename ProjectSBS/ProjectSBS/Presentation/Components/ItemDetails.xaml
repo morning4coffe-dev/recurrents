@@ -180,10 +180,10 @@
                                 Text="{x:Bind ViewModel.SelectedItem.FormattedTotalPrice, Mode=OneWay}" />
 
               <local:DetailsBox HeaderText="{x:Bind ViewModel.BillingCycleText.ToLower()}"
-                                Text="{x:Bind ViewModel.SelectedItem.Item.Billing.PeriodType, Mode=OneWay}" />
+                                Text="{x:Bind ViewModel.SelectedItem.BillingCycle, Mode=OneWay}" />
 
               <local:DetailsBox HeaderText="{x:Bind ViewModel.PaymentMethodText.ToLower()}"
-                                Text="{x:Bind ViewModel.SelectedItem.Item.Billing.PaymentMethod, Mode=OneWay}" />
+                                Text="{x:Bind ViewModel.SelectedItem.PaymentMethod, Mode=OneWay}" />
 
               <local:DetailsBox HeaderText="{x:Bind ViewModel.NextPaymentsText.ToLower()}">
                 <local:DetailsBox.Content>

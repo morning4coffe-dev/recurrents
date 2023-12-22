@@ -189,6 +189,8 @@ public class MsalUser : IUserService
         _currentUser = null;
         _app?.RemoveAsync(_app.GetAccountsAsync().Result.FirstOrDefault());
 
+        App.Services!.GetRequiredService<ISettingsService>().ContinueWithoutLogin = false;
+
         OnLoggedInChanged?.Invoke(this, _currentUser);
     }
 

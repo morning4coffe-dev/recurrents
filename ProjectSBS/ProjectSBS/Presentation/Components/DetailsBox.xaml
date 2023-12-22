@@ -8,7 +8,7 @@
 
   <Border CornerRadius="4"
           Padding="16"
-          Background="{ThemeResource CardBackgroundFillColorDefault}"
+          Background="{ThemeResource CardBackground}"
           BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
           BorderThickness="1">
     <Grid RowSpacing="8">

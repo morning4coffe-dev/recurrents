@@ -11,7 +11,7 @@
 
   <Border CornerRadius="16"
           Visibility="Visible"
-          Background="{ThemeResource CardBackgroundFillColorDefault}"
+          Background="{ThemeResource CardBackground}"
           BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
           BorderThickness="1"
           Grid.Row="1">

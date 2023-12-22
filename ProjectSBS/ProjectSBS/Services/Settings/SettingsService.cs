@@ -49,4 +49,11 @@ public class SettingsService : ISettingsService
         get => new(GetValue(_notificationTimeId, 288000000000));
         set => SetValue(_notificationTimeId, value.Ticks);
     }
+
+    private readonly string _continueWithoutLogin = "ContinueWithoutLogin";
+    public bool ContinueWithoutLogin
+    {
+        get => GetValue(_continueWithoutLogin, false);
+        set => SetValue(_continueWithoutLogin, value);
+    }
 }

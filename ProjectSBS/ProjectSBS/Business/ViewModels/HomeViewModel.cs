@@ -126,7 +126,7 @@ public partial class HomeViewModel : ViewModelBase
         _userService.OnLoggedInChanged += (s, e) =>
         {
             User = e;
-            IsLoggedIn = e is null;
+            IsLoggedIn = e is not null;
             DisplayName = User?.Name;
         };
 

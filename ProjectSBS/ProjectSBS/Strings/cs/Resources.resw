@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -126,8 +126,11 @@
   <data name="All" xml:space="preserve">
     <value>Vše</value>
   </data>
+  <data name="Annually" xml:space="preserve">
+    <value>Ročně</value>
+  </data>
   <data name="ApplicationName" xml:space="preserve">
-    <value>ProjectSBS-cs</value>
+    <value>Recurrents</value>
   </data>
   <data name="Archive" xml:space="preserve">
     <value>Archiv</value>
@@ -139,7 +142,7 @@
     <value>Jste si jisti, že chcete předplatné archivovat?</value>
   </data>
   <data name="ArchiveEmptyDescription" xml:space="preserve">
-    <value>ArchiveEmptyDescription</value>
+    <value>Nejdříve musíte archivovat některé z vašich předplatných.</value>
   </data>
   <data name="ArchiveVerb" xml:space="preserve">
     <value>Archivovat</value>
@@ -179,6 +182,9 @@
   </data>
   <data name="Cryptocurrency" xml:space="preserve">
     <value>Kryptoměna</value>
+  </data>
+  <data name="Daily" xml:space="preserve">
+    <value>Denně</value>
   </data>
   <data name="Days" xml:space="preserve">
     <value>Dnů</value>
@@ -260,10 +266,10 @@
     <value>Faktura</value>
   </data>
   <data name="Items" xml:space="preserve">
-    <value>Předplatné</value>
+    <value>Předplatná</value>
   </data>
   <data name="ItemsEmptyDescription" xml:space="preserve">
-    <value>Vylepšte své návyky při utrácení tím, že přidáte své předplatné.</value>
+    <value>Vylepšte své návyky při utrácení tím, že přidáte svá předplatná.</value>
   </data>
   <data name="ItemsEmptyTitle" xml:space="preserve">
     <value>Nemáte zde žádná předplatná!</value>
@@ -275,17 +281,28 @@
   <data name="LoginWithMicrosoft" xml:space="preserve">
     <value>Přihlášení pomocí účtu Microsoft</value>
   </data>
+  <data name="Monthly" xml:space="preserve">
+    <value>Měsíčně</value>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Název</value>
   </data>
   <data name="NewItem" xml:space="preserve">
-    <value>Nový předmět</value>
+    <value>Nové předplatné</value>
   </data>
   <data name="News" xml:space="preserve">
     <value>Zprávy</value>
   </data>
   <data name="NextPayments" xml:space="preserve">
     <value>Nadcházející platby</value>
+  </data>
+  <data name="NotificationDescription" xml:space="preserve">
+    <value>Vaše předplatné {1} za {0} se obnovuje již zítra!</value>
+    <comment>{0} is the price, {1} is the name of the subscription</comment>
+  </data>
+  <data name="NotificationName" xml:space="preserve">
+    <value>Upozornění na platbu za {0}! 🔔</value>
+    <comment>{0} is the name of the subscription</comment>
   </data>
   <data name="Notifications" xml:space="preserve">
     <value>Oznámení</value>
@@ -329,6 +346,9 @@
   <data name="PrivacyPolicy" xml:space="preserve">
     <value>Zásady ochrany osobních údajů</value>
   </data>
+  <data name="Quarterly" xml:space="preserve">
+    <value>Čtvrtletně</value>
+  </data>
   <data name="RateAndReview" xml:space="preserve">
     <value>Hodnocení a recenze</value>
   </data>
@@ -350,6 +370,9 @@
   <data name="Tag" xml:space="preserve">
     <value>Štítek</value>
   </data>
+  <data name="Today" xml:space="preserve">
+    <value>Dnes</value>
+  </data>
   <data name="Tomorrow" xml:space="preserve">
     <value>Zítra</value>
   </data>
@@ -361,6 +384,9 @@
   </data>
   <data name="Version" xml:space="preserve">
     <value>Verze</value>
+  </data>
+  <data name="Weekly" xml:space="preserve">
+    <value>Týdenně</value>
   </data>
   <data name="Welcome" xml:space="preserve">
     <value>Vítejte</value>

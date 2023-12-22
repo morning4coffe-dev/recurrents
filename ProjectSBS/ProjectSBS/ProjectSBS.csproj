@@ -125,9 +125,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Assets\Icons\icon.png">
+    <UnoImage Include="Assets\Icons\icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </UnoImage>
   </ItemGroup>
 
   <ItemGroup>
@@ -135,6 +135,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Update="Assets\login-background2.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Assets\login-background3.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

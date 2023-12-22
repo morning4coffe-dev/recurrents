@@ -47,6 +47,9 @@ public partial class ItemViewModel : ObservableObject
         }
     }
 
+    public string BillingCycle => _localization[Item?.Billing.PeriodType.ToString() ?? "N/A"];
+    public string? PaymentMethod => string.IsNullOrEmpty(Item?.Billing.PaymentMethod) ? "N/A" : Item?.Billing.PaymentMethod;
+
     public string FormattedPaymentDate
     {
         get
@@ -78,14 +81,14 @@ public partial class ItemViewModel : ObservableObject
         }
     }
 
-    public string FormattedTotalPrice => TotalPrice.ToString("C", CurrencyCache.CurrencyCultures[Item?.Billing.CurrencyId]);
+    public string FormattedTotalPrice => TotalPrice.ToString("C", CurrencyCache.CurrencyCultures[Item?.Billing.CurrencyId ?? "EUR"]);
     public string FormattedPrice
         //var task = _currencyCache.ConvertToDefaultCurrency(
         //    Item?.Billing.BasePrice ?? 0,
         //    Item?.Billing.CurrencyId ?? "EUR",
         //    _settingsService.DefaultCurrency);
 
-        => $"{Item?.Billing.BasePrice.ToString("C", CurrencyCache.CurrencyCultures[Item?.Billing.CurrencyId])}";
+        => $"{Item?.Billing.BasePrice.ToString("C", CurrencyCache.CurrencyCultures[Item?.Billing.CurrencyId ?? "EUR"])}";
 
 
     private Status? GetLastStatus()
@@ -172,9 +175,9 @@ public partial class ItemViewModel : ObservableObject
         var tasks = paymentDates.Select(date =>
         Task.Run(() =>
         {
-            var title = item.Name ?? "";
+            var title = string.Format(_localization["NotificationName"], item.Name);
             //(≈{2})
-            var text = string.Format("Your {0}{1} payment for {2} is due tomorrow!", item.Billing.BasePrice, item.Billing.CurrencyId, item.Name);
+            var text = string.Format(_localization["NotificationDescription"], item.Billing.BasePrice.ToString("C", CurrencyCache.CurrencyCultures[Item?.Billing.CurrencyId ?? "EUR"]), item.Name);
 
             //- time period before e.g. one day, time that user selected
             //DEBUG

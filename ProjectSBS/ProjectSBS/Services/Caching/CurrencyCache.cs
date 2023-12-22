@@ -13,120 +13,6 @@ public sealed class CurrencyCache(
 
     private Currency? _current;
 
-    private bool IsConnected
-    {
-        get
-        {
-            try
-            {
-                return NetworkInformation.GetInternetConnectionProfile().GetNetworkConnectivityLevel() == NetworkConnectivityLevel.InternetAccess;
-            }
-            catch { return false; }
-        }
-    }
-
-    public async ValueTask<Currency?> GetCurrency(CancellationToken token)
-    {
-        var currencyText = await GetCachedCurrency();
-        if (!string.IsNullOrWhiteSpace(currencyText))
-        {
-            return _serializer.FromString<Currency>(currencyText);
-        }
-
-        if (!IsConnected)
-        {
-            _logger.LogWarning("App is offline and cannot connect to the API.");
-            throw new Exception("No internet connection");
-        }
-
-        var response = await _api.GetCurrency(token);
-
-        if (response.IsSuccessStatusCode && response.Content is not null)
-        {
-            var weather = response.Content;
-            await Save(weather, token);
-            return weather;
-        }
-        else if (response.Error is not null)
-        {
-            _logger.LogError(response.Error, "An error occurred while retrieving the latest Currencies.");
-            throw response.Error;
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    public async ValueTask<decimal> ConvertToDefaultCurrency(decimal value, string currency, string defaultCurrency = "EUR")
-    {
-        if (_current?.Rates is not { })
-        {
-            _current = await GetCurrency(CancellationToken.None) ?? new();
-        }
-
-        if (!_current.Rates.ContainsKey("EUR"))
-        {
-            _current.Rates.Add("EUR", 1);
-        }
-
-        var d = value / Convert.ToDecimal(_current.Rates[currency]);
-
-        return d * Convert.ToDecimal(_current.Rates[defaultCurrency]);
-    }
-
-    private static async ValueTask<StorageFile?> GetFile(CreationCollisionOption option)
-    {
-        await fileLock.WaitAsync();
-
-        try
-        {
-            return await ApplicationData.Current.TemporaryFolder.CreateFileAsync("currency.json", option);
-        }
-        catch
-        {
-            //TODO Log
-            return null;
-        }
-        finally
-        {
-            fileLock.Release();
-        }
-    }
-
-    private async ValueTask<string?> GetCachedCurrency()
-    {
-        var file = await GetFile(CreationCollisionOption.OpenIfExists);
-
-        if (file is null)
-        {
-            return null;
-        }
-
-        var properties = await file.GetBasicPropertiesAsync();
-
-        // Reuse latest cache file if offline
-        // or if the file is less than 3 days old
-        if (IsConnected || DateTimeOffset.Now.AddDays(-3) > properties.DateModified)
-        {
-            return null;
-        }
-
-        return await File.ReadAllTextAsync(file.Path);
-    }
-
-    private async ValueTask Save(Currency weather, CancellationToken token)
-    {
-        var weatherText = _serializer.ToString(weather);
-        var file = await GetFile(CreationCollisionOption.ReplaceExisting);
-
-        if (file is null)
-        {
-            return;
-        }
-        await File.WriteAllTextAsync(file.Path, weatherText, token);
-    }
-
     public static IReadOnlyDictionary<string, CultureInfo> CurrencyCultures = new Dictionary<string, CultureInfo>
     {
         { "AUD", new CultureInfo("en-AU") },
@@ -162,4 +48,123 @@ public sealed class CurrencyCache(
         { "EUR", new CultureInfo("en-EU") }
     };
 
+    private static bool IsConnected
+    {
+        get
+        {
+            try
+            {
+                var networkProfile = NetworkInformation.GetInternetConnectionProfile();
+
+                if (networkProfile is not null)
+                {
+                    return networkProfile.GetNetworkConnectivityLevel() == NetworkConnectivityLevel.InternetAccess;
+                }
+            }
+            catch { }
+
+            return false;
+        }
+    }
+
+    public async ValueTask<Currency?> GetCurrency(CancellationToken token)
+    {
+        if (_current?.Rates is { })
+        {
+            return _current;
+        }
+
+        var currencyText = await GetCachedCurrency();
+        if (!string.IsNullOrWhiteSpace(currencyText))
+        {
+            return _serializer.FromString<Currency>(currencyText);
+        }
+
+        if (!IsConnected)
+        {
+            _logger.LogWarning("App is offline and cannot connect to the API.");
+            throw new Exception("No internet connection");
+        }
+
+        var response = await _api.GetCurrency(token);
+
+        if (response.IsSuccessStatusCode && response.Content is not null)
+        {
+            _current = response.Content;
+            _current.Rates.TryAdd("EUR", 1);
+
+            _ = Task.Run(() => Save(_current, token));
+            return _current;
+        }
+        else if (response.Error is not null)
+        {
+            _logger.LogError(response.Error, "An error occurred while retrieving the latest Currencies.");
+            throw response.Error;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public async ValueTask<decimal> ConvertToDefaultCurrency(decimal value, string currency, string defaultCurrency = "EUR")
+    {
+        _current ??= await GetCurrency(CancellationToken.None) ?? new();
+
+        decimal conversionRateToDefault = Convert.ToDecimal(_current.Rates[currency]);
+        decimal conversionRateFromDefault = Convert.ToDecimal(_current.Rates[defaultCurrency]);
+
+        return (value / conversionRateToDefault) * conversionRateFromDefault;
+    }
+
+    private static async ValueTask<StorageFile?> GetFile(CreationCollisionOption option)
+    {
+        await fileLock.WaitAsync();
+
+        try
+        {
+            return await ApplicationData.Current.TemporaryFolder.CreateFileAsync("currency.json", option);
+        }
+        catch
+        {
+            return null;
+        }
+        finally
+        {
+            fileLock.Release();
+        }
+    }
+
+    private async ValueTask<string?> GetCachedCurrency()
+    {
+        var file = await GetFile(CreationCollisionOption.OpenIfExists);
+
+        if (file is null)
+        {
+            return null;
+        }
+
+        var properties = await file.GetBasicPropertiesAsync();
+
+        // Request data if offline
+        // or the file is younger than 3 days
+        if (!IsConnected || (IsConnected && DateTimeOffset.Now.AddDays(-3) <= properties.DateModified))
+        {
+            return await File.ReadAllTextAsync(file.Path);
+        }
+
+        return null;
+    }
+
+    private async ValueTask Save(Currency currency, CancellationToken token)
+    {
+        var currencyText = _serializer.ToString(currency);
+        var file = await GetFile(CreationCollisionOption.ReplaceExisting);
+
+        if (file is null)
+        {
+            return;
+        }
+        await File.WriteAllTextAsync(file.Path, currencyText, token);
+    }
 }

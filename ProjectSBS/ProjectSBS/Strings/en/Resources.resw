@@ -126,8 +126,11 @@
   <data name="All" xml:space="preserve">
     <value>All</value>
   </data>
+  <data name="Annually" xml:space="preserve">
+    <value>Annually</value>
+  </data>
   <data name="ApplicationName" xml:space="preserve">
-    <value>ProjectSBS-en</value>
+    <value>Recurrents</value>
   </data>
   <data name="Archive" xml:space="preserve">
     <value>Archive</value>
@@ -139,7 +142,7 @@
     <value>Are you sure you want to archive your subscription?</value>
   </data>
   <data name="ArchiveEmptyDescription" xml:space="preserve">
-    <value>ArchiveEmptyDescription</value>
+    <value>First you need to archive some of your subscriptions.</value>
   </data>
   <data name="ArchiveVerb" xml:space="preserve">
     <value>Archive</value>
@@ -179,6 +182,9 @@
   </data>
   <data name="Cryptocurrency" xml:space="preserve">
     <value>Cryptocurrency</value>
+  </data>
+  <data name="Daily" xml:space="preserve">
+    <value>Daily</value>
   </data>
   <data name="Days" xml:space="preserve">
     <value>Days</value>
@@ -278,6 +284,9 @@
   <data name="LoginWithMicrosoft" xml:space="preserve">
     <value>Login with Microsoft</value>
   </data>
+  <data name="Monthly" xml:space="preserve">
+    <value>Monthly</value>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Name</value>
   </data>
@@ -289,6 +298,14 @@
   </data>
   <data name="NextPayments" xml:space="preserve">
     <value>Next payments</value>
+  </data>
+  <data name="NotificationDescription" xml:space="preserve">
+    <value>Your {0} payment for {1} is due tomorrow!</value>
+    <comment>{0} is the price, {1} is the name of the subscription</comment>
+  </data>
+  <data name="NotificationName" xml:space="preserve">
+    <value>{0} Payment Reminder! 🔔</value>
+    <comment>{0} is the name of the subscription</comment>
   </data>
   <data name="Notifications" xml:space="preserve">
     <value>Notifications</value>
@@ -332,6 +349,9 @@
   <data name="PrivacyPolicy" xml:space="preserve">
     <value>Privacy Policy</value>
   </data>
+  <data name="Quarterly" xml:space="preserve">
+    <value>Quarterly</value>
+  </data>
   <data name="RateAndReview" xml:space="preserve">
     <value>Rate and review</value>
   </data>
@@ -356,6 +376,9 @@
   <data name="Tag" xml:space="preserve">
     <value>Tag</value>
   </data>
+  <data name="Today" xml:space="preserve">
+    <value>Today</value>
+  </data>
   <data name="Tomorrow" xml:space="preserve">
     <value>Tomorrow</value>
   </data>
@@ -367,6 +390,9 @@
   </data>
   <data name="Version" xml:space="preserve">
     <value>Version</value>
+  </data>
+  <data name="Weekly" xml:space="preserve">
+    <value>Weekly</value>
   </data>
   <data name="Welcome" xml:space="preserve">
     <value>Welcome</value>

@@ -7,6 +7,7 @@ public partial class MainViewModel : ViewModelBase
     private readonly IStringLocalizer _localizer;
     private readonly IItemService _itemService;
     private readonly INavigation _navigation;
+    private readonly ICurrencyCache _currency;
     #endregion
 
     #region Localization Strings
@@ -56,22 +57,18 @@ public partial class MainViewModel : ViewModelBase
         IOptions<AppConfig> appInfo,
         IUserService userService,
         IItemService itemService,
+        ICurrencyCache currency,
         INavigation navigation)
     {
         _userService = userService;
         _navigation = navigation;
         _localizer = localizer;
         _itemService = itemService;
+        _currency = currency;
 
         Title = $"{localizer["ApplicationName"]}";
 #if DEBUG
         Title += $" (Dev)";
-
-        //TODO Don't use static CultureInfo
-        //CultureInfo ci = new("cs-CZ");
-        //Thread.CurrentThread.CurrentCulture = ci;
-        //Thread.CurrentThread.CurrentUICulture = ci;
-        //ApplicationLanguages.PrimaryLanguageOverride = "cs-CZ";
 #endif
 
         DesktopCategories = _navigation.Categories.Where(c => c.Visibility == CategoryVisibility.Desktop || c.Visibility == CategoryVisibility.Both);
@@ -94,6 +91,7 @@ public partial class MainViewModel : ViewModelBase
         {
             if (IsLoggedIn)
             {
+                //TODO There is a bug in the MenuFlyout 
                 //MenuFlyout.ShowAttachedFlyout(UserButton);
                 return;
             }
@@ -110,6 +108,8 @@ public partial class MainViewModel : ViewModelBase
 
         User = await _userService.RetrieveUser();
         IsLoggedIn = User is { };
+
+        _ = await _currency.GetCurrency(CancellationToken.None);
 
         _ = _itemService.InitializeAsync();
     }

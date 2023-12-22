@@ -24,16 +24,25 @@
                                Color="#121212" />
       <win:SolidColorBrush x:Key="ApplicationBackground"
                            Color="Transparent" />
+
+      <StaticResource x:Key="CardBackground"
+                      ResourceKey="CardBackgroundFillColorDefaultBrush" />
     </ResourceDictionary>
     <ResourceDictionary x:Key="Light">
       <not_win:SolidColorBrush x:Key="ApplicationBackground"
                                Color="White" />
       <win:SolidColorBrush x:Key="ApplicationBackground"
                            Color="Transparent" />
+
+      <StaticResource x:Key="CardBackground"
+                      ResourceKey="CardBackgroundFillColorDefaultBrush" />
     </ResourceDictionary>
     <ResourceDictionary x:Key="HighContrast">
       <SolidColorBrush x:Key="ApplicationBackground"
                        Color="Black" />
+
+      <StaticResource x:Key="CardBackground"
+                      ResourceKey="CardBackgroundFillColorDefaultBrush" />
     </ResourceDictionary>
 
   </ResourceDictionary.ThemeDictionaries>

@@ -155,14 +155,16 @@ public class App : Application
             MainWindow.Content = rootFrame;
         }
 
+        var isLoggedIn = await Services!.GetRequiredService<IUserService>().AuthenticateAsync(true);
+        var doContinueWithoutLogin = Services!.GetRequiredService<ISettingsService>().ContinueWithoutLogin;
+
         if (rootFrame.Content == null)
         {
             // When the navigation stack isn't restored navigate to the first page,
             // configuring the new page by passing required information as a navigation
             // parameter
-            var isLoggedIn = await Services.GetRequiredService<IUserService>().AuthenticateAsync(true);
 
-            if (isLoggedIn)
+            if (isLoggedIn || doContinueWithoutLogin)
             {
                 rootFrame.Navigate(typeof(MainPage), args.Arguments);
             }

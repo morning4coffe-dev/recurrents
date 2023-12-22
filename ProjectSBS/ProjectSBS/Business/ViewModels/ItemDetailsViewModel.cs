@@ -1,4 +1,3 @@
-using ProjectSBS.Services.Dialogs;
 using Windows.UI.Core;
 
 namespace ProjectSBS.Business.ViewModels;
@@ -118,7 +117,6 @@ public partial class ItemDetailsViewModel : ViewModelBase
 
         if (currency?.Rates.Count > 0)
         {
-            Currencies.Add(currency.BaseCurrency);
             Currencies.AddRange(currency.Rates.Keys);
         }
     }
