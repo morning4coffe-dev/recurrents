@@ -9,7 +9,7 @@ public class AnalyticsService : IAnalyticsService
     public AnalyticsService()
     {
 #if !HAS_UNO
-        AppCenter.Start("ea15cf3d-e346-483c-b0b3-618fa515fd50",
+        AppCenter.Start(AppConfig.TelemetryId,
                   typeof(Service.Analytics), typeof(Crashes));
 #endif
     }
