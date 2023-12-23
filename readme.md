@@ -1,12 +1,14 @@
 # Recurrents
 
-LOGO
+![The Hero image of Recurrents, the app made by Morning4coffe](https://github.com/morning4coffe-dev/recurrents/blob/0f9c31020bad191e93025adec73f947c13ba6e9b/Assets/hero-large.png)
 
 [![Microsoft Store](https://img.shields.io/static/v1?label=Microsoft%20Store&message=Download&color=1C8522&logo=microsoft)](https://www.microsoft.com/store/apps/9N5MJT8G06KC)
 
 ## Introduction
 
 Tired of juggling numerous subscriptions and forgetting payment dates? Simplify your life with Recurrents which allows you to effortlessly track all your recurring subscriptions in one place. Get reminded of upcoming payments before renewal dates and gain full control over your financial commitments. With a sleek and user-friendly interface, it empowers you to stay on top of your subscriptions, helping you save money, avoid unwanted charges, and enjoy a stress-free subscription experience.
+
+![A screenshot of the Home page of Recurrents, the app made by Morning4coffe](https://github.com/morning4coffe-dev/recurrents/blob/0f9c31020bad191e93025adec73f947c13ba6e9b/Assets/Screenshots/01-home.png)
 
 ## Installing
 
