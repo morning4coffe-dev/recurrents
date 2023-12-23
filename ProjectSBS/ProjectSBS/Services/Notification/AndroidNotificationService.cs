@@ -9,6 +9,7 @@ using Android.Support.V4.App;
 using Android.Util;
 using Android.Views;
 using AndroidX.Core.App;
+using AndroidX.Core.Graphics.Drawable;
 using AndroidX.Lifecycle;
 using System;
 
@@ -16,7 +17,7 @@ namespace ProjectSBS.Services.Notifications;
 
 public class AndroidNotificationService : NotificationServiceBase
 {
-    private Context context = Android.App.Application.Context;
+    private readonly Context _context = Android.App.Application.Context;
 
     public AndroidNotificationService()
     {
@@ -30,7 +31,7 @@ public class AndroidNotificationService : NotificationServiceBase
             //return true;
         }
 
-        return NotificationManagerCompat.From(context).AreNotificationsEnabled();
+        return NotificationManagerCompat.From(_context).AreNotificationsEnabled();
     }
 
     public override void ShowInAppNotification(string notification, bool autoHide)
@@ -72,7 +73,7 @@ public class AndroidNotificationService : NotificationServiceBase
     {
         if (notificationDateTime > DateTime.Now)
         {
-            Intent notificationIntent = new(context, typeof(NotificationReceiver));
+            Intent notificationIntent = new(_context, typeof(NotificationReceiver));
             notificationIntent.PutExtra("id", id);
             notificationIntent.PutExtra("title", title);
             notificationIntent.PutExtra("text", text);
@@ -80,9 +81,9 @@ public class AndroidNotificationService : NotificationServiceBase
             var random = new Random();
             int requestCode = random.Next(0, 5000); // TODO: ID here You can convert the id to an integer for the requestCode
 
-            PendingIntent pendingIntent = PendingIntent.GetBroadcast(context, requestCode, notificationIntent, PendingIntentFlags.Immutable);
+            PendingIntent pendingIntent = PendingIntent.GetBroadcast(_context, requestCode, notificationIntent, PendingIntentFlags.Immutable);
 
-            AlarmManager alarmManager = (AlarmManager)context.GetSystemService(Context.AlarmService);
+            AlarmManager alarmManager = (AlarmManager)_context.GetSystemService(Context.AlarmService);
 
             return (alarmManager, pendingIntent);
         }
@@ -94,22 +95,22 @@ public class AndroidNotificationService : NotificationServiceBase
     // TODO: Test this function properly
     public override void RemoveScheduledNotifications(string id)
     {
-        Intent notificationIntent = new(context, typeof(NotificationReceiver));
+        Intent notificationIntent = new(_context, typeof(NotificationReceiver));
         notificationIntent.PutExtra("id", id);
 
         var random = new Random();
         int requestCode = random.Next(0, 5000); // TODO: ID here You can convert the id to an integer for the requestCode
 
-        PendingIntent pendingIntent = PendingIntent.GetBroadcast(context, requestCode, notificationIntent, PendingIntentFlags.Immutable);
+        PendingIntent pendingIntent = PendingIntent.GetBroadcast(_context, requestCode, notificationIntent, PendingIntentFlags.Immutable);
 
-        AlarmManager alarmManager = (AlarmManager)context.GetSystemService(Context.AlarmService);
+        AlarmManager alarmManager = (AlarmManager)_context.GetSystemService(Context.AlarmService);
 
         alarmManager.Cancel(pendingIntent);
     }
 
     private void GetAlarm() 
     {
-        AlarmManager alarmManager = (AlarmManager)context.GetSystemService(Context.AlarmService);
+        AlarmManager alarmManager = (AlarmManager)_context.GetSystemService(Context.AlarmService);
 
         //var c = alarmManager.CanScheduleExactAlarms();
         //var d = alarmManager.NextAlarmClock;
@@ -117,7 +118,7 @@ public class AndroidNotificationService : NotificationServiceBase
 
     public override void ShowBasicToastNotification(string title, string description)
     {
-        var notificationManager = (NotificationManager)context.GetSystemService(Context.NotificationService);
+        var notificationManager = (NotificationManager)_context.GetSystemService(Context.NotificationService);
 
         var channelId = "ProjectSBS-channel";
         var channelName = "Other";
@@ -126,7 +127,7 @@ public class AndroidNotificationService : NotificationServiceBase
         var notificationChannel = new NotificationChannel(channelId, channelName, importance);
         notificationManager.CreateNotificationChannel(notificationChannel);
 
-        var notificationBuilder = new NotificationCompat.Builder(context, channelId)
+        var notificationBuilder = new NotificationCompat.Builder(_context, channelId)
             .SetSmallIcon(Resource.Drawable.abc_vector_test)
             .SetContentTitle(title)
             .SetContentText(description)
@@ -159,7 +160,7 @@ public class NotificationReceiver : BroadcastReceiver
         notificationManager.CreateNotificationChannel(notificationChannel);
 
         var notificationBuilder = new NotificationCompat.Builder(context, channelId)
-            .SetSmallIcon(Resource.Drawable.abc_vector_test)
+            .SetSmallIcon(Uno.Helpers.DrawableHelper.FindResourceId("login_background")!.Value)
             .SetContentTitle(title)
             .SetContentText(text)
             .SetPriority(NotificationCompat.PriorityHigh)
@@ -168,7 +169,7 @@ public class NotificationReceiver : BroadcastReceiver
 
         var notification = notificationBuilder.Build();
 
-        notificationManager.Notify(0, notification);
+        //TODO notificationManager.Notify(0, notification);
     }
 }
 

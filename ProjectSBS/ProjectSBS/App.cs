@@ -1,16 +1,10 @@
-using ProjectSBS.Services.Storage;
-using ProjectSBS.Services.Storage.Data;
-using ProjectSBS.Services.User;
-using ProjectSBS.Services.Notifications;
-using ProjectSBS.Services.Interop;
-using ProjectSBS.Services.Items;
-using ProjectSBS.Services.Items.Billing;
-using ProjectSBS.Services.Analytics;
+using CommunityToolkit.Mvvm.DependencyInjection;
+using Microsoft.UI.Dispatching;
+using Windows.System.Profile;
+
+
 #if WINDOWS
-using Windows.Foundation.Collections;
-using CommunityToolkit.WinUI.Notifications;
 using Microsoft.UI.Composition.SystemBackdrops;
-using ProjectSBS.Infrastructure.Helpers;
 using WinUIEx;
 #endif
 
@@ -19,13 +13,14 @@ namespace ProjectSBS;
 public class App : Application
 {
     public Window? MainWindow { get; private set; }
-    public IHost? Host { get; private set; }
+    protected IHost? Host { get; private set; }
 
-    protected async override void OnLaunched(LaunchActivatedEventArgs args)
+    public static IServiceProvider? Services => (Current as App)!.Host?.Services;
+    public static DispatcherQueue Dispatcher => (Current as App)!.MainWindow!.DispatcherQueue;
+
+    protected override async void OnLaunched(LaunchActivatedEventArgs args)
     {
         var builder = this.CreateBuilder(args)
-            // Add navigation support for toolkit controls such as TabBar and NavigationView
-            .UseToolkitNavigation()
             .Configure(host => host
 #if DEBUG
                 // Switch to Development environment when running in DEBUG
@@ -47,7 +42,7 @@ public class App : Application
                     // Uncomment individual methods to see more detailed logging
                     //// Generic Xaml events
                     //logBuilder.XamlLogLevel(LogLevel.Debug);
-                    //// Layouter specific messages
+                    //// Layout specific messages
                     //logBuilder.XamlLayoutLogLevel(LogLevel.Debug);
                     //// Storage messages
                     //logBuilder.StorageLogLevel(LogLevel.Debug);
@@ -55,7 +50,7 @@ public class App : Application
                     //logBuilder.XamlBindingLogLevel(LogLevel.Debug);
                     //// Binder memory references tracking
                     //logBuilder.BinderMemoryReferenceLogLevel(LogLevel.Debug);
-                    //// RemoteControl and HotReload related
+                    //// DevServer and HotReload related
                     //logBuilder.HotReloadCoreLogLevel(LogLevel.Information);
                     //// Debug JS interop
                     //logBuilder.WebAssemblyLogLevel(LogLevel.Debug);
@@ -72,40 +67,56 @@ public class App : Application
                 .UseSerialization((context, services) => services
                     .AddContentSerializer(context))
                 .UseHttp((context, services) => services
-                        // Register HttpClient
+                    // Register HttpClient
 #if DEBUG
-                        // DelegatingHandler will be automatically injected into Refit Client
-                        .AddTransient<DelegatingHandler, DebugHttpHandler>()
+                    // DelegatingHandler will be automatically injected into Refit Client
+                    .AddTransient<DelegatingHandler, DebugHttpHandler>()
 #endif
-                        .AddSingleton<ICurrencyCache, CurrencyCache>()
-                        .AddRefitClient<IApiClient>(context))
-#if !__IOS__
-                .UseAuthentication(auth =>
-                    auth.AddMsal(name: "MsalAuthentication")
-                )
-#endif
+                    .AddSingleton<ICurrencyCache, CurrencyCache>()
+                    .AddRefitClient<IApiClient>(context))
                 .ConfigureServices((context, services) =>
                 {
                     services.AddSingleton<IStorageService, StorageService>();
+                    services.AddSingleton<ISettingsService, SettingsService>();
                     services.AddSingleton<IDataService, DataService>();
                     services.AddSingleton<IUserService, MsalUser>();
                     services.AddSingleton<IItemService, ItemService>();
                     services.AddSingleton<IBillingService, BillingService>();
                     services.AddSingleton<IInteropService, InteropService>();
                     services.AddSingleton<IAnalyticsService, AnalyticsService>();
+                    services.AddSingleton<IItemFilterService, ItemFilterService>();
+                    services.AddSingleton<ITagService, TagService>();
+                    services.AddSingleton<INavigation, NavigationService>();
+                    services.AddSingleton<IDialogService, DialogService>();
+                    services.AddSingleton<IAnalyticsService, AnalyticsService>();
+
+                    services.AddTransient<MainViewModel>();
+                    services.AddTransient<LoginViewModel>();
+                    services.AddTransient<ItemDetailsViewModel>();
+                    services.AddTransient<HomeViewModel>();
+                    services.AddTransient<SettingsViewModel>();
+                    services.AddTransient<StatsBannerViewModel>();
+                    //services.AddTransient<ConversionsViewModel>();
 
 #if __ANDROID__
                     services.AddSingleton<INotificationService, AndroidNotificationService>();
 #elif __IOS__
                     services.AddSingleton<INotificationService, IOSNotificationService>();
-#elif __WASM__ || HAS_UNO_SKIA
+#elif HAS_UNO_WASM || HAS_UNO_SKIA
                     services.AddSingleton<INotificationService, WebNotificationService>();
 #elif !HAS_UNO
                     services.AddSingleton<INotificationService, WindowsNotificationService>();
 #endif
                 })
-                .UseNavigation(RegisterRoutes)
             );
+        MainWindow = builder.Window;
+
+#if DEBUG
+        MainWindow.EnableHotReload();
+#endif
+#if __IOS__ || __ANDROID__
+        Uno.UI.FeatureConfiguration.Style.ConfigureNativeFrameNavigation();
+#endif
 
 #if WINDOWS
         var manager = WindowManager.Get(builder.Window);
@@ -115,84 +126,69 @@ public class App : Application
 
         var size = builder.Window.AppWindow.Size;
 
+        manager.PersistenceId = "ProjectSBSMainWindow";
         builder.Window.SetWindowSize(size.Width / 1.55, size.Height / 1.1);
         builder.Window.CenterOnScreen();
         builder.Window.Title = "Project SBS";
         //builder.Window.SetIcon();
 
-        ToastNotificationManagerCompat.OnActivated += toastArgs =>
-        {
-            ToastArguments args = ToastArguments.Parse(toastArgs.Argument);
-            ValueSet userInput = toastArgs.UserInput;
-
-            //TODO work with args
-            if (args.TryGetValue("action", out var action))
-            {
-                if (action == "openItem")
-                {
-                    var itemId = args["itemId"];
-
-                    if (itemId != null)
-                    {
-                        var shell = builder.Window.Content;
-
-                        if (shell != null)
-                        {
-                            //shell.NavigateToItem(itemId);
-                        }
-                    }
-                }
-            }
-        };
-#endif
-
-        MainWindow = builder.Window;
-
-        Host = await builder.NavigateAsync<Shell>(initialNavigate:
-            async (services, navigator) =>
-            {
-                var auth = services.GetRequiredService<IAuthenticationService>();
-                var authenticated = await auth.RefreshAsync();
-                if (authenticated)
-                {
-                    await navigator.NavigateViewModelAsync<MainViewModel>(this, qualifier: Qualifiers.Nested);
-                }
-                else
-                {
-                    await navigator.NavigateViewModelAsync<LoginViewModel>(this, qualifier: Qualifiers.Nested);
-                }
-            });
-
-#if WINDOWS
         if (MicaController.IsSupported())
         {
+            //when implemented in Uno, this can be used on every platform
             MainWindow.SystemBackdrop = new MicaBackdrop() { Kind = MicaKind.Base };
         }
-
-        Win32.SetTitleBackgroundTransparent(MainWindow);
-
-        //TODO Log MicaController.IsSupported()
 #endif
-    }
 
-    private static void RegisterRoutes(IViewRegistry views, IRouteRegistry routes)
-    {
-        views.Register(
-            new ViewMap(ViewModel: typeof(ShellViewModel)),
-            new ViewMap<LoginPage, LoginViewModel>(),
-            new ViewMap<MainPage, MainViewModel>(),
-            new ViewMap<ItemDetailsPage, ItemDetailsViewModel>()
-        );
+        Host = builder.Build();
 
-        routes.Register(
-            new RouteMap("", View: views.FindByViewModel<ShellViewModel>(),
-                Nested: new RouteMap[]
-                {
-                new RouteMap("Login", View: views.FindByViewModel<LoginViewModel>()),
-                new RouteMap("Main", View: views.FindByViewModel<MainViewModel>()),
-                new RouteMap("Details", View: views.FindByViewModel<ItemDetailsViewModel>()),
-                }
-            )
-        );
+        // Do not repeat app initialization when the Window already has content,
+        // just ensure that the window is active
+        if (MainWindow.Content is not Frame rootFrame)
+        {
+            // Create a Frame to act as the navigation context and navigate to the first page
+            rootFrame = new Frame();
+
+            // Set navigation context
+            Services.GetRequiredService<INavigation>().RootFrame = rootFrame;
+
+            // Place the frame in the current Window
+            MainWindow.Content = rootFrame;
+        }
+
+        var isLoggedIn = await Services!.GetRequiredService<IUserService>().AuthenticateAsync(true);
+        var doContinueWithoutLogin = Services!.GetRequiredService<ISettingsService>().ContinueWithoutLogin;
+
+        if (rootFrame.Content == null)
+        {
+            // When the navigation stack isn't restored navigate to the first page,
+            // configuring the new page by passing required information as a navigation
+            // parameter
+
+            if (isLoggedIn || doContinueWithoutLogin)
+            {
+                rootFrame.Navigate(typeof(MainPage), args.Arguments);
+            }
+            else
+            {
+                rootFrame.Navigate(typeof(LoginPage), args.Arguments);
+            }
+        }
+        // Ensure the current window is active
+        MainWindow.Activate();
+
+#if !HAS_UNO
+        var version = Services?.GetRequiredService<IInteropService>().GetAppVersion();
+
+        Dictionary<string, string> appLaunchSettings = new()
+        {
+            { "App Version", string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision) },
+            { "App Install", AppInfo.Current.Package.InstalledDate.ToString("d", new CultureInfo("en-US")) },
+            { "OS Device", AnalyticsInfo.VersionInfo.DeviceFamily },
+            { "OS Form", AnalyticsInfo.DeviceForm },
+            { "OS Version", AnalyticsInfo.VersionInfo.DeviceFamilyVersion },
+        };
+
+        Services?.GetRequiredService<IAnalyticsService>().TrackEvent(AnalyticsConst.Launched, appLaunchSettings);
+#endif
     }
 }

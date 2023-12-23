@@ -1,27 +1,33 @@
-﻿namespace ProjectSBS.Business.Models;
+namespace ProjectSBS.Business.Models;
 
 public partial record Item
 {
     public Item(
-        string id, 
+        string? id, 
         string name, 
-        BillingDetails billing, 
-        string tagId, 
-        string? description, 
-        DateTime creationDate)
+        BillingDetails? billing = default, 
+        int tagId = default, 
+        bool isNotify = true,
+        string description = "", 
+        DateTime creationDate = default,
+        List<Status>? status = default)
     {
-        Id = id;
+        Id = id ?? Guid.NewGuid().ToString();
         Name = name;
-        Billing = billing;
+        Billing = billing ?? new(5, DateOnly.FromDateTime(DateTime.Today));
         TagId = tagId;
+        IsNotify = isNotify;
         Description = description;
-        CreationDate = creationDate;
+        CreationDate = creationDate == default ? DateTime.Now : creationDate;
+        Status = status ?? [];
     }
 
     public string Id { get; }
     public string Name { get; set; }
     public BillingDetails Billing { get; }
-    public string TagId { get; set; }
+    public int TagId { get; set; }
     public string? Description { get; set; }
+    public bool IsNotify { get; set; }
     public DateTime CreationDate { get; set; }
+    public List<Status> Status { get; }
 }

@@ -1,278 +1,219 @@
-<Page x:Class="ProjectSBS.Presentation.MainPage"
+﻿<Page x:Class="ProjectSBS.Presentation.MainPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:local="using:ProjectSBS.Presentation"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:not_win="http://uno.ui/not_win"
+      xmlns:not_skia="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       mc:Ignorable="d not_win"
-      xmlns:uen="using:Uno.Extensions.Navigation.UI"
       xmlns:utu="using:Uno.Toolkit.UI"
       xmlns:comp="using:ProjectSBS.Presentation.Components"
       xmlns:converters="using:CommunityToolkit.WinUI.Converters"
       xmlns:models="using:ProjectSBS.Business.Models"
-      NavigationCacheMode="Required"
       xmlns:toolkit="using:CommunityToolkit.WinUI">
 
-    <!--TODO make the Background Black-->
+  <comp:PageShell TitleBarTitle="{x:Bind ViewModel.Title}"
+                  DesktopTitleVisibility="Visible">
+    <comp:PageShell.ContentView>
 
-    <Page.Resources>
-        <converters:EmptyObjectToObjectConverter x:Key="EmptyToFalseConverter"
-                                                 EmptyValue="False"
-                                                 NotEmptyValue="True" />
+      <UserControl>
+        <Grid>
+          <VisualStateManager.VisualStateGroups>
 
-        <converters:BoolToObjectConverter x:Key="MobileToValueConverter"
-                                          TrueValue="0"
-                                          FalseValue="350" />
+            <!--AdaptiveTriggers-->
+            <VisualStateGroup>
+              <VisualState x:Name="SmallScreen">
+                <VisualState.StateTriggers>
+                  <AdaptiveTrigger MinWindowWidth="0" />
+                </VisualState.StateTriggers>
+                
+                <VisualState.Setters>
+                  <Setter Target="navigation.IsPaneToggleButtonVisible"
+                          Value="False" />
+                  <Setter Target="navigationBar.Visibility"
+                          Value="Visible" />
+                </VisualState.Setters>
+              </VisualState>
+              
+              <VisualState x:Name="LargeScreen">
+                <VisualState.StateTriggers>
+                  <AdaptiveTrigger MinWindowWidth="640" />
+                </VisualState.StateTriggers>
+              </VisualState>
+            </VisualStateGroup>
 
-        <MenuFlyout x:Key="UserFlyout">
-            <MenuFlyoutItem Text="Settings"
-                            Icon="{toolkit:FontIcon Glyph=&#xE713;}"
-                            AutomationProperties.AutomationId="SecondPageButton"
-                            Padding="100, 16"
-                            Command="{Binding GoToSecond}" />
+            <!--Navigation flexibility-->
+            <not_skia:VisualStateGroup>
+              <VisualState>
+                <VisualState.StateTriggers>
+                  <toolkit:IsEqualStateTrigger Value="{Binding IsPaneOpen, ElementName=navigation, Mode=OneWay}"
+                                               To="True" />
+                </VisualState.StateTriggers>
+                <VisualState.Setters>
+                  <Setter Target="userButton.Visibility"
+                          Value="Visible" />
+                </VisualState.Setters>
+              </VisualState>
+              <VisualState>
+                <VisualState.StateTriggers>
+                  <toolkit:IsEqualStateTrigger Value="{Binding IsPaneOpen, ElementName=navigation, Mode=OneWay}"
+                                               To="False" />
+                </VisualState.StateTriggers>
+                <VisualState.Setters>
+                  <Setter Target="userButton.Visibility"
+                          Value="Collapsed" />
+                </VisualState.Setters>
+              </VisualState>
+            </not_skia:VisualStateGroup>
 
-            <MenuFlyoutItem Text="Conversions"
-                            Icon="{toolkit:FontIcon Glyph=&#xE8C7;}"
-                            Padding="100, 16"
-                            Command="{Binding}" />
+            <!--Network-->
+            <VisualStateGroup>
+              <VisualState>
+                <VisualState.StateTriggers>
+                  <toolkit:NetworkConnectionStateTrigger ConnectionState="Connected" />
+                </VisualState.StateTriggers>
+                <VisualState.Setters>
+                  <Setter Target="disconnectAlert.Visibility"
+                          Value="Collapsed" />
+                </VisualState.Setters>
+              </VisualState>
+              <VisualState>
+                <VisualState.StateTriggers>
+                  <toolkit:NetworkConnectionStateTrigger ConnectionState="Disconnected" />
+                </VisualState.StateTriggers>
+                <VisualState.Setters>
+                  <Setter Target="disconnectAlert.Visibility"
+                          Value="Visible" />
+                </VisualState.Setters>
+              </VisualState>
+            </VisualStateGroup>
 
-            <MenuFlyoutItem Text="Logout"
-                            Padding="100, 16"
-                            Command="{Binding Logout}">
-                <MenuFlyoutItem.Icon>
-                    <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                              Glyph="&#xF3B1;" />
-                </MenuFlyoutItem.Icon>
-            </MenuFlyoutItem>
-        </MenuFlyout>
+          </VisualStateManager.VisualStateGroups>
 
-    </Page.Resources>
+          <NavigationView x:Name="navigation"
+                          Grid.Row="1"
+                          IsBackButtonVisible="Collapsed"
+                          IsPaneToggleButtonVisible="True"
+                          IsSettingsVisible="False"
+                          IsPaneVisible="True"
+                          MenuItemsSource="{x:Bind ViewModel.DesktopCategories}"
+                          SelectedItem="{x:Bind ViewModel.SelectedCategory, Mode=TwoWay}"
+                          SelectionChanged="OnNavigation_SelectionChanged">
 
-    <comp:PageShell>
-        <comp:PageShell.ContentView>
+            <NavigationView.Resources>
+              <ResourceDictionary>
+                <ResourceDictionary.ThemeDictionaries>
+                  <ResourceDictionary x:Key="Default">
+                    <SolidColorBrush x:Key="NavigationViewContentBackground"
+                                     Color="Transparent" />
+                    <SolidColorBrush x:Key="NavigationViewContentGridBorderBrush"
+                                     Color="Transparent" />
+                  </ResourceDictionary>
+                </ResourceDictionary.ThemeDictionaries>
+              </ResourceDictionary>
+            </NavigationView.Resources>
 
-            <UserControl>
-                <Grid>
-                    <VisualStateManager.VisualStateGroups>
-                        <VisualStateGroup>
-                            <VisualState x:Name="NarrowState">
-                                <VisualState.StateTriggers>
-                                    <AdaptiveTrigger MinWindowWidth="0" />
-                                </VisualState.StateTriggers>
+            <not_skia:NavigationView.PaneCustomContent>
+              <Button x:Name="userButton"
+                      Background="Transparent"
+                      BorderThickness="0"
+                      BorderBrush="Transparent"
+                      HorizontalAlignment="Stretch"
+                      Margin="4"
+                      Padding="12,8"
+                      HorizontalContentAlignment="Left"
+                      Command="{x:Bind ViewModel.Login}">
+                <Button.Flyout>
+                  <MenuFlyout x:Name="userFlyout">
+                    <MenuFlyoutItem Text="{x:Bind ViewModel.SettingsText}"
+                                    Icon="{toolkit:FontIcon Glyph=&#xE713;}"
+                                    Padding="100, 16"
+                                    Command="{x:Bind ViewModel.GoToSettings}" />
 
-                                <VisualState.Setters>
-                                    <Setter Target="navigation.IsPaneVisible"
-                                            Value="False" />
-                                    <Setter Target="mobileHeader.Visibility"
-                                            Value="Visible" />
-                                    <Setter Target="desktopHeader.Visibility"
-                                            Value="Collapsed" />
-                                    <Setter Target="contentHolder.Padding"
-                                            Value="12,0" />
-                                </VisualState.Setters>
-                            </VisualState>
+                    <MenuFlyoutItem Text="{x:Bind ViewModel.LogoutText}"
+                                    Padding="100, 16"
+                                    Icon="{toolkit:FontIcon Glyph=&#xF3B1;}"
+                                    Command="{x:Bind ViewModel.Logout}">
+                    </MenuFlyoutItem>
+                  </MenuFlyout>
+                </Button.Flyout>
 
-                            <VisualState x:Name="WideState">
-                                <VisualState.StateTriggers>
-                                    <AdaptiveTrigger MinWindowWidth="640" />
-                                </VisualState.StateTriggers>
+                <StackPanel x:Name="desktopPerson"
+                            Orientation="Horizontal"
+                            Spacing="8">
+                  <PersonPicture ProfilePicture="{x:Bind ViewModel.User.Photo, Mode=OneWay}"
+                                 DisplayName="{x:Bind ViewModel.User.Name, Mode=OneWay}"
+                                 Height="48" />
+                  <TextBlock Text="{x:Bind ViewModel.ClickToLoginText}"
+                             Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
+                             VerticalAlignment="Center" />
+                  <TextBlock Text="{x:Bind ViewModel.User.Name, Mode=OneWay}"
+                             Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay, Converter={StaticResource TrueToVisibleConverter}}"
+                             VerticalAlignment="Center" />
+                </StackPanel>
+              </Button>
+            </not_skia:NavigationView.PaneCustomContent>
 
-                                <VisualState.Setters>
-                                </VisualState.Setters>
-                            </VisualState>
-                        </VisualStateGroup>
+            <NavigationView.MenuItemTemplate>
+              <DataTemplate x:DataType="models:NavigationCategory">
+                <NavigationViewItem Content="{x:Bind Text}"
+                                    Padding="0,12"
+                                    ToolTipService.ToolTip="{x:Bind Text}">
+                  <!--ToolTip="{x:Bind Tooltip}">-->
+                  <NavigationViewItem.Icon>
+                    <FontIcon Glyph="{x:Bind Glyph}" />
+                  </NavigationViewItem.Icon>
+                </NavigationViewItem>
+              </DataTemplate>
+            </NavigationView.MenuItemTemplate>
 
-                        <VisualStateGroup>
-                            <VisualState x:Name="connected">
-                                <VisualState.StateTriggers>
-                                    <toolkit:NetworkConnectionStateTrigger ConnectionState="Connected" />
-                                </VisualState.StateTriggers>
-                                <VisualState.Setters>
-                                </VisualState.Setters>
-                            </VisualState>
-                        </VisualStateGroup>
+            <Grid>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+              </Grid.RowDefinitions>
 
-                        <!--<VisualStateGroup>
-                            <VisualState x:Name="paneOpen">
-                                <VisualState.StateTriggers>
-                                    <toolkit:CompareStateTrigger Comparison="Equal"
-                                                                 Value="{Binding navigation.IsPaneOpen, ElementName=NavigationView, Mode=OneWay}"
-                                                                 To="True" />
-                                </VisualState.StateTriggers>
-                                <VisualState.Setters>
-                                    <Setter Target="desktopPerson.Width" Value="25" />
-                                </VisualState.Setters>
-                            </VisualState>
-                        </VisualStateGroup>-->
+              <Frame x:Name="Frame"
+                     x:FieldModifier="public" />
 
-                    </VisualStateManager.VisualStateGroups>
+              <InfoBar x:Name="disconnectAlert"
+                       Title="You are offline"
+                       Severity="Error"
+                       IsClosable="False"
+                       VerticalAlignment="Bottom"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,12"
+                       CornerRadius="28"
+                       IsOpen="True">
+                <InfoBar.IconSource>
+                  <FontIconSource Glyph="&#xF384;" />
+                </InfoBar.IconSource>
+              </InfoBar>
 
-                    <NavigationView x:Name="navigation"
-                                    Grid.Row="1"
-                                    IsBackButtonVisible="Collapsed"
-                                    IsSettingsVisible="True"
-                                    IsPaneVisible="True"
-                                    MenuItemsSource="{Binding Categories}"
-                                    SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
-                                    uen:Region.Attached="True">
+              <utu:TabBar x:Name="navigationBar"
+                          ItemsSource="{x:Bind ViewModel.DesktopCategories}"
+                          SelectedItem="{x:Bind ViewModel.SelectedCategory, Mode=TwoWay}"
+                          Background="{ThemeResource CardBackgroundFillColorDefault}"
+                          Visibility="Collapsed"
+                          CornerRadius="0"
+                          Grid.Row="1">
+                <utu:TabBar.ItemTemplate>
+                  <DataTemplate x:DataType="models:NavigationCategory">
+                    <StackPanel Spacing="4">
+                      <FontIcon Glyph="{x:Bind Glyph}"
+                                FontSize="19" />
+                      <TextBlock Text="{x:Bind Text}" />
+                    </StackPanel>
+                  </DataTemplate>
+                </utu:TabBar.ItemTemplate>
+              </utu:TabBar>
+            </Grid>
+          </NavigationView>
 
-                        <NavigationView.PaneCustomContent>
-                            <StackPanel>
-                                <Button Background="Transparent"
-                                        BorderThickness="0"
-                                        BorderBrush="Transparent"
-                                        HorizontalAlignment="Stretch"
-                                        Margin="4"
-                                        HorizontalContentAlignment="Left"
-                                        Flyout="{StaticResource UserFlyout}">
+        </Grid>
+      </UserControl>
 
-                                    <StackPanel Orientation="Horizontal"
-                                                Spacing="12">
-                                        <PersonPicture x:Name="desktopPerson"
-                                                       Width="45"
-                                                       DisplayName="{Binding User.Name}" />
-                                        <TextBlock  Text="{Binding User.Name}"
-                                                    VerticalAlignment="Center" />
-                                    </StackPanel>
-                                </Button>
-
-                            </StackPanel>
-                        </NavigationView.PaneCustomContent>
-
-                        <NavigationView.MenuItemTemplate>
-                            <DataTemplate x:DataType="models:FilterCategory">
-                                <NavigationViewItem Content="{x:Bind Text}">
-                                <!--ToolTip="{x:Bind Tooltip}">-->
-                                    <NavigationViewItem.Icon>
-                                        <FontIcon Glyph="{x:Bind Glyph}" />
-                                    </NavigationViewItem.Icon>
-                                </NavigationViewItem>
-                            </DataTemplate>
-                        </NavigationView.MenuItemTemplate>
-
-                        <SplitView IsPaneOpen="{Binding SelectedItem, Converter={StaticResource EmptyToFalseConverter}}"
-                                   PaneBackground="Transparent"
-                                   PanePlacement="Right"
-                                   OpenPaneLength="{Binding IsMobile, Converter={StaticResource MobileToValueConverter}}"
-                                   DisplayMode="Inline">
-
-                            <ScrollViewer>
-                                <Grid x:Name="contentHolder"
-                                      RowSpacing="12"
-                                      Padding="50, 25">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="*" />
-                                    </Grid.RowDefinitions>
-
-                                    <Grid x:Name="desktopHeader"
-                                          Height="50">
-                                        <TextBlock Text="Home"
-                                                   VerticalAlignment="Center"
-                                                   Style="{StaticResource TitleTextBlockStyle}" />
-                                    </Grid>
-
-                                    <Grid x:Name="mobileHeader"
-                                          Visibility="Collapsed"
-                                          Margin="0,6,0,-12"
-                                          Height="60">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-
-                                        <TextBlock Text="Good Morning"
-                                                   Style="{StaticResource TitleTextBlockStyle}"
-                                                   Margin="0,15,0,0" />
-
-                                        <Button Grid.Column="1"
-                                                Padding="0"
-                                                CornerRadius="55"
-                                                Background="Transparent"
-                                                BorderBrush="Transparent"
-                                                Flyout="{StaticResource UserFlyout}">
-
-                                            <PersonPicture Width="55"
-                                                           DisplayName="{Binding User.Name}" />
-
-                                        </Button>
-
-                                    </Grid>
-
-                                    <comp:HomePage Items="{Binding Items, Mode=TwoWay}"
-                                                   SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
-                                                   Categories="{Binding Categories, Mode=TwoWay}"
-                                                   SelectedCategory="{Binding SelectedCategory, Mode=TwoWay}"
-                                                   AddNewCommand="{Binding AddNewCommand, Mode=OneWay}"
-                                                   DeleteItemCommand="{Binding DeleteItemCommand, Mode=OneTime}"
-                                                   ArchiveItemCommand="{Binding ArchiveItemCommand, Mode=OneTime}"
-                                                   EditItemCommand="{Binding EnableEditingCommand, Mode=OneTime}"
-                                                   Grid.Row="1" />
-                                </Grid>
-                            </ScrollViewer>
-
-                            <SplitView.Pane>
-
-                                <Grid Background="{ThemeResource CardBackgroundFillColorDefault}"
-                                      RowSpacing="12"
-                                      Padding="24">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto" />
-                                        <RowDefinition />
-                                    </Grid.RowDefinitions>
-
-                                    <Border Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-                                            Margin="-24"
-                                            Grid.RowSpan="2" />
-
-                                    <Grid ColumnSpacing="8">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-
-                                        <TextBlock Text="Details"
-                                                   Style="{StaticResource TitleTextBlockStyle}" />
-
-                                        <StackPanel Orientation="Horizontal"
-                                                    Spacing="8"
-                                                    Grid.Column="1">
-                                            <Button Visibility="{Binding IsEditing, Converter={StaticResource FalseToVisibleConverter}}"
-                                                    Command="{Binding EnableEditingCommand}"
-                                                    Padding="12, 8">
-                                                <FontIcon Glyph="&#xE70F;"
-                                                          FontSize="14" />
-                                            </Button>
-
-                                            <Button Visibility="{Binding IsEditing, Converter={StaticResource FalseToVisibleConverter}}"
-                                                    Command="{Binding DeleteItemCommand}"
-                                                    Padding="12, 8">
-                                                <FontIcon Glyph="&#xE74D;"
-                                                          FontSize="14" />
-                                            </Button>
-
-                                            <Button Command="{Binding CloseDetailsCommand}"
-                                                    Padding="12, 8">
-                                                <FontIcon Glyph="&#xE8BB;"
-                                                          FontSize="14" />
-                                            </Button>
-                                        </StackPanel>
-                                    </Grid>
-
-                                    <comp:ItemDetails SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
-                                                      IsEditing="{Binding IsEditing, Mode=TwoWay}"
-                                                      Grid.Row="1" />
-                                </Grid>
-
-                            </SplitView.Pane>
-                        </SplitView>
-
-                    </NavigationView>
-
-                </Grid>
-            </UserControl>
-
-        </comp:PageShell.ContentView>
-    </comp:PageShell>
+    </comp:PageShell.ContentView>
+  </comp:PageShell>
 </Page>

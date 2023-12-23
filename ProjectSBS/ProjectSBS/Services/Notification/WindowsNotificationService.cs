@@ -1,4 +1,4 @@
-﻿#if !HAS_UNO
+#if !HAS_UNO
 using CommunityToolkit.WinUI.Notifications;
 using System;
 using Windows.Foundation.Collections;
@@ -22,29 +22,20 @@ public class WindowsNotificationService : NotificationServiceBase
 
     public override void ShowBasicToastNotification(string title, string description)
     {
-        if (!IsEnabledOnDevice())
-        {
-            //TODO show that notification could not been sent
-            return;
-        }
 
-        var assetUri = AppDomain.CurrentDomain.BaseDirectory + "Assets";
+        //var assetUri = AppDomain.CurrentDomain.BaseDirectory + "Assets";
 
-        new ToastContentBuilder()
-            //.AddInlineImage(new Uri("file:///" + assetUri + "/Icon_Nice.png"))
-            .AddText(title)
-            .AddText(description)
-            .Show();
+        //new ToastContentBuilder()
+        //    //.AddInlineImage(new Uri("file:///" + assetUri + "/Icon_Nice.png"))
+        //    .AddText(title)
+        //    .AddText(description);
+        //    //.Show();
+
+        CreateNotification("", title, description).Show();
     }
 
     public override void ScheduleNotification(string id, string title, string text, DateOnly day, TimeOnly time)
     {
-        if (!IsEnabledOnDevice())
-        {
-            //TODO show that notification could not been sent
-            return;
-        }
-
         var date = new DateTime(day.Year, day.Month, day.Day, time.Hour, time.Minute, time.Second, time.Millisecond, DateTimeKind.Unspecified);
 
         if (date < DateTime.Now)
@@ -52,14 +43,16 @@ public class WindowsNotificationService : NotificationServiceBase
             return;
         }
 
+        // TODO Notification scheduling is disabled, fails sometimes
+        CreateNotification(id, title, text).Schedule(date);
 
-        CreateNotification(id, title, text).Schedule(date, toast =>
-            {
-                //toast.Id = new Guid().ToString().Take(4).ToString();
-            });
+        /* toast  =>
+        {
+            toast.Id = new Guid().ToString().Take(4).ToString();
+        });*/
     }
 
-    private ToastContentBuilder CreateNotification(string id, string title, string text)
+    private static ToastContentBuilder CreateNotification(string id, string title, string text)
     {
         return new ToastContentBuilder()
             //.AddArgument("action", "viewItemsDueToday")
@@ -81,25 +74,27 @@ public class WindowsNotificationService : NotificationServiceBase
                 }
             })
             .AddButton(new ToastButtonSnooze() { SelectionBoxId = "snoozeTime" })
-            .AddButton(
-            new ToastButton()
-                .SetContent("Done")
-                .AddArgument("action", "done")
-                .SetBackgroundActivation()
-                )
+            //.AddButton(
+            //new ToastButton()
+            //    .SetContent("Archive")
+            //    .AddArgument("action", "archive")
+            //    .SetBackgroundActivation())
             .SetToastScenario(ToastScenario.Reminder);
     }
 
     public override void RemoveScheduledNotifications(string id = "")
     {
-        if (string.IsNullOrEmpty(id))
-        {
-            ToastNotificationManagerCompat.History.Clear();
-            return;
-        }
-
         ToastNotifierCompat notifier = ToastNotificationManagerCompat.CreateToastNotifier();
         IReadOnlyList<ScheduledToastNotification> scheduledToasts = notifier.GetScheduledToastNotifications();
+
+        if (string.IsNullOrEmpty(id))
+        {
+            foreach (var toRemove in scheduledToasts)
+            {
+                notifier.RemoveFromSchedule(toRemove);
+            }
+            return;
+        }
 
         foreach (var toRemove in scheduledToasts)
         {
@@ -108,7 +103,6 @@ public class WindowsNotificationService : NotificationServiceBase
                 notifier.RemoveFromSchedule(toRemove);
             }
         }
-
     }
 }
 #endif

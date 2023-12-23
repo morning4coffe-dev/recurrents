@@ -1,38 +1,50 @@
-﻿using ProjectSBS.Services.Storage.Data;
-
 namespace ProjectSBS.Services.Items.Billing;
 
 class BillingService : IBillingService
 {
-    private readonly IDataService _dataService;
+    #region FEAT: feature/IndividualPayments
+    //public async Task NewPaymentLogAsync(Item item)
+    //{
+    //    var logs = await _dataService.LoadLogsAsync() ?? new List<ItemLog>();
 
-    public BillingService(IDataService dataService)
-    {
-        _dataService = dataService;
-    }
+    //    var log = new ItemLog(
+    //        item.Id,
+    //        DateOnly.FromDateTime(DateTime.Now.Date),
+    //        item.Billing.BasePrice,
+    //        item.Billing.CurrencyId
+    //    );
 
-    public async Task NewPaymentLogAsync(Item item)
-    {
-        var log = new ItemLog(
-            item.Id,
-            DateOnly.FromDateTime(DateTime.Now.Date),
-            item.Billing.BasePrice,
-            item.Billing.CurrencyId
-        );
+    //    logs.Add(log);
 
-        await _dataService.AddLogAsync(log);
-    }
+    //    await _dataService.SaveLogsAsync(logs);
+    //}
 
-    public List<ItemLog> GetPaymentLogsForItem(Item item, List<ItemLog> logs)
-    {
-        return logs.Where(log => log.ItemId == item.Id).ToList();
-    }
+    //public async Task RemoveLastPaymentLogAsync(Item item)
+    //{
+    //    var logs = await _dataService.LoadLogsAsync() ?? new List<ItemLog>();
 
-    public List<DateOnly> GetFuturePayments(DateOnly initialDate, Period periodType, int recurEvery, int numberOfPayments = 20)
+    //    var log = logs.LastOrDefault(log => log.ItemId == item.Id);
+
+    //    if (log is not { })
+    //    {
+    //        return;
+    //    }
+
+    //    logs.Remove(log);
+
+    //    await _dataService.SaveLogsAsync(logs);
+    //}
+    //public IEnumerable<ItemLog> GetPaymentLogsForItem(Item item, IEnumerable<ItemLog> logs)
+    //{
+    //    return logs.Where(log => log.ItemId == item.Id);
+    //}
+    #endregion
+
+    public List<DateOnly> GetFuturePayments(DateOnly initialDate, Period periodType, int recurEvery, int numberOfPayments = 12)
     {
         var nextBillingDate = GetBillingDates(initialDate, periodType, recurEvery).upcomingBillingDate;
 
-        List<DateOnly> paymentList = new();
+        List<DateOnly> paymentList = [];
 
         for (int i = 0; i < numberOfPayments; i++)
         {
@@ -49,15 +61,29 @@ class BillingService : IBillingService
         return paymentList;
     }
 
+    public IEnumerable<DateOnly> GetLastPayments(DateOnly initialDate, Period periodType, int recurEvery)
+    {
+        var today = DateOnly.FromDateTime(DateTime.Now.Date);
+        List<DateOnly> paymentList = [];
+
+        while (initialDate <= today)
+        {
+            paymentList.Add(initialDate);
+            initialDate = GetNextBillingDate(initialDate, periodType, recurEvery);
+        }
+
+        return paymentList;
+    }
+
     public (DateOnly lastBillingDate, DateOnly upcomingBillingDate) GetBillingDates(DateOnly initialDate, Period periodType, int recurEvery)
     {
         DateOnly lastBillingDate = initialDate;
-        DateOnly nextBillingDate = initialDate;
+        DateOnly nextBillingDate = GetNextBillingDate(initialDate, periodType, recurEvery);
 
         while (nextBillingDate <= DateOnly.FromDateTime(DateTime.Now.Date))
         {
             lastBillingDate = nextBillingDate;
-            nextBillingDate = GetNextBillingDate(nextBillingDate, periodType, recurEvery);
+            nextBillingDate = GetNextBillingDate(lastBillingDate, periodType, recurEvery);
         }
 
         return (lastBillingDate, nextBillingDate);

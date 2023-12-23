@@ -1,22 +1,13 @@
-﻿namespace ProjectSBS.Business.Models;
+namespace ProjectSBS.Business.Models;
 
-public enum CategoryVisibility
+public class FilterCategory(
+    string text, 
+    string? glyph, 
+    Func<ItemViewModel, bool>? selector = null, 
+    CategoryVisibility visibility = CategoryVisibility.Both)
 {
-    Both,
-    Desktop,
-    Mobile
-}
-
-public class FilterCategory
-{
-    public FilterCategory(string text, string? glyph, Func<ItemViewModel, bool>? selector = null)
-    {
-        Text = text;
-        Glyph = glyph;
-        Selector = selector;
-    }
-
-    public string Text { get; }
-    public string? Glyph { get; }
-    public Func<ItemViewModel, bool>? Selector { get; }
+    public string Text { get; } = text;
+    public string? Glyph { get; } = glyph;
+    public Func<ItemViewModel, bool>? Selector { get; } = selector;
+    public CategoryVisibility Visibility { get; } = visibility;
 }

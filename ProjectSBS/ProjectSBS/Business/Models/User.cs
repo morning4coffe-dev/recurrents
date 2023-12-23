@@ -1,14 +1,12 @@
-﻿namespace ProjectSBS.Business.Models;
+using Microsoft.UI.Xaml.Media.Imaging;
 
-public class User
+namespace ProjectSBS.Business.Models;
+
+public class User(string name, string email, BitmapImage? photo)
 {
-    public User(string name, string email)
-    {
-        Name = name;
-        Email = email;
-    }
+    public string Name { get; } = name;
 
-    public string Name { get; }
+    public string Email { get; } = email;
 
-    public string Email { get; }
+    public BitmapImage? Photo { get; set; } = photo;
 }

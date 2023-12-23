@@ -1,10 +1,11 @@
-﻿namespace ProjectSBS.Business.Models;
+namespace ProjectSBS.Business.Models;
 
 public record BillingDetails
 {
     public BillingDetails(decimal basePrice, DateOnly initialDate,
         string currencyId = "EUR",
-        Period periodType = Period.Monthly, short recurEvery = 1)
+        Period periodType = Period.Monthly, short recurEvery = 1,
+        string paymentMethod = "")
     {
 
         BasePrice = basePrice;
@@ -12,16 +13,11 @@ public record BillingDetails
         CurrencyId = currencyId;
         PeriodType = periodType;
         RecurEvery = recurEvery;
+        PaymentMethod = paymentMethod;
     }
 
-    /// <summary>
-    /// Base price of the subscription in EUR. Multiply with the selected currency.
-    /// </summary>
     public decimal BasePrice { get; set; }
 
-    /// <summary>
-    /// The start Billing date of the subscription.
-    /// </summary>
     public DateOnly InitialDate { get; set; }
 
     public string CurrencyId { get; set; }
@@ -29,4 +25,6 @@ public record BillingDetails
     public Period PeriodType { get; set; }
 
     public short RecurEvery { get; set; }
+
+    public string PaymentMethod { get; set; }
 }

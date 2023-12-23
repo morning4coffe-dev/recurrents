@@ -1,91 +1,377 @@
-﻿<UserControl x:Class="ProjectSBS.Presentation.Components.ItemDetails"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="using:ProjectSBS.Presentation.Components"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:not_win="http://uno.ui/not_win"
-             mc:Ignorable="d not_win android"
-             xmlns:uen="using:Uno.Extensions.Navigation.UI"
-             xmlns:utu="using:Uno.Toolkit.UI"
-             xmlns:not_android="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:android="http://uno.ui/android"
-             xmlns:models="using:ProjectSBS.Business.Models"
-             xmlns:comp="using:ProjectSBS.Presentation.Components">
+﻿<Page x:Class="ProjectSBS.Presentation.Components.ItemDetails"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="using:ProjectSBS.Presentation.Components"
+      xmlns:models="using:ProjectSBS.Business.Models"
+      xmlns:toolkit="using:CommunityToolkit.WinUI"
+      xmlns:converters="using:CommunityToolkit.WinUI.Converters"
+      xmlns:localConverters="using:ProjectSBS.Business.Converters"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:sys="ProjectSBS:System;assembly=System.Private.CoreLib"
+      xmlns:win="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:android="http://uno.ui/android"
+      mc:Ignorable="d android">
 
-    <UserControl.Resources>
-        <Style x:Key="DetailsBorder"
-               TargetType="Border">
-            <Setter Property="CornerRadius"
-                    Value="4" />
-            <Setter Property="Background"
-                    Value="{ThemeResource CardBackgroundFillColorDefault}" />
-            <Setter Property="Padding"
-                    Value="16" />
-        </Style>
-    </UserControl.Resources>
+  <Page.Resources>
+    <MenuFlyout x:Key="MoreFlyout">
+      <MenuFlyoutItem Text="Archive"
+                      Icon="{toolkit:FontIcon Glyph=&#xE7B8;}"
+                      Padding="100, 16"
+                      Command="{x:Bind ViewModel.ArchiveCommand}" />
+    </MenuFlyout>
 
-    <Grid>
-        <ScrollViewer Visibility="{x:Bind IsEditing, Mode=TwoWay, Converter={StaticResource FalseToVisibleConverter}}">
-            <StackPanel Spacing="8">
-                <Border Style="{StaticResource DetailsBorder}">
-                    <StackPanel Spacing="8">
-                        <TextBlock Text="{x:Bind SelectedItem.Item.Name, Mode=OneWay}"
-                                   Style="{StaticResource SubtitleTextBlockStyle}" />
-                        <TextBlock Text="{x:Bind SelectedItem.Item.Name, Mode=OneWay}" />
-                    </StackPanel>
-                </Border>
+    <Style x:Key="ContentStack"
+           TargetType="StackPanel">
+      <Setter Property="Padding"
+              Value="12, 12" />
+    </Style>
 
-                <Border Style="{StaticResource DetailsBorder}">
-                    <TextBlock Text="xx" />
-                </Border>
+    <converters:StringFormatConverter x:Key="StringFormatConverter" />
+    <localConverters:ColorToBrushConverter x:Key="ColorToBrushConverter" />
 
-                <Border Style="{StaticResource DetailsBorder}">
-                    <TextBlock Text="xx" />
-                </Border>
-            </StackPanel>
-        </ScrollViewer>
+  </Page.Resources>
 
-        <Grid Visibility="{x:Bind IsEditing, Mode=TwoWay, Converter={StaticResource TrueToVisibleConverter}}"
-              RowSpacing="12">
+  <local:PageShell MobileTitleVisibility="Visible"
+                   Title="{x:Bind ViewModel.ItemName, Mode=OneWay}"
+                   BackCommand="{x:Bind ViewModel.CloseCommand}">
+    <local:PageShell.ActionBar>
+
+      <StackPanel Orientation="Horizontal"
+                  Spacing="4"
+                  Grid.Column="1">
+        <Button Background="Transparent"
+                BorderBrush="Transparent"
+                BorderThickness="0"
+                Padding="12"
+                VerticalAlignment="Top"
+                AutomationProperties.PositionInSet="1"
+                AutomationProperties.SizeOfSet="2"
+                Visibility="{x:Bind ViewModel.IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
+                Command="{x:Bind ViewModel.EnableEditingCommand}">
+
+          <SymbolIcon Symbol="Edit" />
+        </Button>
+
+        <Button Background="Transparent"
+                BorderBrush="Transparent"
+                BorderThickness="0"
+                Padding="12"
+                VerticalAlignment="Top"
+                AutomationProperties.PositionInSet="1"
+                AutomationProperties.SizeOfSet="2"
+                Visibility="{x:Bind ViewModel.IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
+                Flyout="{StaticResource MoreFlyout}">
+
+          <SymbolIcon Symbol="More"
+                      RenderTransformOrigin=".5,.5">
+            <SymbolIcon.RenderTransform>
+              <RotateTransform Angle="90" />
+            </SymbolIcon.RenderTransform>
+          </SymbolIcon>
+        </Button>
+      </StackPanel>
+
+    </local:PageShell.ActionBar>
+
+    <local:PageShell.ContentView>
+
+      <UserControl>
+        <Grid>
+          <VisualStateManager.VisualStateGroups>
+            <!--AdaptiveTriggers-->
+            <VisualStateGroup>
+              <VisualState>
+                <VisualState.StateTriggers>
+                  <AdaptiveTrigger MinWindowWidth="0" />
+                </VisualState.StateTriggers>
+
+                <VisualState.Setters>
+                  <Setter Target="desktopHeader.Visibility"
+                          Value="Collapsed" />
+                </VisualState.Setters>
+              </VisualState>
+
+              <VisualState>
+                <VisualState.StateTriggers>
+                  <AdaptiveTrigger MinWindowWidth="640" />
+                </VisualState.StateTriggers>
+              </VisualState>
+            </VisualStateGroup>
+
+          </VisualStateManager.VisualStateGroups>
+
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+          </Grid.RowDefinitions>
+
+          <Grid x:Name="desktopHeader"
+                Visibility="Visible"
+                Padding="12,12,12,0">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition />
+              <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
             <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition Height="auto" />
+              <RowDefinition />
+              <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <!--TODO This ScrollViewer is has Margin, especially on mobile it looks weird-->
+            <TextBlock Text="{x:Bind ViewModel.ItemName, Mode=OneWay}"
+                       Style="{StaticResource TitleTextBlockStyle}"
+                       Grid.ColumnSpan="2"
+                       Grid.Row="1" />
+
+            <StackPanel Orientation="Horizontal"
+                        Spacing="8"
+                        Grid.Column="1">
+              <Button Visibility="{x:Bind ViewModel.IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
+                      Command="{x:Bind ViewModel.EnableEditingCommand}"
+                      ToolTipService.ToolTip="{x:Bind ViewModel.EditText}"
+                      Padding="14, 10">
+                <FontIcon Glyph="&#xE70F;"
+                          FontSize="13" />
+              </Button>
+
+              <Button Visibility="{x:Bind ViewModel.IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
+                      Command="{x:Bind ViewModel.ArchiveCommand}"
+                      ToolTipService.ToolTip="{x:Bind ViewModel.ArchiveText}"
+                      Padding="14, 10">
+                <FontIcon Glyph="&#xE7B8;"
+                          FontSize="13" />
+              </Button>
+
+              <Button Command="{x:Bind ViewModel.CloseCommand}"
+                      ToolTipService.ToolTip="{x:Bind ViewModel.CloseDetailsText}"
+                      Padding="14, 10">
+                <FontIcon Glyph="&#xE8BB;"
+                          FontSize="13" />
+              </Button>
+            </StackPanel>
+          </Grid>
+
+          <ScrollViewer Visibility="{x:Bind ViewModel.IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
+                        Grid.Row="1">
+            <StackPanel Spacing="8"
+                        Style="{StaticResource ContentStack}">
+              <win:StackPanel.ChildrenTransitions>
+                <TransitionCollection>
+                  <EntranceThemeTransition FromHorizontalOffset="80"
+                                           FromVerticalOffset="0"
+                                           IsStaggeringEnabled="False" />
+                </TransitionCollection>
+              </win:StackPanel.ChildrenTransitions>
+
+              <Grid HorizontalAlignment="Left">
+                <Rectangle Fill="{x:Bind ViewModel.SelectedItem.DisplayTag.Color, Mode=OneWay, Converter={StaticResource ColorToBrushConverter}}"
+                           RadiusY="12"
+                           RadiusX="12" />
+                <TextBlock Text="{x:Bind ViewModel.SelectedItem.DisplayTag.Name, Mode=OneWay}"
+                           Margin="12,4"
+                           Style="{StaticResource CaptionTextBlockStyle}" />
+              </Grid>
+
+              <local:DetailsBox HeaderText="{x:Bind ViewModel.ForThePriceOfText.ToLower()}"
+                                Text="{x:Bind ViewModel.SelectedItem.FormattedPrice, Mode=OneWay}" />
+
+              <local:DetailsBox HeaderText="{x:Bind ViewModel.PaidInTotalText.ToLower()}"
+                                Text="{x:Bind ViewModel.SelectedItem.FormattedTotalPrice, Mode=OneWay}" />
+
+              <local:DetailsBox HeaderText="{x:Bind ViewModel.BillingCycleText.ToLower()}"
+                                Text="{x:Bind ViewModel.SelectedItem.BillingCycle, Mode=OneWay}" />
+
+              <local:DetailsBox HeaderText="{x:Bind ViewModel.PaymentMethodText.ToLower()}"
+                                Text="{x:Bind ViewModel.SelectedItem.PaymentMethod, Mode=OneWay}" />
+
+              <local:DetailsBox HeaderText="{x:Bind ViewModel.NextPaymentsText.ToLower()}">
+                <local:DetailsBox.Content>
+                  <ScrollViewer HorizontalScrollMode="Enabled"
+                                HorizontalScrollBarVisibility="Auto"
+                                Margin="-16"
+                                Padding="16">
+                    <ItemsRepeater VerticalAlignment="Top"
+                                   ItemsSource="{x:Bind ViewModel.FuturePayments, Mode=OneWay}">
+                      <ItemsRepeater.Layout>
+                        <StackLayout Orientation="Horizontal"
+                                     Spacing="8" />
+                      </ItemsRepeater.Layout>
+                    </ItemsRepeater>
+                  </ScrollViewer>
+                </local:DetailsBox.Content>
+              </local:DetailsBox>
+
+              <local:DetailsBox HeaderText="{x:Bind ViewModel.PayingSinceText.ToLower()}"
+                                Text="{x:Bind ViewModel.SelectedItem.Item.Billing.InitialDate, Mode=OneWay}" />
+
+              <local:DetailsBox HeaderText="{x:Bind ViewModel.OtherText.ToLower()}">
+                <local:DetailsBox.Content>
+                  <StackPanel Orientation="Horizontal"
+                              Spacing="12">
+                    <local:ToggleIcon ToolTipService.ToolTip="{x:Bind ViewModel.GetNotifiedText}"
+                                      IsChecked="{x:Bind ViewModel.SelectedItem.Item.IsNotify, Mode=OneWay}"
+                                      TrueIcon="{toolkit:FontIcon Glyph=&#xEA8F;}"
+                                      FalseIcon="{toolkit:FontIcon Glyph=&#xE7ED;}" />
+                  </StackPanel>
+                </local:DetailsBox.Content>
+              </local:DetailsBox>
+
+              <local:DetailsBox HeaderText="{x:Bind ViewModel.DescriptionText.ToLower()}"
+                                Visibility="{x:Bind ViewModel.SelectedItem.Item.Description, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}"
+                                Text="{x:Bind ViewModel.SelectedItem.Item.Description, Mode=OneWay}" />
+
+            </StackPanel>
+          </ScrollViewer>
+
+          <Grid Visibility="{x:Bind ViewModel.IsEditing, Mode=TwoWay, Converter={StaticResource TrueToVisibleConverter}}"
+                RowSpacing="12"
+                Grid.Row="1">
+            <Grid.RowDefinitions>
+              <RowDefinition />
+              <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
             <ScrollViewer>
-                <StackPanel Spacing="12">
-                    <TextBox Header="Name"
-                             Text="{x:Bind SelectedItem.Item.Name, Mode=TwoWay}" />
+              <StackPanel Spacing="20"
+                          Style="{StaticResource ContentStack}">
+
+                <TextBox Header="{x:Bind ViewModel.NameText}"
+                         Text="{x:Bind ViewModel.EditItem.Name, Mode=TwoWay}"
+                         MaxLength="80" />
+
+                <Grid ColumnSpacing="8">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                  </Grid.ColumnDefinitions>
+
+                  <NumberBox Header="{x:Bind ViewModel.PriceText}"
+                             Value="{x:Bind ViewModel.EditItem.Billing.BasePrice, Mode=TwoWay, Converter={StaticResource DecimalToDoubleConverter}}"
+                             SpinButtonPlacementMode="Inline"
+                             AcceptsExpression="True"
+                             Maximum="9999999999999"
+                             Minimum="-999999999999" />
+                  <ComboBox VerticalAlignment="Bottom"
+                            ItemsSource="{x:Bind ViewModel.Currencies, Mode=OneWay}"
+                            SelectedItem="{x:Bind ViewModel.EditItem.Billing.CurrencyId, Mode=TwoWay}"
+                            MinWidth="80"
+                            Grid.Column="1" />
+                </Grid>
+
+                <CalendarDatePicker Header="{x:Bind ViewModel.PayingSinceText}"
+                                    Date="{x:Bind ViewModel.EditItem.Billing.InitialDate, Mode=TwoWay, Converter={StaticResource DateOnlyToDateTimeOffsetConverter}}"
+                                    IsTodayHighlighted="True"
+                                    HorizontalAlignment="Stretch" />
+
+                <Grid ColumnSpacing="8">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                  </Grid.ColumnDefinitions>
+
+                  <NumberBox Header="{x:Bind ViewModel.BillingCycleText}"
+                             Value="{x:Bind ViewModel.EditItem.Billing.RecurEvery, Mode=TwoWay}"
+                             SpinButtonPlacementMode="Inline"
+                             AcceptsExpression="True"
+                             Maximum="999"
+                             Minimum="1" />
+                  <ComboBox VerticalAlignment="Bottom"
+                            ItemsSource="{toolkit:EnumValues Type=models:Period}"
+                            SelectedItem="{x:Bind ViewModel.EditItem.Billing.PeriodType, Mode=TwoWay}"
+                            MinWidth="120"
+                            Grid.Column="1" />
+                </Grid>
+
+                <Grid>
+                  <!--TODO Add changing icon here-->
+                  <CheckBox Content="{x:Bind ViewModel.GetNotifiedText}"
+                            IsChecked="{x:Bind ViewModel.EditItem.IsNotify, Mode=TwoWay}" />
+                  <local:ToggleIcon IsChecked="{x:Bind ViewModel.EditItem.IsNotify, Mode=OneWay}"
+                                    HorizontalAlignment="Right"
+                                    TrueIcon="{toolkit:FontIcon Glyph=&#xEA8F;}"
+                                    FalseIcon="{toolkit:FontIcon Glyph=&#xE7ED;}" />
+                </Grid>
+
+                <!--<Grid>
+                  <CheckBox Content="Split between people {NI}" />
+
+                  <local:ToggleIcon IsChecked="True"
+                                    HorizontalAlignment="Right"
+                                    TrueIcon="{toolkit:FontIcon Glyph=&#xE713;}"
+                                    FalseIcon="{toolkit:FontIcon Glyph=&#xE748;}" />
+                </Grid>-->
+
+                <!--TODO SelectedIndex is not future proof-->
+                <ComboBox Header="{x:Bind ViewModel.TagText}"
+                          ItemsSource="{x:Bind ViewModel.Tags, Mode=OneTime}"
+                          SelectedIndex="{x:Bind ViewModel.EditItem.TagId, Mode=TwoWay}"
+                          VerticalAlignment="Bottom"
+                          HorizontalAlignment="Stretch">
+                  <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="models:Tag">
+                      <StackPanel Orientation="Horizontal"
+                                  Spacing="12">
+                        <Rectangle Fill="{x:Bind Color, Converter={StaticResource ColorToBrushConverter}}"
+                                   Width="16"
+                                   Height="16"
+                                   RadiusX="4"
+                                   RadiusY="4" />
+                        <TextBlock Text="{x:Bind Name}" />
+                      </StackPanel>
+                    </DataTemplate>
+                  </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <ComboBox ItemsSource="{x:Bind ViewModel.PaymentMethods}"
+                          SelectedValue="{x:Bind ViewModel.EditItem.Billing.PaymentMethod, Mode=TwoWay}"
+                          HorizontalAlignment="Stretch"
+                          IsEditable="True">
+                  <ComboBox.Header>
                     <StackPanel Orientation="Horizontal"
-                                Spacing="8">
-                        <NumberBox Header="Price"
-                                   SpinButtonPlacementMode="Inline" />
-                        <!--Value="{x:Bind SelectedItem.Item.Billing.BasePrice}"-->
-                        <ComboBox VerticalAlignment="Bottom" />
+                                Spacing="4">
+                      <TextBlock Text="{x:Bind ViewModel.PaymentMethodText}" />
+                      <TextBlock Text="{x:Bind ViewModel.OptionalText}"
+                                 Opacity="0.5" />
                     </StackPanel>
+                  </ComboBox.Header>
+                </ComboBox>
 
-                    <ComboBox Header="Tag"
-                              VerticalAlignment="Bottom" />
-
-                    <CalendarDatePicker Header="Billing Date"
-                                        HorizontalAlignment="Stretch" />
-                    <TextBox Header="Description"
-                             Height="120"
-                             TextWrapping="Wrap"
-                             AcceptsReturn="True" />
-                    <ComboBox Header="Category"
-                              HorizontalAlignment="Stretch" />
-                </StackPanel>
+                <TextBox Text="{x:Bind ViewModel.EditItem.Description, Mode=TwoWay}"
+                         PlaceholderText="{x:Bind ViewModel.DescriptionPlaceholder}"
+                         Height="120"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"
+                         MaxLength="9999">
+                  <TextBox.Header>
+                    <StackPanel Orientation="Horizontal"
+                                Spacing="4">
+                      <TextBlock Text="{x:Bind ViewModel.DescriptionText}" />
+                      <TextBlock Text="{x:Bind ViewModel.OptionalText}"
+                                 Opacity="0.5" />
+                    </StackPanel>
+                  </TextBox.Header>
+                </TextBox>
+              </StackPanel>
             </ScrollViewer>
 
-            <StackPanel Grid.Row="1">
-                <Button Content="Save"
-                        Click="SaveButton_Click"
-                        HorizontalAlignment="Stretch"
-                        Height="45" />
-            </StackPanel>
+            <Button Command="{x:Bind ViewModel.SaveCommand}"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Height="46"
+                    Margin="12,0,12,12"
+                    Grid.Row="1">
+              <StackPanel Orientation="Horizontal"
+                          Spacing="8">
+                <FontIcon Glyph="&#xE74E;"
+                          FontSize="16" />
+                <TextBlock Text="{x:Bind ViewModel.SaveText, Mode=OneWay}" />
+              </StackPanel>
+            </Button>
+
+          </Grid>
         </Grid>
-    </Grid>
-</UserControl>
+      </UserControl>
+    </local:PageShell.ContentView>
+  </local:PageShell>
+</Page>

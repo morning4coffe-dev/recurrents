@@ -1,22 +1,79 @@
 namespace ProjectSBS.Services.Caching;
 
-public sealed class CurrencyCache : ICurrencyCache
+public sealed class CurrencyCache(
+    IApiClient api,
+    ISerializer serializer,
+    ILogger<CurrencyCache> logger) : ICurrencyCache
 {
-    private readonly IApiClient _api;
-    private readonly ISerializer _serializer;
-    private readonly ILogger _logger;
+    private readonly IApiClient _api = api;
+    private readonly ISerializer _serializer = serializer;
+    private readonly ILogger _logger = logger;
 
-    public CurrencyCache(IApiClient api, ISerializer serializer, ILogger<CurrencyCache> logger)
+    private static readonly SemaphoreSlim fileLock = new(1, 1);
+
+    private Currency? _current;
+
+    public static IReadOnlyDictionary<string, CultureInfo> CurrencyCultures = new Dictionary<string, CultureInfo>
     {
-        _api = api;
-        _serializer = serializer;
-        _logger = logger;
-    }
+        { "AUD", new CultureInfo("en-AU") },
+        { "BGN", new CultureInfo("bg-BG") },
+        { "BRL", new CultureInfo("pt-BR") },
+        { "CAD", new CultureInfo("en-CA") },
+        { "CHF", new CultureInfo("fr-CH") },
+        { "CNY", new CultureInfo("zh-CN") },
+        { "CZK", new CultureInfo("cs-CZ") },
+        { "DKK", new CultureInfo("da-DK") },
+        { "GBP", new CultureInfo("en-GB") },
+        { "HKD", new CultureInfo("zh-HK") },
+        { "HUF", new CultureInfo("hu-HU") },
+        { "IDR", new CultureInfo("id-ID") },
+        { "ILS", new CultureInfo("he-IL") },
+        { "INR", new CultureInfo("en-IN") },
+        { "ISK", new CultureInfo("is-IS") },
+        { "JPY", new CultureInfo("ja-JP") },
+        { "KRW", new CultureInfo("ko-KR") },
+        { "MXN", new CultureInfo("es-MX") },
+        { "MYR", new CultureInfo("ms-MY") },
+        { "NOK", new CultureInfo("nb-NO") },
+        { "NZD", new CultureInfo("en-NZ") },
+        { "PHP", new CultureInfo("en-PH") },
+        { "PLN", new CultureInfo("pl-PL") },
+        { "RON", new CultureInfo("ro-RO") },
+        { "SEK", new CultureInfo("sv-SE") },
+        { "SGD", new CultureInfo("en-SG") },
+        { "THB", new CultureInfo("th-TH") },
+        { "TRY", new CultureInfo("tr-TR") },
+        { "USD", new CultureInfo("en-US") },
+        { "ZAR", new CultureInfo("en-ZA") },
+        { "EUR", new CultureInfo("en-EU") }
+    };
 
-    private bool IsConnected => NetworkInformation.GetInternetConnectionProfile().GetNetworkConnectivityLevel() == NetworkConnectivityLevel.InternetAccess;
+    private static bool IsConnected
+    {
+        get
+        {
+            try
+            {
+                var networkProfile = NetworkInformation.GetInternetConnectionProfile();
+
+                if (networkProfile is not null)
+                {
+                    return networkProfile.GetNetworkConnectivityLevel() == NetworkConnectivityLevel.InternetAccess;
+                }
+            }
+            catch { }
+
+            return false;
+        }
+    }
 
     public async ValueTask<Currency?> GetCurrency(CancellationToken token)
     {
+        if (_current?.Rates is { })
+        {
+            return _current;
+        }
+
         var currencyText = await GetCachedCurrency();
         if (!string.IsNullOrWhiteSpace(currencyText))
         {
@@ -33,9 +90,11 @@ public sealed class CurrencyCache : ICurrencyCache
 
         if (response.IsSuccessStatusCode && response.Content is not null)
         {
-            var weather = response.Content;
-            await Save(weather, token);
-            return weather;
+            _current = response.Content;
+            _current.Rates.TryAdd("EUR", 1);
+
+            _ = Task.Run(() => Save(_current, token));
+            return _current;
         }
         else if (response.Error is not null)
         {
@@ -48,28 +107,64 @@ public sealed class CurrencyCache : ICurrencyCache
         }
     }
 
-    private async ValueTask<StorageFile> GetFile(CreationCollisionOption option) =>
-        await ApplicationData.Current.TemporaryFolder.CreateFileAsync("currency.json", option);
+    public async ValueTask<decimal> ConvertToDefaultCurrency(decimal value, string currency, string defaultCurrency = "EUR")
+    {
+        _current ??= await GetCurrency(CancellationToken.None) ?? new();
+
+        decimal conversionRateToDefault = Convert.ToDecimal(_current.Rates[currency]);
+        decimal conversionRateFromDefault = Convert.ToDecimal(_current.Rates[defaultCurrency]);
+
+        return (value / conversionRateToDefault) * conversionRateFromDefault;
+    }
+
+    private static async ValueTask<StorageFile?> GetFile(CreationCollisionOption option)
+    {
+        await fileLock.WaitAsync();
+
+        try
+        {
+            return await ApplicationData.Current.TemporaryFolder.CreateFileAsync("currency.json", option);
+        }
+        catch
+        {
+            return null;
+        }
+        finally
+        {
+            fileLock.Release();
+        }
+    }
 
     private async ValueTask<string?> GetCachedCurrency()
     {
         var file = await GetFile(CreationCollisionOption.OpenIfExists);
-        var properties = await file.GetBasicPropertiesAsync();
 
-        // Reuse latest cache file if offline
-        // or if the file is less than 3 days old
-        if (IsConnected || DateTimeOffset.Now.AddDays(-3) > properties.DateModified)
+        if (file is null)
         {
             return null;
         }
 
-        return await File.ReadAllTextAsync(file.Path);
+        var properties = await file.GetBasicPropertiesAsync();
+
+        // Request data if offline
+        // or the file is younger than 3 days
+        if (!IsConnected || (IsConnected && DateTimeOffset.Now.AddDays(-3) <= properties.DateModified))
+        {
+            return await File.ReadAllTextAsync(file.Path);
+        }
+
+        return null;
     }
 
-    private async ValueTask Save(Currency weather, CancellationToken token)
+    private async ValueTask Save(Currency currency, CancellationToken token)
     {
-        var weatherText = _serializer.ToString(weather);
+        var currencyText = _serializer.ToString(currency);
         var file = await GetFile(CreationCollisionOption.ReplaceExisting);
-        await File.WriteAllTextAsync(file.Path, weatherText);
+
+        if (file is null)
+        {
+            return;
+        }
+        await File.WriteAllTextAsync(file.Path, currencyText, token);
     }
 }

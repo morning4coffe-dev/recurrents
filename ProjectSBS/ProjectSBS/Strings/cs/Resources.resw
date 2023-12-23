@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="About" xml:space="preserve">
+    <value>O aplikaci</value>
+  </data>
+  <data name="AboutDescription" xml:space="preserve">
+    <value>Vyvinuto v České Republice 🏰</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Vše</value>
+  </data>
+  <data name="Annually" xml:space="preserve">
+    <value>Ročně</value>
+  </data>
+  <data name="ApplicationName" xml:space="preserve">
+    <value>Recurrents</value>
+  </data>
+  <data name="Archive" xml:space="preserve">
+    <value>Archiv</value>
+  </data>
+  <data name="ArchiveDialogDescription" xml:space="preserve">
+    <value>Nadále již nebudete moci dostávat oznámení o nadcházejících platbách.</value>
+  </data>
+  <data name="ArchiveDialogTitle" xml:space="preserve">
+    <value>Jste si jisti, že chcete předplatné archivovat?</value>
+  </data>
+  <data name="ArchiveEmptyDescription" xml:space="preserve">
+    <value>Nejdříve musíte archivovat některé z vašich předplatných.</value>
+  </data>
+  <data name="ArchiveVerb" xml:space="preserve">
+    <value>Archivovat</value>
+  </data>
+  <data name="Author" xml:space="preserve">
+    <value>Morning4coffe</value>
+  </data>
+  <data name="BankTransfer" xml:space="preserve">
+    <value>Bankovní převod</value>
+  </data>
+  <data name="BillingCycle" xml:space="preserve">
+    <value>Zúčtovací cyklus</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Zrušit</value>
+  </data>
+  <data name="Cash" xml:space="preserve">
+    <value>Hotovost</value>
+  </data>
+  <data name="ClickToLogin" xml:space="preserve">
+    <value>Přihlásit se</value>
+  </data>
+  <data name="CloseDetails" xml:space="preserve">
+    <value>Zavřít podrobnosti</value>
+  </data>
+  <data name="CloseDialogDescription" xml:space="preserve">
+    <value>Můžete přijít o některé neuložené změny.</value>
+  </data>
+  <data name="CloseDialogTitle" xml:space="preserve">
+    <value>Určitě chcete zavřít?</value>
+  </data>
+  <data name="ContinueWithoutLogin" xml:space="preserve">
+    <value>Pokračovat bez přihlášení</value>
+  </data>
+  <data name="CreditCard" xml:space="preserve">
+    <value>Kreditní karta</value>
+  </data>
+  <data name="Cryptocurrency" xml:space="preserve">
+    <value>Kryptoměna</value>
+  </data>
+  <data name="Daily" xml:space="preserve">
+    <value>Denně</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Dnů</value>
+  </data>
+  <data name="DebitCard" xml:space="preserve">
+    <value>Debetní karta</value>
+  </data>
+  <data name="DefaultCurrency" xml:space="preserve">
+    <value>Výchozí měna</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Smazat</value>
+  </data>
+  <data name="DeleteDialogDescription" xml:space="preserve">
+    <value>Tímto způsobem bude toto předplatné odstraněno i ze souhrnů. Upozorňujeme, že tato akce je nevratná.</value>
+  </data>
+  <data name="DeleteDialogTitle" xml:space="preserve">
+    <value>Opravdu chcete odstranit své předplatné?</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Popis</value>
+  </data>
+  <data name="DescriptionPlaceholder" xml:space="preserve">
+    <value>Přidejte vašemu předplatnému popis</value>
+  </data>
+  <data name="DigitalWallet" xml:space="preserve">
+    <value>Digitální peněženka</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Upravit</value>
+  </data>
+  <data name="Education" xml:space="preserve">
+    <value>Vzdělávání</value>
+  </data>
+  <data name="Entertainment" xml:space="preserve">
+    <value>Zábava</value>
+  </data>
+  <data name="Finance" xml:space="preserve">
+    <value>Finance</value>
+  </data>
+  <data name="Fitness" xml:space="preserve">
+    <value>Fitness</value>
+  </data>
+  <data name="Food" xml:space="preserve">
+    <value>Strava</value>
+  </data>
+  <data name="ForThePriceOf" xml:space="preserve">
+    <value>Za cenu</value>
+  </data>
+  <data name="GetNotified" xml:space="preserve">
+    <value>Dostávat upozornění</value>
+  </data>
+  <data name="GitHub" xml:space="preserve">
+    <value>GitHub</value>
+  </data>
+  <data name="GoodAfternoon" xml:space="preserve">
+    <value>Dobré odpoledne</value>
+  </data>
+  <data name="GoodEvening" xml:space="preserve">
+    <value>Dobrý večer</value>
+  </data>
+  <data name="GoodMorning" xml:space="preserve">
+    <value>Dobré ráno</value>
+  </data>
+  <data name="GoodNight" xml:space="preserve">
+    <value>Dobrou noc</value>
+  </data>
+  <data name="Health" xml:space="preserve">
+    <value>Zdraví</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Domů</value>
+  </data>
+  <data name="InTime" xml:space="preserve">
+    <value>Za</value>
+    <comment>In a specific time in days</comment>
+  </data>
+  <data name="Invoice" xml:space="preserve">
+    <value>Faktura</value>
+  </data>
+  <data name="Items" xml:space="preserve">
+    <value>Předplatná</value>
+  </data>
+  <data name="ItemsEmptyDescription" xml:space="preserve">
+    <value>Vylepšte své návyky při utrácení tím, že přidáte svá předplatná.</value>
+  </data>
+  <data name="ItemsEmptyTitle" xml:space="preserve">
+    <value>Nemáte zde žádná předplatná!</value>
+  </data>
+  <data name="LastDays" xml:space="preserve">
+    <value>Posledních {0} dnů</value>
+    <comment>{0} is the number of days in current month</comment>
+  </data>
+  <data name="LoginWithMicrosoft" xml:space="preserve">
+    <value>Přihlášení pomocí účtu Microsoft</value>
+  </data>
+  <data name="Monthly" xml:space="preserve">
+    <value>Měsíčně</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Název</value>
+  </data>
+  <data name="NewItem" xml:space="preserve">
+    <value>Nové předplatné</value>
+  </data>
+  <data name="News" xml:space="preserve">
+    <value>Zprávy</value>
+  </data>
+  <data name="NextPayments" xml:space="preserve">
+    <value>Nadcházející platby</value>
+  </data>
+  <data name="NotificationDescription" xml:space="preserve">
+    <value>Vaše předplatné {1} za {0} se obnovuje již zítra!</value>
+    <comment>{0} is the price, {1} is the name of the subscription</comment>
+  </data>
+  <data name="NotificationName" xml:space="preserve">
+    <value>Upozornění na platbu za {0}! 🔔</value>
+    <comment>{0} is the name of the subscription</comment>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>Oznámení</value>
+  </data>
+  <data name="NotificationsDisabled" xml:space="preserve">
+    <value>Oznámení jsou vypnuta!</value>
+  </data>
+  <data name="NotificationsDisabledDescription" xml:space="preserve">
+    <value>Chcete-li začít přijímat oznámení, zkontrolujte, zda jsou povolena v nastavení.</value>
+  </data>
+  <data name="NotificationTime" xml:space="preserve">
+    <value>Čas oznámení</value>
+  </data>
+  <data name="NotLoggedIn" xml:space="preserve">
+    <value>Nejste přihlášeni!</value>
+  </data>
+  <data name="NotLoggedInDescription" xml:space="preserve">
+    <value>Vaše data jsou uložena lokálně a nejsou synchronizována.</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="Optional" xml:space="preserve">
+    <value>Volitelné</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Ostatní</value>
+  </data>
+  <data name="PaidInTotal" xml:space="preserve">
+    <value>Zaplaceno celkem</value>
+  </data>
+  <data name="PayingSince" xml:space="preserve">
+    <value>Placeno od</value>
+  </data>
+  <data name="PaymentMethod" xml:space="preserve">
+    <value>Platební metoda</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Cena</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Zásady ochrany osobních údajů</value>
+  </data>
+  <data name="Quarterly" xml:space="preserve">
+    <value>Čtvrtletně</value>
+  </data>
+  <data name="RateAndReview" xml:space="preserve">
+    <value>Hodnocení a recenze</value>
+  </data>
+  <data name="ReportABug" xml:space="preserve">
+    <value>Nahlásit chybu</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Uložit</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Nastavení</value>
+  </data>
+  <data name="Social" xml:space="preserve">
+    <value>Social</value>
+  </data>
+  <data name="Stats" xml:space="preserve">
+    <value>Statistiky</value>
+  </data>
+  <data name="Tag" xml:space="preserve">
+    <value>Štítek</value>
+  </data>
+  <data name="Today" xml:space="preserve">
+    <value>Dnes</value>
+  </data>
+  <data name="Tomorrow" xml:space="preserve">
+    <value>Zítra</value>
+  </data>
+  <data name="Travel" xml:space="preserve">
+    <value>Cestování</value>
+  </data>
+  <data name="Unarchive" xml:space="preserve">
+    <value>Odarchivovat</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Verze</value>
+  </data>
+  <data name="Weekly" xml:space="preserve">
+    <value>Týdenně</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Vítejte</value>
+  </data>
+  <data name="Work" xml:space="preserve">
+    <value>Práce</value>
+  </data>
+</root>

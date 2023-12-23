@@ -15,16 +15,12 @@
 			<string>UIInterfaceOrientationLandscapeRight</string>
 		</array>
 		<key>XSAppIconAssets</key>
-		<string>Assets.xcassets/iconapp.appiconset</string>
+		<string>Assets.xcassets/icon.appiconset</string>
 
 		<!--
 		Adjust this to your application's encryption usage.
 		<key>ITSAppUsesNonExemptEncryption</key>
 		<false/>
 		-->
-		<key>CFBundleURLSchemes</key>
-		<array>
-			<string>myprotocol</string>
-		</array>
 	</dict>
 </plist>

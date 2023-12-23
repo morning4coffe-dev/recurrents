@@ -1,11 +1,9 @@
-﻿namespace ProjectSBS.Presentation
+namespace ProjectSBS.Presentation;
+
+public sealed partial class Shell : Page
 {
-    public sealed partial class Shell : UserControl, IContentControlProvider
+    public Shell()
     {
-        public Shell()
-        {
-            this.InitializeComponent();
-        }
-        public ContentControl ContentControl => Splash;
+        this.InitializeComponent();
     }
 }

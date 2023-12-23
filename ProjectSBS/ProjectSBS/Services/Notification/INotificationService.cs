@@ -1,4 +1,4 @@
-﻿namespace ProjectSBS.Services.Notifications;
+namespace ProjectSBS.Services.Notifications;
 
 public class InAppNotificationRequestedEventArgs : EventArgs { public required string NotificationText { get; set; } public int NotificationTime { get; set; } }
 
@@ -18,7 +18,7 @@ public interface INotificationService
 
 public abstract class NotificationServiceBase : INotificationService
 {
-    public event EventHandler<InAppNotificationRequestedEventArgs> InAppNotificationRequested;
+    public event EventHandler<InAppNotificationRequestedEventArgs>? InAppNotificationRequested;
 
     public void InvokeInAppNotificationRequested(InAppNotificationRequestedEventArgs args)
     {

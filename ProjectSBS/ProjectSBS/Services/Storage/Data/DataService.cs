@@ -1,33 +1,18 @@
-﻿using ProjectSBS.Services.User;
+using ProjectSBS.Services.User;
 using System.Text.Json;
 
 namespace ProjectSBS.Services.Storage.Data;
 
-public class DataService : IDataService
+public class DataService(
+    IStorageService storage,
+    IUserService userService) : IDataService
 {
-    private readonly IStorageService _storage;
-    private readonly IUserService _userService;
-    private readonly IAuthenticationService _authentication;
+    private readonly IStorageService _storage = storage;
+    private readonly IUserService _userService = userService;
 
     //TODO Rename
     private const string itemsPath = "appItems.json";
     private const string logsPath = "itemLogs.json";
-
-    public DataService(
-        IStorageService storage,
-        IUserService userService
-#if !__IOS__
-        ,
-        IAuthenticationService authentication
-#endif
-        )
-    {
-        _storage = storage;
-        _userService = userService;
-#if !__IOS__
-        _authentication = authentication;
-#endif
-    }
 
     public async Task<(List<Item> items, List<ItemLog> logs)> InitializeDatabaseAsync()
     {
@@ -36,9 +21,9 @@ public class DataService : IDataService
         //Check if the remote database is newer than the local one (or vice-versa)
 
         var data = await LoadDataAsync();
-        var logs = await LoadLogsAsync();
+        //var logs = new List<ItemLog>();await LoadLogsAsync();
 
-        return (data, logs);
+        return (data, null);
     }
 
 
@@ -51,17 +36,6 @@ public class DataService : IDataService
         return await SaveAsync(stringData, itemsPath);
     }
 
-    public async Task<bool> AddLogAsync(ItemLog log)
-    {
-        var logs = await LoadLogsAsync() ?? new List<ItemLog>();
-
-        logs.Add(log);
-
-        var stringData = JsonSerializer.Serialize(logs);
-
-        return await SaveAsync(stringData, logsPath);
-    }
-
     public async Task<bool> SaveLogsAsync(List<ItemLog> logs)
     {
         var stringData = JsonSerializer.Serialize(logs);
@@ -71,14 +45,7 @@ public class DataService : IDataService
 
     private async Task<bool> SaveAsync(string content, string path)
     {
-
-#if !__IOS__
-        var isSigned = await _authentication.IsAuthenticated();
-#else
-        var isSigned = false;
-#endif
-
-        if (isSigned)
+        if (_userService.IsLoggedIn)
         {
             await _userService.UploadData(content, path);
         }
@@ -95,40 +62,54 @@ public class DataService : IDataService
     {
         var data = await LoadAsync(itemsPath, typeof(List<Item>));
 
-        return (data as List<Item>) ?? new List<Item>();
+        return (data as List<Item>) ?? [];
     }
 
     public async Task<List<ItemLog>> LoadLogsAsync()
     {
         var logs = await LoadAsync(logsPath, typeof(List<ItemLog>));
 
-        return (logs as List<ItemLog>) ?? new List<ItemLog>();
+        return (logs as List<ItemLog>) ?? [];
     }
 
     private async Task<object?> LoadAsync(string path, Type type)
     {
-        var isSigned = await _authentication.IsAuthenticated();
-        string remoteContent = "";
-
-        if (isSigned)
+        try
         {
-            //TODO Use CancellationToken
-            var data = await _userService.RetrieveData(path, CancellationToken.None);
-            remoteContent = data.ReadToEnd();
-        }
+            //TODO var isSigned = await _authentication.IsAuthenticated();
+            var isSigned = _userService.IsLoggedIn;
+            string remoteContent = "";
 
-        if (!isSigned)
-        {
-            if (!_storage.DoesFileExist(path))
+            if (isSigned)
+            {
+                //TODO Use CancellationToken
+                var data = await _userService.RetrieveData(path, CancellationToken.None);
+                remoteContent = data.ReadToEnd();
+            }
+
+            if (!isSigned)
+            {
+                if (!_storage.DoesFileExist(path))
+                {
+                    return null;
+                }
+                var fileContent = await _storage.ReadFileAsync(path);
+                remoteContent = fileContent;
+            }
+
+            //TODO Compare remote and local content
+            if (remoteContent is not { })
             {
                 return null;
             }
-            var fileContent = await _storage.ReadFileAsync(path);
-            remoteContent = fileContent;
+
+            return JsonSerializer.Deserialize(remoteContent, type);
         }
-
-        //TODO Compare remote and local content
-
-        return JsonSerializer.Deserialize(remoteContent, type);
+        catch(Exception ex)
+        {
+            //TODO Log
+            Console.WriteLine(ex);
+            return null;
+        }
     }
 }

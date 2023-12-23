@@ -42,16 +42,81 @@ public sealed partial class PageShell : Page
         set { SetValue(ContentViewProperty, value); }
     }
 
-    public static readonly DependencyProperty TitleVisibilityProperty = DependencyProperty.Register(
-      nameof(TitleVisibility),
-      typeof(Visibility),
+    public static readonly DependencyProperty TitleProperty = DependencyProperty.Register(
+      nameof(Title),
+      typeof(string),
       typeof(PageShell),
-      new PropertyMetadata(Visibility.Visible)
+      new PropertyMetadata("")
     );
 
-    public Visibility TitleVisibility
+    public string Title
     {
-        get { return (Visibility)GetValue(TitleVisibilityProperty); }
-        set { SetValue(TitleVisibilityProperty, value); }
+        get => (string)GetValue(TitleProperty);
+        set => SetValue(TitleProperty, value); 
+    }
+
+    public static readonly DependencyProperty ActionBarProperty = DependencyProperty.Register(
+      nameof(ActionBar),
+      typeof(UIElement),
+      typeof(PageShell),
+      new PropertyMetadata(null)
+    );
+
+    public string TitleBarTitle
+    {
+        get => (string)GetValue(TitleBarTitleProperty);
+        set => SetValue(TitleBarTitleProperty, value);
+    }
+
+    public static readonly DependencyProperty TitleBarTitleProperty = DependencyProperty.Register(
+      nameof(TitleBarTitle),
+      typeof(string),
+      typeof(PageShell),
+      new PropertyMetadata("")
+    );
+
+    public UIElement ActionBar
+    {
+        get { return (UIElement)GetValue(ActionBarProperty); }
+        set { SetValue(ActionBarProperty, value); }
+    }
+
+    public static readonly DependencyProperty DesktopTitleVisibilityProperty = DependencyProperty.Register(
+      nameof(DesktopTitleVisibility),
+      typeof(Visibility),
+      typeof(PageShell),
+      new PropertyMetadata(Visibility.Collapsed)
+    );
+
+    public Visibility DesktopTitleVisibility
+    {
+        get => (Visibility)GetValue(DesktopTitleVisibilityProperty);
+        set => SetValue(DesktopTitleVisibilityProperty, value);
+    }
+
+    public static readonly DependencyProperty MobileTitleVisibilityProperty = DependencyProperty.Register(
+      nameof(MobileTitleVisibility),
+      typeof(Visibility),
+      typeof(PageShell),
+      new PropertyMetadata(Visibility.Collapsed)
+    );
+
+    public Visibility MobileTitleVisibility
+    {
+        get => (Visibility)GetValue(MobileTitleVisibilityProperty);
+        set => SetValue(MobileTitleVisibilityProperty, value);
+    }
+
+    public static readonly DependencyProperty BackCommandProperty = DependencyProperty.Register(
+      nameof(BackCommand),
+      typeof(ICommand),
+      typeof(PageShell),
+      new PropertyMetadata(null)
+    );
+
+    public ICommand BackCommand
+    {
+        get => (ICommand)GetValue(BackCommandProperty);
+        set => SetValue(BackCommandProperty, value);
     }
 }
