@@ -3,5 +3,13 @@ namespace ProjectSBS.Business.Models;
 public record AppConfig
 {
     public string? Environment { get; init; }
-    public const string TelemetryId = "ea15cf3d-e346-483c-b0b3-618fa515fd50";
+
+    public const string TelemetryId = "";
+
+    public const string ApplicationId = "";
+    public const string TenantId = "";
+    public static string[] Scopes =
+    [
+
+    ];
 }
