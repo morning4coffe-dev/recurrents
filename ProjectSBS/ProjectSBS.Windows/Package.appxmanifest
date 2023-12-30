@@ -12,7 +12,7 @@
   <Identity
     Name="3597CaffeStudios.Recurrents"
     Publisher="CN=A4324CBF-D4DD-41DE-9042-BB3AA1508016"
-    Version="0.9.7.0" />
+    Version="0.9.10.0" />
 
   <mp:PhoneIdentity PhoneProductId="b5323638-1e69-4644-a27d-9487a55d21ff" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
 
