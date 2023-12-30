@@ -1,4 +1,4 @@
-using ProjectSBS.Services.User;
+using System.Diagnostics;
 using System.Text.Json;
 
 namespace ProjectSBS.Services.Storage.Data;
@@ -10,22 +10,15 @@ public class DataService(
     private readonly IStorageService _storage = storage;
     private readonly IUserService _userService = userService;
 
-    //TODO Rename
-    private const string itemsPath = "appItems.json";
-    private const string logsPath = "itemLogs.json";
+    private const string itemsPath = "recurrents.json";
+    private const string logsPath = "recurrents_logs.json";
 
     public async Task<(List<Item> items, List<ItemLog> logs)> InitializeDatabaseAsync()
     {
-        //TODO Check if user is logged in
-        //Load from remote database
-        //Check if the remote database is newer than the local one (or vice-versa)
+        //TODO Check if the remote database is newer than the local one (or vice-versa)
 
-        var data = await LoadDataAsync();
-        //var logs = new List<ItemLog>();await LoadLogsAsync();
-
-        return (data, null);
+        return (await LoadDataAsync(), null);
     }
-
 
 
 
@@ -57,7 +50,6 @@ public class DataService(
 
 
 
-
     public async Task<List<Item>> LoadDataAsync()
     {
         var data = await LoadAsync(itemsPath, typeof(List<Item>));
@@ -76,13 +68,11 @@ public class DataService(
     {
         try
         {
-            //TODO var isSigned = await _authentication.IsAuthenticated();
             var isSigned = _userService.IsLoggedIn;
             string remoteContent = "";
 
             if (isSigned)
             {
-                //TODO Use CancellationToken
                 var data = await _userService.RetrieveData(path, CancellationToken.None);
                 remoteContent = data.ReadToEnd();
             }
@@ -97,7 +87,6 @@ public class DataService(
                 remoteContent = fileContent;
             }
 
-            //TODO Compare remote and local content
             if (remoteContent is not { })
             {
                 return null;
@@ -105,10 +94,9 @@ public class DataService(
 
             return JsonSerializer.Deserialize(remoteContent, type);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
-            //TODO Log
-            Console.WriteLine(ex);
+            Debug.WriteLine(ex);
             return null;
         }
     }

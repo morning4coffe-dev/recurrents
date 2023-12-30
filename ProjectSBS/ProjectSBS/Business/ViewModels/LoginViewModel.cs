@@ -67,13 +67,9 @@ public partial class LoginViewModel : ObservableObject
 
             await _itemService.InitializeAsync();
 
-            //TODO [Optimization] instead of waiting, maybe load items, or stuff like that here
-            //await Task.Delay(100);
-
             App.Dispatcher.TryEnqueue(() =>
             {
                 _navigation.Navigate(typeof(MainPage));
-                //_navigator.NavigateViewModelAsync<MainViewModel>(this, qualifier: Qualifiers.ClearBackStack);
             });
         }
     }
@@ -81,8 +77,7 @@ public partial class LoginViewModel : ObservableObject
     [RelayCommand]
     private void PrivacyPolicy()
     {
-        //TODO add proper privacy policy link
-        _ = Launcher.LaunchUriAsync(new Uri("https://www.privacypolicies.com/"));
+        _ = Launcher.LaunchUriAsync(new Uri("https://github.com/morning4coffe-dev/recurrents/blob/ebf622cb65d60c7d353af69824f63d88fa796bde/privacy-policy.md"));
     }
 
     [ObservableProperty]

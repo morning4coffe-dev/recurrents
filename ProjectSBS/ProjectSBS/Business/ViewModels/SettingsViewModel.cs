@@ -114,13 +114,12 @@ public partial class SettingsViewModel : ViewModelBase
 
         Login = new RelayCommand(() => navigation.Navigate(typeof(LoginPage)));
         GitHub = new AsyncRelayCommand(async () =>
-            await Windows.System.Launcher.LaunchUriAsync(new Uri("https://github.com/morning4coffe-dev/project-sbs/")));
+            await Windows.System.Launcher.LaunchUriAsync(new Uri("https://github.com/morning4coffe-dev/recurrents")));
         RateAndReview = new AsyncRelayCommand(interopService.OpenStoreReviewUrlAsync);
-        //TODO: Change the link to proper Privacy Policy
         PrivacyPolicy = new AsyncRelayCommand(async () =>
-            await Windows.System.Launcher.LaunchUriAsync(new Uri("")));
+            await Windows.System.Launcher.LaunchUriAsync(new Uri("https://github.com/morning4coffe-dev/recurrents/blob/ebf622cb65d60c7d353af69824f63d88fa796bde/privacy-policy.md")));
         ReportABug = new AsyncRelayCommand(async () =>
-            await Windows.System.Launcher.LaunchUriAsync(new Uri("https://github.com/morning4coffe-dev/project-sbs/issues/new")));
+            await Windows.System.Launcher.LaunchUriAsync(new Uri("https://github.com/morning4coffe-dev/recurrents/issues/new")));
 
         IsNotificationsEnabled = notificationService.IsEnabledOnDevice();
 

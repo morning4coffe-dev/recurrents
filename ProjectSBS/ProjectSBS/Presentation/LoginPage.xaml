@@ -55,7 +55,7 @@
                  Grid.Column="1"
                  VerticalAlignment="Center">
             <Image.Source>
-              <BitmapImage UriSource="ms-appx:///Assets/login-background3.jpg" />
+              <BitmapImage UriSource="ms-appx:///Assets/login-background.jpg" />
             </Image.Source>
           </Image>
 
@@ -128,8 +128,8 @@
                         Spacing="8"
                         Margin="0, 8"
                         Grid.Row="4">
-              <HyperlinkButton Content="{x:Bind ViewModel.PrivacyPolicyText}" />
-              <!--TODO Command="{x:Bind ViewModel.PrivacyPolicy}"-->
+              <HyperlinkButton Content="{x:Bind ViewModel.PrivacyPolicyText}"
+                               Command="{x:Bind ViewModel.PrivacyPolicyCommand}" />
               <TextBlock Text="{x:Bind ViewModel.AuthorText}"
                          VerticalAlignment="Center" />
             </StackPanel>
