@@ -367,6 +367,9 @@
   <data name="Stats" xml:space="preserve">
     <value>Statistiky</value>
   </data>
+  <data name="SystemNotifications" xml:space="preserve">
+    <value>Systémová oznámení</value>
+  </data>
   <data name="Tag" xml:space="preserve">
     <value>Štítek</value>
   </data>
