@@ -16,7 +16,7 @@
           BorderThickness="1"
           Grid.Row="1">
     <StackPanel>
-      <StackPanel Margin="26"
+      <StackPanel Margin="26,26,0,0"
                   Spacing="2">
         <!--Margin="30,30,0,0"-->
         <TextBlock Text="{x:Bind ViewModel.Header}"
@@ -25,9 +25,12 @@
                    Style="{StaticResource SubtitleTextBlockStyle}" />
       </StackPanel>
 
-      <!--<lvc:CartesianChart Height="160"
+      <lvc:CartesianChart Height="160"
+                          Margin="26,0,0,0"
                           Foreground="White"
-                          Series="{x:Bind ViewModel.Series}" />-->
+                          XAxes="{x:Bind ViewModel.XAxes}"
+                          YAxes="{x:Bind ViewModel.YAxes}"
+                          Series="{x:Bind ViewModel.Series}" />
     </StackPanel>
   </Border>
 </Page>

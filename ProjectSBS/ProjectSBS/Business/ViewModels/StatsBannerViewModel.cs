@@ -1,5 +1,9 @@
 using LiveChartsCore;
+using LiveChartsCore.Kernel.Sketches;
 using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore.SkiaSharpView.Painting;
+using SkiaSharp;
+using Windows.UI;
 
 namespace ProjectSBS.Business.ViewModels;
 
@@ -17,6 +21,8 @@ public partial class StatsBannerViewModel : ViewModelBase
     private string _sum = "0";
 
     public ObservableCollection<ISeries> Series { get; set; }
+    public ObservableCollection<ICartesianAxis> XAxes { get; set; }
+    public ObservableCollection<ICartesianAxis> YAxes { get; set; }
 
     public StatsBannerViewModel(
         IItemService itemService,
@@ -35,33 +41,42 @@ public partial class StatsBannerViewModel : ViewModelBase
 
         SetSum(_itemService.GetItems());
 
+        var accentColor = (Color)Application.Current.Resources["SystemAccentColor"];
+        var skColor = new SKColor(accentColor.R, accentColor.G, accentColor.B);
+
         ObservableCollection<ISeries> series =
         [
             new LineSeries<double>
             {
                 Values = _values,
-                Fill = null
+                Fill = null,
+                Stroke = new SolidColorPaint(skColor) { StrokeThickness = 6 },
+                GeometryStroke = new SolidColorPaint(skColor) { StrokeThickness = 0 },
+                GeometryFill = new SolidColorPaint(skColor) { StrokeThickness = 0 }
             }
         ];
 
         Series = series;
+
+        DateTime currentDate = DateTime.Now;
+        var months = new string[6];
+
+        for (int i = 0; i < 6; i++)
+        {
+            months[5-i] = currentDate.AddMonths(-i).ToString("MMM");
+        }
+
+        XAxes = [new Axis { ShowSeparatorLines = false, Labels = months, LabelsPaint = new SolidColorPaint(SKColors.White), TextSize=14 }];
+        YAxes = [new Axis { ShowSeparatorLines = false, Labeler = value => value.ToString("C", CurrencyCache.CurrencyCultures[_settingsService.DefaultCurrency]), LabelsPaint = new SolidColorPaint(SKColors.LightGray), TextSize = 14 }];
     }
 
     private void ItemService_OnItemsChanged(object? sender, IEnumerable<ItemViewModel> e)
     {
         SetSum(e);
-        //    _values.Add(e.ToList().Count);
 
-        //    ObservableCollection<ISeries> series = new()
-        //    {
-        //        new LineSeries<double>
-        //        {
-        //            Values = _values,
-        //            Fill = null
-        //        }
-        //    };
-
-        //    Series = series;
+        _values.Clear();
+        for (int i = 0; i < 6; i++)
+            _values.Add( new Random().Next(10, 1000000));
     }
 
     private async void SetSum(IEnumerable<ItemViewModel> e)
