@@ -367,6 +367,9 @@
   <data name="Stats" xml:space="preserve">
     <value>Statistiky</value>
   </data>
+  <data name="SystemLanguageAndRegion" xml:space="preserve">
+    <value>Systemové nastavení jazyka a oblasti</value>
+  </data>
   <data name="SystemNotifications" xml:space="preserve">
     <value>Systémová oznámení</value>
   </data>
