@@ -15,6 +15,7 @@ public partial class SettingsViewModel : ViewModelBase
     public string LogoutText => _localizer["Logout"];
     public string NotLoggedInText => _localizer["NotLoggedIn"];
     public string NotLoggedInDescription => _localizer["NotLoggedInDescription"];
+    public string SystemLanguageAndRegionText => _localizer["SystemLanguageAndRegion"];
     public string SystemNotificationsText => _localizer["SystemNotifications"];
     public string NotificationTimeText => _localizer["NotificationTime"];
     public string NotificationsDisabledText => _localizer["NotificationsDisabled"];
@@ -149,6 +150,9 @@ public partial class SettingsViewModel : ViewModelBase
 
     [RelayCommand]
     public void LaunchNotificationSettings() => _ = Windows.System.Launcher.LaunchUriAsync(new Uri("ms-settings:notifications"));
+
+    [RelayCommand]
+    public void LaunchLangSettings() => _ = Windows.System.Launcher.LaunchUriAsync(new Uri("ms-settings:regionlanguage-adddisplaylanguage"));
 
     public override void Unload()
     {
