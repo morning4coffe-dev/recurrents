@@ -10,7 +10,7 @@
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageVersion Include="Microsoft.Windows.Compatibility" Version="8.0.0-rc.2.23479.10" />
     <PackageVersion Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.2428" />
-    <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.4.231115000" />
+    <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.4.231219000" />
     <PackageVersion Include="SkiaSharp.Skottie" Version="2.88.6" />
     <PackageVersion Include="SkiaSharp.Views.Uno.WinUI" Version="2.88.6" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.5.0" />
@@ -38,25 +38,25 @@
     <PackageVersion Include="Uno.Wasm.Bootstrap.DevServer" Version="8.0.4" />
     <PackageVersion Include="Uno.Wasm.Bootstrap.Server" Version="8.0.4" />
     <PackageVersion Include="Uno.WinUI" Version="5.0.118" />
-    <PackageVersion Include="Uno.WinUI.Lottie" Version="5.0.48" />
-    <PackageVersion Include="Uno.WinUI.DevServer" Version="5.0.48" />
-    <PackageVersion Include="Uno.WinUI.Skia.Gtk" Version="5.0.48" />
-    <PackageVersion Include="Uno.WinUI.WebAssembly" Version="5.0.48" />
+    <PackageVersion Include="Uno.WinUI.Lottie" Version="5.0.118" />
+    <PackageVersion Include="Uno.WinUI.DevServer" Version="5.0.118" />
+    <PackageVersion Include="Uno.WinUI.Skia.Gtk" Version="5.0.118" />
+    <PackageVersion Include="Uno.WinUI.WebAssembly" Version="5.0.118" />
     <PackageVersion Include="Xamarin.Google.Android.Material" Version="1.10.0.1" />
     <PackageVersion Include="Uno.UITest.Helpers" Version="1.1.0-dev.70" />
     <PackageVersion Include="Xamarin.UITest" Version="4.3.0" />
     <PackageVersion Include="WinUIEx" Version="2.3.3" />
-    <PackageVersion Include="Uno.WinUI.MSAL" Version="5.0.48" />
+    <PackageVersion Include="Uno.WinUI.MSAL" Version="5.0.118" />
     <PackageVersion Include="Microsoft.Graph" Version="5.38.0" />
     <PackageVersion Include="Microsoft.Identity.Client" Version="4.58.1" />
     <PackageVersion Include="LiveChartsCore.SkiaSharpView.Uno.WinUI" Version="2.0.0-rc2" />
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageVersion Include="CommunityToolkit.WinUI.Notifications" Version="7.1.2" />
-    <PackageVersion Include="CommunityToolkit.WinUI.Converters" Version="8.0.230907" />
-    <PackageVersion Include="CommunityToolkit.WinUI.Animations" Version="8.0.230907" />
-    <PackageVersion Include="CommunityToolkit.WinUI.Triggers" Version="8.0.230907" />
-    <PackageVersion Include="CommunityToolkit.WinUI.Controls.Segmented" Version="8.0.230907" />
-    <PackageVersion Include="CommunityToolkit.WinUI.Controls.SettingsControls" Version="8.0.230907" />
+    <PackageVersion Include="CommunityToolkit.WinUI.Converters" Version="8.0.240109" />
+    <PackageVersion Include="CommunityToolkit.WinUI.Animations" Version="8.0.240109" />
+    <PackageVersion Include="CommunityToolkit.WinUI.Triggers" Version="8.0.240109" />
+    <PackageVersion Include="CommunityToolkit.WinUI.Controls.Segmented" Version="8.0.240109" />
+    <PackageVersion Include="CommunityToolkit.WinUI.Controls.SettingsControls" Version="8.0.240109" />
     <PackageVersion Include="Microsoft.AppCenter" Version="5.0.3" />
     <PackageVersion Include="Microsoft.AppCenter.Analytics" Version="5.0.3" />
     <PackageVersion Include="Microsoft.AppCenter.Crashes" Version="5.0.3" />
