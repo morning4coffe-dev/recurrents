@@ -7,6 +7,7 @@
       xmlns:ui="using:CommunityToolkit.WinUI"
       xmlns:controls="using:CommunityToolkit.WinUI.Controls"
       xmlns:comp="using:ProjectSBS.Presentation.Components"
+      xmlns:helpers="using:ProjectSBS.Presentation.Helpers"
       mc:Ignorable="d">
 
   <comp:PageShell x:Name="pageShell"
@@ -42,8 +43,8 @@
           </VisualStateManager.VisualStateGroups>
 
           <ScrollViewer>
-            <StackPanel x:Name="settingsHolder"
-                        Spacing="4"
+            <helpers:StackPanelWithSpacing x:Name="settingsHolder"
+                        Space="4"
                         Margin="48,48,48,0">
               <!--<win:StackPanel.ChildrenTransitions>
             <TransitionCollection>
@@ -193,7 +194,7 @@
                            Style="{StaticResource CaptionTextBlockStyle}" />
               </controls:SettingsExpander>
 
-            </StackPanel>
+            </helpers:StackPanelWithSpacing>
           </ScrollViewer>
         </Grid>
       </UserControl>

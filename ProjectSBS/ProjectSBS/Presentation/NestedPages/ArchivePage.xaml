@@ -5,6 +5,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:triggers="using:CommunityToolkit.WinUI"
       xmlns:viewModels="using:ProjectSBS.Business.ViewModels"
+      xmlns:helpers="using:ProjectSBS.Presentation.Helpers"
       mc:Ignorable="d">
 
   <Grid>
@@ -53,15 +54,9 @@
     <Grid Style="{ThemeResource PageBackground}">
 
       <ScrollViewer>
-        <Grid x:Name="contentHolder"
-              Margin="48,48,48,0">
-
-          <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition />
-          </Grid.RowDefinitions>
+        <helpers:StackPanelWithSpacing x:Name="contentHolder"
+                                       Space="8"
+                                       Margin="48,48,48,0">
 
           <TextBlock x:Name="desktopHeader"
                      Visibility="Visible"
@@ -100,10 +95,9 @@
                          Style="{StaticResource TitleTextBlockStyle}" />
             </StackPanel>
           </Grid>
-          
+
           <StackPanel Orientation="Horizontal"
                       Grid.Row="1"
-                      Margin="0,12"
                       Spacing="8">
             <Button Content="{x:Bind ViewModel.UnarchiveText}"
                     AutomationProperties.PositionInSet="1"
@@ -123,6 +117,7 @@
                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
                     ScrollViewer.VerticalScrollMode="Disabled"
                     Grid.Row="2"
+                    Margin="-4,0"
                     ItemClick="ListView_ItemClick">
 
             <ListView.ItemTemplate>
@@ -150,7 +145,6 @@
           </ListView>
 
           <StackPanel x:Name="itemsEmptyImage"
-                      Spacing="12"
                       Grid.Row="3"
                       VerticalAlignment="Center"
                       Visibility="Collapsed"
@@ -174,7 +168,7 @@
 
           </StackPanel>
 
-        </Grid>
+        </helpers:StackPanelWithSpacing>
       </ScrollViewer>
     </Grid>
   </Grid>
