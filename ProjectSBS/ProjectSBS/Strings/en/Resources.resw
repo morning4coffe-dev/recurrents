@@ -370,8 +370,8 @@
   <data name="Stats" xml:space="preserve">
     <value>Stats</value>
   </data>
-  <data name="String1" xml:space="preserve">
-    <value>System Language &amp; Region</value>
+  <data name="SystemLanguageAndRegion" xml:space="preserve">
+    <value>System Language &amp; region</value>
   </data>
   <data name="SystemNotifications" xml:space="preserve">
     <value>System notifications</value>

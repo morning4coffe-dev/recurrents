@@ -155,7 +155,7 @@
 
           <ScrollViewer Visibility="{x:Bind ViewModel.IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
                         Grid.Row="1">
-            <helpers:StackPanelWithSpacing Space="8"
+            <helpers:StackPanelWithSpacing Space="4"
                                            Style="{StaticResource ContentStack}">
               <win:StackPanel.ChildrenTransitions>
                 <TransitionCollection>
@@ -234,7 +234,7 @@
             </Grid.RowDefinitions>
 
             <ScrollViewer>
-              <helpers:StackPanelWithSpacing Space="20"
+              <helpers:StackPanelWithSpacing Space="12"
                                              Style="{StaticResource ContentStack}">
 
                 <TextBox Header="{x:Bind ViewModel.NameText}"
