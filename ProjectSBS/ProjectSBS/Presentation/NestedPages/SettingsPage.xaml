@@ -7,6 +7,7 @@
       xmlns:ui="using:CommunityToolkit.WinUI"
       xmlns:controls="using:CommunityToolkit.WinUI.Controls"
       xmlns:comp="using:ProjectSBS.Presentation.Components"
+      xmlns:helpers="using:ProjectSBS.Presentation.Helpers"
       mc:Ignorable="d">
 
   <comp:PageShell x:Name="pageShell"
@@ -26,7 +27,7 @@
 
                 <VisualState.Setters>
                   <Setter Target="settingsHolder.Margin"
-                          Value="8,8,8,0" />
+                          Value="8" />
                   <Setter Target="desktopHeader.Visibility"
                           Value="Collapsed" />
                 </VisualState.Setters>
@@ -42,9 +43,9 @@
           </VisualStateManager.VisualStateGroups>
 
           <ScrollViewer>
-            <StackPanel x:Name="settingsHolder"
-                        Spacing="4"
-                        Margin="48,48,48,0">
+            <helpers:StackPanelWithSpacing x:Name="settingsHolder"
+                        Space="4"
+                        Margin="48">
               <!--<win:StackPanel.ChildrenTransitions>
             <TransitionCollection>
               <EntranceThemeTransition FromVerticalOffset="-100"
@@ -103,6 +104,12 @@
                           Grid.Column="1" />
               </controls:SettingsCard>
 
+              <controls:SettingsCard Header="{x:Bind ViewModel.SystemLanguageAndRegionText}"
+                                     ActionIcon="{ui:FontIcon Glyph=&#xE8A7;}"
+                                     HeaderIcon="{ui:FontIcon Glyph=&#xF2B7;}"
+                                     IsClickEnabled="True"
+                                     Command="{x:Bind ViewModel.LaunchLangSettingsCommand}" />
+
               <TextBlock Text="{x:Bind ViewModel.NotificationsText}"
                          Margin="0,12,0,0"
                          Style="{StaticResource BaseTextBlockStyle}" />
@@ -153,7 +160,7 @@
                     <StackPanel VerticalAlignment="Center"
                                 Spacing="4">
                       <TextBlock Text="{x:Bind ViewModel.AppName}" />
-                      <TextBlock Text="Morning4coffe ©️ 2023"
+                      <TextBlock Text="Morning4coffe ©️ 2024"
                                  Opacity="0.75"
                                  Style="{StaticResource CaptionTextBlockStyle}" />
                     </StackPanel>
@@ -167,6 +174,7 @@
                   <controls:SettingsCard HorizontalContentAlignment="Left"
                                          ContentAlignment="Left">
                     <StackPanel Margin="-12,0,0,0"
+                                Spacing="2"
                                 Orientation="Vertical">
                       <HyperlinkButton Content="{x:Bind ViewModel.GitHubText}"
                                        Command="{x:Bind ViewModel.GitHub}" />
@@ -187,7 +195,7 @@
                            Style="{StaticResource CaptionTextBlockStyle}" />
               </controls:SettingsExpander>
 
-            </StackPanel>
+            </helpers:StackPanelWithSpacing>
           </ScrollViewer>
         </Grid>
       </UserControl>

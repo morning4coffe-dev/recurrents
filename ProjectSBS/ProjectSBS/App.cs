@@ -1,7 +1,5 @@
-using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.UI.Dispatching;
 using Windows.System.Profile;
-
 
 #if WINDOWS
 using Microsoft.UI.Composition.SystemBackdrops;
@@ -129,7 +127,7 @@ public class App : Application
         manager.PersistenceId = "ProjectSBSMainWindow";
         builder.Window.SetWindowSize(size.Width / 1.55, size.Height / 1.1);
         builder.Window.CenterOnScreen();
-        builder.Window.Title = "Project SBS";
+        builder.Window.Title = Package.Current.DisplayName;
         //builder.Window.SetIcon();
 
         if (MicaController.IsSupported())

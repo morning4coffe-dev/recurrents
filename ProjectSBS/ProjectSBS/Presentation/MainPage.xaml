@@ -194,7 +194,8 @@
               <utu:TabBar x:Name="navigationBar"
                           ItemsSource="{x:Bind ViewModel.DesktopCategories}"
                           SelectedItem="{x:Bind ViewModel.SelectedCategory, Mode=TwoWay}"
-                          Background="{ThemeResource CardBackgroundFillColorDefault}"
+                          Background="{ThemeResource CardBackground}"
+                          BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
                           Visibility="Collapsed"
                           CornerRadius="0"
                           Grid.Row="1">
@@ -202,8 +203,8 @@
                   <DataTemplate x:DataType="models:NavigationCategory">
                     <StackPanel Spacing="4">
                       <FontIcon Glyph="{x:Bind Glyph}"
-                                FontSize="19" />
-                      <TextBlock Text="{x:Bind Text}" />
+                                FontSize="20" />
+                      <!--<TextBlock Text="{x:Bind Text}" />-->
                     </StackPanel>
                   </DataTemplate>
                 </utu:TabBar.ItemTemplate>
