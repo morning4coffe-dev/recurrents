@@ -14,11 +14,11 @@
           Background="{ThemeResource CardBackground}"
           BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
           BorderThickness="1"
-          Grid.Row="1">
+          Grid.Row="1">    
     <StackPanel>
+      
       <StackPanel Margin="26,26,0,0"
                   Spacing="2">
-        <!--Margin="30,30,0,0"-->
         <TextBlock Text="{x:Bind ViewModel.Header}"
                    Opacity="0.75" />
         <TextBlock Text="{x:Bind ViewModel.Sum, Mode=OneWay}"
@@ -31,6 +31,7 @@
                           XAxes="{x:Bind ViewModel.XAxes}"
                           YAxes="{x:Bind ViewModel.YAxes}"
                           Series="{x:Bind ViewModel.Series}" />
+      
     </StackPanel>
   </Border>
 </Page>
