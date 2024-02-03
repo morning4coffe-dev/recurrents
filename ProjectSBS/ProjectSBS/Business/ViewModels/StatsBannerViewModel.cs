@@ -1,9 +1,11 @@
+using CommunityToolkit.WinUI.Helpers;
 using LiveChartsCore;
 using LiveChartsCore.Kernel.Sketches;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
 using Windows.UI;
+using Windows.UI.ViewManagement;
 
 namespace ProjectSBS.Business.ViewModels;
 
@@ -12,6 +14,8 @@ public partial class StatsBannerViewModel : ViewModelBase
     private readonly IItemService _itemService;
     private readonly ISettingsService _settingsService;
     private readonly ICurrencyCache _currencyCache;
+
+    private readonly UISettings _themeListener = new();
 
     public string Header { get; }
 
@@ -63,11 +67,42 @@ public partial class StatsBannerViewModel : ViewModelBase
 
         for (int i = 0; i < 6; i++)
         {
-            months[5-i] = currentDate.AddMonths(-i).ToString("MMM");
+            months[5 - i] = currentDate.AddMonths(-i).ToString("MMM", CultureInfo.CurrentCulture);
         }
 
-        XAxes = [new Axis { ShowSeparatorLines = false, Labels = months, LabelsPaint = new SolidColorPaint(SKColors.White), TextSize=14 }];
-        YAxes = [new Axis { ShowSeparatorLines = false, Labeler = value => value.ToString("C", CurrencyCache.CurrencyCultures[_settingsService.DefaultCurrency]), LabelsPaint = new SolidColorPaint(SKColors.LightGray), TextSize = 14 }];
+        XAxes = [
+            new Axis
+            {
+                ShowSeparatorLines = false,
+                Labels = months,
+                LabelsPaint = new SolidColorPaint(SKColors.White),
+                TextSize = 14
+            }];
+
+        YAxes = [
+            new Axis
+            {
+                ShowSeparatorLines = false,
+                Labeler = value => value.ToString("C", CurrencyCache.CurrencyCultures[_settingsService.DefaultCurrency]),
+                LabelsPaint = new SolidColorPaint(SKColors.LightGray),
+                TextSize = 14
+            }];
+    }
+
+    private void UISettings_ColorValuesChanged(UISettings sender, object args)
+    {
+        //TODO: The UISettings.ColorValueChanged is not called on Windows 10
+        //https://github.com/CommunityToolkit/WindowsCommunityToolkit/issues/4412#issuecomment-1823919825
+
+        var accentColor = (Color)Application.Current.Resources["SystemAccentColor"];
+        var skColor = new SKColor(accentColor.R, accentColor.G, accentColor.B);
+
+        ((LineSeries<double>)Series[0]).Stroke = new SolidColorPaint(skColor) { StrokeThickness = 6 };
+        ((LineSeries<double>)Series[0]).GeometryStroke = new SolidColorPaint(skColor) { StrokeThickness = 0 };
+        ((LineSeries<double>)Series[0]).GeometryFill = new SolidColorPaint(skColor) { StrokeThickness = 0 };
+
+        ((Axis)XAxes[0]).LabelsPaint = new SolidColorPaint(SKColors.Pink);
+        ((Axis)YAxes[0]).LabelsPaint = new SolidColorPaint(SKColors.LightBlue);
     }
 
     private void ItemService_OnItemsChanged(object? sender, IEnumerable<ItemViewModel> e)
@@ -76,7 +111,7 @@ public partial class StatsBannerViewModel : ViewModelBase
 
         _values.Clear();
         for (int i = 0; i < 6; i++)
-            _values.Add( new Random().Next(10, 1000000));
+            _values.Add(new Random().Next(10, 1000000));
     }
 
     private async void SetSum(IEnumerable<ItemViewModel> e)
@@ -85,6 +120,8 @@ public partial class StatsBannerViewModel : ViewModelBase
 
         var items = e
             .Where(item => !item.IsArchived);
+
+        //use the same GetPaymentsInPeriod(int periodDays, int offsetDays = 0) for the graphs, offset it by the days since the specified month
 
         var tasks = items.Select(async item => await _currencyCache.ConvertToDefaultCurrency(
             item.Item?.Billing.BasePrice * item.GetPaymentsInPeriod(days) ?? 0,
@@ -99,12 +136,14 @@ public partial class StatsBannerViewModel : ViewModelBase
 
     public override void Load()
     {
-        //throw new NotImplementedException();
+        _themeListener.ColorValuesChanged += UISettings_ColorValuesChanged;
     }
 
     public override void Unload()
     {
         _itemService.OnItemsChanged -= ItemService_OnItemsChanged;
         _itemService.OnItemsInitialized -= ItemService_OnItemsChanged;
+
+        _themeListener.ColorValuesChanged -= UISettings_ColorValuesChanged;
     }
 }
