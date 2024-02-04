@@ -15,13 +15,13 @@
       xmlns:helpers="using:ProjectSBS.Presentation.Helpers"
       mc:Ignorable="d not_win android">
 
-  <Page.Resources>
-    <win:ResourceDictionary>
+  <win:Page.Resources>
+    <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="ms-appx:///CommunityToolkit.WinUI.Controls.Segmented/Segmented/Segmented.xaml" />
       </ResourceDictionary.MergedDictionaries>
-    </win:ResourceDictionary>
-  </Page.Resources>
+    </ResourceDictionary>
+  </win:Page.Resources>
 
   <Grid>
 
