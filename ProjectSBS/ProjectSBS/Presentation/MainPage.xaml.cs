@@ -11,9 +11,6 @@ public sealed partial class MainPage : Page
         DataContext = App.Services?.GetRequiredService<MainViewModel>();
         Loaded += Page_Loaded;
         Unloaded += Page_Unloaded;
-
-        //ViewModel.MenuFlyout = userFlyout;
-        //ViewModel.UserButton = userButton;
     }
 
     private void Page_Loaded(object sender, RoutedEventArgs e)
