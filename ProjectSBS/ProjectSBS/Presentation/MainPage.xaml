@@ -27,7 +27,7 @@
                 <VisualState.StateTriggers>
                   <AdaptiveTrigger MinWindowWidth="0" />
                 </VisualState.StateTriggers>
-                
+
                 <VisualState.Setters>
                   <Setter Target="navigation.IsPaneToggleButtonVisible"
                           Value="False" />
@@ -35,7 +35,7 @@
                           Value="Visible" />
                 </VisualState.Setters>
               </VisualState>
-              
+
               <VisualState x:Name="LargeScreen">
                 <VisualState.StateTriggers>
                   <AdaptiveTrigger MinWindowWidth="640" />
@@ -97,7 +97,7 @@
                           IsPaneToggleButtonVisible="True"
                           IsSettingsVisible="False"
                           IsPaneVisible="True"
-                          MenuItemsSource="{x:Bind ViewModel.DesktopCategories}"
+                          MenuItemsSource="{x:Bind ViewModel.Categories}"
                           SelectedItem="{x:Bind ViewModel.SelectedCategory, Mode=TwoWay}">
 
             <NavigationView.Resources>
@@ -122,21 +122,7 @@
                       Margin="4"
                       Padding="12,8"
                       HorizontalContentAlignment="Left"
-                      Command="{x:Bind ViewModel.Login}">
-                <Button.Flyout>
-                  <MenuFlyout x:Name="userFlyout">
-                    <MenuFlyoutItem Text="{x:Bind ViewModel.SettingsText}"
-                                    Icon="{toolkit:FontIcon Glyph=&#xE713;}"
-                                    Padding="100, 16"
-                                    Command="{x:Bind ViewModel.GoToSettings}" />
-
-                    <MenuFlyoutItem Text="{x:Bind ViewModel.LogoutText}"
-                                    Padding="100, 16"
-                                    Icon="{toolkit:FontIcon Glyph=&#xF3B1;}"
-                                    Command="{x:Bind ViewModel.Logout}">
-                    </MenuFlyoutItem>
-                  </MenuFlyout>
-                </Button.Flyout>
+                      Command="{x:Bind ViewModel.GoToSettings}">
 
                 <StackPanel x:Name="desktopPerson"
                             Orientation="Horizontal"
@@ -159,7 +145,6 @@
                 <NavigationViewItem Content="{x:Bind Text}"
                                     Padding="0,12"
                                     ToolTipService.ToolTip="{x:Bind Text}">
-                  <!--ToolTip="{x:Bind Tooltip}">-->
                   <NavigationViewItem.Icon>
                     <FontIcon Glyph="{x:Bind Glyph}" />
                   </NavigationViewItem.Icon>
@@ -173,14 +158,17 @@
                 <RowDefinition Height="Auto" />
               </Grid.RowDefinitions>
 
+              <!-- Main Loading Indicator -->
               <ProgressBar IsIndeterminate="{x:Bind ViewModel.IndicateLoading, Mode=OneWay}"
                            Visibility="{x:Bind ViewModel.IndicateLoading, Mode=OneWay}"
                            VerticalAlignment="Top"
-                           Margin="5"/>
+                           Margin="5" />
 
+              <!-- Category Frame View -->
               <Frame x:Name="Frame"
                      x:FieldModifier="public" />
 
+              <!-- Network Status Info -->
               <InfoBar x:Name="disconnectAlert"
                        Title="You are offline"
                        Severity="Error"
@@ -195,23 +183,51 @@
                 </InfoBar.IconSource>
               </InfoBar>
 
+              <!-- Mobile Navigation -->
               <utu:TabBar x:Name="navigationBar"
-                          ItemsSource="{x:Bind ViewModel.DesktopCategories}"
+                          x:FieldModifier="public"
+                          ItemsSource="{x:Bind ViewModel.Categories}"
                           SelectedItem="{x:Bind ViewModel.SelectedCategory, Mode=TwoWay}"
                           Background="{ThemeResource CardBackground}"
                           BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
                           Visibility="Collapsed"
+                          SelectionIndicatorTransitionMode="Slide"
+                          MinHeight="62"
+                          MaxHeight="62"
                           CornerRadius="0"
                           Grid.Row="1">
                 <utu:TabBar.ItemTemplate>
                   <DataTemplate x:DataType="models:NavigationCategory">
                     <StackPanel Spacing="4">
                       <FontIcon Glyph="{x:Bind Glyph}"
-                                FontSize="20" />
-                      <!--<TextBlock Text="{x:Bind Text}" />-->
+                                Margin="0,0,0,5"
+                                FontSize="19" />
                     </StackPanel>
                   </DataTemplate>
                 </utu:TabBar.ItemTemplate>
+                <utu:TabBar.SelectionIndicatorContentTemplate>
+                  <DataTemplate>
+                    <Border Background="{ThemeResource AccentAAFillColorDefaultBrush}"
+                            Height="5"
+                            Margin="40, 10"
+                            CornerRadius="3.5"
+                            VerticalAlignment="Bottom" />
+                  </DataTemplate>
+                </utu:TabBar.SelectionIndicatorContentTemplate>
+                <utu:TabBar.Resources>
+                  <ResourceDictionary>
+                    <ResourceDictionary.ThemeDictionaries>
+                      <ResourceDictionary x:Key="Default">
+                        <SolidColorBrush x:Key="TabBarItemBackgroundSelected"
+                                         Color="Transparent" />
+                        <SolidColorBrush x:Key="TabBarItemBackgroundSelectedPointerOver"
+                                         Color="Transparent" />
+                        <SolidColorBrush x:Key="TabBarItemForegroundSelectedPressed"
+                                         Color="Transparent" />
+                      </ResourceDictionary>
+                    </ResourceDictionary.ThemeDictionaries>
+                  </ResourceDictionary>
+                </utu:TabBar.Resources>
               </utu:TabBar>
             </Grid>
           </NavigationView>
