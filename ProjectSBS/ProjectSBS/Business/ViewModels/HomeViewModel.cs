@@ -1,4 +1,3 @@
-using System.CodeDom;
 using Windows.UI.Core;
 
 namespace ProjectSBS.Business.ViewModels;
@@ -70,7 +69,7 @@ public partial class HomeViewModel : ViewModelBase
 
     public ObservableCollection<ItemViewModel> Items { get; } = [];
 
-    public List<Tag> FilterCategories { get; }
+    public List<Tag> FilterCategories => _filterService.Categories;
 
     public Tag SelectedFilter
     {
@@ -196,8 +195,15 @@ public partial class HomeViewModel : ViewModelBase
     {
         IEnumerable<ItemViewModel> items;
 
+        //TODO Must add a listener for when the category changes
+
+        if (SelectedCategory is not { } category)
+        {
+            return new List<ItemViewModel>();
+        }
+
         //If ArchivePage is selected, show archived items
-        if (SelectedCategory.Page == typeof(ArchivePage))
+        if (category.Page == typeof(ArchivePage))
         {
             items = _itemService.GetItems(item => item.IsArchived)
             .OrderBy(i => i.PaymentDate);
@@ -218,7 +224,6 @@ public partial class HomeViewModel : ViewModelBase
         }
 
         Items.Clear();
-        //TODO Dont clear the whole thing, just removem update and add changed
         Items.AddRange(items);
 
         return items;
