@@ -105,11 +105,16 @@ public partial class MainViewModel : ViewModelBase
     public async override void Load()
     {
         _navigation.NavigateNested(SelectedCategory.Page);
+        IndicateLoading = true;
 
         User = await _userService.RetrieveUser();
         IsLoggedIn = User is { };
 
         _ = await _currency.GetCurrency(CancellationToken.None);
+        _ = Task.Run(() => _currency.GetCurrency(CancellationToken.None));
+
+        await _itemService.InitializeAsync();
+        IndicateLoading = false;
 
         _ = _itemService.InitializeAsync();
     }
