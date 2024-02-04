@@ -141,16 +141,16 @@ public partial class ItemDetailsViewModel : ViewModelBase
                     IsEditing = m.IsEdit;
                 }
 
-                if (SelectedItem?.Item?.Billing?.PeriodType is { } period)
-                {
-                    var resultPair = PaymentPeriods.FirstOrDefault(pair => pair.Key == period);
+                //if (SelectedItem?.Item?.Billing?.PeriodType is { } period)
+                //{
+                //    var resultPair = PaymentPeriods.FirstOrDefault(pair => pair.Key == period);
 
-                    if (!EqualityComparer<Period>.Default.Equals(resultPair.Key, default))
-                    {
-                        SelectedPeriod = new(resultPair.Key, resultPair.Value);
-                        OnPropertyChanged(nameof(SelectedPeriod));
-                    }
-                }
+                //    if (!EqualityComparer<Period>.Default.Equals(resultPair.Key, default))
+                //    {
+                //        SelectedPeriod = new(resultPair.Key, resultPair.Value);
+                //        OnPropertyChanged(nameof(SelectedPeriod));
+                //    }
+                //}
 
                 var localizedDateStrings
                     = item.GetFuturePayments()

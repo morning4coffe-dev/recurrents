@@ -106,8 +106,6 @@ public partial class HomeViewModel : ViewModelBase
         _navigation = navigation;
         _dialog = dialog;
 
-        FilterCategories = filterService.Categories;
-
         _userService.OnLoggedInChanged += (s, e) =>
         {
             User = e;
@@ -301,7 +299,6 @@ public partial class HomeViewModel : ViewModelBase
 
     [RelayCommand]
     private void OpenSettings()
-    {
-        _navigation.NavigateNested(typeof(SettingsPage));
-    }
+    => _navigation.NavigateCategory(_navigation.Categories.FirstOrDefault(category => category.Id == 5)
+                ?? throw new($"Settings category wasn't found in the Categories list on {this}."));
 }
