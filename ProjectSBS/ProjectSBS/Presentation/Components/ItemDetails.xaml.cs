@@ -21,4 +21,12 @@ public sealed partial class ItemDetails : Page
     {
         ViewModel.Unload();
     }
+
+    private void PeriodComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (e.AddedItems.FirstOrDefault() as KeyValuePair<Period, string>? is { } period)
+        {
+            //ViewModel.SelectedPeriod = period.Key;
+        }
+    }
 }
