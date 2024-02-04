@@ -101,10 +101,6 @@
 
         <Grid Style="{ThemeResource PageBackground}">
           <ScrollViewer>
-            <!--<RefreshContainer x:Name="contentHolder"
-                                          Margin="48,48,48,0"
-                                          RefreshRequested="RefreshContainer_RefreshRequested">-->
-
             <helpers:StackPanelWithSpacing x:Name="contentHolder"
                                            Space="12"
                                            Margin="48,48,48,0">
@@ -266,34 +262,6 @@
                                          HorizontalAlignment="Right"
                                          Opacity="0.75" />
                             </StackPanel>
-
-                            <!--<Border Height="20"
-                                      Grid.Column="2">
-                                      <CheckBox CornerRadius="20"
-                                                IsChecked="{x:Bind IsPaid, Mode=TwoWay}"
-                                                Command="{x:Bind OnPayCommand}"
-                                                Margin="20,0">
-                                          <CheckBox.Resources>
-                                              <ResourceDictionary>
-                                                  <ResourceDictionary.ThemeDictionaries>
-                                                      <ResourceDictionary x:Key="Dark">
-                                                          <SolidColorBrush x:Key="CheckBoxForegroundUnchecked"
-                                                                           Color="Purple" />
-                                                          <SolidColorBrush x:Key="CheckBoxForegroundChecked"
-                                                                           Color="Purple" />
-                                                          <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundChecked"
-                                                                           Color="White" />
-                                                          <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeChecked"
-                                                                           Color="Purple" />
-                                                          <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked"
-                                                                           Color="Purple" />
-
-                                                      </ResourceDictionary>
-                                                  </ResourceDictionary.ThemeDictionaries>
-                                              </ResourceDictionary>
-                                          </CheckBox.Resources>
-                                      </CheckBox>
-                                  </Border>-->
                           </Grid>
                         </Border>
                       </SwipeControl>
@@ -332,8 +300,6 @@
 
               </StackPanel>
             </helpers:StackPanelWithSpacing>
-
-            <!--</RefreshContainer>-->
           </ScrollViewer>
 
           <StackPanel x:Name="mobileAddButton"
