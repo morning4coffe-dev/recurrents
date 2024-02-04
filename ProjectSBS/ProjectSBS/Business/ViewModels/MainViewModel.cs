@@ -82,26 +82,6 @@ public partial class MainViewModel : ViewModelBase
         GoToSettings = new RelayCommand(()
             => navigation.NavigateCategory(navigation.Categories.FirstOrDefault(category => category.Id == 5)
             ?? throw new($"Settings category wasn't found in the Categories list on {this}.")));
-
-        Logout = new RelayCommand(() =>
-        {
-            userService.Logout();
-            navigation.Navigate(typeof(LoginPage));
-        });
-
-        Login = new RelayCommand(() =>
-        {
-            if (IsLoggedIn)
-            {
-                //TODO There is a bug in the MenuFlyout 
-                //MenuFlyout.ShowAttachedFlyout(UserButton);
-                return;
-            }
-
-            navigation.Navigate(typeof(LoginPage));
-
-            _itemService.ClearItems();
-        });
     }
 
     public async override void Load()
