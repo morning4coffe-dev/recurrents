@@ -28,9 +28,4 @@ public sealed partial class MainPage : Page
     {
         ViewModel.Unload();
     }
-
-    private void OnNavigation_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
-    {
-        ViewModel.Navigate(args);
-    }
 }
