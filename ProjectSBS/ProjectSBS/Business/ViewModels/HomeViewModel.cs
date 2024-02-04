@@ -119,7 +119,9 @@ public partial class HomeViewModel : ViewModelBase
         AddNewCommand = new RelayCommand(AddNew);
         ArchiveCommand = new AsyncRelayCommand(() => Archive());
         DeleteCommand = new AsyncRelayCommand(() => Delete());
-        OpenSettingsCommand = new RelayCommand(() => _navigation.NavigateNested(typeof(SettingsPage)));
+        OpenSettingsCommand = new RelayCommand(()
+            => navigation.NavigateCategory(navigation.Categories.FirstOrDefault(category => category.Id == 5)
+            ?? throw new($"Settings category wasn't found in the Categories list on {this}.")));
 
         FilterCategories = filterService.Categories;
 
@@ -211,7 +213,7 @@ public partial class HomeViewModel : ViewModelBase
         IEnumerable<ItemViewModel> items;
 
         //If ArchivePage is selected, show archived items
-        if (_navigation.SelectedCategory.Id == 2)
+        if (SelectedCategory.Page == typeof(ArchivePage))
         {
             items = _itemService.GetItems(item => item.IsArchived)
             .OrderBy(i => i.PaymentDate);

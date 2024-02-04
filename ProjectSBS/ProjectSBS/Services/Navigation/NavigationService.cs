@@ -1,30 +1,25 @@
 namespace ProjectSBS.Services.Navigation;
 
-internal class NavigationService : INavigation
+internal class NavigationService(IStringLocalizer localizer) : INavigation
 {
     private readonly Queue<QueuedDialog> _dialogQueue = new();
     private bool _isProcessing;
 
-    public List<NavigationCategory> Categories { get; private init; }
-    public NavigationCategory SelectedCategory { get; set; }
+    public List<NavigationCategory> Categories { get; private init; } =
+    [
+        new(0, localizer["Home"], "\uE80F", typeof(HomePage)),
+        new(1, localizer["Items"], "\uF0B2", typeof(HomePage)),
+        new(2, localizer["Archive"], "\uE7B8", typeof(ArchivePage)),
+        //new(3, localizer["Stats"], "\uEAFC", typeof(HomePage)),
+        //new(4, localizer["Dev"], "\uE98F", typeof(HomePage)/*, CategoryVisibility.Desktop*/),
+        new(5, localizer["Settings"], "\uE713", typeof(SettingsPage)/*, CategoryVisibility.Mobile*/),
+    ];
+
+    public event EventHandler<NavigationCategory>? CategoryChanged;
+    public NavigationCategory SelectedCategory { get; private set; }
 
     public Frame? RootFrame { private get; set; }
     public Frame? NestedFrame { get; set; }
-
-    public NavigationService(IStringLocalizer localizer)
-    {
-        Categories =
-        [
-            new(0, localizer["Home"], "\uE80F", typeof(HomePage)),
-            new(1, localizer["Items"], "\uF0B2", typeof(HomePage)),
-            new(2, localizer["Archive"], "\uE7B8", typeof(ArchivePage)),
-            //new(3, localizer["Stats"], "\uEAFC", typeof(HomePage)),
-            //new(4, localizer["Dev"], "\uE98F", typeof(HomePage)/*, CategoryVisibility.Desktop*/),
-            new(5, localizer["Settings"], "\uE713", typeof(SettingsPage)/*, CategoryVisibility.Mobile*/),
-        ];
-
-        SelectedCategory = Categories[0];
-    }
 
     public void Navigate(Type page)
     {
@@ -36,14 +31,16 @@ internal class NavigationService : INavigation
         frame.Navigate(page);
     }
 
-    public void NavigateNested(Type page)
+    public void NavigateCategory(NavigationCategory category)
     {
         if (NestedFrame is not { } frame)
         {
             return;
         }
 
-        frame.Navigate(page);
+        frame.Navigate(category.Page);
+        SelectedCategory = category;
+        CategoryChanged?.Invoke(this, category);
     }
 
     public async Task<ContentDialogResult> ShowDialogAsync(ContentDialog dialog)
