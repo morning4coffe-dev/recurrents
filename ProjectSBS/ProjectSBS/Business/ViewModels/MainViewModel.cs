@@ -79,6 +79,10 @@ public partial class MainViewModel : ViewModelBase
             User = e;
             IsLoggedIn = e is { };
         };
+
+        GoToSettings = new RelayCommand(()
+            => navigation.NavigateCategory(navigation.Categories.FirstOrDefault(category => category.Id == 5)
+            ?? throw new($"Settings category wasn't found in the Categories list on {this}.")));
     }
 
     public async override void Load()
