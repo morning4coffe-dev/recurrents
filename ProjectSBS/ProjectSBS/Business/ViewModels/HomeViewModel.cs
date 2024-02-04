@@ -1,3 +1,4 @@
+using System.CodeDom;
 using Windows.UI.Core;
 
 namespace ProjectSBS.Business.ViewModels;
@@ -31,9 +32,6 @@ public partial class HomeViewModel : ViewModelBase
 
     [ObservableProperty]
     private decimal _sum;
-
-    [ObservableProperty]
-    private Type? _itemDetails;
 
     [ObservableProperty]
     private string _welcomeMessage;
@@ -85,11 +83,9 @@ public partial class HomeViewModel : ViewModelBase
             }
 
             _filterService.SelectedCategory = value;
-
             WeakReferenceMessenger.Default.Send(new CategorySelectionChanged());
 
             OnPropertyChanged();
-
             _ = RefreshItems();
         }
     }
@@ -257,6 +253,8 @@ public partial class HomeViewModel : ViewModelBase
                 true)
             );
         IsPaneOpen = true;
+
+        AnalyticsService.TrackEvent(AnalyticsService.ItemEvent, "Added", "True");
     }
 
     public async Task Archive(ItemViewModel? item = null)
@@ -270,7 +268,7 @@ public partial class HomeViewModel : ViewModelBase
                 _localizer["ArchiveDialogDescription"],
                 _localizer["ArchiveVerb"]);
         }
-        else 
+        else
         {
             result = ContentDialogResult.Primary;
         }
@@ -281,13 +279,16 @@ public partial class HomeViewModel : ViewModelBase
 
             SelectedItem = null;
             RefreshItems();
+
+            AnalyticsService.TrackEvent(AnalyticsService.ItemEvent, "Archived",
+                (item ?? SelectedItem).IsArchived.ToString());
         }
     }
 
     public async Task Delete(ItemViewModel? item = null)
     {
         var result = await _dialog.ShowAsync(
-            _localizer["DeleteDialogTitle"], 
+            _localizer["DeleteDialogTitle"],
             _localizer["DeleteDialogDescription"],
             _localizer["Delete"]);
 
@@ -297,6 +298,8 @@ public partial class HomeViewModel : ViewModelBase
 
             SelectedItem = null;
             RefreshItems();
+
+            AnalyticsService.TrackEvent(AnalyticsService.ItemEvent, "Deleted", "True");
         }
     }
 }
