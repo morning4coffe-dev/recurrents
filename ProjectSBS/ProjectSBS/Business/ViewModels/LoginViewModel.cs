@@ -43,7 +43,6 @@ public partial class LoginViewModel : ObservableObject
         {
             success = await _userService.AuthenticateAsync();
 
-            //App.Services.GetRequiredService<ILogger<LoginViewModel>>().LogInformation("Logging in");
         }
         catch (Exception ex)
         {
@@ -65,7 +64,20 @@ public partial class LoginViewModel : ObservableObject
             {
                 _navigation.Navigate(typeof(MainPage));
             });
+
+            SendAnalytics(true);
         }
+    }
+
+    private void SendAnalytics(bool loggedIn)
+    {
+        Dictionary<string, string> logInStats = new()
+        {
+            { "Logged In", loggedIn.ToString() },
+            { "Provider", loggedIn ? "Microsoft" : "N/A" },
+        };
+
+        AnalyticsService.TrackEvent(AnalyticsService.LogIn, logInStats);
     }
 
     [RelayCommand]
