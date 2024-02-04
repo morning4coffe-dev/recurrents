@@ -32,9 +32,4 @@ public sealed partial class HomePage : Page
         ViewModel.IsEdit = true;
         ViewModel.SelectedItem = (ItemViewModel)args.SwipeControl.DataContext;
     }
-
-    private void RefreshContainer_RefreshRequested(RefreshContainer sender, RefreshRequestedEventArgs args)
-    {
-
-    }
 }

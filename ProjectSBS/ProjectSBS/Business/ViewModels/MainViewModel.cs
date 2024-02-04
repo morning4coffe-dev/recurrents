@@ -6,7 +6,7 @@ public partial class MainViewModel : ViewModelBase
     private readonly IUserService _userService;
     private readonly IStringLocalizer _localizer;
     private readonly IItemService _itemService;
-    private readonly INavigation _navigation;
+    public readonly INavigation _navigation;
     private readonly ICurrencyCache _currency;
     #endregion
 
@@ -29,13 +29,10 @@ public partial class MainViewModel : ViewModelBase
     private bool _isLoggedIn;
 
     [ObservableProperty]
-    private MenuFlyout _menuFlyout;
-
-    [ObservableProperty]
-    private FrameworkElement _userButton;
-
-    [ObservableProperty]
     private bool _indicateLoading;
+
+    public IEnumerable<NavigationCategory> Categories
+        => _navigation.Categories;
 
     private NavigationCategory _selectedCategory;
     public NavigationCategory SelectedCategory
@@ -75,8 +72,6 @@ public partial class MainViewModel : ViewModelBase
 #if DEBUG
         Title += $" (Dev)";
 #endif
-
-        DesktopCategories = _navigation.Categories.Where(c => c.Visibility == CategoryVisibility.Desktop || c.Visibility == CategoryVisibility.Both);
 
         _userService.OnLoggedInChanged += (s, e) =>
         {
