@@ -52,6 +52,35 @@ public partial class ItemDetailsViewModel : ViewModelBase
     public ObservableCollection<string> Currencies { get; } = [];
     public ObservableCollection<string> FuturePayments { get; } = [];
     public ObservableCollection<string> PaymentMethods { get; }
+    public List<KeyValuePair<Period, string>> PaymentPeriods { get; }
+
+    //This monstrosity is needed here due to localization, but I need to find a better way to do this someday
+    public KeyValuePair<Period, string>? SelectedPeriod
+    {
+        get
+        {
+            if (SelectedItem?.Item?.Billing?.PeriodType is { } period)
+            {
+                var resultPair = PaymentPeriods.FirstOrDefault(pair => pair.Key == period);
+
+                if (!EqualityComparer<Period>.Default.Equals(resultPair.Key, default))
+                {
+                    return new(resultPair.Key, resultPair.Value);
+                }
+            }
+
+            return null;
+        }
+        set
+        {
+            if (SelectedItem?.Item?.Billing.PeriodType is { } period
+                && value is { } && period != value.Value.Key)
+            {
+                SelectedItem.Item.Billing.PeriodType = value.Value.Key;
+                OnPropertyChanged();
+            }
+        }
+    }
 
     public ItemDetailsViewModel(
         IStringLocalizer localizer,
@@ -76,6 +105,15 @@ public partial class ItemDetailsViewModel : ViewModelBase
             _localizer["Invoice"],
             _localizer["Cash"]
         ];
+
+        PaymentPeriods = new Dictionary<Period, string>
+        {
+            { Period.Daily, _localizer["Daily"] },
+            { Period.Weekly, _localizer["Weekly"] },
+            { Period.Monthly, _localizer["Monthly"] },
+            { Period.Quarterly, _localizer["Quarterly"] },
+            { Period.Annually, _localizer["Annually"] }
+        }.ToList();
     }
 
     public async override void Load()
@@ -101,6 +139,17 @@ public partial class ItemDetailsViewModel : ViewModelBase
                 else
                 {
                     IsEditing = m.IsEdit;
+                }
+
+                if (SelectedItem?.Item?.Billing?.PeriodType is { } period)
+                {
+                    var resultPair = PaymentPeriods.FirstOrDefault(pair => pair.Key == period);
+
+                    if (!EqualityComparer<Period>.Default.Equals(resultPair.Key, default))
+                    {
+                        SelectedPeriod = new(resultPair.Key, resultPair.Value);
+                        OnPropertyChanged(nameof(SelectedPeriod));
+                    }
                 }
 
                 var localizedDateStrings
