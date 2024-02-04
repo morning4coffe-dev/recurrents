@@ -98,8 +98,7 @@
                           IsSettingsVisible="False"
                           IsPaneVisible="True"
                           MenuItemsSource="{x:Bind ViewModel.DesktopCategories}"
-                          SelectedItem="{x:Bind ViewModel.SelectedCategory, Mode=TwoWay}"
-                          SelectionChanged="OnNavigation_SelectionChanged">
+                          SelectedItem="{x:Bind ViewModel.SelectedCategory, Mode=TwoWay}">
 
             <NavigationView.Resources>
               <ResourceDictionary>
@@ -173,6 +172,11 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
               </Grid.RowDefinitions>
+
+              <ProgressBar IsIndeterminate="{x:Bind ViewModel.IndicateLoading, Mode=OneWay}"
+                           Visibility="{x:Bind ViewModel.IndicateLoading, Mode=OneWay}"
+                           VerticalAlignment="Top"
+                           Margin="5"/>
 
               <Frame x:Name="Frame"
                      x:FieldModifier="public" />
