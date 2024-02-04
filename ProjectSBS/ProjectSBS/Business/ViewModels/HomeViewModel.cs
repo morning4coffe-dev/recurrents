@@ -201,7 +201,7 @@ public partial class HomeViewModel : ViewModelBase
         IEnumerable<ItemViewModel> items;
 
         //If ArchivePage is selected, show archived items
-        if (_navigation.SelectedCategory.Id == 2)
+        if (SelectedCategory.Page == typeof(ArchivePage))
         {
             items = _itemService.GetItems(item => item.IsArchived)
             .OrderBy(i => i.PaymentDate);

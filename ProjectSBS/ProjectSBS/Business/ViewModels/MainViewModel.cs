@@ -35,14 +35,23 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty]
     private FrameworkElement _userButton;
 
+    [ObservableProperty]
+    private bool _indicateLoading;
+
+    private NavigationCategory _selectedCategory;
     public NavigationCategory SelectedCategory
     {
         set
         {
-            _navigation.SelectedCategory = value;
-            OnPropertyChanged();
+            if (_selectedCategory != value)
+            {
+                _selectedCategory = value;
+
+                _navigation.NavigateCategory(value);
+                OnPropertyChanged(nameof(SelectedCategory));
+            }
         }
-        get => _navigation.SelectedCategory;
+        get => _selectedCategory;
     }
 
     public string? Title { get; }
@@ -79,20 +88,28 @@ public partial class MainViewModel : ViewModelBase
 
     public async override void Load()
     {
-        _navigation.NavigateNested(SelectedCategory.Page);
+        _navigation.CategoryChanged += Navigation_CategoryChanged;
+        _navigation.NavigateCategory(_navigation.Categories[0]);
+
         IndicateLoading = true;
 
         User = await _userService.RetrieveUser();
         IsLoggedIn = User is { };
 
-        _ = await _currency.GetCurrency(CancellationToken.None);
         _ = Task.Run(() => _currency.GetCurrency(CancellationToken.None));
 
         await _itemService.InitializeAsync();
-        IndicateLoading = false;
 
-        _ = _itemService.InitializeAsync();
+        IndicateLoading = false;
     }
+
+    public override void Unload()
+    {
+        _navigation.CategoryChanged -= Navigation_CategoryChanged;
+    }
+
+    private void Navigation_CategoryChanged(object? sender, NavigationCategory e) 
+        => SelectedCategory = e;
 
     public void Navigate(NavigationViewSelectionChangedEventArgs args)
     {
@@ -105,7 +122,7 @@ public partial class MainViewModel : ViewModelBase
             }
         }
 
-        _navigation.NavigateNested((args.SelectedItem as NavigationCategory)?.Page ?? SelectedCategory.Page);
+        _navigation.NavigateCategory((args.SelectedItem as NavigationCategory) ?? SelectedCategory);
     }
 
     public override void Unload()
