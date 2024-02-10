@@ -23,6 +23,12 @@
     <UserSecretsId>1a1c5c78-c108-4b70-af65-e8bb5267e21b</UserSecretsId>
   </PropertyGroup>
 
+  <Target Name="UpdateRuntimePackVersion" BeforeTargets="ProcessFrameworkReferences">
+    <ItemGroup>
+      <KnownRuntimePack Condition="%(RuntimePackLabels) == 'Mono'" LatestRuntimeFrameworkVersion="8.0.0" />
+    </ItemGroup>
+  </Target>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.Identity.Client.Extensions.Msal" />
     <PackageReference Include="Uno.WinUI" />
