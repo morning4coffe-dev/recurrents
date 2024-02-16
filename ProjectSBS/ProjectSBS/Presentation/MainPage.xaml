@@ -123,18 +123,18 @@
                       Margin="4"
                       Padding="12,8"
                       HorizontalContentAlignment="Left"
-                      Command="{x:Bind ViewModel.Login}">
+                      Command="{x:Bind ViewModel.LoginCommand}">
                 <Button.Flyout>
                   <MenuFlyout x:Name="userFlyout">
                     <MenuFlyoutItem Text="{x:Bind ViewModel.SettingsText}"
                                     Icon="{toolkit:FontIcon Glyph=&#xE713;}"
                                     Padding="100, 16"
-                                    Command="{x:Bind ViewModel.GoToSettings}" />
+                                    Command="{x:Bind ViewModel.GoToSettingsCommand}" />
 
                     <MenuFlyoutItem Text="{x:Bind ViewModel.LogoutText}"
                                     Padding="100, 16"
                                     Icon="{toolkit:FontIcon Glyph=&#xF3B1;}"
-                                    Command="{x:Bind ViewModel.Logout}">
+                                    Command="{x:Bind ViewModel.LogoutCommand}">
                     </MenuFlyoutItem>
                   </MenuFlyout>
                 </Button.Flyout>
