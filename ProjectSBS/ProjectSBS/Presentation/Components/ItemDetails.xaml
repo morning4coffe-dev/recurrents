@@ -30,6 +30,7 @@
 
     <converters:StringFormatConverter x:Key="StringFormatConverter" />
     <localConverters:ColorToBrushConverter x:Key="ColorToBrushConverter" />
+    <localConverters:PaymentPeriodToLocalizedStringConverter x:Key="PaymentPeriodToLocalizedStringConverter" />
 
   </Page.Resources>
 
@@ -281,7 +282,13 @@
                             ItemsSource="{toolkit:EnumValues Type=models:Period}"
                             SelectedItem="{x:Bind ViewModel.EditItem.Billing.PeriodType, Mode=TwoWay}"
                             MinWidth="120"
-                            Grid.Column="1" />
+                            Grid.Column="1">
+                    <ComboBox.ItemTemplate>
+                      <DataTemplate x:DataType="models:Period">
+                        <TextBlock Text="{x:Bind Converter={StaticResource PaymentPeriodToLocalizedStringConverter}}" />
+                      </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                  </ComboBox>
                 </Grid>
 
                 <Grid>
