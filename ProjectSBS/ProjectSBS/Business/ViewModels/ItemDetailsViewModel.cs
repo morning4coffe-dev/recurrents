@@ -12,7 +12,6 @@ public partial class ItemDetailsViewModel : ViewModelBase
     #endregion
 
     #region Localization Strings
-    public string EditText => _localizer["Edit"];
     public string ArchiveText => _localizer["ArchiveVerb"];
     public string CloseDetailsText => _localizer["CloseDetails"];
     public string ForThePriceOfText => _localizer["ForThePriceOf"];

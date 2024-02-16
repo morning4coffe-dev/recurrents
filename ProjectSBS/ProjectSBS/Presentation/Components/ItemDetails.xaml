@@ -10,6 +10,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:sys="ProjectSBS:System;assembly=System.Private.CoreLib"
       xmlns:helpers="using:ProjectSBS.Presentation.Helpers"
+      xmlns:cme="using:ProjectSBS.Presentation.CustomMarkupExtensions"
       xmlns:win="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:android="http://uno.ui/android"
       mc:Ignorable="d android">
@@ -130,7 +131,7 @@
                         Grid.Column="1">
               <Button Visibility="{x:Bind ViewModel.IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
                       Command="{x:Bind ViewModel.EnableEditingCommand}"
-                      ToolTipService.ToolTip="{x:Bind ViewModel.EditText}"
+                      ToolTipService.ToolTip="{cme:Localize Name=Edit}"
                       Padding="14, 10">
                 <FontIcon Glyph="&#xE70F;"
                           FontSize="13" />
