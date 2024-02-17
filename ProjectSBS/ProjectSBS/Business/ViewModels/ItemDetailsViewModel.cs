@@ -91,7 +91,14 @@ public partial class ItemDetailsViewModel : ViewModelBase
                 SelectedItem = item;
                 OnPropertyChanged(nameof(SelectedItem));
 
-                EnableEditing(m.IsEdit);
+                if (m.IsEdit)
+                {
+                    EnableEditing();
+                }
+                else
+                {
+                    IsEditing = m.IsEdit;
+                }
 
                 var localizedDateStrings
                     = item.GetFuturePayments()
@@ -117,16 +124,13 @@ public partial class ItemDetailsViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void EnableEditing(bool isTrue = true)
+    private void EnableEditing()
     {
-        IsEditing = isTrue;
+        IsEditing = true;
 
-        if (isTrue)
-        {
-            // take a copy of the item
-            EditItem = SelectedItem?.Item with { };
-            ItemName = _localizer[string.IsNullOrEmpty(SelectedItem?.Item.Name) ? "NewItem" : "Edit"];
-        }
+        // take a copy of the item
+        EditItem = SelectedItem?.Item with { };
+        ItemName = _localizer[string.IsNullOrEmpty(SelectedItem?.Item.Name) ? "NewItem" : "Edit"];
     }
 
     [RelayCommand]
