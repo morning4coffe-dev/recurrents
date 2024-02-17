@@ -13,16 +13,6 @@ public partial class HomeViewModel : ViewModelBase
     private readonly IDialogService _dialog;
     #endregion
 
-    #region Localization Strings
-    public string NewItemText => _localizer["NewItem"];
-    public string DeleteText => _localizer["Delete"];
-    public string UnarchiveText => _localizer["Unarchive"];
-    public string ItemsEmptyTitleText => _localizer["ItemsEmptyTitle"];
-    public string ItemsEmptyDescriptionText => _localizer["ItemsEmptyDescription"];
-    public string ArchiveEmptyTitleText => _localizer["ItemsEmptyTitle"];
-    public string ArchiveEmptyDescriptionText => _localizer["ArchiveEmptyDescription"];
-    #endregion
-
     [ObservableProperty]
     private User? _user;
 

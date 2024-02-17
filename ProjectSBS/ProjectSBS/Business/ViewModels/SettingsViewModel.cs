@@ -8,28 +8,7 @@ public partial class SettingsViewModel : ViewModelBase
     private readonly IUserService _userService;
     private readonly IStringLocalizer _localizer;
 
-    #region Localization Strings
-    public string TitleText => _localizer["Settings"];
-    public string DefaultCurrencyText => _localizer["DefaultCurrency"];
-    public string GoToSettingsText => _localizer["GoToSettings"];
-    public string LogoutText => _localizer["Logout"];
-    public string NotLoggedInText => _localizer["NotLoggedIn"];
-    public string NotLoggedInDescription => _localizer["NotLoggedInDescription"];
-    public string SystemLanguageAndRegionText => _localizer["SystemLanguageAndRegion"];
-    public string SystemNotificationsText => _localizer["SystemNotifications"];
-    public string NotificationTimeText => _localizer["NotificationTime"];
-    public string NotificationsDisabledText => _localizer["NotificationsDisabled"];
-    public string NotificationsDisabledDescription => _localizer["NotificationsDisabledDescription"];
-    public string AppName => _localizer["ApplicationName"];
     public string AppVersion { get; init; }
-    public string NotificationsText => _localizer["Notifications"];
-    public string AboutText => _localizer["About"];
-    public string AboutDescription => _localizer["AboutDescription"];
-    public string GitHubText => _localizer["GitHub"];
-    public string RateAndReviewText => _localizer["RateAndReview"];
-    public string PrivacyPolicyText => _localizer["PrivacyPolicy"];
-    public string ReportABugText => _localizer["ReportABug"];
-    #endregion
 
     [ObservableProperty]
     private User? _user;

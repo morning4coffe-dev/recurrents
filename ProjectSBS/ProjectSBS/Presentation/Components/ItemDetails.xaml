@@ -139,14 +139,14 @@
 
               <Button Visibility="{x:Bind ViewModel.IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
                       Command="{x:Bind ViewModel.ArchiveCommand}"
-                      ToolTipService.ToolTip="{x:Bind ViewModel.ArchiveText}"
+                      ToolTipService.ToolTip="{cme:Localize Name=Archive}"
                       Padding="14, 10">
                 <FontIcon Glyph="&#xE7B8;"
                           FontSize="13" />
               </Button>
 
               <Button Command="{x:Bind ViewModel.CloseCommand}"
-                      ToolTipService.ToolTip="{x:Bind ViewModel.CloseDetailsText}"
+                      ToolTipService.ToolTip="{cme:Localize Name=CloseDetails}"
                       Padding="14, 10">
                 <FontIcon Glyph="&#xE8BB;"
                           FontSize="13" />
@@ -175,19 +175,19 @@
                            Style="{StaticResource CaptionTextBlockStyle}" />
               </Grid>
 
-              <local:DetailsBox HeaderText="{x:Bind ViewModel.ForThePriceOfText.ToLower()}"
+              <local:DetailsBox HeaderText="{cme:Localize Name=ForThePriceOf}"
                                 Text="{x:Bind ViewModel.SelectedItem.FormattedPrice, Mode=OneWay}" />
 
-              <local:DetailsBox HeaderText="{x:Bind ViewModel.PaidInTotalText.ToLower()}"
+              <local:DetailsBox HeaderText="{cme:Localize Name=PaidInTotal}"
                                 Text="{x:Bind ViewModel.SelectedItem.FormattedTotalPrice, Mode=OneWay}" />
 
-              <local:DetailsBox HeaderText="{x:Bind ViewModel.BillingCycleText.ToLower()}"
+              <local:DetailsBox HeaderText="{cme:Localize Name=BillingCycle}"
                                 Text="{x:Bind ViewModel.SelectedItem.BillingCycle, Mode=OneWay}" />
 
-              <local:DetailsBox HeaderText="{x:Bind ViewModel.PaymentMethodText.ToLower()}"
+              <local:DetailsBox HeaderText="{cme:Localize Name=PaymentMethod}"
                                 Text="{x:Bind ViewModel.SelectedItem.PaymentMethod, Mode=OneWay}" />
 
-              <local:DetailsBox HeaderText="{x:Bind ViewModel.NextPaymentsText.ToLower()}">
+              <local:DetailsBox HeaderText="{cme:Localize Name=NextPayments}">
                 <local:DetailsBox.Content>
                   <ScrollViewer HorizontalScrollMode="Enabled"
                                 HorizontalScrollBarVisibility="Auto"
@@ -204,14 +204,14 @@
                 </local:DetailsBox.Content>
               </local:DetailsBox>
 
-              <local:DetailsBox HeaderText="{x:Bind ViewModel.PayingSinceText.ToLower()}"
+              <local:DetailsBox HeaderText="{cme:Localize Name=PayingSince}"
                                 Text="{x:Bind ViewModel.SelectedItem.Item.Billing.InitialDate, Mode=OneWay}" />
 
-              <local:DetailsBox HeaderText="{x:Bind ViewModel.OtherText.ToLower()}">
+              <local:DetailsBox HeaderText="{cme:Localize Name=Other}">
                 <local:DetailsBox.Content>
                   <StackPanel Orientation="Horizontal"
                               Spacing="12">
-                    <local:ToggleIcon ToolTipService.ToolTip="{x:Bind ViewModel.GetNotifiedText}"
+                    <local:ToggleIcon ToolTipService.ToolTip="{cme:Localize Name=GetNotified}"
                                       IsChecked="{x:Bind ViewModel.SelectedItem.Item.IsNotify, Mode=OneWay}"
                                       TrueIcon="{toolkit:FontIcon Glyph=&#xEA8F;}"
                                       FalseIcon="{toolkit:FontIcon Glyph=&#xE7ED;}" />
@@ -219,7 +219,7 @@
                 </local:DetailsBox.Content>
               </local:DetailsBox>
 
-              <local:DetailsBox HeaderText="{x:Bind ViewModel.DescriptionText.ToLower()}"
+              <local:DetailsBox HeaderText="{cme:Localize Name=Description}"
                                 Visibility="{x:Bind ViewModel.SelectedItem.Item.Description, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}"
                                 Text="{x:Bind ViewModel.SelectedItem.Item.Description, Mode=OneWay}" />
 
@@ -238,7 +238,7 @@
               <helpers:StackPanelWithSpacing Space="12"
                                              Style="{StaticResource ContentStack}">
 
-                <TextBox Header="{x:Bind ViewModel.NameText}"
+                <TextBox Header="{cme:Localize Name=Name}"
                          Text="{x:Bind ViewModel.EditItem.Name, Mode=TwoWay}"
                          MaxLength="80" />
 
@@ -248,7 +248,7 @@
                     <ColumnDefinition Width="Auto" />
                   </Grid.ColumnDefinitions>
 
-                  <NumberBox Header="{x:Bind ViewModel.PriceText}"
+                  <NumberBox Header="{cme:Localize Name=Price}"
                              Value="{x:Bind ViewModel.EditItem.Billing.BasePrice, Mode=TwoWay, Converter={StaticResource DecimalToDoubleConverter}}"
                              SpinButtonPlacementMode="Inline"
                              AcceptsExpression="True"
@@ -261,7 +261,7 @@
                             Grid.Column="1" />
                 </Grid>
 
-                <CalendarDatePicker Header="{x:Bind ViewModel.PayingSinceText}"
+                <CalendarDatePicker Header="{cme:Localize Name=PayingSince}"
                                     Date="{x:Bind ViewModel.EditItem.Billing.InitialDate, Mode=TwoWay, Converter={StaticResource DateOnlyToDateTimeOffsetConverter}}"
                                     IsTodayHighlighted="True"
                                     HorizontalAlignment="Stretch" />
@@ -272,7 +272,7 @@
                     <ColumnDefinition Width="Auto" />
                   </Grid.ColumnDefinitions>
 
-                  <NumberBox Header="{x:Bind ViewModel.BillingCycleText}"
+                  <NumberBox Header="{cme:Localize Name=BillingCycle}"
                              Value="{x:Bind ViewModel.EditItem.Billing.RecurEvery, Mode=TwoWay}"
                              SpinButtonPlacementMode="Inline"
                              AcceptsExpression="True"
@@ -287,7 +287,7 @@
 
                 <Grid>
                   <!--TODO Add changing icon here-->
-                  <CheckBox Content="{x:Bind ViewModel.GetNotifiedText}"
+                  <CheckBox Content="{cme:Localize Name=GetNotified}"
                             IsChecked="{x:Bind ViewModel.EditItem.IsNotify, Mode=TwoWay}" />
                   <local:ToggleIcon IsChecked="{x:Bind ViewModel.EditItem.IsNotify, Mode=OneWay}"
                                     HorizontalAlignment="Right"
@@ -305,7 +305,7 @@
                 </Grid>-->
 
                 <!--TODO SelectedIndex is not future proof-->
-                <ComboBox Header="{x:Bind ViewModel.TagText}"
+                <ComboBox Header="{cme:Localize Name=Tag}"
                           ItemsSource="{x:Bind ViewModel.Tags, Mode=OneTime}"
                           SelectedIndex="{x:Bind ViewModel.EditItem.TagId, Mode=TwoWay}"
                           VerticalAlignment="Bottom"
@@ -332,15 +332,15 @@
                   <ComboBox.Header>
                     <StackPanel Orientation="Horizontal"
                                 Spacing="4">
-                      <TextBlock Text="{x:Bind ViewModel.PaymentMethodText}" />
-                      <TextBlock Text="{x:Bind ViewModel.OptionalText}"
+                      <TextBlock Text="{cme:Localize Name=PaymentMethod}" />
+                      <TextBlock Text="{cme:Localize Name=Optional}"
                                  Opacity="0.5" />
                     </StackPanel>
                   </ComboBox.Header>
                 </ComboBox>
 
                 <TextBox Text="{x:Bind ViewModel.EditItem.Description, Mode=TwoWay}"
-                         PlaceholderText="{x:Bind ViewModel.DescriptionPlaceholder}"
+                         PlaceholderText="{cme:Localize Name=.DescriptionPlaceholder}"
                          Height="120"
                          TextWrapping="Wrap"
                          AcceptsReturn="True"
@@ -348,8 +348,8 @@
                   <TextBox.Header>
                     <StackPanel Orientation="Horizontal"
                                 Spacing="4">
-                      <TextBlock Text="{x:Bind ViewModel.DescriptionText}" />
-                      <TextBlock Text="{x:Bind ViewModel.OptionalText}"
+                      <TextBlock Text="{cme:Localize Name=Description}" />
+                      <TextBlock Text="{cme:Localize Name=Optional}"
                                  Opacity="0.5" />
                     </StackPanel>
                   </TextBox.Header>
@@ -367,7 +367,7 @@
                           Spacing="8">
                 <FontIcon Glyph="&#xE74E;"
                           FontSize="16" />
-                <TextBlock Text="{x:Bind ViewModel.SaveText, Mode=OneWay}" />
+                <TextBlock Text="{cme:Localize Name=Save}" />
               </StackPanel>
             </Button>
 

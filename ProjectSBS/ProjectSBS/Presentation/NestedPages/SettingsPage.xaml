@@ -8,10 +8,11 @@
       xmlns:controls="using:CommunityToolkit.WinUI.Controls"
       xmlns:comp="using:ProjectSBS.Presentation.Components"
       xmlns:helpers="using:ProjectSBS.Presentation.Helpers"
+      xmlns:cme="using:ProjectSBS.Presentation.CustomMarkupExtensions"
       mc:Ignorable="d">
 
   <comp:PageShell x:Name="pageShell"
-                  Title="{x:Bind ViewModel.TitleText}"
+                  Title="{cme:Localize Name=Settings}"
                   MobileTitleVisibility="Visible">
     <comp:PageShell.ContentView>
       <UserControl>
@@ -55,7 +56,7 @@
 
               <TextBlock x:Name="desktopHeader"
                          Visibility="Visible"
-                         Text="{x:Bind ViewModel.TitleText}"
+                         Text="{cme:Localize Name=Settings}"
                          Margin="0,0,0,12"
                          Style="{StaticResource TitleTextBlockStyle}" />
 
@@ -75,13 +76,13 @@
                     </StackPanel>
                   </StackPanel>
                 </controls:SettingsCard.Header>
-                <Button Content="{x:Bind ViewModel.LogoutText}"
+                <Button Content="{cme:Localize Name=Logout}"
                         Margin="6"
                         Command="{x:Bind ViewModel.Logout}" />
               </controls:SettingsCard>
 
-              <InfoBar Title="{x:Bind ViewModel.NotLoggedInText}"
-                       Message="{x:Bind ViewModel.NotLoggedInDescription}"
+              <InfoBar Title="{cme:Localize Name=NotLoggedIn}"
+                       Message="{cme:Localize Name=NotLoggedInDescription}"
                        Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
                        IsOpen="True"
                        Severity="Warning"
@@ -96,7 +97,7 @@
                 </InfoBar.ActionButton>
               </InfoBar>
 
-              <controls:SettingsCard Header="{x:Bind ViewModel.DefaultCurrencyText}"
+              <controls:SettingsCard Header="{cme:Localize Name=DefaultCurrency}"
                                      HeaderIcon="{ui:FontIcon Glyph=&#xE8C7;}">
                 <ComboBox VerticalAlignment="Bottom"
                           ItemsSource="{x:Bind ViewModel.Currencies, Mode=OneWay}"
@@ -104,32 +105,32 @@
                           Grid.Column="1" />
               </controls:SettingsCard>
 
-              <controls:SettingsCard Header="{x:Bind ViewModel.SystemLanguageAndRegionText}"
+              <controls:SettingsCard Header="{cme:Localize Name=SystemLanguageAndRegion}"
                                      ActionIcon="{ui:FontIcon Glyph=&#xE8A7;}"
                                      HeaderIcon="{ui:FontIcon Glyph=&#xF2B7;}"
                                      IsClickEnabled="True"
                                      Command="{x:Bind ViewModel.LaunchLangSettingsCommand}" />
 
-              <TextBlock Text="{x:Bind ViewModel.NotificationsText}"
+              <TextBlock Text="{cme:Localize Name=Notifications}"
                          Margin="0,12,0,0"
                          Style="{StaticResource BaseTextBlockStyle}" />
 
               <win:Border>
                 <!--TODO TimePicker is not yet supported on Uno targets-->
-                <controls:SettingsCard Header="{x:Bind ViewModel.NotificationTimeText}"
+                <controls:SettingsCard Header="{cme:Localize Name=NotificationTime}"
                                        HeaderIcon="{ui:FontIcon Glyph=&#xE823;}">
                   <TimePicker SelectedTime="{x:Bind ViewModel.NotificationTime, Mode=TwoWay, Converter={StaticResource TimeOnlyToTimeSpanConverter}}"/>
                 </controls:SettingsCard>
               </win:Border>
 
-              <controls:SettingsCard Header="{x:Bind ViewModel.SystemNotificationsText}"
+              <controls:SettingsCard Header="{cme:Localize Name=SystemNotifications}"
                                      ActionIcon="{ui:FontIcon Glyph=&#xE8A7;}"
                                      HeaderIcon="{ui:FontIcon Glyph=&#xEA8F;}"
                                      IsClickEnabled="True"
                                      Command="{x:Bind ViewModel.LaunchNotificationSettingsCommand}" />
 
-              <InfoBar Title="{x:Bind ViewModel.NotificationsDisabledText}"
-                       Message="{x:Bind ViewModel.NotificationsDisabledDescription}"
+              <InfoBar Title="{cme:Localize Name=NotificationsDisabled}"
+                       Message="{cme:Localize Name=NotificationsDisabledDescription}"
                        Visibility="{x:Bind ViewModel.IsNotificationsEnabled, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
                        IsOpen="True"
                        Severity="Warning"
@@ -138,13 +139,13 @@
                   <FontIconSource Glyph="&#xEE79;" />
                 </InfoBar.IconSource>
                 <InfoBar.ActionButton>
-                  <Button Content="{x:Bind ViewModel.GoToSettingsText}"
+                  <Button Content="{cme:Localize Name=GoToSettings}"
                           HorizontalAlignment="Right"
                           Command="{x:Bind ViewModel.LaunchNotificationSettingsCommand}" />
                 </InfoBar.ActionButton>
               </InfoBar>
 
-              <TextBlock Text="{x:Bind ViewModel.AboutText}"
+              <TextBlock Text="{cme:Localize Name=About}"
                          Margin="0,12,0,0"
                          Style="{StaticResource BaseTextBlockStyle}" />
 
@@ -159,7 +160,7 @@
 
                     <StackPanel VerticalAlignment="Center"
                                 Spacing="4">
-                      <TextBlock Text="{x:Bind ViewModel.AppName}" />
+                      <TextBlock Text="{cme:Localize Name=ApplicationName}" />
                       <TextBlock Text="Morning4coffe ©️ 2024"
                                  Opacity="0.75"
                                  Style="{StaticResource CaptionTextBlockStyle}" />
@@ -168,7 +169,7 @@
                 </controls:SettingsExpander.Header>
 
                 <controls:SettingsExpander.Items>
-                  <controls:SettingsCard Header="{x:Bind ViewModel.AboutDescription}"
+                  <controls:SettingsCard Header="{cme:Localize Name=AboutDescription}"
                                          HeaderIcon="{ui:FontIcon Glyph=&#xE909;}" />
 
                   <controls:SettingsCard HorizontalContentAlignment="Left"
@@ -176,13 +177,13 @@
                     <StackPanel Margin="-12,0,0,0"
                                 Spacing="2"
                                 Orientation="Vertical">
-                      <HyperlinkButton Content="{x:Bind ViewModel.GitHubText}"
+                      <HyperlinkButton Content="{cme:Localize Name=GitHub}"
                                        Command="{x:Bind ViewModel.GitHub}" />
-                      <HyperlinkButton Content="{x:Bind ViewModel.RateAndReviewText}"
+                      <HyperlinkButton Content="{cme:Localize Name=RateAndReview}"
                                        Command="{x:Bind ViewModel.RateAndReview}" />
-                      <HyperlinkButton Content="{x:Bind ViewModel.PrivacyPolicyText}"
+                      <HyperlinkButton Content="{cme:Localize Name=PrivacyPolicy}"
                                        Command="{x:Bind ViewModel.PrivacyPolicy}" />
-                      <HyperlinkButton Content="{x:Bind ViewModel.ReportABugText}"
+                      <HyperlinkButton Content="{cme:Localize Name=ReportABug}"
                                        Command="{x:Bind ViewModel.ReportABug}" />
                     </StackPanel>
                   </controls:SettingsCard>

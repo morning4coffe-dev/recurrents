@@ -13,6 +13,7 @@
       xmlns:viewModels="using:ProjectSBS.Business.ViewModels"
       xmlns:comp="using:ProjectSBS.Presentation.Components"
       xmlns:helpers="using:ProjectSBS.Presentation.Helpers"
+      xmlns:cme="using:ProjectSBS.Presentation.CustomMarkupExtensions"
       mc:Ignorable="d not_win android">
 
   <Page.Resources>
@@ -150,7 +151,7 @@
               <Button x:Name="desktopAdd"
                       Visibility="Visible"
                       Grid.Row="1"
-                      Content="{x:Bind ViewModel.NewItemText}"
+                      Content="{cme:Localize Name=NewItem}"
                       Command="{x:Bind ViewModel.AddNewCommand}" />
 
               <comp:StatsBanner Visibility="{x:Bind ViewModel.IsStatsVisible, Mode=OneWay}"
@@ -199,7 +200,7 @@
 
                   <SwipeItems x:Key="Left"
                               Mode="Execute">
-                    <SwipeItem Text="Edit"
+                    <SwipeItem Text="{cme:Localize Name=Edit}"
                                IconSource="{StaticResource EditIcon}"
                                Foreground="{StaticResource TextOnAccentFillColorPrimaryBrush}"
                                Background="{StaticResource SystemAccentColor}"
@@ -207,7 +208,7 @@
                   </SwipeItems>
                   <SwipeItems x:Key="Right"
                               Mode="Execute">
-                    <SwipeItem Text="Archive"
+                    <SwipeItem Text="{cme:Localize Name=ArchiveVerb}"
                                IconSource="{StaticResource ArchiveIcon}"
                                Foreground="{StaticResource TextOnAccentFillColorPrimaryBrush}"
                                Background="{ThemeResource SystemFillColorCriticalBrush}"
@@ -314,18 +315,18 @@
                        MaxWidth="300"
                        Margin="20" />
 
-                <TextBlock Text="{x:Bind ViewModel.ItemsEmptyTitleText}"
+                <TextBlock Text="{cme:Localize Name=ItemsEmptyTitle}"
                            TextWrapping="WrapWholeWords"
                            HorizontalAlignment="Center"
                            Style="{StaticResource BaseTextBlockStyle}" />
 
-                <TextBlock Text="{x:Bind ViewModel.ItemsEmptyDescriptionText}"
+                <TextBlock Text="{cme:Localize Name=ItemsEmptyDescription}"
                            TextWrapping="WrapWholeWords"
                            TextAlignment="Center"
                            HorizontalAlignment="Center"
                            Opacity="0.7" />
 
-                <Button Content="{x:Bind ViewModel.NewItemText}"
+                <Button Content="{cme:Localize Name=NewItem}"
                         HorizontalAlignment="Center"
                         Padding="20, 8"
                         Command="{x:Bind ViewModel.AddNewCommand}" />
@@ -345,7 +346,7 @@
                     Height="65"
                     VerticalAlignment="Bottom"
                     HorizontalAlignment="Right"
-                    AutomationProperties.Name="{x:Bind ViewModel.NewItemText}"
+                    AutomationProperties.Name="{cme:Localize Name=NewItem}"
                     Style="{StaticResource AccentButtonStyle}"
                     Margin="20"
                     Padding="22,0"
@@ -356,7 +357,7 @@
                 <SymbolIcon x:Name="fabIcon"
                             Symbol="Add" />
 
-                <TextBlock Text="{x:Bind ViewModel.NewItemText}"
+                <TextBlock Text="{cme:Localize Name=NewItem}"
                            Grid.Column="1"
                            Margin="12,0,0,0" />
               </StackPanel>
