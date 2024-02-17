@@ -48,10 +48,6 @@ public partial class MainViewModel : ViewModelBase
 
     public IEnumerable<NavigationCategory> DesktopCategories;
 
-    public ICommand GoToSettings { get; }
-    public ICommand Logout { get; }
-    public ICommand Login { get; }
-
     public MainViewModel(
         IStringLocalizer localizer,
         IOptions<AppConfig> appInfo,
@@ -78,28 +74,6 @@ public partial class MainViewModel : ViewModelBase
             User = e;
             IsLoggedIn = e is { };
         };
-
-        GoToSettings = new RelayCommand(() => navigation.NavigateNested(typeof(SettingsPage)));
-
-        Logout = new RelayCommand(() =>
-        {
-            userService.Logout();
-            navigation.Navigate(typeof(LoginPage));
-        });
-
-        Login = new RelayCommand(() =>
-        {
-            if (IsLoggedIn)
-            {
-                //TODO There is a bug in the MenuFlyout 
-                //MenuFlyout.ShowAttachedFlyout(UserButton);
-                return;
-            }
-
-            navigation.Navigate(typeof(LoginPage));
-
-            _itemService.ClearItems();
-        });
     }
 
     public async override void Load()
@@ -120,7 +94,7 @@ public partial class MainViewModel : ViewModelBase
         {
             if (PageType != typeof(SettingsPage))
             {
-                GoToSettings.Execute(null);
+                GoToSettings();
                 return;
             }
         }
@@ -131,5 +105,32 @@ public partial class MainViewModel : ViewModelBase
     public override void Unload()
     {
 
+    }
+
+    [RelayCommand]
+    private void GoToSettings()
+    {
+        _navigation.NavigateNested(typeof(SettingsPage));
+    }
+
+    [RelayCommand]
+    private void Login()
+    {
+        if (IsLoggedIn)
+        {
+            //TODO There is a bug in the MenuFlyout 
+            //MenuFlyout.ShowAttachedFlyout(UserButton);
+            return;
+        }
+
+        _navigation.Navigate(typeof(LoginPage));
+        _itemService.ClearItems();
+    }
+
+    [RelayCommand]
+    private void Logout()
+    {
+        _userService.Logout();
+        _navigation.Navigate(typeof(LoginPage));
     }
 }

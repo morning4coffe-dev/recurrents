@@ -25,13 +25,6 @@ public partial class LoginViewModel : ObservableObject
         _localization = localization;
         _itemService = itemService;
 
-        Login = new AsyncRelayCommand(DoLogin);
-        WithoutLogin = new RelayCommand(() =>
-        {
-            App.Services!.GetRequiredService<ISettingsService>().ContinueWithoutLogin = true;
-            _navigation.Navigate(typeof(MainPage));
-        });
-
         _titleText = _localization["Welcome"];
         _authorText = _localization["Author"];
         _privacyPolicyText = _localization["PrivacyPolicy"];
@@ -41,7 +34,8 @@ public partial class LoginViewModel : ObservableObject
         itemService.ClearItems();
     }
 
-    private async Task DoLogin()
+    [RelayCommand]
+    private async Task Login()
     {
         var success = false;
 
@@ -75,10 +69,15 @@ public partial class LoginViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void PrivacyPolicy()
+    private void ContinueWithoutLogin()
     {
-        _ = Launcher.LaunchUriAsync(new Uri("https://github.com/morning4coffe-dev/recurrents/blob/ebf622cb65d60c7d353af69824f63d88fa796bde/privacy-policy.md"));
+        App.Services!.GetRequiredService<ISettingsService>().ContinueWithoutLogin = true;
+        _navigation.Navigate(typeof(MainPage));
     }
+
+    [RelayCommand]
+    private async Task OpenPrivacyPolicy() =>
+        await  Launcher.LaunchUriAsync(new Uri("https://github.com/morning4coffe-dev/recurrents/blob/ebf622cb65d60c7d353af69824f63d88fa796bde/privacy-policy.md"));
 
     [ObservableProperty]
     private string _titleText;
@@ -94,7 +93,4 @@ public partial class LoginViewModel : ObservableObject
 
     [ObservableProperty]
     private string _continueWithoutLoginText;
-
-    public ICommand Login { get; }
-    public ICommand WithoutLogin { get; }
 }

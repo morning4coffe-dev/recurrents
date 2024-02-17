@@ -112,12 +112,12 @@
                         HorizontalAlignment="Stretch"
                         Padding="20, 12"
                         AutomationProperties.AutomationId="LoginWithMicrosoft"
-                        Command="{x:Bind ViewModel.Login}" />
+                        Command="{x:Bind ViewModel.LoginCommand}" />
 
                 <HyperlinkButton Content="{x:Bind ViewModel.ContinueWithoutLoginText}"
                                  HorizontalAlignment="Stretch"
                                  Padding="20, 8"
-                                 Command="{x:Bind ViewModel.WithoutLogin}" />
+                                 Command="{x:Bind ViewModel.ContinueWithoutLoginCommand}" />
               </StackPanel>
 
               <muxc:ProgressRing IsActive="{Binding Login.IsRunning}" />
@@ -129,7 +129,7 @@
                         Margin="0, 8"
                         Grid.Row="4">
               <HyperlinkButton Content="{x:Bind ViewModel.PrivacyPolicyText}"
-                               Command="{x:Bind ViewModel.PrivacyPolicyCommand}" />
+                               Command="{x:Bind ViewModel.OpenPrivacyPolicyCommand}" />
               <TextBlock Text="{x:Bind ViewModel.AuthorText}"
                          VerticalAlignment="Center" />
             </StackPanel>

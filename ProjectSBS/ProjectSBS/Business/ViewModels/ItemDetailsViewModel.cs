@@ -52,11 +52,6 @@ public partial class ItemDetailsViewModel : ViewModelBase
     public ObservableCollection<string> FuturePayments { get; } = [];
     public ObservableCollection<string> PaymentMethods { get; }
 
-    public ICommand EnableEditingCommand { get; }
-    public ICommand CloseCommand { get; }
-    public ICommand SaveCommand { get; }
-    public ICommand ArchiveCommand { get; }
-
     public ItemDetailsViewModel(
         IStringLocalizer localizer,
         ITagService tagService,
@@ -67,11 +62,6 @@ public partial class ItemDetailsViewModel : ViewModelBase
         _tagService = tagService;
         _currencyCache = currencyCache;
         _dialog = dialog;
-
-        EnableEditingCommand = new RelayCommand(() => EnableEditing());
-        CloseCommand = new AsyncRelayCommand(Close);
-        SaveCommand = new RelayCommand(Save);
-        ArchiveCommand = new RelayCommand(Archive);
 
         PaymentMethods =
         [
@@ -126,7 +116,7 @@ public partial class ItemDetailsViewModel : ViewModelBase
         WeakReferenceMessenger.Default.UnregisterAll(this);
     }
 
-
+    [RelayCommand]
     private void EnableEditing(bool isTrue = true)
     {
         IsEditing = isTrue;
@@ -139,6 +129,7 @@ public partial class ItemDetailsViewModel : ViewModelBase
         }
     }
 
+    [RelayCommand]
     private async Task<bool> Close()
     {
         ContentDialogResult result = ContentDialogResult.Primary;
@@ -159,6 +150,7 @@ public partial class ItemDetailsViewModel : ViewModelBase
         return result == ContentDialogResult.Primary;
     }
 
+    [RelayCommand]
     private void Save()
     {
         if (EditItem is not { } item || SelectedItem is not { })
@@ -170,6 +162,7 @@ public partial class ItemDetailsViewModel : ViewModelBase
         WeakReferenceMessenger.Default.Send(new ItemUpdated(SelectedItem, ToSave: true));
     }
 
+    [RelayCommand]
     private void Archive()
     {
         if (SelectedItem is not { })

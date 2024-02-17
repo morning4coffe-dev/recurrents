@@ -77,7 +77,7 @@
                 </controls:SettingsCard.Header>
                 <Button Content="{x:Bind ViewModel.LogoutText}"
                         Margin="6"
-                        Command="{x:Bind ViewModel.Logout}" />
+                        Command="{x:Bind ViewModel.LogoutCommand}" />
               </controls:SettingsCard>
 
               <InfoBar Title="{x:Bind ViewModel.NotLoggedInText}"
@@ -92,7 +92,7 @@
                 <InfoBar.ActionButton>
                   <Button Content="Login"
                           HorizontalAlignment="Right"
-                          Command="{x:Bind ViewModel.Login}" />
+                          Command="{x:Bind ViewModel.LoginCommand}" />
                 </InfoBar.ActionButton>
               </InfoBar>
 
@@ -177,13 +177,13 @@
                                 Spacing="2"
                                 Orientation="Vertical">
                       <HyperlinkButton Content="{x:Bind ViewModel.GitHubText}"
-                                       Command="{x:Bind ViewModel.GitHub}" />
+                                       Command="{x:Bind ViewModel.OpenGithubCommand}" />
                       <HyperlinkButton Content="{x:Bind ViewModel.RateAndReviewText}"
-                                       Command="{x:Bind ViewModel.RateAndReview}" />
+                                       Command="{x:Bind ViewModel.OpenRateAndReviewCommand}" />
                       <HyperlinkButton Content="{x:Bind ViewModel.PrivacyPolicyText}"
-                                       Command="{x:Bind ViewModel.PrivacyPolicy}" />
+                                       Command="{x:Bind ViewModel.OpenPrivacyPolicyCommand}" />
                       <HyperlinkButton Content="{x:Bind ViewModel.ReportABugText}"
-                                       Command="{x:Bind ViewModel.ReportABug}" />
+                                       Command="{x:Bind ViewModel.OpenGithubIssuesCommand}" />
                     </StackPanel>
                   </controls:SettingsCard>
 
