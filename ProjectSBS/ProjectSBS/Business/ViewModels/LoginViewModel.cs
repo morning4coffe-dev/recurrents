@@ -32,7 +32,8 @@ public partial class LoginViewModel : ObservableObject
         itemService.ClearItems();
     }
 
-    private async Task DoLogin()
+    [RelayCommand]
+    private async Task Login()
     {
         var success = false;
 
@@ -66,9 +67,10 @@ public partial class LoginViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void PrivacyPolicy()
+    private void ContinueWithoutLogin()
     {
-        _ = Launcher.LaunchUriAsync(new Uri("https://github.com/morning4coffe-dev/recurrents/blob/ebf622cb65d60c7d353af69824f63d88fa796bde/privacy-policy.md"));
+        App.Services!.GetRequiredService<ISettingsService>().ContinueWithoutLogin = true;
+        _navigation.Navigate(typeof(MainPage));
     }
 
     public ICommand Login { get; }

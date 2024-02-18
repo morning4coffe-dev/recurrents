@@ -86,11 +86,6 @@ public partial class HomeViewModel : ViewModelBase
 
     public NavigationCategory SelectedCategory => _navigation.SelectedCategory;
 
-    public ICommand AddNewCommand { get; }
-    public ICommand ArchiveCommand { get; }
-    public ICommand DeleteCommand { get; }
-    public ICommand OpenSettingsCommand { get; }
-
     public HomeViewModel(
         IUserService userService,
         IItemService itemService,
@@ -105,11 +100,6 @@ public partial class HomeViewModel : ViewModelBase
         _filterService = filterService;
         _navigation = navigation;
         _dialog = dialog;
-
-        AddNewCommand = new RelayCommand(AddNew);
-        ArchiveCommand = new AsyncRelayCommand(() => Archive());
-        DeleteCommand = new AsyncRelayCommand(() => Delete());
-        OpenSettingsCommand = new RelayCommand(() => _navigation.NavigateNested(typeof(SettingsPage)));
 
         FilterCategories = filterService.Categories;
 
@@ -234,6 +224,7 @@ public partial class HomeViewModel : ViewModelBase
         SystemNavigationManager.GetForCurrentView().BackRequested -= System_BackRequested;
     }
 
+    [RelayCommand]
     private void AddNew()
     {
         SelectedItem = null;
@@ -247,6 +238,7 @@ public partial class HomeViewModel : ViewModelBase
         IsPaneOpen = true;
     }
 
+    [RelayCommand]
     public async Task Archive(ItemViewModel? item = null)
     {
         ContentDialogResult result;
@@ -272,6 +264,7 @@ public partial class HomeViewModel : ViewModelBase
         }
     }
 
+    [RelayCommand]
     public async Task Delete(ItemViewModel? item = null)
     {
         var result = await _dialog.ShowAsync(
@@ -286,5 +279,11 @@ public partial class HomeViewModel : ViewModelBase
             SelectedItem = null;
             RefreshItems();
         }
+    }
+
+    [RelayCommand]
+    private void OpenSettings()
+    {
+        _navigation.NavigateNested(typeof(SettingsPage));
     }
 }

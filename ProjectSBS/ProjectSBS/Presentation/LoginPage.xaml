@@ -112,12 +112,12 @@
                         HorizontalAlignment="Stretch"
                         Padding="20, 12"
                         AutomationProperties.AutomationId="LoginWithMicrosoft"
-                        Command="{x:Bind ViewModel.Login}" />
+                        Command="{x:Bind ViewModel.LoginCommand}" />
 
                 <HyperlinkButton Content="{cme:Localize Name=ContinueWithoutLogin}"
                                  HorizontalAlignment="Stretch"
                                  Padding="20, 8"
-                                 Command="{x:Bind ViewModel.WithoutLogin}" />
+                                 Command="{x:Bind ViewModel.ContinueWithoutLoginCommand}" />
               </StackPanel>
 
               <muxc:ProgressRing IsActive="{Binding Login.IsRunning}" />

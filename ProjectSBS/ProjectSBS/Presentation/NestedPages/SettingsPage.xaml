@@ -78,7 +78,7 @@
                 </controls:SettingsCard.Header>
                 <Button Content="{cme:Localize Name=Logout}"
                         Margin="6"
-                        Command="{x:Bind ViewModel.Logout}" />
+                        Command="{x:Bind ViewModel.LogoutCommand}" />
               </controls:SettingsCard>
 
               <InfoBar Title="{cme:Localize Name=NotLoggedIn}"
@@ -93,7 +93,7 @@
                 <InfoBar.ActionButton>
                   <Button Content="Login"
                           HorizontalAlignment="Right"
-                          Command="{x:Bind ViewModel.Login}" />
+                          Command="{x:Bind ViewModel.LoginCommand}" />
                 </InfoBar.ActionButton>
               </InfoBar>
 
