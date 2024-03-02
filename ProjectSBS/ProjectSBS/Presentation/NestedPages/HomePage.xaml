@@ -101,9 +101,9 @@
 
         <Grid Style="{ThemeResource PageBackground}">
           <ScrollViewer>
-            <helpers:StackPanelWithSpacing x:Name="contentHolder"
-                                           Space="12"
-                                           Margin="48,48,48,0">
+            <StackPanel x:Name="contentHolder"
+                        Spacing="12"
+                        Margin="48,48,48,0">
 
               <TextBlock x:Name="desktopHeader"
                          Visibility="Visible"
@@ -299,7 +299,7 @@
                         Command="{x:Bind ViewModel.AddNewCommand}" />
 
               </StackPanel>
-            </helpers:StackPanelWithSpacing>
+            </StackPanel>
           </ScrollViewer>
 
           <StackPanel x:Name="mobileAddButton"

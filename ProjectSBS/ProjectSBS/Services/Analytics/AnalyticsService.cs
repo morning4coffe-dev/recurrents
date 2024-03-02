@@ -10,7 +10,7 @@ public class AnalyticsService
     public const string LogIn = "02_LogIn";
     public const string ItemEvent = "03_ItemEvent";
 
-    public AnalyticsService()
+    public static void Initialize()
     {
 #if !HAS_UNO && !DEBUG
         AppCenter.Start(AppConfig.TelemetryId,

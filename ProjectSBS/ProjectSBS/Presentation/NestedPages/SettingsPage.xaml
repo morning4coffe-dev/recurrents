@@ -43,8 +43,8 @@
           </VisualStateManager.VisualStateGroups>
 
           <ScrollViewer>
-            <helpers:StackPanelWithSpacing x:Name="settingsHolder"
-                        Space="4"
+            <StackPanel x:Name="settingsHolder"
+                        Spacing="4"
                         Margin="48">
               <!--<win:StackPanel.ChildrenTransitions>
             <TransitionCollection>
@@ -118,7 +118,7 @@
                 <!--TODO TimePicker is not yet supported on Uno targets-->
                 <controls:SettingsCard Header="{x:Bind ViewModel.NotificationTimeText}"
                                        HeaderIcon="{ui:FontIcon Glyph=&#xE823;}">
-                  <TimePicker SelectedTime="{x:Bind ViewModel.NotificationTime, Mode=TwoWay, Converter={StaticResource TimeOnlyToTimeSpanConverter}}"/>
+                  <TimePicker SelectedTime="{x:Bind ViewModel.NotificationTime, Mode=TwoWay, Converter={StaticResource TimeOnlyToTimeSpanConverter}}" />
                 </controls:SettingsCard>
               </win:Border>
 
@@ -195,7 +195,7 @@
                            Style="{StaticResource CaptionTextBlockStyle}" />
               </controls:SettingsExpander>
 
-            </helpers:StackPanelWithSpacing>
+            </StackPanel>
           </ScrollViewer>
         </Grid>
       </UserControl>

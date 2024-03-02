@@ -4,7 +4,7 @@ namespace ProjectSBS.Business.Converters;
 
 public class PaymentPeriodToLocalizedStringConverter : IValueConverter
 {
-    private IStringLocalizer _localizer;
+    private readonly IStringLocalizer _localizer;
 
     public PaymentPeriodToLocalizedStringConverter()
     {

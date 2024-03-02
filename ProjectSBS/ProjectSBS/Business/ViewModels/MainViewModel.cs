@@ -52,8 +52,6 @@ public partial class MainViewModel : ViewModelBase
 
     public string? Title { get; }
 
-    public IEnumerable<NavigationCategory> DesktopCategories;
-
     public MainViewModel(
         IStringLocalizer localizer,
         IOptions<AppConfig> appInfo,
@@ -119,35 +117,9 @@ public partial class MainViewModel : ViewModelBase
         _navigation.NavigateCategory((args.SelectedItem as NavigationCategory) ?? SelectedCategory);
     }
 
-    public override void Unload()
-    {
-
-    }
-
     [RelayCommand]
     private void GoToSettings()
     {
-        _navigation.NavigateNested(typeof(SettingsPage));
-    }
-
-    [RelayCommand]
-    private void Login()
-    {
-        if (IsLoggedIn)
-        {
-            //TODO There is a bug in the MenuFlyout 
-            //MenuFlyout.ShowAttachedFlyout(UserButton);
-            return;
-        }
-
-        _navigation.Navigate(typeof(LoginPage));
-        _itemService.ClearItems();
-    }
-
-    [RelayCommand]
-    private void Logout()
-    {
-        _userService.Logout();
-        _navigation.Navigate(typeof(LoginPage));
+        _navigation.NavigateCategory(_navigation.Categories.First(x => x.Page == typeof(SettingsPage)));
     }
 }

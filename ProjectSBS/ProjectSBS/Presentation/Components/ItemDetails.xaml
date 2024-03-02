@@ -156,8 +156,8 @@
 
           <ScrollViewer Visibility="{x:Bind ViewModel.IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
                         Grid.Row="1">
-            <helpers:StackPanelWithSpacing Space="4"
-                                           Style="{StaticResource ContentStack}">
+            <StackPanel Spacing="4"
+                        Style="{StaticResource ContentStack}">
               <win:StackPanel.ChildrenTransitions>
                 <TransitionCollection>
                   <EntranceThemeTransition FromHorizontalOffset="80"
@@ -223,7 +223,7 @@
                                 Visibility="{x:Bind ViewModel.SelectedItem.Item.Description, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}"
                                 Text="{x:Bind ViewModel.SelectedItem.Item.Description, Mode=OneWay}" />
 
-            </helpers:StackPanelWithSpacing>
+            </StackPanel>
           </ScrollViewer>
 
           <Grid Visibility="{x:Bind ViewModel.IsEditing, Mode=TwoWay, Converter={StaticResource TrueToVisibleConverter}}"
@@ -235,8 +235,8 @@
             </Grid.RowDefinitions>
 
             <ScrollViewer>
-              <helpers:StackPanelWithSpacing Space="12"
-                                             Style="{StaticResource ContentStack}">
+              <StackPanel Spacing="16"
+                          Style="{StaticResource ContentStack}">
 
                 <TextBox Header="{x:Bind ViewModel.NameText}"
                          Text="{x:Bind ViewModel.EditItem.Name, Mode=TwoWay}"
@@ -280,10 +280,8 @@
                              Minimum="1" />
 
                   <ComboBox VerticalAlignment="Bottom"
-                            ItemsSource="{x:Bind ViewModel.PaymentPeriods}"
-                            SelectedItem="{x:Bind ViewModel.SelectedPeriod, Mode=TwoWay}"
-                            SelectedValuePath="Key"
-                            DisplayMemberPath="Value"
+                            ItemsSource="{toolkit:EnumValues Type=models:Period}"
+                            SelectedItem="{x:Bind ViewModel.EditItem.Billing.PeriodType, Mode=TwoWay}"
                             MinWidth="120"
                             Grid.Column="1">
                     <ComboBox.ItemTemplate>
@@ -363,7 +361,7 @@
                     </StackPanel>
                   </TextBox.Header>
                 </TextBox>
-              </helpers:StackPanelWithSpacing>
+              </StackPanel>
             </ScrollViewer>
 
             <Button Command="{x:Bind ViewModel.SaveCommand}"

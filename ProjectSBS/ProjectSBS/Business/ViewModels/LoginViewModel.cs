@@ -14,6 +14,9 @@ public partial class LoginViewModel : ObservableObject
     [ObservableProperty]
     private UserModel.User? _user;
 
+    [ObservableProperty]
+    private bool _indicateLoading;
+
     public LoginViewModel(
         INavigation navigation,
         IUserService userService,
@@ -38,6 +41,7 @@ public partial class LoginViewModel : ObservableObject
     private async Task Login()
     {
         var success = false;
+        IndicateLoading = true;
 
         try
         {
@@ -67,6 +71,8 @@ public partial class LoginViewModel : ObservableObject
 
             SendAnalytics(true);
         }
+
+        IndicateLoading = false;
     }
 
     private void SendAnalytics(bool loggedIn)
@@ -83,8 +89,10 @@ public partial class LoginViewModel : ObservableObject
     [RelayCommand]
     private void ContinueWithoutLogin()
     {
+        IndicateLoading = true;
         App.Services!.GetRequiredService<ISettingsService>().ContinueWithoutLogin = true;
         _navigation.Navigate(typeof(MainPage));
+        IndicateLoading = false;
     }
 
     [RelayCommand]
