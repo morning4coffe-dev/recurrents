@@ -156,8 +156,8 @@
 
           <ScrollViewer Visibility="{x:Bind ViewModel.IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
                         Grid.Row="1">
-            <helpers:StackPanelWithSpacing Space="4"
-                                           Style="{StaticResource ContentStack}">
+            <StackPanel Spacing="4"
+                        Style="{StaticResource ContentStack}">
               <win:StackPanel.ChildrenTransitions>
                 <TransitionCollection>
                   <EntranceThemeTransition FromHorizontalOffset="80"
@@ -223,7 +223,7 @@
                                 Visibility="{x:Bind ViewModel.SelectedItem.Item.Description, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}"
                                 Text="{x:Bind ViewModel.SelectedItem.Item.Description, Mode=OneWay}" />
 
-            </helpers:StackPanelWithSpacing>
+            </StackPanel>
           </ScrollViewer>
 
           <Grid Visibility="{x:Bind ViewModel.IsEditing, Mode=TwoWay, Converter={StaticResource TrueToVisibleConverter}}"

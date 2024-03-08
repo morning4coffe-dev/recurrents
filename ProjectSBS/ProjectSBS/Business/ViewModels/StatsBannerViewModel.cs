@@ -19,7 +19,7 @@ public partial class StatsBannerViewModel : ViewModelBase
 
     public string Header { get; }
 
-    private readonly ObservableCollection<double> _values = [];
+    private readonly ObservableCollection<decimal> _values = [];
 
     [ObservableProperty]
     private string _sum = "0";
@@ -43,14 +43,14 @@ public partial class StatsBannerViewModel : ViewModelBase
         _itemService.OnItemsChanged += ItemService_OnItemsChanged;
         _itemService.OnItemsInitialized += ItemService_OnItemsChanged;
 
-        SetSum(_itemService.GetItems());
+        UpdateVisual(_itemService.GetItems());
 
         var accentColor = (Color)Application.Current.Resources["SystemAccentColor"];
         var skColor = new SKColor(accentColor.R, accentColor.G, accentColor.B);
 
         ObservableCollection<ISeries> series =
         [
-            new LineSeries<double>
+            new LineSeries<decimal>
             {
                 Values = _values,
                 Fill = null,
@@ -97,9 +97,9 @@ public partial class StatsBannerViewModel : ViewModelBase
         var accentColor = (Color)Application.Current.Resources["SystemAccentColor"];
         var skColor = new SKColor(accentColor.R, accentColor.G, accentColor.B);
 
-        ((LineSeries<double>)Series[0]).Stroke = new SolidColorPaint(skColor) { StrokeThickness = 6 };
-        ((LineSeries<double>)Series[0]).GeometryStroke = new SolidColorPaint(skColor) { StrokeThickness = 0 };
-        ((LineSeries<double>)Series[0]).GeometryFill = new SolidColorPaint(skColor) { StrokeThickness = 0 };
+        ((LineSeries<decimal>)Series[0]).Stroke = new SolidColorPaint(skColor) { StrokeThickness = 6 };
+        ((LineSeries<decimal>)Series[0]).GeometryStroke = new SolidColorPaint(skColor) { StrokeThickness = 0 };
+        ((LineSeries<decimal>)Series[0]).GeometryFill = new SolidColorPaint(skColor) { StrokeThickness = 0 };
 
         ((Axis)XAxes[0]).LabelsPaint = new SolidColorPaint(SKColors.Pink);
         ((Axis)YAxes[0]).LabelsPaint = new SolidColorPaint(SKColors.LightBlue);
@@ -107,11 +107,28 @@ public partial class StatsBannerViewModel : ViewModelBase
 
     private void ItemService_OnItemsChanged(object? sender, IEnumerable<ItemViewModel> e)
     {
-        SetSum(e);
+        UpdateVisual(e);
+    }
+
+    private async void UpdateVisual(IEnumerable<ItemViewModel> items)
+    {
+        SetSum(items);
 
         _values.Clear();
-        for (int i = 0; i < 6; i++)
-            _values.Add(new Random().Next(10, 1000000));
+        for (int i = 0; i < 6; i++) 
+        {
+            var date = DateTime.Now.AddMonths(-i);
+            var days = DateTime.DaysInMonth(date.Year, date.Month);
+
+            var tasks = items.Select(async item => await _currencyCache.ConvertToDefaultCurrency(
+                item.Item?.Billing.BasePrice * item.GetPaymentsInPeriod(days, (DateTime.Now - date).Days) ?? 0,
+                item?.Item?.Billing?.CurrencyId ?? "EUR",
+                _settingsService.DefaultCurrency));
+
+            var values = await Task.WhenAll(tasks);
+
+            _values.Insert(0, values.Sum());
+        }
     }
 
     private async void SetSum(IEnumerable<ItemViewModel> e)

@@ -17,6 +17,7 @@ public partial class SettingsViewModel : ViewModelBase
     public string DefaultCurrencyText => _localizer["DefaultCurrency"];
     public string GoToSettingsText => _localizer["GoToSettings"];
     public string LogoutText => _localizer["Logout"];
+    public string LoginText => _localizer["Login"];
     public string NotLoggedInText => _localizer["NotLoggedIn"];
     public string NotLoggedInDescription => _localizer["NotLoggedInDescription"];
     public string SystemLanguageAndRegionText => _localizer["SystemLanguageAndRegion"];

@@ -149,5 +149,11 @@
     </Page>
   </ItemGroup>
 
+  <ItemGroup>
+    <PRIResource Update="Strings\de\Resources.resw">
+      <SubType>Designer</SubType>
+    </PRIResource>
+  </ItemGroup>
+
   <Import Project="..\winappsdk-workaround.targets" />
 </Project>
