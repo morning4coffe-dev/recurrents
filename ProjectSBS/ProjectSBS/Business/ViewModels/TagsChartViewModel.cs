@@ -2,119 +2,90 @@ using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
-using Windows.UI;
-using Windows.UI.ViewManagement;
 
 namespace ProjectSBS.Business.ViewModels;
 
 public partial class TagsChartViewModel : ViewModelBase
 {
     private readonly IItemService _itemService;
-    private readonly ISettingsService _settingsService;
     private readonly ICurrencyCache _currencyCache;
-
-    private readonly UISettings _themeListener = new();
+    private readonly ISettingsService _settingsService;
+    private readonly ITagService _tagService;
 
     public string Header { get; }
 
-    private readonly ObservableCollection<decimal> _values = [];
+    public ObservableCollection<TagChart> Tags = [];
 
-    [ObservableProperty]
-    private string _sum = "0";
-
-    public ObservableCollection<ISeries> Series { get; set; }
+    public ObservableCollection<ISeries> Series { get; set; } = [];
 
     public TagsChartViewModel(
         IItemService itemService,
-        ISettingsService settingsService,
         IStringLocalizer localizer,
-        ICurrencyCache currencyCache)
+        ICurrencyCache currencyCache,
+        ISettingsService settingsService,
+        ITagService tagService)
     {
         _itemService = itemService;
-        _settingsService = settingsService;
         _currencyCache = currencyCache;
+        _settingsService = settingsService;
+        _tagService = tagService;
 
         Header = string.Format(localizer["LastDays"], DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)).ToLower();
 
         _itemService.OnItemsChanged += ItemService_OnItemsChanged;
         _itemService.OnItemsInitialized += ItemService_OnItemsChanged;
-
-        UpdateVisual(_itemService.GetItems());
-
-        var accentColor = (Color)Application.Current.Resources["SystemAccentColor"];
-        var skColor = new SKColor(accentColor.R, accentColor.G, accentColor.B);
-
-        ObservableCollection<ISeries> series =
-        [
-            new PieSeries<decimal>
-            {
-                Values = _values,
-                Fill = null,
-                Stroke = new SolidColorPaint(skColor) { StrokeThickness = 6 },
-            }
-        ];
-
-        Series = series;
-
-        DateTime currentDate = DateTime.Now;
-        var months = new string[6];
-
-        for (int i = 0; i < 6; i++)
-        {
-            months[5 - i] = currentDate.AddMonths(-i).ToString("MMM", CultureInfo.CurrentCulture);
-        }
-    }
-
-    private void UISettings_ColorValuesChanged(UISettings sender, object args)
-    {
-        //TODO: The UISettings.ColorValueChanged is not called on Windows 10
-        //https://github.com/CommunityToolkit/WindowsCommunityToolkit/issues/4412#issuecomment-1823919825
-
-        var accentColor = (Color)Application.Current.Resources["SystemAccentColor"];
-        var skColor = new SKColor(accentColor.R, accentColor.G, accentColor.B);
-
-        ((LineSeries<decimal>)Series[0]).Stroke = new SolidColorPaint(skColor) { StrokeThickness = 6 };
-        ((LineSeries<decimal>)Series[0]).GeometryStroke = new SolidColorPaint(skColor) { StrokeThickness = 0 };
-        ((LineSeries<decimal>)Series[0]).GeometryFill = new SolidColorPaint(skColor) { StrokeThickness = 0 };
     }
 
     private void ItemService_OnItemsChanged(object? sender, IEnumerable<ItemViewModel> e)
     {
-        UpdateVisual(e);
+        _ = UpdateVisual(e);
     }
 
-    private async void UpdateVisual(IEnumerable<ItemViewModel> items)
+    private async Task UpdateVisual(IEnumerable<ItemViewModel> items)
     {
-        SetSum(items);
+        Series.Clear();
+        Tags.Clear();
 
-        _values.Clear();
-        for (int i = 0; i < 6; i++) 
+        var days = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+
+        var activeItems = items.Where(item => !item.IsArchived);
+        var values = activeItems.GroupBy(item => item.Item.TagId);
+
+        foreach (var value in values)
         {
-            var date = DateTime.Now.AddMonths(-i);
-            var days = DateTime.DaysInMonth(date.Year, date.Month);
+            var tag = _tagService.Tags.FirstOrDefault(tag => tag.Id == value.Key);
+            if (tag == null) continue;
 
-            var values = items.Select(item => 
-                item.IsArchived ? 0 : item.Item.TagId
-            );
+            var color = new SKColor(tag.Color.Value.R, tag.Color.Value.G, tag.Color.Value.B);
 
-            _values.Insert(0, values.Sum());
+            var tasks = value.Select(async item => await _currencyCache.ConvertToDefaultCurrency(
+                item.Item?.Billing.BasePrice * item.GetPaymentsInPeriod(days) ?? 0,
+                item?.Item?.Billing?.CurrencyId ?? "EUR",
+                _settingsService.DefaultCurrency));
+
+            var convertedPrices = await Task.WhenAll(tasks);
+            var sum = convertedPrices.Sum();
+
+            Series.Add(new PieSeries<decimal>
+            {
+                Values = [sum],
+                Name = tag.Name,
+                Fill = new SolidColorPaint(color),
+            });
+
+            Tags.Add(new(tag.Name, tag.Color, Math.Round(sum, 2)
+                .ToString("C", CurrencyCache.CurrencyCultures[_settingsService.DefaultCurrency])));
         }
     }
 
-    private async void SetSum(IEnumerable<ItemViewModel> e)
+    public async override void Load()
     {
-    }
-
-    public override void Load()
-    {
-        _themeListener.ColorValuesChanged += UISettings_ColorValuesChanged;
+        await UpdateVisual(_itemService.GetItems());
     }
 
     public override void Unload()
     {
         _itemService.OnItemsChanged -= ItemService_OnItemsChanged;
         _itemService.OnItemsInitialized -= ItemService_OnItemsChanged;
-
-        _themeListener.ColorValuesChanged -= UISettings_ColorValuesChanged;
     }
 }

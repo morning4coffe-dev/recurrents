@@ -140,8 +140,6 @@ public partial class StatsBannerViewModel : ViewModelBase
         var items = e
             .Where(item => !item.IsArchived);
 
-        //use the same GetPaymentsInPeriod(int periodDays, int offsetDays = 0) for the graphs, offset it by the days since the specified month
-
         var tasks = items.Select(async item => await _currencyCache.ConvertToDefaultCurrency(
             item.Item?.Billing.BasePrice * item.GetPaymentsInPeriod(days) ?? 0,
             item?.Item?.Billing?.CurrencyId ?? "EUR",
