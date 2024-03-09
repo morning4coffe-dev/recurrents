@@ -1,14 +1,14 @@
 namespace ProjectSBS.Presentation.Components;
 
-public sealed partial class StatsBanner : Page
+public sealed partial class TagsChartBanner : Page
 {
-    public StatsBannerViewModel ViewModel => (StatsBannerViewModel)DataContext;
+    public TagsChartViewModel ViewModel => (TagsChartViewModel)DataContext;
 
-    public StatsBanner()
+    public TagsChartBanner()
     {
         InitializeComponent();
 
-        DataContext = App.Services?.GetRequiredService<StatsBannerViewModel>()!;
+        DataContext = App.Services?.GetRequiredService<TagsChartViewModel>()!;
         Loaded += Page_Loaded;
         Unloaded += Page_Unloaded;
     }

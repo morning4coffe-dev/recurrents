@@ -178,7 +178,7 @@
                      x:FieldModifier="public" />
 
               <InfoBar x:Name="disconnectAlert"
-                       Title="You are offline"
+                       Title="{x:Bind ViewModel.OfflineAlertText}"
                        Severity="Error"
                        IsClosable="False"
                        VerticalAlignment="Bottom"

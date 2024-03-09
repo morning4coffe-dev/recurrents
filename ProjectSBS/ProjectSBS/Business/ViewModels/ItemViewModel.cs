@@ -116,12 +116,12 @@ public partial class ItemViewModel : ObservableObject
         }
     }
 
-    public int GetPaymentsInPeriod(int periodDays)
+    public int GetPaymentsInPeriod(int periodDays, int offsetDays = 0)
     {
         var dates = GetLastPayments().ToArray();
 
-        var startDate = DateOnly.FromDateTime(DateTime.Now.AddDays(-(periodDays - 1)));
-        var endDate = DateOnly.FromDateTime(DateTime.Now);
+        var startDate = DateOnly.FromDateTime(DateTime.Now.AddDays(-((periodDays + offsetDays) - 1)));
+        var endDate = DateOnly.FromDateTime(DateTime.Now.AddDays(-(offsetDays - 1)));
 
         return dates.Count(date => date >= startDate && date <= endDate);
     }
