@@ -1,4 +1,3 @@
-using CommunityToolkit.WinUI.Helpers;
 using LiveChartsCore;
 using LiveChartsCore.Kernel.Sketches;
 using LiveChartsCore.SkiaSharpView;
@@ -120,10 +119,13 @@ public partial class StatsBannerViewModel : ViewModelBase
             var date = DateTime.Now.AddMonths(-i);
             var days = DateTime.DaysInMonth(date.Year, date.Month);
 
-            var tasks = items.Select(async item => await _currencyCache.ConvertToDefaultCurrency(
+            var tasks = items.Select(async item => 
+            item.IsArchived ? 0 : await _currencyCache.ConvertToDefaultCurrency
+            (
                 item.Item?.Billing.BasePrice * item.GetPaymentsInPeriod(days, (DateTime.Now - date).Days) ?? 0,
                 item?.Item?.Billing?.CurrencyId ?? "EUR",
-                _settingsService.DefaultCurrency));
+                _settingsService.DefaultCurrency)
+            );
 
             var values = await Task.WhenAll(tasks);
 
