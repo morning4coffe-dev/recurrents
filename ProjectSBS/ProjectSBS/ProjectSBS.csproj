@@ -100,6 +100,7 @@
     <None Remove="Presentation\Components\MobileUser.xaml" />
     <None Remove="Presentation\Components\PageShell.xaml" />
     <None Remove="Presentation\Components\StatsBanner.xaml" />
+    <None Remove="Presentation\Components\TagsChartBanner.xaml" />
     <None Remove="Presentation\Components\ToggleIcon.xaml" />
     <None Remove="Presentation\LoginPage.xaml" />
     <None Remove="Presentation\MainPage.xaml" />
@@ -115,6 +116,7 @@
     <UpToDateCheckInput Remove="Presentation\Components\MobileUser.xaml" />
     <UpToDateCheckInput Remove="Presentation\Components\PageShell.xaml" />
     <UpToDateCheckInput Remove="Presentation\Components\StatsBanner.xaml" />
+    <UpToDateCheckInput Remove="Presentation\Components\TagsChartBanner.xaml" />
     <UpToDateCheckInput Remove="Presentation\Components\ToggleIcon.xaml" />
     <UpToDateCheckInput Remove="Presentation\LoginPage.xaml" />
     <UpToDateCheckInput Remove="Presentation\MainPage.xaml" />
@@ -143,6 +145,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="Presentation\Components\TagsChartBanner.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Presentation\NestedPages\ArchivePage.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
