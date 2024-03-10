@@ -10,22 +10,25 @@
       xmlns:not_win="http://uno.ui/not_win"
       mc:Ignorable="d not_win">
 
-  <Grid>
+  <Grid ColumnSpacing="26" HorizontalAlignment="Center">
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="*" />
-      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="auto" />
+      <ColumnDefinition Width="2*" />
     </Grid.ColumnDefinitions>
 
     <lvc:PieChart Height="200"
+                  Width="200"
                   Foreground="White"
                   VerticalAlignment="Center"
-                  Series="{x:Bind ViewModel.Series}" />
+                  Series="{x:Bind ViewModel.Series}"
+                  Grid.Column="0" />
 
     <ScrollViewer Margin="0,26,26,0"
                   Padding="0,0,16,0"
                   VerticalScrollBarVisibility="Auto"
                   VerticalAlignment="Center"
-                  Grid.Column="1">
+                  HorizontalAlignment="Left"
+                  Grid.Column="2">
       <ItemsControl ItemsSource="{x:Bind ViewModel.Tags}">
         <ItemsControl.ItemTemplate>
           <DataTemplate x:DataType="models:TagChart">
