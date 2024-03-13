@@ -20,7 +20,7 @@
     <StackPanel>
       <FlipView x:Name="Gallery"
                 Background="Transparent"
-                Height="220">
+                Height="230">
 
         <comp:PaymentLineBanner />
         <comp:TagsChartBanner />
