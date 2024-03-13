@@ -12,6 +12,7 @@ public partial class MainViewModel : ViewModelBase
 
     #region Localization Strings
     public string ClickToLoginText => _localizer["ClickToLogin"];
+    public string OfflineAlertText => _localizer["OfflineAlert"];
     public string SettingsText => _localizer["Settings"];
     public string LogoutText => _localizer["Logout"];
     #endregion

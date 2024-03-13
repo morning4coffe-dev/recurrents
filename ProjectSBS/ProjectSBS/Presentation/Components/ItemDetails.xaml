@@ -29,7 +29,6 @@
     </Style>
 
     <converters:StringFormatConverter x:Key="StringFormatConverter" />
-    <localConverters:ColorToBrushConverter x:Key="ColorToBrushConverter" />
     <localConverters:PaymentPeriodToLocalizedStringConverter x:Key="PaymentPeriodToLocalizedStringConverter" />
 
   </Page.Resources>

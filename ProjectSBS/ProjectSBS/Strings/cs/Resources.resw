@@ -278,6 +278,9 @@
     <value>Posledních {0} dnů</value>
     <comment>{0} is the number of days in current month</comment>
   </data>
+  <data name="Login" xml:space="preserve">
+    <value>Login</value>
+  </data>
   <data name="LoginWithMicrosoft" xml:space="preserve">
     <value>Přihlášení pomocí účtu Microsoft</value>
   </data>
@@ -321,6 +324,9 @@
   </data>
   <data name="NotLoggedInDescription" xml:space="preserve">
     <value>Vaše data jsou uložena lokálně a nejsou synchronizována.</value>
+  </data>
+  <data name="OfflineAlert" xml:space="preserve">
+    <value>Jste offline</value>
   </data>
   <data name="Ok" xml:space="preserve">
     <value>Ok</value>

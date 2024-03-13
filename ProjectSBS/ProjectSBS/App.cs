@@ -92,6 +92,7 @@ public class App : Application
                     services.AddTransient<HomeViewModel>();
                     services.AddTransient<SettingsViewModel>();
                     services.AddTransient<StatsBannerViewModel>();
+                    services.AddTransient<TagsChartViewModel>();
 
 #if __ANDROID__
                     services.AddSingleton<INotificationService, AndroidNotificationService>();

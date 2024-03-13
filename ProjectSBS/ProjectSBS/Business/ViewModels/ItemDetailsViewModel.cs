@@ -7,6 +7,7 @@ public partial class ItemDetailsViewModel : ViewModelBase
     #region Services
     private readonly IStringLocalizer _localizer;
     private readonly ITagService _tagService;
+    private readonly IItemFilterService _filterService;
     private readonly ICurrencyCache _currencyCache;
     private readonly IDialogService _dialog;
     #endregion
@@ -84,11 +85,13 @@ public partial class ItemDetailsViewModel : ViewModelBase
     public ItemDetailsViewModel(
         IStringLocalizer localizer,
         ITagService tagService,
+        IItemFilterService filterService, 
         ICurrencyCache currencyCache,
         IDialogService dialog)
     {
         _localizer = localizer;
         _tagService = tagService;
+        _filterService = filterService;
         _currencyCache = currencyCache;
         _dialog = dialog;
 
