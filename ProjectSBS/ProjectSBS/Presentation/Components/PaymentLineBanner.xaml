@@ -19,7 +19,7 @@
                  Style="{StaticResource SubtitleTextBlockStyle}" />
     </StackPanel>
 
-    <lvc:CartesianChart Height="160"
+    <lvc:CartesianChart Height="165"
                         Margin="26,0,0,0"
                         Foreground="White"
                         XAxes="{x:Bind ViewModel.XAxes}"

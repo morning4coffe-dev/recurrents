@@ -82,7 +82,7 @@ public partial class StatsBannerViewModel : ViewModelBase
             new Axis
             {
                 ShowSeparatorLines = false,
-                Labeler = value => value.ToString("C", CurrencyCache.CurrencyCultures[_settingsService.DefaultCurrency]),
+                Labeler = value => Math.Round(value).ToString("C0", CurrencyCache.CurrencyCultures[_settingsService.DefaultCurrency]),
                 LabelsPaint = new SolidColorPaint(SKColors.LightGray),
                 TextSize = 14
             }];
