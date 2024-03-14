@@ -92,6 +92,7 @@ public class App : Application
                     services.AddTransient<HomeViewModel>();
                     services.AddTransient<SettingsViewModel>();
                     services.AddTransient<StatsBannerViewModel>();
+                    services.AddTransient<TagsChartViewModel>();
 
 #if __ANDROID__
                     services.AddSingleton<INotificationService, AndroidNotificationService>();
@@ -171,7 +172,8 @@ public class App : Application
         // Ensure the current window is active
         MainWindow.Activate();
 
-#if !HAS_UNO //&& !DEBUG
+#if !HAS_UNO && !DEBUG
+        AnalyticsService.Initialize();
         //TODO Always returns v1 on WinUI3
         //var version = Services?.GetRequiredService<IInteropService>().GetAppVersion();
 

@@ -7,6 +7,7 @@ public partial class ItemDetailsViewModel : ViewModelBase
     #region Services
     private readonly IStringLocalizer _localizer;
     private readonly ITagService _tagService;
+    private readonly IItemFilterService _filterService;
     private readonly ICurrencyCache _currencyCache;
     private readonly IDialogService _dialog;
     #endregion
@@ -81,26 +82,18 @@ public partial class ItemDetailsViewModel : ViewModelBase
         }
     }
 
-    public ICommand EnableEditingCommand { get; }
-    public ICommand CloseCommand { get; }
-    public ICommand SaveCommand { get; }
-    public ICommand ArchiveCommand { get; }
-
     public ItemDetailsViewModel(
         IStringLocalizer localizer,
         ITagService tagService,
+        IItemFilterService filterService, 
         ICurrencyCache currencyCache,
         IDialogService dialog)
     {
         _localizer = localizer;
         _tagService = tagService;
+        _filterService = filterService;
         _currencyCache = currencyCache;
         _dialog = dialog;
-
-        EnableEditingCommand = new RelayCommand(() => EnableEditing());
-        CloseCommand = new AsyncRelayCommand(Close);
-        SaveCommand = new RelayCommand(Save);
-        ArchiveCommand = new RelayCommand(Archive);
 
         PaymentMethods =
         [
@@ -139,7 +132,25 @@ public partial class ItemDetailsViewModel : ViewModelBase
                 SelectedItem = item;
                 OnPropertyChanged(nameof(SelectedItem));
 
-                EnableEditing(m.IsEdit);
+                if (m.IsEdit)
+                {
+                    EnableEditing();
+                }
+                else
+                {
+                    IsEditing = m.IsEdit;
+                }
+
+                if (SelectedItem?.Item?.Billing?.PeriodType is { } period)
+                {
+                    var resultPair = PaymentPeriods.FirstOrDefault(pair => pair.Key == period);
+
+                    if (!EqualityComparer<Period>.Default.Equals(resultPair.Key, default))
+                    {
+                        SelectedPeriod = new(resultPair.Key, resultPair.Value);
+                        OnPropertyChanged(nameof(SelectedPeriod));
+                    }
+                }
 
                 if (SelectedItem?.Item?.Billing?.PeriodType is { } period)
                 {
@@ -175,19 +186,17 @@ public partial class ItemDetailsViewModel : ViewModelBase
         WeakReferenceMessenger.Default.UnregisterAll(this);
     }
 
-
-    private void EnableEditing(bool isTrue = true)
+    [RelayCommand]
+    private void EnableEditing()
     {
-        IsEditing = isTrue;
+        IsEditing = true;
 
-        if (isTrue)
-        {
-            // take a copy of the item
-            EditItem = SelectedItem?.Item with { };
-            ItemName = _localizer[string.IsNullOrEmpty(SelectedItem?.Item.Name) ? "NewItem" : "Edit"];
-        }
+        // take a copy of the item
+        EditItem = SelectedItem?.Item with { };
+        ItemName = _localizer[string.IsNullOrEmpty(SelectedItem?.Item.Name) ? "NewItem" : "Edit"];
     }
 
+    [RelayCommand]
     private async Task<bool> Close()
     {
         ContentDialogResult result = ContentDialogResult.Primary;
@@ -208,6 +217,7 @@ public partial class ItemDetailsViewModel : ViewModelBase
         return result == ContentDialogResult.Primary;
     }
 
+    [RelayCommand]
     private void Save()
     {
         if (EditItem is not { } item || SelectedItem is not { })
@@ -219,6 +229,7 @@ public partial class ItemDetailsViewModel : ViewModelBase
         WeakReferenceMessenger.Default.Send(new ItemUpdated(SelectedItem, ToSave: true));
     }
 
+    [RelayCommand]
     private void Archive()
     {
         if (SelectedItem is not { })

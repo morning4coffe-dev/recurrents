@@ -14,6 +14,9 @@ public partial class LoginViewModel : ObservableObject
     [ObservableProperty]
     private UserModel.User? _user;
 
+    [ObservableProperty]
+    private bool _indicateLoading;
+
     public LoginViewModel(
         INavigation navigation,
         IUserService userService,
@@ -25,15 +28,6 @@ public partial class LoginViewModel : ObservableObject
         _localization = localization;
         _itemService = itemService;
 
-        Login = new AsyncRelayCommand(DoLogin);
-        WithoutLogin = new RelayCommand(() =>
-        {
-            App.Services!.GetRequiredService<ISettingsService>().ContinueWithoutLogin = true;
-            _navigation.Navigate(typeof(MainPage));
-
-            SendAnalytics(false);
-        });
-
         _titleText = _localization["Welcome"];
         _authorText = _localization["Author"];
         _privacyPolicyText = _localization["PrivacyPolicy"];
@@ -43,9 +37,11 @@ public partial class LoginViewModel : ObservableObject
         itemService.ClearItems();
     }
 
-    private async Task DoLogin()
+    [RelayCommand]
+    private async Task Login()
     {
         var success = false;
+        IndicateLoading = true;
 
         try
         {
@@ -75,6 +71,19 @@ public partial class LoginViewModel : ObservableObject
 
             SendAnalytics(true);
         }
+
+        IndicateLoading = false;
+    }
+
+    private void SendAnalytics(bool loggedIn)
+    {
+        Dictionary<string, string> logInStats = new()
+        {
+            { "Logged In", loggedIn.ToString() },
+            { "Provider", loggedIn ? "Microsoft" : "N/A" },
+        };
+
+        AnalyticsService.TrackEvent(AnalyticsService.LogIn, logInStats);
     }
 
     private void SendAnalytics(bool loggedIn)
@@ -89,10 +98,17 @@ public partial class LoginViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void PrivacyPolicy()
+    private void ContinueWithoutLogin()
     {
-        _ = Launcher.LaunchUriAsync(new Uri("https://github.com/morning4coffe-dev/recurrents/blob/ebf622cb65d60c7d353af69824f63d88fa796bde/privacy-policy.md"));
+        IndicateLoading = true;
+        App.Services!.GetRequiredService<ISettingsService>().ContinueWithoutLogin = true;
+        _navigation.Navigate(typeof(MainPage));
+        IndicateLoading = false;
     }
+
+    [RelayCommand]
+    private async Task OpenPrivacyPolicy() =>
+        await  Launcher.LaunchUriAsync(new Uri("https://github.com/morning4coffe-dev/recurrents/blob/ebf622cb65d60c7d353af69824f63d88fa796bde/privacy-policy.md"));
 
     [ObservableProperty]
     private string _titleText;
@@ -108,7 +124,4 @@ public partial class LoginViewModel : ObservableObject
 
     [ObservableProperty]
     private string _continueWithoutLoginText;
-
-    public ICommand Login { get; }
-    public ICommand WithoutLogin { get; }
 }

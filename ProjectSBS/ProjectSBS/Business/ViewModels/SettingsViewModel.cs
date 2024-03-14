@@ -1,3 +1,5 @@
+using WS = Windows.System;
+
 namespace ProjectSBS.Business.ViewModels;
 
 public partial class SettingsViewModel : ViewModelBase
@@ -7,12 +9,15 @@ public partial class SettingsViewModel : ViewModelBase
     private readonly IItemService _itemService;
     private readonly IUserService _userService;
     private readonly IStringLocalizer _localizer;
+    private readonly INavigation _navigation;
+    private readonly IInteropService _interopService;
 
     #region Localization Strings
     public string TitleText => _localizer["Settings"];
     public string DefaultCurrencyText => _localizer["DefaultCurrency"];
     public string GoToSettingsText => _localizer["GoToSettings"];
     public string LogoutText => _localizer["Logout"];
+    public string LoginText => _localizer["Login"];
     public string NotLoggedInText => _localizer["NotLoggedIn"];
     public string NotLoggedInDescription => _localizer["NotLoggedInDescription"];
     public string SystemLanguageAndRegionText => _localizer["SystemLanguageAndRegion"];
@@ -39,7 +44,8 @@ public partial class SettingsViewModel : ViewModelBase
 
     public bool IsNotificationsEnabled { get; }
 
-    private string _selectedCurrency;
+    private string _selectedCurrency = string.Empty;
+
     public string SelectedCurrency
     {
         get => _selectedCurrency;
@@ -79,48 +85,30 @@ public partial class SettingsViewModel : ViewModelBase
 
     public ObservableCollection<string> Currencies { get; } = [];
 
-    public ICommand Logout { get; }
-    public ICommand Login { get; }
-    public ICommand GitHub { get; }
-    public ICommand RateAndReview { get; }
-    public ICommand PrivacyPolicy { get; }
-    public ICommand ReportABug { get; }
     public SettingsViewModel(
-    IStringLocalizer localizer,
-    ICurrencyCache currencyCache,
-    ISettingsService settingsService,
-    INavigation navigation,
-    INotificationService notificationService,
-    IItemService itemService,
-    IInteropService interopService,
-    IUserService userService)
+        IStringLocalizer localizer,
+        ICurrencyCache currencyCache,
+        ISettingsService settingsService,
+        INavigation navigation,
+        INotificationService notificationService,
+        IItemService itemService,
+        IInteropService interopService,
+        IUserService userService
+    )
     {
         _localizer = localizer;
         _userService = userService;
         _currencyCache = currencyCache;
         _itemService = itemService;
         _settingsService = settingsService;
+        _navigation = navigation;
+        _interopService = interopService;
 
         _userService.OnLoggedInChanged += (s, e) =>
         {
             User = e;
             IsLoggedIn = e is { };
         };
-
-        Logout = new RelayCommand(() =>
-        {
-            userService.Logout();
-            navigation.Navigate(typeof(LoginPage));
-        });
-
-        Login = new RelayCommand(() => navigation.Navigate(typeof(LoginPage)));
-        GitHub = new AsyncRelayCommand(async () =>
-            await Windows.System.Launcher.LaunchUriAsync(new Uri("https://github.com/morning4coffe-dev/recurrents")));
-        RateAndReview = new AsyncRelayCommand(interopService.OpenStoreReviewUrlAsync);
-        PrivacyPolicy = new AsyncRelayCommand(async () =>
-            await Windows.System.Launcher.LaunchUriAsync(new Uri("https://github.com/morning4coffe-dev/recurrents/blob/ebf622cb65d60c7d353af69824f63d88fa796bde/privacy-policy.md")));
-        ReportABug = new AsyncRelayCommand(async () =>
-            await Windows.System.Launcher.LaunchUriAsync(new Uri("https://github.com/morning4coffe-dev/recurrents/issues/new")));
 
         IsNotificationsEnabled = notificationService.IsEnabledOnDevice();
 
@@ -149,13 +137,41 @@ public partial class SettingsViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    public void LaunchNotificationSettings() => _ = Windows.System.Launcher.LaunchUriAsync(new Uri("ms-settings:notifications"));
+    public async Task LaunchNotificationSettings() =>
+        await WS.Launcher.LaunchUriAsync(new Uri("ms-settings:notifications"));
 
     [RelayCommand]
-    public void LaunchLangSettings() => _ = Windows.System.Launcher.LaunchUriAsync(new Uri("ms-settings:regionlanguage-adddisplaylanguage"));
+    public async Task LaunchLangSettings() =>
+        await WS.Launcher.LaunchUriAsync(new Uri("ms-settings:regionlanguage-adddisplaylanguage"));
 
     public override void Unload()
     {
-        
     }
+
+    [RelayCommand]
+    private void Login() =>
+        _navigation.Navigate(typeof(LoginPage));
+
+    [RelayCommand]
+    private void Logout()
+    {
+        _userService.Logout();
+        _navigation.Navigate(typeof(LoginPage));
+    }
+
+    [RelayCommand]
+    private async Task OpenGithub() =>
+        await WS.Launcher.LaunchUriAsync(new Uri("https://github.com/morning4coffe-dev/recurrents"));
+
+    [RelayCommand]
+    private async Task OpenRateAndReview() =>
+        await _interopService.OpenStoreReviewUrlAsync();
+
+    [RelayCommand]
+    private async Task OpenPrivacyPolicy() =>
+        await WS.Launcher.LaunchUriAsync(new Uri("https://github.com/morning4coffe-dev/recurrents/blob/ebf622cb65d60c7d353af69824f63d88fa796bde/privacy-policy.md"));
+
+    [RelayCommand]
+    private async Task OpenGithubIssues() =>
+        await WS.Launcher.LaunchUriAsync(new Uri("https://github.com/morning4coffe-dev/recurrents/issues/new"));
 }

@@ -120,7 +120,6 @@ public class MsalUser : IUserService
         var fullName = user?.DisplayName;
         var mail = user?.Mail;
 
-        // Retrieve the user's profile picture
         BitmapImage? photoBitmap = null;
         try
         {
@@ -148,21 +147,32 @@ public class MsalUser : IUserService
 
     public async Task<bool> UploadData(string content, string relativeLocalPath, CancellationToken token = default)
     {
-        //https://learn.microsoft.com/en-us/onedrive/developer/rest-api/concepts/special-folders-appfolder?view=odsp-graph-online
-        var user = await _client.Me.GetAsync(cancellationToken: token);
+        try
+        {
+            var user = await _client.Me.GetAsync(cancellationToken: token);
+            var userDrive = await _client.Users[user.Id].Drive.GetAsync(cancellationToken: token);
+            var driveItems = await _client.Drives[userDrive.Id].Special["approot"].GetAsync(cancellationToken: token);
 
-        var userDrive = await _client.Users[user.Id].Drive.GetAsync(cancellationToken: token);
-        var driveItems = await _client.Drives[userDrive.Id].Special["approot"].GetAsync(cancellationToken: token);
+            byte[] byteArray = Encoding.ASCII.GetBytes(content);
+            var newItem = new DriveItem { Name = relativeLocalPath, Content = byteArray };
 
-        byte[] byteArray = Encoding.UTF8.GetBytes(content);
-        var newItem = new DriveItem { Name = relativeLocalPath, Content = byteArray };
+            var uploadedItem = await _client.Drives[userDrive.Id]
+                .Items[driveItems.Id]
+                .ItemWithPath(newItem.Name)
+                .Content
+                .PutAsync(new MemoryStream(byteArray), cancellationToken: token);
 
-        var uploadedItem = await _client.Drives[userDrive.Id]
-            .Items[driveItems.Id]
-            .ItemWithPath(newItem.Name).Content
-            .PutAsync(new MemoryStream(byteArray));
-
-        return uploadedItem != null;
+            return uploadedItem is not null;
+        }
+        catch (Exception ex)
+        {
+            AnalyticsService.TrackEvent("UserService", new Dictionary<string, string>
+            {
+                { "Error", ex.Message + "--" + ex.StackTrace }
+            });
+            Console.WriteLine($"Error uploading file: {ex.Message}");
+            return false;
+        }
     }
 
     public async Task<Stream?> RetrieveData(string relativeLocalPath, CancellationToken token)

@@ -28,6 +28,7 @@ For new features, please make sure there's an existing issue created. If no issu
 
 - Czech: Morning4coffe
 - English: Morning4coffe
+- German: Sebastian Szvetecz (@szv)
 
 ### Contributors
 

@@ -29,7 +29,7 @@
     </Style>
 
     <converters:StringFormatConverter x:Key="StringFormatConverter" />
-    <localConverters:ColorToBrushConverter x:Key="ColorToBrushConverter" />
+    <localConverters:PaymentPeriodToLocalizedStringConverter x:Key="PaymentPeriodToLocalizedStringConverter" />
 
   </Page.Resources>
 
@@ -155,8 +155,8 @@
 
           <ScrollViewer Visibility="{x:Bind ViewModel.IsEditing, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
                         Grid.Row="1">
-            <helpers:StackPanelWithSpacing Space="4"
-                                           Style="{StaticResource ContentStack}">
+            <StackPanel Spacing="4"
+                        Style="{StaticResource ContentStack}">
               <win:StackPanel.ChildrenTransitions>
                 <TransitionCollection>
                   <EntranceThemeTransition FromHorizontalOffset="80"
@@ -222,7 +222,7 @@
                                 Visibility="{x:Bind ViewModel.SelectedItem.Item.Description, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}"
                                 Text="{x:Bind ViewModel.SelectedItem.Item.Description, Mode=OneWay}" />
 
-            </helpers:StackPanelWithSpacing>
+            </StackPanel>
           </ScrollViewer>
 
           <Grid Visibility="{x:Bind ViewModel.IsEditing, Mode=TwoWay, Converter={StaticResource TrueToVisibleConverter}}"
@@ -234,8 +234,8 @@
             </Grid.RowDefinitions>
 
             <ScrollViewer>
-              <helpers:StackPanelWithSpacing Space="12"
-                                             Style="{StaticResource ContentStack}">
+              <StackPanel Spacing="16"
+                          Style="{StaticResource ContentStack}">
 
                 <TextBox Header="{x:Bind ViewModel.NameText}"
                          Text="{x:Bind ViewModel.EditItem.Name, Mode=TwoWay}"
@@ -284,7 +284,13 @@
                             SelectedValuePath="Key"
                             DisplayMemberPath="Value"
                             MinWidth="120"
-                            Grid.Column="1" />
+                            Grid.Column="1">
+                    <ComboBox.ItemTemplate>
+                      <DataTemplate x:DataType="models:Period">
+                        <TextBlock Text="{x:Bind Converter={StaticResource PaymentPeriodToLocalizedStringConverter}}" />
+                      </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                  </ComboBox>
                 </Grid>
 
                 <Grid>
@@ -356,7 +362,7 @@
                     </StackPanel>
                   </TextBox.Header>
                 </TextBox>
-              </helpers:StackPanelWithSpacing>
+              </StackPanel>
             </ScrollViewer>
 
             <Button Command="{x:Bind ViewModel.SaveCommand}"

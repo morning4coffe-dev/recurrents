@@ -1,8 +1,8 @@
 using CommunityToolkit.WinUI.Helpers;
 using LiveChartsCore;
+using LiveChartsCore.Kernel.Sketches;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
-using Microsoft.UI.Dispatching;
 using SkiaSharp;
 using Windows.UI;
 using Windows.UI.ViewManagement;
@@ -17,17 +17,16 @@ public partial class StatsBannerViewModel : ViewModelBase
 
     private readonly UISettings _themeListener = new();
 
-    private Color _accentColor = (Color)Application.Current.Resources["SystemAccentColor"];
-    private Color _textColor => (Color)Application.Current.Resources["TextFillColorPrimary"];
-
     public string Header { get; }
 
-    private readonly ObservableCollection<double> _values = [];
+    private readonly ObservableCollection<decimal> _values = [];
 
     [ObservableProperty]
     private string _sum = "0";
 
     public ObservableCollection<ISeries> Series { get; set; }
+    public ObservableCollection<ICartesianAxis> XAxes { get; set; }
+    public ObservableCollection<ICartesianAxis> YAxes { get; set; }
 
     public StatsBannerViewModel(
         IItemService itemService,
@@ -46,12 +45,18 @@ public partial class StatsBannerViewModel : ViewModelBase
 
         UpdateVisual(_itemService.GetItems());
 
+        var accentColor = (Color)Application.Current.Resources["SystemAccentColor"];
+        var skColor = new SKColor(accentColor.R, accentColor.G, accentColor.B);
+
         ObservableCollection<ISeries> series =
         [
-            new LineSeries<double>
+            new LineSeries<decimal>
             {
                 Values = _values,
                 Fill = null,
+                Stroke = new SolidColorPaint(skColor) { StrokeThickness = 6 },
+                GeometryStroke = new SolidColorPaint(skColor) { StrokeThickness = 0 },
+                GeometryFill = new SolidColorPaint(skColor) { StrokeThickness = 0 }
             }
         ];
 
@@ -70,6 +75,7 @@ public partial class StatsBannerViewModel : ViewModelBase
             {
                 ShowSeparatorLines = false,
                 Labels = months,
+                LabelsPaint = new SolidColorPaint(SKColors.White),
                 TextSize = 14
             }];
 
@@ -77,11 +83,10 @@ public partial class StatsBannerViewModel : ViewModelBase
             new Axis
             {
                 ShowSeparatorLines = false,
-                Labeler = value => value.ToString("C", CurrencyCache.CurrencyCultures[_settingsService.DefaultCurrency]),
+                Labeler = value => Math.Round(value).ToString("C0", CurrencyCache.CurrencyCultures[_settingsService.DefaultCurrency]),
+                LabelsPaint = new SolidColorPaint(SKColors.LightGray),
                 TextSize = 14
             }];
-
-        UISettings_ColorValuesChanged(null, null);
     }
 
     private void UISettings_ColorValuesChanged(UISettings sender, object args)
@@ -89,43 +94,33 @@ public partial class StatsBannerViewModel : ViewModelBase
         //TODO: The UISettings.ColorValueChanged is not called on Windows 10
         //https://github.com/CommunityToolkit/WindowsCommunityToolkit/issues/4412#issuecomment-1823919825
 
-        var skColor = new SKColor(_accentColor.R, _accentColor.G, _accentColor.B);
+        var accentColor = (Color)Application.Current.Resources["SystemAccentColor"];
+        var skColor = new SKColor(accentColor.R, accentColor.G, accentColor.B);
 
         ((LineSeries<decimal>)Series[0]).Stroke = new SolidColorPaint(skColor) { StrokeThickness = 6 };
-        ((LineSeries<decimal>)Series[0]).GeometryStroke = new SolidColorPaint(skColor) { StrokeThickness = 2 };
-        ((LineSeries<decimal>)Series[0]).GeometryFill = new SolidColorPaint(skColor) { StrokeThickness = 2 };
+        ((LineSeries<decimal>)Series[0]).GeometryStroke = new SolidColorPaint(skColor) { StrokeThickness = 0 };
+        ((LineSeries<decimal>)Series[0]).GeometryFill = new SolidColorPaint(skColor) { StrokeThickness = 0 };
 
-        App.Dispatcher.TryEnqueue(DispatcherQueuePriority.High,
-        () =>
-        {
-            var textColor = new SKColor(_textColor.R, _textColor.G, _textColor.B);
-            ((Axis)XAxes[0]).LabelsPaint = new SolidColorPaint(textColor);
-            ((Axis)YAxes[0]).LabelsPaint = new SolidColorPaint(textColor);
-        });
-
+        ((Axis)XAxes[0]).LabelsPaint = new SolidColorPaint(SKColors.Pink);
+        ((Axis)YAxes[0]).LabelsPaint = new SolidColorPaint(SKColors.LightBlue);
     }
 
     private void ItemService_OnItemsChanged(object? sender, IEnumerable<ItemViewModel> e)
     {
-        SetSum(e);
-        //    _values.Add(e.ToList().Count);
+        UpdateVisual(e);
+    }
 
-        //    ObservableCollection<ISeries> series = new()
-        //    {
-        //        new LineSeries<double>
-        //        {
-        //            Values = _values,
-        //            Fill = null
-        //        }
-        //    };
+    private async void UpdateVisual(IEnumerable<ItemViewModel> items)
+    {
+        SetSum(items);
 
         _values.Clear();
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 6; i++) 
         {
             var date = DateTime.Now.AddMonths(-i);
             var days = DateTime.DaysInMonth(date.Year, date.Month);
 
-            var tasks = items.Select(async item =>
+            var tasks = items.Select(async item => 
             item.IsArchived ? 0 : await _currencyCache.ConvertToDefaultCurrency
             (
                 item.Item?.Billing.BasePrice * item.GetPaymentsInPeriod(days, (DateTime.Now - date).Days) ?? 0,
@@ -159,12 +154,14 @@ public partial class StatsBannerViewModel : ViewModelBase
 
     public override void Load()
     {
-        //throw new NotImplementedException();
+        _themeListener.ColorValuesChanged += UISettings_ColorValuesChanged;
     }
 
     public override void Unload()
     {
         _itemService.OnItemsChanged -= ItemService_OnItemsChanged;
         _itemService.OnItemsInitialized -= ItemService_OnItemsChanged;
+
+        _themeListener.ColorValuesChanged -= UISettings_ColorValuesChanged;
     }
 }

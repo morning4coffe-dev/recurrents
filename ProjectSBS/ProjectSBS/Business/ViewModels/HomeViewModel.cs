@@ -91,11 +91,6 @@ public partial class HomeViewModel : ViewModelBase
 
     public NavigationCategory SelectedCategory => _navigation.SelectedCategory;
 
-    public ICommand AddNewCommand { get; }
-    public ICommand ArchiveCommand { get; }
-    public ICommand DeleteCommand { get; }
-    public ICommand OpenSettingsCommand { get; }
-
     public HomeViewModel(
         IUserService userService,
         IItemService itemService,
@@ -110,13 +105,6 @@ public partial class HomeViewModel : ViewModelBase
         _filterService = filterService;
         _navigation = navigation;
         _dialog = dialog;
-
-        AddNewCommand = new RelayCommand(AddNew);
-        ArchiveCommand = new AsyncRelayCommand(() => Archive());
-        DeleteCommand = new AsyncRelayCommand(() => Delete());
-        OpenSettingsCommand = new RelayCommand(()
-            => navigation.NavigateCategory(navigation.Categories.FirstOrDefault(category => category.Id == 5)
-            ?? throw new($"Settings category wasn't found in the Categories list on {this}.")));
 
         _userService.OnLoggedInChanged += (s, e) =>
         {
@@ -245,6 +233,7 @@ public partial class HomeViewModel : ViewModelBase
         SystemNavigationManager.GetForCurrentView().BackRequested -= System_BackRequested;
     }
 
+    [RelayCommand]
     private void AddNew()
     {
         SelectedItem = null;
@@ -260,6 +249,7 @@ public partial class HomeViewModel : ViewModelBase
         AnalyticsService.TrackEvent(AnalyticsService.ItemEvent, "Added", "True");
     }
 
+    [RelayCommand]
     public async Task Archive(ItemViewModel? item = null)
     {
         ContentDialogResult result;
@@ -288,6 +278,7 @@ public partial class HomeViewModel : ViewModelBase
         }
     }
 
+    [RelayCommand]
     public async Task Delete(ItemViewModel? item = null)
     {
         var result = await _dialog.ShowAsync(
@@ -304,5 +295,11 @@ public partial class HomeViewModel : ViewModelBase
 
             AnalyticsService.TrackEvent(AnalyticsService.ItemEvent, "Deleted", "True");
         }
+    }
+
+    [RelayCommand]
+    private void OpenSettings()
+    {
+        _navigation.NavigateCategory(_navigation.Categories.First(x => x.Page == typeof(SettingsPage)));
     }
 }

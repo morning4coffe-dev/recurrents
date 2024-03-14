@@ -12,6 +12,7 @@ public partial class MainViewModel : ViewModelBase
 
     #region Localization Strings
     public string ClickToLoginText => _localizer["ClickToLogin"];
+    public string OfflineAlertText => _localizer["OfflineAlert"];
     public string SettingsText => _localizer["Settings"];
     public string LogoutText => _localizer["Logout"];
     #endregion
@@ -52,8 +53,6 @@ public partial class MainViewModel : ViewModelBase
 
     public string? Title { get; }
 
-    public ICommand GoToSettings { get; }
-
     public MainViewModel(
         IStringLocalizer localizer,
         IOptions<AppConfig> appInfo,
@@ -78,10 +77,6 @@ public partial class MainViewModel : ViewModelBase
             User = e;
             IsLoggedIn = e is { };
         };
-
-        GoToSettings = new RelayCommand(()
-            => navigation.NavigateCategory(navigation.Categories.FirstOrDefault(category => category.Id == 5)
-            ?? throw new($"Settings category wasn't found in the Categories list on {this}.")));
     }
 
     public async override void Load()
@@ -104,6 +99,29 @@ public partial class MainViewModel : ViewModelBase
     public override void Unload()
     {
         _navigation.CategoryChanged -= Navigation_CategoryChanged;
+    }
+
+    private void Navigation_CategoryChanged(object? sender, NavigationCategory e) 
+        => SelectedCategory = e;
+
+    public void Navigate(NavigationViewSelectionChangedEventArgs args)
+    {
+        if (args.IsSettingsSelected)
+        {
+            if (PageType != typeof(SettingsPage))
+            {
+                GoToSettings();
+                return;
+            }
+        }
+
+        _navigation.NavigateCategory((args.SelectedItem as NavigationCategory) ?? SelectedCategory);
+    }
+
+    [RelayCommand]
+    private void GoToSettings()
+    {
+        _navigation.NavigateCategory(_navigation.Categories.First(x => x.Page == typeof(SettingsPage)));
     }
 
     private void Navigation_CategoryChanged(object? sender, NavigationCategory e) 
