@@ -7,7 +7,6 @@ public partial class LoginViewModel : ObservableObject
 {
     private readonly IUserService _userService;
 
-    private readonly IStringLocalizer _localization;
     private readonly INavigation _navigation;
     private readonly IItemService _itemService;
 
@@ -17,19 +16,18 @@ public partial class LoginViewModel : ObservableObject
     public LoginViewModel(
         INavigation navigation,
         IUserService userService,
-        IItemService itemService,
-        IStringLocalizer localization)
+        IItemService itemService)
     {
         _navigation = navigation;
         _userService = userService;
-        _localization = localization;
         _itemService = itemService;
 
-        _titleText = _localization["Welcome"];
-        _authorText = _localization["Author"];
-        _privacyPolicyText = _localization["PrivacyPolicy"];
-        _loginWithMicrosoftText = _localization["LoginWithMicrosoft"];
-        _continueWithoutLoginText = _localization["ContinueWithoutLogin"];
+        Login = new AsyncRelayCommand(DoLogin);
+        WithoutLogin = new RelayCommand(() =>
+        {
+            App.Services!.GetRequiredService<ISettingsService>().ContinueWithoutLogin = true;
+            _navigation.Navigate(typeof(MainPage));
+        });
 
         itemService.ClearItems();
     }
@@ -87,22 +85,6 @@ public partial class LoginViewModel : ObservableObject
         _navigation.Navigate(typeof(MainPage));
     }
 
-    [RelayCommand]
-    private async Task OpenPrivacyPolicy() =>
-        await  Launcher.LaunchUriAsync(new Uri("https://github.com/morning4coffe-dev/recurrents/blob/ebf622cb65d60c7d353af69824f63d88fa796bde/privacy-policy.md"));
-
-    [ObservableProperty]
-    private string _titleText;
-
-    [ObservableProperty]
-    private string _authorText;
-
-    [ObservableProperty]
-    private string _privacyPolicyText;
-
-    [ObservableProperty]
-    private string _loginWithMicrosoftText;
-
-    [ObservableProperty]
-    private string _continueWithoutLoginText;
+    public ICommand Login { get; }
+    public ICommand WithoutLogin { get; }
 }

@@ -6,6 +6,7 @@
       xmlns:triggers="using:CommunityToolkit.WinUI"
       xmlns:viewModels="using:ProjectSBS.Business.ViewModels"
       xmlns:helpers="using:ProjectSBS.Presentation.Helpers"
+      xmlns:cme="using:ProjectSBS.Presentation.CustomMarkupExtensions"
       mc:Ignorable="d">
 
   <Grid>
@@ -99,13 +100,13 @@
           <StackPanel Orientation="Horizontal"
                       Grid.Row="1"
                       Spacing="8">
-            <Button Content="{x:Bind ViewModel.UnarchiveText}"
+            <Button Content="{cme:Localize Name=Unarchive}"
                     AutomationProperties.PositionInSet="1"
                     AutomationProperties.SizeOfSet="2"
                     IsEnabled="{x:Bind ViewModel.SelectedItem, Mode=OneWay, Converter={StaticResource EmptyToFalseConverter}}"
                     Command="{x:Bind ViewModel.ArchiveCommand}" />
 
-            <Button Content="{x:Bind ViewModel.DeleteText}"
+            <Button Content="{cme:Localize Name=Delete}"
                     AutomationProperties.PositionInSet="2"
                     AutomationProperties.SizeOfSet="2"
                     IsEnabled="{x:Bind ViewModel.SelectedItem, Mode=OneWay, Converter={StaticResource EmptyToFalseConverter}}"
@@ -155,12 +156,12 @@
                    MaxWidth="300"
                    Margin="20" />
 
-            <TextBlock Text="{x:Bind ViewModel.ArchiveEmptyTitleText}"
+            <TextBlock Text="{cme:Localize Name=ArchiveEmptyTitle}"
                        TextWrapping="WrapWholeWords"
                        HorizontalAlignment="Center"
                        FontWeight="Bold" />
 
-            <TextBlock Text="{x:Bind ViewModel.ArchiveEmptyDescriptionText}"
+            <TextBlock Text="{cme:Localize Name=ArchiveEmptyDescription}"
                        TextWrapping="WrapWholeWords"
                        TextAlignment="Center"
                        Opacity="0.7"

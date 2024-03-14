@@ -10,13 +10,6 @@ public partial class MainViewModel : ViewModelBase
     private readonly ICurrencyCache _currency;
     #endregion
 
-    #region Localization Strings
-    public string ClickToLoginText => _localizer["ClickToLogin"];
-    public string OfflineAlertText => _localizer["OfflineAlert"];
-    public string SettingsText => _localizer["Settings"];
-    public string LogoutText => _localizer["Logout"];
-    #endregion
-
     [ObservableProperty]
     private User? _user;
 

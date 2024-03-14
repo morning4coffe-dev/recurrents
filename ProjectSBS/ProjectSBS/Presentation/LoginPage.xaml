@@ -10,7 +10,7 @@
       xmlns:utu="using:Uno.Toolkit.UI"
       xmlns:triggers="using:CommunityToolkit.WinUI.UI.Triggers"
       xmlns:page="using:ProjectSBS.Presentation.Components"
-      NavigationCacheMode="Required">
+      xmlns:cme="using:ProjectSBS.Presentation.CustomMarkupExtensions">
 
   <page:PageShell>
     <page:PageShell.ContentView>
@@ -89,7 +89,7 @@
               </Ellipse.Fill>
             </Ellipse>
 
-            <TextBlock Text="{x:Bind ViewModel.TitleText}"
+            <TextBlock Text="{cme:Localize Name=Welcome}"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Bottom"
                        Style="{StaticResource TitleTextBlockStyle}" />
@@ -108,13 +108,13 @@
                         HorizontalAlignment="Center">
 
               <StackPanel Spacing="8">
-                <Button Content="{x:Bind ViewModel.LoginWithMicrosoftText}"
+                <Button Content="{cme:Localize Name=LoginWithMicrosoft}"
                         HorizontalAlignment="Stretch"
                         Padding="20, 12"
                         AutomationProperties.AutomationId="LoginWithMicrosoft"
                         Command="{x:Bind ViewModel.LoginCommand}" />
 
-                <HyperlinkButton Content="{x:Bind ViewModel.ContinueWithoutLoginText}"
+                <HyperlinkButton Content="{cme:Localize Name=ContinueWithoutLogin}"
                                  HorizontalAlignment="Stretch"
                                  Padding="20, 8"
                                  Command="{x:Bind ViewModel.ContinueWithoutLoginCommand}" />
@@ -128,9 +128,9 @@
                         Spacing="8"
                         Margin="0, 8"
                         Grid.Row="4">
-              <HyperlinkButton Content="{x:Bind ViewModel.PrivacyPolicyText}"
-                               Command="{x:Bind ViewModel.OpenPrivacyPolicyCommand}" />
-              <TextBlock Text="{x:Bind ViewModel.AuthorText}"
+              <HyperlinkButton Content="{cme:Localize Name=PrivacyPolicy}"
+                               Command="{x:Bind ViewModel.PrivacyPolicyCommand}" />
+              <TextBlock Text="{cme:Localize Name=Author}"
                          VerticalAlignment="Center" />
             </StackPanel>
 
