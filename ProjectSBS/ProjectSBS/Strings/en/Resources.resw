@@ -187,7 +187,7 @@
     <value>Daily</value>
   </data>
   <data name="Days" xml:space="preserve">
-    <value>Days</value>
+    <value>days</value>
   </data>
   <data name="DebitCard" xml:space="preserve">
     <value>Debit Card</value>
@@ -278,7 +278,7 @@
     <value>You have no subscriptions here!</value>
   </data>
   <data name="LastDays" xml:space="preserve">
-    <value>Last {0} days</value>
+    <value>last {0} days</value>
     <comment>{0} is the number of days in current month</comment>
   </data>
   <data name="Login" xml:space="preserve">

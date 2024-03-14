@@ -42,7 +42,7 @@ public partial class StatsBannerViewModel : ViewModelBase
         _settingsService = settingsService;
         _currencyCache = currencyCache;
 
-        Header = string.Format(localizer["LastDays"], DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)).ToLower();
+        Header = string.Format(localizer["LastDays"], DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
 
         _itemService.OnItemsChanged += ItemService_OnItemsChanged;
         _itemService.OnItemsInitialized += ItemService_OnItemsChanged;

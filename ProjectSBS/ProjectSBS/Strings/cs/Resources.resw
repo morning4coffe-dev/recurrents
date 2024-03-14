@@ -187,7 +187,7 @@
     <value>Denně</value>
   </data>
   <data name="Days" xml:space="preserve">
-    <value>Dnů</value>
+    <value>dnů</value>
   </data>
   <data name="DebitCard" xml:space="preserve">
     <value>Debetní karta</value>
@@ -275,7 +275,7 @@
     <value>Nemáte zde žádná předplatná!</value>
   </data>
   <data name="LastDays" xml:space="preserve">
-    <value>Posledních {0} dnů</value>
+    <value>posledních {0} dnů</value>
     <comment>{0} is the number of days in current month</comment>
   </data>
   <data name="Login" xml:space="preserve">
