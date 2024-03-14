@@ -23,9 +23,6 @@ public partial class HomeViewModel : ViewModelBase
     private decimal _sum;
 
     [ObservableProperty]
-    private Type? _itemDetails;
-
-    [ObservableProperty]
     private string _welcomeMessage;
 
     [ObservableProperty]
@@ -62,7 +59,7 @@ public partial class HomeViewModel : ViewModelBase
 
     public ObservableCollection<ItemViewModel> Items { get; } = [];
 
-    public List<Tag> FilterCategories { get; }
+    public List<Tag> FilterCategories => _filterService.Categories;
 
     public Tag SelectedFilter
     {
@@ -75,11 +72,9 @@ public partial class HomeViewModel : ViewModelBase
             }
 
             _filterService.SelectedCategory = value;
-
             WeakReferenceMessenger.Default.Send(new CategorySelectionChanged());
 
             OnPropertyChanged();
-
             _ = RefreshItems();
         }
     }
@@ -100,8 +95,6 @@ public partial class HomeViewModel : ViewModelBase
         _filterService = filterService;
         _navigation = navigation;
         _dialog = dialog;
-
-        FilterCategories = filterService.Categories;
 
         _userService.OnLoggedInChanged += (s, e) =>
         {
@@ -190,8 +183,15 @@ public partial class HomeViewModel : ViewModelBase
     {
         IEnumerable<ItemViewModel> items;
 
+        //TODO Must add a listener for when the category changes
+
+        if (SelectedCategory is not { } category)
+        {
+            return new List<ItemViewModel>();
+        }
+
         //If ArchivePage is selected, show archived items
-        if (_navigation.SelectedCategory.Id == 2)
+        if (category.Page == typeof(ArchivePage))
         {
             items = _itemService.GetItems(item => item.IsArchived)
             .OrderBy(i => i.PaymentDate);
@@ -212,7 +212,6 @@ public partial class HomeViewModel : ViewModelBase
         }
 
         Items.Clear();
-        //TODO Dont clear the whole thing, just removem update and add changed
         Items.AddRange(items);
 
         return items;
@@ -236,6 +235,8 @@ public partial class HomeViewModel : ViewModelBase
                 true)
             );
         IsPaneOpen = true;
+
+        AnalyticsService.TrackEvent(AnalyticsService.ItemEvent, "Added", "True");
     }
 
     [RelayCommand]
@@ -250,7 +251,7 @@ public partial class HomeViewModel : ViewModelBase
                 _localizer["ArchiveDialogDescription"],
                 _localizer["ArchiveVerb"]);
         }
-        else 
+        else
         {
             result = ContentDialogResult.Primary;
         }
@@ -261,6 +262,9 @@ public partial class HomeViewModel : ViewModelBase
 
             SelectedItem = null;
             RefreshItems();
+
+            AnalyticsService.TrackEvent(AnalyticsService.ItemEvent, "Archived",
+                (item ?? SelectedItem).IsArchived.ToString());
         }
     }
 
@@ -268,7 +272,7 @@ public partial class HomeViewModel : ViewModelBase
     public async Task Delete(ItemViewModel? item = null)
     {
         var result = await _dialog.ShowAsync(
-            _localizer["DeleteDialogTitle"], 
+            _localizer["DeleteDialogTitle"],
             _localizer["DeleteDialogDescription"],
             _localizer["Delete"]);
 
@@ -278,12 +282,13 @@ public partial class HomeViewModel : ViewModelBase
 
             SelectedItem = null;
             RefreshItems();
+
+            AnalyticsService.TrackEvent(AnalyticsService.ItemEvent, "Deleted", "True");
         }
     }
 
     [RelayCommand]
     private void OpenSettings()
-    {
-        _navigation.NavigateNested(typeof(SettingsPage));
-    }
+    => _navigation.NavigateCategory(_navigation.Categories.FirstOrDefault(category => category.Id == 5)
+                ?? throw new($"Settings category wasn't found in the Categories list on {this}."));
 }

@@ -11,9 +11,6 @@ public sealed partial class MainPage : Page
         DataContext = App.Services?.GetRequiredService<MainViewModel>();
         Loaded += Page_Loaded;
         Unloaded += Page_Unloaded;
-
-        //ViewModel.MenuFlyout = userFlyout;
-        //ViewModel.UserButton = userButton;
     }
 
     private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -22,15 +19,22 @@ public sealed partial class MainPage : Page
         nav.NestedFrame = Frame;
 
         ViewModel.Load();
+
+        ViewModel._navigation.CategoryChanged += Navigation_CategoryChanged;
+        navigationBar.SelectedIndex = ViewModel._navigation.Categories.IndexOf
+            (ViewModel._navigation.SelectedCategory);
+    }
+
+    //This is a workaround for TabBar bug, setting the item doesn't work, index does
+    private void Navigation_CategoryChanged(object? sender, NavigationCategory e)
+    {
+        navigationBar.SelectedIndex = ViewModel._navigation.Categories.IndexOf(e);
     }
 
     private void Page_Unloaded(object sender, RoutedEventArgs e)
     {
-        ViewModel.Unload();
-    }
+        ViewModel._navigation.CategoryChanged += Navigation_CategoryChanged;
 
-    private void OnNavigation_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
-    {
-        ViewModel.Navigate(args);
+        ViewModel.Unload();
     }
 }

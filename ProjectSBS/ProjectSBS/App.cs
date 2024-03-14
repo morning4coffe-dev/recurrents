@@ -81,12 +81,10 @@ public class App : Application
                     services.AddSingleton<IItemService, ItemService>();
                     services.AddSingleton<IBillingService, BillingService>();
                     services.AddSingleton<IInteropService, InteropService>();
-                    services.AddSingleton<IAnalyticsService, AnalyticsService>();
                     services.AddSingleton<IItemFilterService, ItemFilterService>();
                     services.AddSingleton<ITagService, TagService>();
                     services.AddSingleton<INavigation, NavigationService>();
                     services.AddSingleton<IDialogService, DialogService>();
-                    services.AddSingleton<IAnalyticsService, AnalyticsService>();
 
                     services.AddTransient<MainViewModel>();
                     services.AddTransient<LoginViewModel>();
@@ -94,6 +92,7 @@ public class App : Application
                     services.AddTransient<HomeViewModel>();
                     services.AddTransient<SettingsViewModel>();
                     services.AddTransient<StatsBannerViewModel>();
+                    services.AddTransient<TagsChartViewModel>();
                     //services.AddTransient<ConversionsViewModel>();
 
 #if __ANDROID__
@@ -174,19 +173,20 @@ public class App : Application
         // Ensure the current window is active
         MainWindow.Activate();
 
-#if !HAS_UNO
-        var version = Services?.GetRequiredService<IInteropService>().GetAppVersion();
+#if !HAS_UNO //&& !DEBUG
+        //TODO Always returns v1 on WinUI3
+        //var version = Services?.GetRequiredService<IInteropService>().GetAppVersion();
 
         Dictionary<string, string> appLaunchSettings = new()
         {
-            { "App Version", string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision) },
-            { "App Install", AppInfo.Current.Package.InstalledDate.ToString("d", new CultureInfo("en-US")) },
-            { "OS Device", AnalyticsInfo.VersionInfo.DeviceFamily },
-            { "OS Form", AnalyticsInfo.DeviceForm },
-            { "OS Version", AnalyticsInfo.VersionInfo.DeviceFamilyVersion },
+            { "Account", isLoggedIn ? "Microsoft" : doContinueWithoutLogin ? "Using app without login" : "None" },
+            { "Installation Date", AppInfo.Current.Package.InstalledDate.ToString("d", new CultureInfo("en-US")) },
+            { "OS & Device", AnalyticsInfo.VersionInfo.DeviceFamily.Replace(".", " ") },
+            { "Device Form Factor", AnalyticsInfo.DeviceForm },
+            { "Mica Supported", MicaController.IsSupported().ToString() }
         };
 
-        Services?.GetRequiredService<IAnalyticsService>().TrackEvent(AnalyticsConst.Launched, appLaunchSettings);
+        AnalyticsService.TrackEvent(AnalyticsService.Launched, appLaunchSettings);
 #endif
     }
 }

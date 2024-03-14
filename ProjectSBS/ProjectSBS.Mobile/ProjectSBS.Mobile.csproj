@@ -5,12 +5,12 @@
     <SingleProject>true</SingleProject>
     <OutputType>Exe</OutputType>
     <!-- Display name -->
-    <ApplicationTitle>ProjectSBS</ApplicationTitle>
+    <ApplicationTitle>Recurrents</ApplicationTitle>
     <!-- App Identifier -->
-    <ApplicationId>com.morning4coffe.ProjectSBS</ApplicationId>
+    <ApplicationId>com.morning4coffe.Recurrents</ApplicationId>
     <ApplicationIdGuid>01E54658-2C2B-44EA-907E-AD8EC550FE89</ApplicationIdGuid>
     <!-- Versions -->
-    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+    <ApplicationDisplayVersion>0.45</ApplicationDisplayVersion>
     <ApplicationVersion>1</ApplicationVersion>
 
     <AndroidManifest>Android\AndroidManifest.xml</AndroidManifest>
@@ -22,6 +22,12 @@
     <IsUnoHead>true</IsUnoHead>
     <UserSecretsId>1a1c5c78-c108-4b70-af65-e8bb5267e21b</UserSecretsId>
   </PropertyGroup>
+
+  <Target Name="UpdateRuntimePackVersion" BeforeTargets="ProcessFrameworkReferences">
+    <ItemGroup>
+      <KnownRuntimePack Condition="%(RuntimePackLabels) == 'Mono'" LatestRuntimeFrameworkVersion="8.0.0" />
+    </ItemGroup>
+  </Target>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Identity.Client.Extensions.Msal" />

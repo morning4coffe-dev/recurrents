@@ -91,7 +91,7 @@
                   <FontIconSource Glyph="&#xE779;" />
                 </InfoBar.IconSource>
                 <InfoBar.ActionButton>
-                  <Button Content="Login"
+                  <Button Content="{x:Bind ViewModel.LoginText}"
                           HorizontalAlignment="Right"
                           Command="{x:Bind ViewModel.LoginCommand}" />
                 </InfoBar.ActionButton>

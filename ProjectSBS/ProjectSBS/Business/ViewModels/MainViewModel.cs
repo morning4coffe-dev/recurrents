@@ -6,7 +6,7 @@ public partial class MainViewModel : ViewModelBase
     private readonly IUserService _userService;
     private readonly IStringLocalizer _localizer;
     private readonly IItemService _itemService;
-    private readonly INavigation _navigation;
+    public readonly INavigation _navigation;
     private readonly ICurrencyCache _currency;
     #endregion
 
@@ -23,24 +23,28 @@ public partial class MainViewModel : ViewModelBase
     private bool _isLoggedIn;
 
     [ObservableProperty]
-    private MenuFlyout _menuFlyout;
+    private bool _indicateLoading;
 
-    [ObservableProperty]
-    private FrameworkElement _userButton;
+    public IEnumerable<NavigationCategory> Categories
+        => _navigation.Categories;
 
+    private NavigationCategory _selectedCategory;
     public NavigationCategory SelectedCategory
     {
         set
         {
-            _navigation.SelectedCategory = value;
-            OnPropertyChanged();
+            if (_selectedCategory != value)
+            {
+                _selectedCategory = value;
+
+                _navigation.NavigateCategory(value);
+                OnPropertyChanged(nameof(SelectedCategory));
+            }
         }
-        get => _navigation.SelectedCategory;
+        get => _selectedCategory;
     }
 
     public string? Title { get; }
-
-    public IEnumerable<NavigationCategory> DesktopCategories;
 
     public MainViewModel(
         IStringLocalizer localizer,
@@ -61,8 +65,6 @@ public partial class MainViewModel : ViewModelBase
         Title += $" (Dev)";
 #endif
 
-        DesktopCategories = _navigation.Categories.Where(c => c.Visibility == CategoryVisibility.Desktop || c.Visibility == CategoryVisibility.Both);
-
         _userService.OnLoggedInChanged += (s, e) =>
         {
             User = e;
@@ -72,15 +74,32 @@ public partial class MainViewModel : ViewModelBase
 
     public async override void Load()
     {
-        _navigation.NavigateNested(SelectedCategory.Page);
+        _navigation.CategoryChanged += Navigation_CategoryChanged;
+        _navigation.NavigateCategory(_navigation.Categories[0]);
+
+        IndicateLoading = true;
 
         User = await _userService.RetrieveUser();
         IsLoggedIn = User is { };
 
         _ = await _currency.GetCurrency(CancellationToken.None);
+        _ = Task.Run(() => _currency.GetCurrency(CancellationToken.None));
 
-        _ = _itemService.InitializeAsync();
+        await _itemService.InitializeAsync();
+        IndicateLoading = false;
+
+        await _itemService.InitializeAsync();
+
+        IndicateLoading = false;
     }
+
+    public override void Unload()
+    {
+        _navigation.CategoryChanged -= Navigation_CategoryChanged;
+    }
+
+    private void Navigation_CategoryChanged(object? sender, NavigationCategory e) 
+        => SelectedCategory = e;
 
     public void Navigate(NavigationViewSelectionChangedEventArgs args)
     {
@@ -93,19 +112,13 @@ public partial class MainViewModel : ViewModelBase
             }
         }
 
-        _navigation.NavigateNested((args.SelectedItem as NavigationCategory)?.Page ?? SelectedCategory.Page);
-    }
-
-    public override void Unload()
-    {
-
+        _navigation.NavigateCategory((args.SelectedItem as NavigationCategory) ?? SelectedCategory);
     }
 
     [RelayCommand]
     private void GoToSettings()
-    {
-        _navigation.NavigateNested(typeof(SettingsPage));
-    }
+        => _navigation.NavigateCategory(_navigation.Categories.FirstOrDefault(category => category.Id == 5)
+                    ?? throw new($"Settings category wasn't found in the Categories list on {this}."));
 
     [RelayCommand]
     private void Login()

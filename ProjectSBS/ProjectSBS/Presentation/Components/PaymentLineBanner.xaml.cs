@@ -1,10 +1,10 @@
 namespace ProjectSBS.Presentation.Components;
 
-public sealed partial class StatsBanner : Page
+public sealed partial class PaymentLineBanner : Page
 {
     public StatsBannerViewModel ViewModel => (StatsBannerViewModel)DataContext;
 
-    public StatsBanner()
+    public PaymentLineBanner()
     {
         InitializeComponent();
 
