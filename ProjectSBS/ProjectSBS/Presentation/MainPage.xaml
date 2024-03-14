@@ -11,7 +11,8 @@
       xmlns:comp="using:ProjectSBS.Presentation.Components"
       xmlns:converters="using:CommunityToolkit.WinUI.Converters"
       xmlns:models="using:ProjectSBS.Business.Models"
-      xmlns:toolkit="using:CommunityToolkit.WinUI">
+      xmlns:toolkit="using:CommunityToolkit.WinUI"
+      xmlns:cme="using:ProjectSBS.Presentation.CustomMarkupExtensions">
 
   <comp:PageShell TitleBarTitle="{x:Bind ViewModel.Title}"
                   DesktopTitleVisibility="Visible">
@@ -130,7 +131,7 @@
                   <PersonPicture ProfilePicture="{x:Bind ViewModel.User.Photo, Mode=OneWay}"
                                  DisplayName="{x:Bind ViewModel.User.Name, Mode=OneWay}"
                                  Height="48" />
-                  <TextBlock Text="{x:Bind ViewModel.ClickToLoginText}"
+                  <TextBlock Text="{cme:Localize Name=ClickToLogin}"
                              Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
                              VerticalAlignment="Center" />
                   <TextBlock Text="{x:Bind ViewModel.User.Name, Mode=OneWay}"
