@@ -8,7 +8,6 @@
       mc:Ignorable="d not_win"
       xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
       xmlns:utu="using:Uno.Toolkit.UI"
-      xmlns:triggers="using:CommunityToolkit.WinUI.UI.Triggers"
       xmlns:page="using:ProjectSBS.Presentation.Components"
       xmlns:cme="using:ProjectSBS.Presentation.CustomMarkupExtensions">
 
@@ -120,7 +119,7 @@
                                  Command="{x:Bind ViewModel.ContinueWithoutLoginCommand}" />
               </StackPanel>
 
-              <muxc:ProgressRing IsActive="{Binding Login.IsRunning}" />
+              <muxc:ProgressRing IsActive="{x:Bind ViewModel.IndicateLoading, Mode=OneWay}" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal"
@@ -129,7 +128,7 @@
                         Margin="0, 8"
                         Grid.Row="4">
               <HyperlinkButton Content="{cme:Localize Name=PrivacyPolicy}"
-                               Command="{x:Bind ViewModel.PrivacyPolicyCommand}" />
+                               Command="{x:Bind ViewModel.OpenPrivacyPolicyCommand}" />
               <TextBlock Text="{cme:Localize Name=Author}"
                          VerticalAlignment="Center" />
             </StackPanel>

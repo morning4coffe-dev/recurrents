@@ -61,7 +61,7 @@ public partial class ItemViewModel : ObservableObject
                 return $"{_localization["Tomorrow"]}".ToLower();
             }
 
-            return $"{_localization["InTime"]} {remaining.ToString() ?? "N/A"} {_localization["Days"]}".ToLower();
+            return $"{_localization["InTime"]} {remaining.ToString() ?? "N/A"} {_localization["Days"]}";
         }
     }
 

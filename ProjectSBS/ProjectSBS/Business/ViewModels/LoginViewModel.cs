@@ -13,6 +13,9 @@ public partial class LoginViewModel : ObservableObject
     [ObservableProperty]
     private UserModel.User? _user;
 
+    [ObservableProperty]
+    private bool _indicateLoading;
+
     public LoginViewModel(
         INavigation navigation,
         IUserService userService,
@@ -22,13 +25,6 @@ public partial class LoginViewModel : ObservableObject
         _userService = userService;
         _itemService = itemService;
 
-        Login = new AsyncRelayCommand(DoLogin);
-        WithoutLogin = new RelayCommand(() =>
-        {
-            App.Services!.GetRequiredService<ISettingsService>().ContinueWithoutLogin = true;
-            _navigation.Navigate(typeof(MainPage));
-        });
-
         itemService.ClearItems();
     }
 
@@ -36,6 +32,7 @@ public partial class LoginViewModel : ObservableObject
     private async Task Login()
     {
         var success = false;
+        IndicateLoading = true;
 
         try
         {
@@ -65,6 +62,8 @@ public partial class LoginViewModel : ObservableObject
 
             SendAnalytics(true);
         }
+
+        IndicateLoading = false;
     }
 
     private void SendAnalytics(bool loggedIn)
@@ -81,10 +80,13 @@ public partial class LoginViewModel : ObservableObject
     [RelayCommand]
     private void ContinueWithoutLogin()
     {
+        IndicateLoading = true;
         App.Services!.GetRequiredService<ISettingsService>().ContinueWithoutLogin = true;
         _navigation.Navigate(typeof(MainPage));
+        IndicateLoading = false;
     }
 
-    public ICommand Login { get; }
-    public ICommand WithoutLogin { get; }
+    [RelayCommand]
+    private async Task OpenPrivacyPolicy() =>
+    await Launcher.LaunchUriAsync(new Uri("https://github.com/morning4coffe-dev/recurrents/blob/ebf622cb65d60c7d353af69824f63d88fa796bde/privacy-policy.md"));
 }

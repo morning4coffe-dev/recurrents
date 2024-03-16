@@ -10,7 +10,7 @@
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageVersion Include="Microsoft.Windows.Compatibility" Version="8.0.0-rc.2.23479.10" />
     <PackageVersion Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.2428" />
-    <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.5.240124002-experimental2" />
+    <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.5.240311000" />
     <PackageVersion Include="SkiaSharp.Skottie" Version="2.88.6" />
     <PackageVersion Include="SkiaSharp.Views.Uno.WinUI" Version="2.88.6" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.5.0" />

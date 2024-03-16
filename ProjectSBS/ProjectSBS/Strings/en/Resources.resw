@@ -123,6 +123,9 @@
   <data name="AboutDescription" xml:space="preserve">
     <value>Made with love and loads of coffee in Czechia 🏰</value>
   </data>
+  <data name="AddItemsFirst" xml:space="preserve">
+    <value>You will need to add your subscriptions first.</value>
+  </data>
   <data name="All" xml:space="preserve">
     <value>All</value>
   </data>
@@ -262,7 +265,7 @@
     <value>Home</value>
   </data>
   <data name="InTime" xml:space="preserve">
-    <value>In</value>
+    <value>in</value>
     <comment>In a specific time in days</comment>
   </data>
   <data name="Invoice" xml:space="preserve">

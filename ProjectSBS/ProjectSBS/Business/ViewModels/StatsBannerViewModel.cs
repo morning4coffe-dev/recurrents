@@ -63,9 +63,14 @@ public partial class StatsBannerViewModel : ViewModelBase
         DateTime currentDate = DateTime.Now;
         var months = new string[6];
 
+        var currentLanguage =
+#if !HAS_UNO
+            Windows.System.UserProfile.GlobalizationPreferences.Languages[0] ?? 
+#endif            
+            "en-US";
         for (int i = 0; i < 6; i++)
         {
-            months[5 - i] = currentDate.AddMonths(-i).ToString("MMM", CultureInfo.CurrentCulture);
+            months[5 - i] = currentDate.AddMonths(-i).ToString("MMM", new CultureInfo(currentLanguage));
         }
 
         XAxes = [

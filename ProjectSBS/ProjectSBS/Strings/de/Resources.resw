@@ -123,6 +123,9 @@
   <data name="AboutDescription" xml:space="preserve">
     <value>Entwickelt mit Liebe und viel Kaffee in Tschechien🏰</value>
   </data>
+  <data name="AddItemsFirst" xml:space="preserve">
+    <value>Sie müssen zuerst Ihre Abonnements hinzufügen.</value>
+  </data>
   <data name="All" xml:space="preserve">
     <value>Alles</value>
   </data>

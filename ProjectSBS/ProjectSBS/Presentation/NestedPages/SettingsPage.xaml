@@ -91,7 +91,7 @@
                   <FontIconSource Glyph="&#xE779;" />
                 </InfoBar.IconSource>
                 <InfoBar.ActionButton>
-                  <Button Content="{x:Bind ViewModel.LoginText}"
+                  <Button Content="{cme:Localize Name=Login}"
                           HorizontalAlignment="Right"
                           Command="{x:Bind ViewModel.LoginCommand}" />
                 </InfoBar.ActionButton>
@@ -178,13 +178,13 @@
                                 Spacing="2"
                                 Orientation="Vertical">
                       <HyperlinkButton Content="{cme:Localize Name=GitHub}"
-                                       Command="{x:Bind ViewModel.GitHub}" />
+                                       Command="{x:Bind ViewModel.OpenGithubCommand}" />
                       <HyperlinkButton Content="{cme:Localize Name=RateAndReview}"
-                                       Command="{x:Bind ViewModel.RateAndReview}" />
+                                       Command="{x:Bind ViewModel.OpenRateAndReviewCommand}" />
                       <HyperlinkButton Content="{cme:Localize Name=PrivacyPolicy}"
-                                       Command="{x:Bind ViewModel.PrivacyPolicy}" />
+                                       Command="{x:Bind ViewModel.OpenPrivacyPolicyCommand}" />
                       <HyperlinkButton Content="{cme:Localize Name=ReportABug}"
-                                       Command="{x:Bind ViewModel.ReportABug}" />
+                                       Command="{x:Bind ViewModel.OpenGithubIssuesCommand}" />
                     </StackPanel>
                   </controls:SettingsCard>
 
