@@ -173,7 +173,9 @@ public class App : Application
         // Ensure the current window is active
         MainWindow.Activate();
 
-#if !HAS_UNO //&& !DEBUG
+#if !HAS_UNO && !DEBUG
+        AnalyticsService.Initialize();
+
         //TODO Always returns v1 on WinUI3
         //var version = Services?.GetRequiredService<IInteropService>().GetAppVersion();
 

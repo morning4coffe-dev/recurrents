@@ -242,6 +242,11 @@ public partial class HomeViewModel : ViewModelBase
     [RelayCommand]
     public async Task Archive(ItemViewModel? item = null)
     {
+        if (item is not { } && SelectedItem is not { })
+        {
+            return;
+        }
+
         ContentDialogResult result;
 
         if (!(item ?? SelectedItem).IsArchived)
@@ -260,17 +265,22 @@ public partial class HomeViewModel : ViewModelBase
         {
             _itemService.ArchiveItem(item ?? SelectedItem);
 
-            SelectedItem = null;
-            RefreshItems();
-
             AnalyticsService.TrackEvent(AnalyticsService.ItemEvent, "Archived",
                 (item ?? SelectedItem).IsArchived.ToString());
+
+            SelectedItem = null;
+            RefreshItems();
         }
     }
 
     [RelayCommand]
     public async Task Delete(ItemViewModel? item = null)
     {
+        if (item is not { } && SelectedItem is not { })
+        {
+            return;
+        }
+
         var result = await _dialog.ShowAsync(
             _localizer["DeleteDialogTitle"],
             _localizer["DeleteDialogDescription"],
@@ -280,10 +290,10 @@ public partial class HomeViewModel : ViewModelBase
         {
             _itemService.DeleteItem(item ?? SelectedItem);
 
+            AnalyticsService.TrackEvent(AnalyticsService.ItemEvent, "Deleted", "True");
+
             SelectedItem = null;
             RefreshItems();
-
-            AnalyticsService.TrackEvent(AnalyticsService.ItemEvent, "Deleted", "True");
         }
     }
 

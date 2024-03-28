@@ -156,7 +156,7 @@
                    MaxWidth="300"
                    Margin="20" />
 
-            <TextBlock Text="{cme:Localize Name=ArchiveEmptyTitle}"
+            <TextBlock Text="{cme:Localize Name=ItemsEmptyTitle}"
                        TextWrapping="WrapWholeWords"
                        HorizontalAlignment="Center"
                        FontWeight="Bold" />
