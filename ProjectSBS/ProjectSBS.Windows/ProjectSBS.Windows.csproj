@@ -213,4 +213,11 @@
   </PropertyGroup>
 
   <Import Project="..\ProjectSBS.Base\base.props" />
+
+  <ItemGroup>
+    <PackageReference Update="Uno.Resizetizer">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 </Project>
