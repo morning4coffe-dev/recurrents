@@ -8,7 +8,6 @@ public partial class SettingsViewModel : ViewModelBase
     private readonly ISettingsService _settingsService;
     private readonly IItemService _itemService;
     private readonly IUserService _userService;
-    private readonly IStringLocalizer _localizer;
     private readonly INavigation _navigation;
     private readonly IInteropService _interopService;
 
@@ -74,7 +73,6 @@ public partial class SettingsViewModel : ViewModelBase
         IUserService userService
     )
     {
-        _localizer = localizer;
         _userService = userService;
         _currencyCache = currencyCache;
         _itemService = itemService;
@@ -113,6 +111,9 @@ public partial class SettingsViewModel : ViewModelBase
         SelectedCurrency = _settingsService.DefaultCurrency;
         NotificationTime = _settingsService.NotificationTime;
     }
+    public override void Unload()
+    {
+    }
 
     [RelayCommand]
     public async Task LaunchNotificationSettings() =>
@@ -122,9 +123,6 @@ public partial class SettingsViewModel : ViewModelBase
     public async Task LaunchLangSettings() =>
         await WS.Launcher.LaunchUriAsync(new Uri("ms-settings:regionlanguage-adddisplaylanguage"));
 
-    public override void Unload()
-    {
-    }
 
     [RelayCommand]
     private void Login() =>
@@ -133,8 +131,9 @@ public partial class SettingsViewModel : ViewModelBase
     [RelayCommand]
     private void Logout()
     {
-        _userService.Logout();
         _navigation.Navigate(typeof(LoginPage));
+
+        _userService.LogoutAsync();
     }
 
     [RelayCommand]

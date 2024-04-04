@@ -1,5 +1,4 @@
 using Windows.System;
-using UserModel = ProjectSBS.Business.Models;
 
 namespace ProjectSBS.Business.ViewModels;
 
@@ -9,9 +8,6 @@ public partial class LoginViewModel : ObservableObject
 
     private readonly INavigation _navigation;
     private readonly IItemService _itemService;
-
-    [ObservableProperty]
-    private UserModel.User? _user;
 
     [ObservableProperty]
     private bool _indicateLoading;
@@ -37,7 +33,6 @@ public partial class LoginViewModel : ObservableObject
         try
         {
             success = await _userService.AuthenticateAsync();
-
         }
         catch (Exception ex)
         {
@@ -46,20 +41,12 @@ public partial class LoginViewModel : ObservableObject
 
         if (success)
         {
-            var user = await _userService.RetrieveUser();
-
-            App.Dispatcher.TryEnqueue(() =>
-            {
-                User = user;
-            });
-
+            await _userService.RetrieveUser();
             await _itemService.InitializeAsync();
 
-            App.Dispatcher.TryEnqueue(() =>
-            {
-                _navigation.Navigate(typeof(MainPage));
-            });
+            _navigation.Navigate(typeof(MainPage));
 
+            App.Services!.GetRequiredService<ISettingsService>().ContinueWithoutLogin = false;
             SendAnalytics(true);
         }
 
@@ -78,8 +65,14 @@ public partial class LoginViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void ContinueWithoutLogin()
+    private async Task ContinueWithoutLogin()
     {
+        var isLoggedIn = await _userService.AuthenticateAsync(true);
+        if (isLoggedIn)
+        {
+            await _userService.LogoutAsync();
+        }
+
         IndicateLoading = true;
         App.Services!.GetRequiredService<ISettingsService>().ContinueWithoutLogin = true;
         _navigation.Navigate(typeof(MainPage));
@@ -88,5 +81,5 @@ public partial class LoginViewModel : ObservableObject
 
     [RelayCommand]
     private async Task OpenPrivacyPolicy() =>
-    await Launcher.LaunchUriAsync(new Uri("https://github.com/morning4coffe-dev/recurrents/blob/ebf622cb65d60c7d353af69824f63d88fa796bde/privacy-policy.md"));
+        await Launcher.LaunchUriAsync(new Uri("https://github.com/morning4coffe-dev/recurrents/blob/ebf622cb65d60c7d353af69824f63d88fa796bde/privacy-policy.md"));
 }

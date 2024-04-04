@@ -13,5 +13,5 @@ public interface IUserService
     Task<bool> UploadData(string content, string relativeLocalPath, CancellationToken token = default);
     Task<Stream?> RetrieveData(string relativeLocalPath, CancellationToken token);
 
-    void Logout();
+    Task LogoutAsync();
 }

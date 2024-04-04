@@ -123,21 +123,7 @@ public partial class MainViewModel : ViewModelBase
     [RelayCommand]
     private void Login()
     {
-        if (IsLoggedIn)
-        {
-            //TODO There is a bug in the MenuFlyout 
-            //MenuFlyout.ShowAttachedFlyout(UserButton);
-            return;
-        }
-
         _navigation.Navigate(typeof(LoginPage));
         _itemService.ClearItems();
-    }
-
-    [RelayCommand]
-    private void Logout()
-    {
-        _userService.Logout();
-        _navigation.Navigate(typeof(LoginPage));
     }
 }

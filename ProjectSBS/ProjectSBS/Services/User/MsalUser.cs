@@ -116,7 +116,6 @@ public class MsalUser : IUserService
                 requestConfiguration.QueryParameters.Select =
                     ["displayName", "mail"];
             });
-
         var fullName = user?.DisplayName;
         var mail = user?.Mail;
 
@@ -184,15 +183,22 @@ public class MsalUser : IUserService
             .GetAsync(cancellationToken: token);
     }
 
-    public void Logout()
+    public async Task LogoutAsync()
     {
+        _client?.Dispose();
+        _client = null;
         _currentUser = null;
-        _app?.RemoveAsync(_app.GetAccountsAsync().Result.FirstOrDefault());
+
+        foreach (var account in await _app?.GetAccountsAsync())
+        {
+            await _app.RemoveAsync(account);
+        }
 
         App.Services!.GetRequiredService<ISettingsService>().ContinueWithoutLogin = false;
 
         OnLoggedInChanged?.Invoke(this, _currentUser);
     }
+
 
     [MemberNotNull(nameof(_app))]
     private async Task EnsureIdentityClientAsync()
