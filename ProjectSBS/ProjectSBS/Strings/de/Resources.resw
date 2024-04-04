@@ -328,6 +328,9 @@
   <data name="NotLoggedInDescription" xml:space="preserve">
     <value>Ihre Daten werden lokal gespeichert und nicht synchronisiert.</value>
   </data>
+  <data name="OfflineAlertText" xml:space="preserve">
+    <value>Sie sind offline, Ihre Abonnements werden nicht synchronisiert.</value>
+  </data>
   <data name="Ok" xml:space="preserve">
     <value>Ok</value>
   </data>
