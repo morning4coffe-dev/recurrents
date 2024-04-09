@@ -282,7 +282,7 @@
     <comment>{0} is the number of days in current month</comment>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Login</value>
+    <value>Přihlásit se</value>
   </data>
   <data name="LoginWithMicrosoft" xml:space="preserve">
     <value>Přihlášení pomocí účtu Microsoft</value>
