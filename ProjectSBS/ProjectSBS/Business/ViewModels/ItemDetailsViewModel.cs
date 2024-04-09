@@ -24,44 +24,28 @@ public partial class ItemDetailsViewModel : ViewModelBase
     [ObservableProperty]
     private bool _isEditing = false;
 
+    public int TagId
+    {
+        set
+        {
+            if (EditItem != null)
+            {
+                EditItem.TagId = Tags.ElementAtOrDefault(value)?.Id ?? 0;
+            }
+        }
+        get => EditItem != null ? Tags.IndexOf(Tags.First(x => x.Id == EditItem.TagId)) : 0;
+    }
+
     public ObservableCollection<Tag> Tags { get; } = [];
     public ObservableCollection<string> Currencies { get; } = [];
     public ObservableCollection<string> FuturePayments { get; } = [];
     public ObservableCollection<string> PaymentMethods { get; }
     public List<KeyValuePair<Period, string>> PaymentPeriods { get; }
 
-    //This monstrosity is needed here due to localization, but I need to find a better way to do this someday
-    public KeyValuePair<Period, string>? SelectedPeriod
-    {
-        get
-        {
-            if (SelectedItem?.Item?.Billing?.PeriodType is { } period)
-            {
-                var resultPair = PaymentPeriods.FirstOrDefault(pair => pair.Key == period);
-
-                if (!EqualityComparer<Period>.Default.Equals(resultPair.Key, default))
-                {
-                    return new(resultPair.Key, resultPair.Value);
-                }
-            }
-
-            return null;
-        }
-        set
-        {
-            if (SelectedItem?.Item?.Billing.PeriodType is { } period
-                && value is { } && period != value.Value.Key)
-            {
-                SelectedItem.Item.Billing.PeriodType = value.Value.Key;
-                OnPropertyChanged();
-            }
-        }
-    }
-
     public ItemDetailsViewModel(
         IStringLocalizer localizer,
         ITagService tagService,
-        IItemFilterService filterService, 
+        IItemFilterService filterService,
         ICurrencyCache currencyCache,
         IDialogService dialog)
     {
@@ -116,17 +100,6 @@ public partial class ItemDetailsViewModel : ViewModelBase
                 {
                     IsEditing = m.IsEdit;
                 }
-
-                //if (SelectedItem?.Item?.Billing?.PeriodType is { } period)
-                //{
-                //    var resultPair = PaymentPeriods.FirstOrDefault(pair => pair.Key == period);
-
-                //    if (!EqualityComparer<Period>.Default.Equals(resultPair.Key, default))
-                //    {
-                //        SelectedPeriod = new(resultPair.Key, resultPair.Value);
-                //        OnPropertyChanged(nameof(SelectedPeriod));
-                //    }
-                //}
 
                 var localizedDateStrings
                     = item.GetFuturePayments()

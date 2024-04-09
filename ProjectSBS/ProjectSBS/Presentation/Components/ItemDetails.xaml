@@ -311,10 +311,9 @@
                                     FalseIcon="{toolkit:FontIcon Glyph=&#xE748;}" />
                 </Grid>-->
 
-                <!--TODO SelectedIndex is not future proof-->
                 <ComboBox Header="{cme:Localize Name=Tag}"
                           ItemsSource="{x:Bind ViewModel.Tags, Mode=OneTime}"
-                          SelectedIndex="{x:Bind ViewModel.EditItem.TagId, Mode=TwoWay}"
+                          SelectedIndex="{x:Bind ViewModel.TagId, Mode=TwoWay}"
                           VerticalAlignment="Bottom"
                           HorizontalAlignment="Stretch">
                   <ComboBox.ItemTemplate>
