@@ -25,7 +25,7 @@ public class TagService(IStringLocalizer? localizer) : ITagService
         new(15, localizer?["Photography"] ?? "Photography", Color.FromArgb(200, 51, 51, 255)),
         new(16, localizer?["Utilities"] ?? "Utilities", Color.FromArgb(200, 153, 0, 153)),
         new(17, localizer?["Fashion"] ?? "Fashion", Color.FromArgb(200, 255, 102, 102)),
-        new(18, localizer?["Home"] ?? "Home", Color.FromArgb(200, 0, 153, 76)),
+        new(18, localizer?["HomeN"] ?? "Home", Color.FromArgb(200, 0, 153, 76)),
         new(19, localizer?["Books"] ?? "Books", Color.FromArgb(200, 255, 51, 153)),
         new(20, localizer?["Art"] ?? "Art", Color.FromArgb(200, 153, 153, 0)),
         new(21, localizer?["Software"] ?? "Software", Color.FromArgb(200, 0, 102, 204)),

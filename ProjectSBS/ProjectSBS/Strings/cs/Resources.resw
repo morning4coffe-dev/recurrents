@@ -273,6 +273,9 @@
   <data name="Home" xml:space="preserve">
     <value>Domů</value>
   </data>
+  <data name="HomeN" xml:space="preserve">
+    <value>Domov</value>
+  </data>
   <data name="InTime" xml:space="preserve">
     <value>za</value>
     <comment>In a specific time in days</comment>

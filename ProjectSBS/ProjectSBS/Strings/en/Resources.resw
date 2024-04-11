@@ -276,6 +276,9 @@
   <data name="Home" xml:space="preserve">
     <value>Home</value>
   </data>
+  <data name="HomeN" xml:space="preserve">
+    <value>Home</value>
+  </data>
   <data name="InTime" xml:space="preserve">
     <value>in</value>
     <comment>In a specific time in days</comment>
