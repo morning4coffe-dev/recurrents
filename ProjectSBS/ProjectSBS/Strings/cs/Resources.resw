@@ -150,6 +150,9 @@
   <data name="ArchiveVerb" xml:space="preserve">
     <value>Archivovat</value>
   </data>
+  <data name="Art" xml:space="preserve">
+    <value>Umění</value>
+  </data>
   <data name="Author" xml:space="preserve">
     <value>Morning4coffe</value>
   </data>
@@ -158,6 +161,9 @@
   </data>
   <data name="BillingCycle" xml:space="preserve">
     <value>Zúčtovací cyklus</value>
+  </data>
+  <data name="Books" xml:space="preserve">
+    <value>Knihy</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Zrušit</value>
@@ -225,6 +231,9 @@
   <data name="Entertainment" xml:space="preserve">
     <value>Zábava</value>
   </data>
+  <data name="Fashion" xml:space="preserve">
+    <value>Móda</value>
+  </data>
   <data name="Finance" xml:space="preserve">
     <value>Finance</value>
   </data>
@@ -236,6 +245,9 @@
   </data>
   <data name="ForThePriceOf" xml:space="preserve">
     <value>Za cenu</value>
+  </data>
+  <data name="Gaming" xml:space="preserve">
+    <value>Hraní</value>
   </data>
   <data name="GetNotified" xml:space="preserve">
     <value>Dostávat upozornění</value>
@@ -289,6 +301,9 @@
   </data>
   <data name="Monthly" xml:space="preserve">
     <value>Měsíčně</value>
+  </data>
+  <data name="Music" xml:space="preserve">
+    <value>Hudba</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Název</value>
@@ -352,11 +367,17 @@
   <data name="PaymentMethod" xml:space="preserve">
     <value>Platební metoda</value>
   </data>
+  <data name="Photography" xml:space="preserve">
+    <value>Fotografování</value>
+  </data>
   <data name="Price" xml:space="preserve">
     <value>Cena</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
     <value>Zásady ochrany osobních údajů</value>
+  </data>
+  <data name="Productivity" xml:space="preserve">
+    <value>Produktivita</value>
   </data>
   <data name="Quarterly" xml:space="preserve">
     <value>Čtvrtletně</value>
@@ -373,11 +394,20 @@
   <data name="Settings" xml:space="preserve">
     <value>Nastavení</value>
   </data>
+  <data name="Shopping" xml:space="preserve">
+    <value>Nákupy</value>
+  </data>
   <data name="Social" xml:space="preserve">
     <value>Social</value>
   </data>
+  <data name="Software" xml:space="preserve">
+    <value>Software</value>
+  </data>
   <data name="Stats" xml:space="preserve">
     <value>Statistiky</value>
+  </data>
+  <data name="Streaming" xml:space="preserve">
+    <value>Streamování</value>
   </data>
   <data name="SystemLanguageAndRegion" xml:space="preserve">
     <value>Systemové nastavení jazyka a oblasti</value>
@@ -399,6 +429,9 @@
   </data>
   <data name="Unarchive" xml:space="preserve">
     <value>Odarchivovat</value>
+  </data>
+  <data name="Utilities" xml:space="preserve">
+    <value>Nástroje</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Verze</value>

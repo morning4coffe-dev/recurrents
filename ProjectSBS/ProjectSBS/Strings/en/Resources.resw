@@ -150,6 +150,9 @@
   <data name="ArchiveVerb" xml:space="preserve">
     <value>Archive</value>
   </data>
+  <data name="Art" xml:space="preserve">
+    <value>Art</value>
+  </data>
   <data name="Author" xml:space="preserve">
     <value>Morning4coffe</value>
   </data>
@@ -158,6 +161,9 @@
   </data>
   <data name="BillingCycle" xml:space="preserve">
     <value>Billing cycle</value>
+  </data>
+  <data name="Books" xml:space="preserve">
+    <value>Books</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
@@ -225,6 +231,9 @@
   <data name="Entertainment" xml:space="preserve">
     <value>Entertainment</value>
   </data>
+  <data name="Fashion" xml:space="preserve">
+    <value>Fashion</value>
+  </data>
   <data name="Finance" xml:space="preserve">
     <value>Finance</value>
   </data>
@@ -236,6 +245,9 @@
   </data>
   <data name="ForThePriceOf" xml:space="preserve">
     <value>For the price of</value>
+  </data>
+  <data name="Gaming" xml:space="preserve">
+    <value>Gaming</value>
   </data>
   <data name="GetNotified" xml:space="preserve">
     <value>Get notified</value>
@@ -292,6 +304,9 @@
   </data>
   <data name="Monthly" xml:space="preserve">
     <value>Monthly</value>
+  </data>
+  <data name="Music" xml:space="preserve">
+    <value>Music</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Name</value>
@@ -355,11 +370,17 @@
   <data name="PaymentMethod" xml:space="preserve">
     <value>Payment method</value>
   </data>
+  <data name="Photography" xml:space="preserve">
+    <value>Photography</value>
+  </data>
   <data name="Price" xml:space="preserve">
     <value>Price</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
     <value>Privacy Policy</value>
+  </data>
+  <data name="Productivity" xml:space="preserve">
+    <value>Productivity</value>
   </data>
   <data name="Quarterly" xml:space="preserve">
     <value>Quarterly</value>
@@ -376,11 +397,20 @@
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
+  <data name="Shopping" xml:space="preserve">
+    <value>Shopping</value>
+  </data>
   <data name="Social" xml:space="preserve">
     <value>Social</value>
   </data>
+  <data name="Software" xml:space="preserve">
+    <value>Software</value>
+  </data>
   <data name="Stats" xml:space="preserve">
     <value>Stats</value>
+  </data>
+  <data name="Streaming" xml:space="preserve">
+    <value>Streaming</value>
   </data>
   <data name="SystemLanguageAndRegion" xml:space="preserve">
     <value>System Language &amp; region</value>
@@ -402,6 +432,9 @@
   </data>
   <data name="Unarchive" xml:space="preserve">
     <value>Unarchive</value>
+  </data>
+  <data name="Utilities" xml:space="preserve">
+    <value>Utilities</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Version</value>

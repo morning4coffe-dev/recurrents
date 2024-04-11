@@ -150,6 +150,9 @@
   <data name="ArchiveVerb" xml:space="preserve">
     <value>Archivieren</value>
   </data>
+  <data name="Art" xml:space="preserve">
+    <value>Kunst</value>
+  </data>
   <data name="Author" xml:space="preserve">
     <value>Morning4coffe</value>
   </data>
@@ -158,6 +161,9 @@
   </data>
   <data name="BillingCycle" xml:space="preserve">
     <value>Abrechnungszeitraum</value>
+  </data>
+  <data name="Books" xml:space="preserve">
+    <value>Bücher</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Abbrechen</value>
@@ -225,6 +231,9 @@
   <data name="Entertainment" xml:space="preserve">
     <value>Unterhaltung</value>
   </data>
+  <data name="Fashion" xml:space="preserve">
+    <value>Mode</value>
+  </data>
   <data name="Finance" xml:space="preserve">
     <value>Finanzen</value>
   </data>
@@ -236,6 +245,9 @@
   </data>
   <data name="ForThePriceOf" xml:space="preserve">
     <value>Für den Preis von</value>
+  </data>
+  <data name="Gaming" xml:space="preserve">
+    <value>Spielen</value>
   </data>
   <data name="GetNotified" xml:space="preserve">
     <value>Benachrichtigt werden</value>
@@ -289,6 +301,9 @@
   </data>
   <data name="Monthly" xml:space="preserve">
     <value>Monatlich</value>
+  </data>
+  <data name="Music" xml:space="preserve">
+    <value>Musik</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Name</value>
@@ -349,11 +364,17 @@
   <data name="PaymentMethod" xml:space="preserve">
     <value>Zahlungsweise</value>
   </data>
+  <data name="Photography" xml:space="preserve">
+    <value>Fotografie</value>
+  </data>
   <data name="Price" xml:space="preserve">
     <value>Preis</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
     <value>Datenschutzerklärung</value>
+  </data>
+  <data name="Productivity" xml:space="preserve">
+    <value>Produktivität</value>
   </data>
   <data name="Quarterly" xml:space="preserve">
     <value>Vierteljährlich</value>
@@ -370,11 +391,20 @@
   <data name="Settings" xml:space="preserve">
     <value>Einstellungen</value>
   </data>
+  <data name="Shopping" xml:space="preserve">
+    <value>Einkaufen</value>
+  </data>
   <data name="Social" xml:space="preserve">
     <value>Social</value>
   </data>
+  <data name="Software" xml:space="preserve">
+    <value>Software</value>
+  </data>
   <data name="Stats" xml:space="preserve">
     <value>Stats</value>
+  </data>
+  <data name="Streaming" xml:space="preserve">
+    <value>Streaming</value>
   </data>
   <data name="SystemLanguageAndRegion" xml:space="preserve">
     <value>System Sprache &amp; Region</value>
@@ -396,6 +426,9 @@
   </data>
   <data name="Unarchive" xml:space="preserve">
     <value>Nicht archivieren</value>
+  </data>
+  <data name="Utilities" xml:space="preserve">
+    <value>Dienstprogramme</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Version</value>
