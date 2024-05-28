@@ -8,7 +8,7 @@
 
 Tired of juggling numerous subscriptions and forgetting payment dates? Simplify your life with Recurrents which allows you to effortlessly track all your recurring subscriptions in one place. Get reminded of upcoming payments before renewal dates and gain full control over your financial commitments. With a sleek and user-friendly interface, it empowers you to stay on top of your subscriptions, helping you save money, avoid unwanted charges, and enjoy a stress-free subscription experience.
 
-![A screenshot of the Home page of Recurrents, the app made by Morning4coffe](https://github.com/morning4coffe-dev/recurrents/blob/0f9c31020bad191e93025adec73f947c13ba6e9b/Assets/Screenshots/01-home.png)
+![A screenshot of the Home page of Recurrents, the app made by Morning4coffe](https://github.com/morning4coffe-dev/recurrents/blob/45eaa997f003c5deb373f8154e33d1da2103ad6d/Assets/Screenshots/01-home.png)
 
 ## Installing
 
