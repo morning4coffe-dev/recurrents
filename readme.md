@@ -2,7 +2,9 @@
 
 ![The Hero image of Recurrents, the app made by Morning4coffe](https://github.com/morning4coffe-dev/recurrents/blob/0f9c31020bad191e93025adec73f947c13ba6e9b/Assets/hero-large.png)
 
-[![Microsoft Store](https://img.shields.io/static/v1?label=Microsoft%20Store&message=Download&color=1C8522&logo=microsoft)](https://www.microsoft.com/store/apps/9N5MJT8G06KC)
+<a href="https://apps.microsoft.com/detail/9N5MJT8G06KC?launch=true&cid=github&mode=mini">
+	<img src="https://get.microsoft.com/images/en-us%20dark.svg" width="200"/>
+</a>
 
 ## Introduction
 
