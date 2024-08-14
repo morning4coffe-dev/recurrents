@@ -1,0 +1,10 @@
+{
+	"profiles": {
+		"Recurrents.Windows (Unpackaged)": {
+			"commandName": "Project"
+		},
+		"Recurrents.Windows (Package)": {
+			"commandName": "MsixPackage"
+		}
+	}
+}
