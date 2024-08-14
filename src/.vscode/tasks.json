@@ -7,8 +7,9 @@
       "type": "process",
       "args": [
         "build",
-        "${workspaceFolder}/Recurrents.Wasm/Recurrents.Wasm.csproj",
+        "${workspaceFolder}/Recurrents/Recurrents.csproj",
         "/property:GenerateFullPaths=true",
+        "/property:TargetFramework=net8.0-browserwasm",
         "/consoleloggerparameters:NoSummary"
       ],
       "problemMatcher": "$msCompile"
@@ -19,32 +20,35 @@
       "type": "process",
       "args": [
         "publish",
-        "${workspaceFolder}/Recurrents.Wasm/Recurrents.Wasm.csproj",
+        "${workspaceFolder}/Recurrents/Recurrents.csproj",
         "/property:GenerateFullPaths=true",
+        "/property:TargetFramework=net8.0-browserwasm",
         "/consoleloggerparameters:NoSummary"
       ],
       "problemMatcher": "$msCompile"
     },
     {
-      "label": "build-skia-gtk",
+      "label": "build-desktop",
       "command": "dotnet",
       "type": "process",
       "args": [
         "build",
-        "${workspaceFolder}/Recurrents.Skia.Gtk/Recurrents.Skia.Gtk.csproj",
+        "${workspaceFolder}/Recurrents/Recurrents.csproj",
         "/property:GenerateFullPaths=true",
+        "/property:TargetFramework=net8.0-desktop",
         "/consoleloggerparameters:NoSummary"
       ],
       "problemMatcher": "$msCompile"
     },
     {
-      "label": "publish-skia-gtk",
+      "label": "publish-desktop",
       "command": "dotnet",
       "type": "process",
       "args": [
         "publish",
-        "${workspaceFolder}/Recurrents.Skia.Gtk/Recurrents.Skia.Gtk.csproj",
+        "${workspaceFolder}/Recurrents/Recurrents.csproj",
         "/property:GenerateFullPaths=true",
+        "/property:TargetFramework=net8.0-desktop",
         "/consoleloggerparameters:NoSummary"
       ],
       "problemMatcher": "$msCompile"
