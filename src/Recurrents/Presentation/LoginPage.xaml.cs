@@ -1,4 +1,4 @@
-﻿namespace Recurrents.Presentation;
+namespace Recurrents.Presentation;
 
 public sealed partial class LoginPage : Page
 {
@@ -7,7 +7,5 @@ public sealed partial class LoginPage : Page
     public LoginPage()
     {
         this.InitializeComponent();
-
-        this.DataContext = App.Services?.GetRequiredService<LoginViewModel>();
     }
 }

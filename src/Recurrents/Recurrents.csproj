@@ -26,7 +26,7 @@
       the "Microsoft.Windows.SDK.BuildTools" package above, and the "revision" version number
       must be the highest found in https://www.nuget.org/packages/Microsoft.Windows.SDK.NET.Ref.
     -->
-    <!-- <WindowsSdkPackageReference>10.0.22621.28</WindowsSdkPackageReference> -->
+    <!-- <WindowsSdkPackageVersion>10.0.22621.28</WindowsSdkPackageVersion> -->
 
     <!--
       UnoFeatures let's you quickly add and manage implicit package references based on the features you want to use.
@@ -36,19 +36,20 @@
       Lottie;
       Hosting;
       Toolkit;
+      Logging;
       Mvvm;
       Configuration;
       Http;
       Serialization;
       Localization;
+      Navigation;
       ThemeService;
     </UnoFeatures>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)'=='Debug' or '$(IsUiAutomationMappingEnabled)'=='True'">
-    <IsUiAutomationMappingEnabled>True</IsUiAutomationMappingEnabled>
-    <DefineConstants>$(DefineConstants);USE_UITESTS</DefineConstants>
-  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Assets\Icons\icon_foreground.svg" />
+    <None Remove="Presentation\LoginPage.xaml" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="WinUIEx" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" />
@@ -56,8 +57,7 @@
     <PackageReference Include="Microsoft.Graph" />
     <PackageReference Include="Microsoft.Identity.Client" />
     <PackageReference Include="Microsoft.Identity.Client.Extensions.Msal" />
-    <PackageReference Include="LiveChartsCore.SkiaSharpView.Uno.WinUI" />
-    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <!--<PackageReference Include="LiveChartsCore.SkiaSharpView.Uno.WinUI" />-->
     <PackageReference Include="CommunityToolkit.WinUI.Notifications" />
     <PackageReference Include="CommunityToolkit.WinUI.Converters" />
     <PackageReference Include="CommunityToolkit.WinUI.Animations" />
@@ -68,5 +68,10 @@
     <PackageReference Include="Microsoft.AppCenter.Analytics" />
     <PackageReference Include="Microsoft.AppCenter.Crashes" />
   </ItemGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Debug' or '$(IsUiAutomationMappingEnabled)'=='True'">
+    <IsUiAutomationMappingEnabled>True</IsUiAutomationMappingEnabled>
+    <DefineConstants>$(DefineConstants);USE_UITESTS</DefineConstants>
+  </PropertyGroup>
 
 </Project>

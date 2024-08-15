@@ -1,5 +1,11 @@
 using Uno.Resizetizer;
 
+
+#if WINDOWS
+using Microsoft.UI.Composition.SystemBackdrops;
+using WinUIEx;
+#endif
+
 namespace Recurrents;
 public partial class App : Application
 {
@@ -15,67 +21,103 @@ public partial class App : Application
     protected Window? MainWindow { get; private set; }
     protected IHost? Host { get; private set; }
 
-    protected override void OnLaunched(LaunchActivatedEventArgs args)
+    public static IServiceProvider? Services => (Current as App)!.Host?.Services;
+
+    protected async override void OnLaunched(LaunchActivatedEventArgs args)
     {
         var builder = this.CreateBuilder(args)
+            .UseToolkitNavigation()
             .Configure(host => host
 #if DEBUG
-                // Switch to Development environment when running in DEBUG
                 .UseEnvironment(Environments.Development)
 #endif
+                .UseLogging(configure: (context, logBuilder) =>
+                {
+                    logBuilder
+                        .SetMinimumLevel(
+                            context.HostingEnvironment.IsDevelopment() ?
+                                LogLevel.Information :
+                                LogLevel.Warning)
+                        .CoreLogLevel(LogLevel.Warning);
+                }, enableUnoLogging: true)
                 .UseConfiguration(configure: configBuilder =>
-                    configBuilder
-                        .EmbeddedSource<App>()
-                        .Section<AppConfig>()
+                    configBuilder.EmbeddedSource<App>().Section<AppConfig>()
                 )
-                // Enable localization (see appsettings.json for supported languages)
                 .UseLocalization()
-                // Register Json serializers (ISerializer and ISerializer)
                 .UseSerialization((context, services) => services
                     .AddContentSerializer(context)
-                    .AddJsonTypeInfo(CurrencyContext.Default.IImmutableListWeatherForecast))
+                    .AddJsonTypeInfo(WeatherForecastContext.Default.IImmutableListWeatherForecast))
                 .UseHttp((context, services) => services
-                    // Register HttpClient
-#if DEBUG
-                    // DelegatingHandler will be automatically injected into Refit Client
-                    .AddTransient<DelegatingHandler, DebugHttpHandler>()
-#endif
                     .AddSingleton<IWeatherCache, WeatherCache>()
                     .AddRefitClient<IApiClient>(context))
                 .ConfigureServices((context, services) =>
                 {
-                    // TODO: Register your services
-                    //services.AddSingleton<IMyService, MyService>();
+                    // Register your services here
+                    // services.AddSingleton<IMyService, MyService>();
                 })
+                .UseNavigation(RegisterRoutes)
             );
+
+        // Assign the Host after building
+        Host = builder.Build();
+
+        // Ensure that Services is now accessible
+        if (Services == null)
+        {
+            throw new InvalidOperationException("Services could not be initialized.");
+        }
+
         MainWindow = builder.Window;
+
+#if WINDOWS
+        var manager = WindowManager.Get(builder.Window);
+        manager.MinWidth = 500;
+        manager.MinHeight = 500;
+
+        var size = builder.Window.AppWindow.Size;
+        manager.PersistenceId = "RecurrentsMainWindow";
+        builder.Window.SetWindowSize(size.Width / 1.55, size.Height / 1.1);
+        builder.Window.CenterOnScreen();
+        builder.Window.Title = Package.Current.DisplayName;
+
+        if (MicaController.IsSupported())
+        {
+            MainWindow.SystemBackdrop = new MicaBackdrop() { Kind = MicaKind.Base };
+        }
+#endif
 
 #if DEBUG
         MainWindow.EnableHotReload();
 #endif
         MainWindow.SetWindowIcon();
 
-        Host = builder.Build();
+        await builder.NavigateAsync<Shell>();
+    }
 
-        // Do not repeat app initialization when the Window already has content,
-        // just ensure that the window is active
-        if (MainWindow.Content is not Frame rootFrame)
-        {
-            // Create a Frame to act as the navigation context and navigate to the first page
-            rootFrame = new Frame();
 
-            // Place the frame in the current Window
-            MainWindow.Content = rootFrame;
-        }
+    private static void RegisterRoutes(IViewRegistry views, IRouteRegistry routes)
+    {
+        views.Register(
+            new ViewMap(ViewModel: typeof(ShellViewModel)),
+            //new ViewMap<MainPage, MainViewModel>(),
+            new DataViewMap<MainPage, MainViewModel, User>(),
+            new ViewMap<LoginPage, LoginViewModel>(),
+            new DataViewMap<SecondPage, SecondViewModel, Entity>()
+        );
 
-        if (rootFrame.Content == null)
-        {
-            // When the navigation stack isn't restored navigate to the first page,
-            // configuring the new page by passing required information as a navigation
-            // parameter
-            rootFrame.Navigate(typeof(MainPage), args.Arguments);
-        }
-        // Ensure the current window is active
-        MainWindow.Activate();
+        routes.Register(
+            new RouteMap("", View: views.FindByViewModel<ShellViewModel>(),
+                Nested:
+                [
+                    new ("Main", View: views.FindByViewModel<MainViewModel>()),
+                    new ("Login", View: views.FindByViewModel<LoginViewModel>(), IsDefault: true,
+                        Nested:
+                        [
+                            new ("Second", View: views.FindByViewModel<SecondViewModel>())
+                        ]
+                    ),
+                ]
+            )
+        );
     }
 }

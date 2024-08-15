@@ -1,9 +1,10 @@
-namespace Recurrents.Presentation;
+﻿namespace Recurrents.Presentation;
 
-public sealed partial class Shell : Page
+public sealed partial class Shell : UserControl, IContentControlProvider
 {
     public Shell()
     {
         this.InitializeComponent();
     }
+    public ContentControl ContentControl => Splash;
 }

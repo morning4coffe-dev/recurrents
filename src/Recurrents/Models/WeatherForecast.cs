@@ -1,4 +1,4 @@
-namespace Recurrents.DataContracts;
+namespace Recurrents.Models;
 
 /// <summary>
 /// A Weather Forecast for a specific date
