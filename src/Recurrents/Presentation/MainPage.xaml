@@ -82,7 +82,7 @@
       </VisualStateGroup>
 
     </VisualStateManager.VisualStateGroups>
-    
+
     <NavigationView x:Name="navigation"
                     uen:Region.Attached="True"
                     IsBackButtonVisible="Collapsed"
@@ -181,7 +181,9 @@
                      Margin="5" />
 
         <!-- Category Frame View -->
-        <ContentControl uen:Region.Attached="True" />
+        <ContentControl uen:Region.Attached="True"
+                        HorizontalContentAlignment="Stretch"
+                        VerticalContentAlignment="Stretch" />
 
         <!-- Network Status Info -->
         <InfoBar x:Name="disconnectAlert"
@@ -228,7 +230,7 @@
             </utu:TabBarItem>
 
             <utu:TabBarItem uen:Region.Name="Second"
-                                Content="Request Value">
+                            Content="Request Value">
               <utu:TabBarItem.Icon>
                 <SymbolIcon Symbol="Remote" />
               </utu:TabBarItem.Icon>
@@ -242,7 +244,7 @@
             </utu:TabBarItem>
 
           </utu:TabBar.Items>
-          
+
           <utu:TabBar.SelectionIndicatorContentTemplate>
             <DataTemplate>
               <Border Background="{ThemeResource AccentAAFillColorDefaultBrush}"

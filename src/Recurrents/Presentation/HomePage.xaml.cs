@@ -14,7 +14,7 @@ public sealed partial class HomePage : Page
 
     private void Page_Loaded(object sender, RoutedEventArgs e)
     {
-        ViewModel.Load();
+        //ViewModel.Load();
     }
 
     private void Page_Unloaded(object sender, RoutedEventArgs e)

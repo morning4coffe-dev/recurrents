@@ -9,7 +9,7 @@ public partial class HomeViewModel : ObservableObject
     //private readonly IUserService _userService;
     //private readonly IItemService _itemService;
     //private readonly IItemFilterService _filterService;
-    //private readonly INavigation _navigation;
+    private readonly INavigator _navigation;
     //private readonly IDialogService _dialog;
     #endregion
 
@@ -36,28 +36,28 @@ public partial class HomeViewModel : ObservableObject
 
     public bool IsEdit;
 
-    //private ItemViewModel? _selectedItem;
-    //public ItemViewModel? SelectedItem
-    //{
-    //    get => _selectedItem;
-    //    set
-    //    {
-    //        IsPaneOpen = value is { };
+    private ItemViewModel? _selectedItem;
+    public ItemViewModel? SelectedItem
+    {
+        get => _selectedItem;
+        set
+        {
+            IsPaneOpen = value is { };
 
-    //        if (_selectedItem == value)
-    //        {
-    //            return;
-    //        }
+            if (_selectedItem == value)
+            {
+                return;
+            }
 
-    //        WeakReferenceMessenger.Default.Send(new ItemSelectionChanged(value, IsEdit, (value?.Item is null)));
-    //        IsEdit = false;
+            //WeakReferenceMessenger.Default.Send(new ItemSelectionChanged(value, IsEdit, (value?.Item is null)));
+            IsEdit = false;
 
-    //        _selectedItem = value;
-    //        OnPropertyChanged();
-    //    }
-    //}
+            _selectedItem = value;
+            OnPropertyChanged();
+        }
+    }
 
-    //public ObservableCollection<ItemViewModel> Items { get; } = [];
+    public ObservableCollection<ItemViewModel> Items { get; } = [];
 
     //public List<Tag> FilterCategories => _filterService.Categories;
 
@@ -83,8 +83,8 @@ public partial class HomeViewModel : ObservableObject
         //IUserService userService,
         //IItemService itemService,
         //IItemFilterService filterService,
-        IStringLocalizer localizer//,
-        //INavigation navigation,
+        IStringLocalizer localizer,
+        INavigator navigation
         //IDialogService dialog
         )
     {
@@ -92,7 +92,7 @@ public partial class HomeViewModel : ObservableObject
         //_userService = userService;
         //_itemService = itemService;
         //_filterService = filterService;
-        //_navigation = navigation;
+        _navigation = navigation;
         //_dialog = dialog;
 
         //_userService.OnLoggedInChanged += (s, e) =>
@@ -101,6 +101,11 @@ public partial class HomeViewModel : ObservableObject
         //    IsLoggedIn = e is not null;
         //    DisplayName = User?.Name;
         //};
+
+        for (int i = 0; i < 60; i++)
+        {
+            Items.Add(new ItemViewModel(new Item(null, $"Test {i}")));
+        }
 
         WelcomeMessage = DateTime.Now.Hour switch
         {
@@ -165,136 +170,134 @@ public partial class HomeViewModel : ObservableObject
         //});
     }
 
-//    public override void Unload()
-//    {
-//        WeakReferenceMessenger.Default.UnregisterAll(this);
+    //    public override void Unload()
+    //    {
+    //        WeakReferenceMessenger.Default.UnregisterAll(this);
 
-//#if HAS_UNO
-//        SystemNavigationManager.GetForCurrentView().BackRequested -= System_BackRequested;
-//#endif
-//    }
+    //#if HAS_UNO
+    //        SystemNavigationManager.GetForCurrentView().BackRequested -= System_BackRequested;
+    //#endif
+    //    }
 
-//    private IEnumerable<ItemViewModel> RefreshItems()
-//    {
-//        IEnumerable<ItemViewModel> items;
+    //    private IEnumerable<ItemViewModel> RefreshItems()
+    //    {
+    //        IEnumerable<ItemViewModel> items;
 
-//        //TODO Must add a listener for when the category changes
+    //        //TODO Must add a listener for when the category changes
 
-//        if (SelectedCategory is not { } category)
-//        {
-//            return new List<ItemViewModel>();
-//        }
+    //        if (SelectedCategory is not { } category)
+    //        {
+    //            return new List<ItemViewModel>();
+    //        }
 
-//        //If ArchivePage is selected, show archived items
-//        if (category.Page == typeof(ArchivePage))
-//        {
-//            items = _itemService.GetItems(item => item.IsArchived)
-//            .OrderBy(i => i.PaymentDate);
-//        }
-//        else
-//        {
-//            // Check for sentry value of -1 = None tag
-//            if (SelectedFilter.Id == -1)
-//            {
-//                items = _itemService.GetItems(item => !item.IsArchived)
-//                .OrderBy(i => i.PaymentDate);
-//            }
-//            else
-//            {
-//                items = _itemService.GetItems(item => !item.IsArchived && item.Item?.TagId == SelectedFilter.Id)
-//                .OrderBy(i => i.PaymentDate);
-//            }
-//        }
+    //        //If ArchivePage is selected, show archived items
+    //        if (category.Page == typeof(ArchivePage))
+    //        {
+    //            items = _itemService.GetItems(item => item.IsArchived)
+    //            .OrderBy(i => i.PaymentDate);
+    //        }
+    //        else
+    //        {
+    //            // Check for sentry value of -1 = None tag
+    //            if (SelectedFilter.Id == -1)
+    //            {
+    //                items = _itemService.GetItems(item => !item.IsArchived)
+    //                .OrderBy(i => i.PaymentDate);
+    //            }
+    //            else
+    //            {
+    //                items = _itemService.GetItems(item => !item.IsArchived && item.Item?.TagId == SelectedFilter.Id)
+    //                .OrderBy(i => i.PaymentDate);
+    //            }
+    //        }
 
-//        Items.Clear();
-//        Items.AddRange(items);
+    //        Items.Clear();
+    //        Items.AddRange(items);
 
-//        return items;
-//    }
+    //        return items;
+    //    }
 
-//    private void System_BackRequested(object? sender, BackRequestedEventArgs e)
-//    {
-//        e.Handled = true;
-//        SystemNavigationManager.GetForCurrentView().BackRequested -= System_BackRequested;
-//    }
+    //    private void System_BackRequested(object? sender, BackRequestedEventArgs e)
+    //    {
+    //        e.Handled = true;
+    //        SystemNavigationManager.GetForCurrentView().BackRequested -= System_BackRequested;
+    //    }
 
-//    [RelayCommand]
-//    private void AddNew()
-//    {
-//        SelectedItem = null;
+    //    [RelayCommand]
+    //    private void AddNew()
+    //    {
+    //        SelectedItem = null;
 
-//        WeakReferenceMessenger.Default.Send(
-//            new ItemSelectionChanged(
-//                new ItemViewModel(new Item(null, string.Empty)),
-//                true,
-//                true)
-//            );
-//        IsPaneOpen = true;
+    //        WeakReferenceMessenger.Default.Send(
+    //            new ItemSelectionChanged(
+    //                new ItemViewModel(new Item(null, string.Empty)),
+    //                true,
+    //                true)
+    //            );
+    //        IsPaneOpen = true;
 
-//        AnalyticsService.TrackEvent(AnalyticsService.ItemEvent, "Added", "True");
-//    }
+    //        AnalyticsService.TrackEvent(AnalyticsService.ItemEvent, "Added", "True");
+    //    }
 
-//    [RelayCommand]
-//    public async Task Archive(ItemViewModel? item = null)
-//    {
-//        if (item is not { } && SelectedItem is not { })
-//        {
-//            return;
-//        }
+    //    [RelayCommand]
+    //    public async Task Archive(ItemViewModel? item = null)
+    //    {
+    //        if (item is not { } && SelectedItem is not { })
+    //        {
+    //            return;
+    //        }
 
-//        ContentDialogResult result;
+    //        ContentDialogResult result;
 
-//        if (!(item ?? SelectedItem).IsArchived)
-//        {
-//            result = await _dialog.ShowAsync(
-//                _localizer["ArchiveDialogTitle"],
-//                _localizer["ArchiveDialogDescription"],
-//                _localizer["ArchiveVerb"]);
-//        }
-//        else
-//        {
-//            result = ContentDialogResult.Primary;
-//        }
+    //        if (!(item ?? SelectedItem).IsArchived)
+    //        {
+    //            result = await _dialog.ShowAsync(
+    //                _localizer["ArchiveDialogTitle"],
+    //                _localizer["ArchiveDialogDescription"],
+    //                _localizer["ArchiveVerb"]);
+    //        }
+    //        else
+    //        {
+    //            result = ContentDialogResult.Primary;
+    //        }
 
-//        if (result == ContentDialogResult.Primary)
-//        {
-//            _itemService.ArchiveItem(item ?? SelectedItem);
+    //        if (result == ContentDialogResult.Primary)
+    //        {
+    //            _itemService.ArchiveItem(item ?? SelectedItem);
 
-//            AnalyticsService.TrackEvent(AnalyticsService.ItemEvent, "Archived",
-//                (item ?? SelectedItem).IsArchived.ToString());
+    //            AnalyticsService.TrackEvent(AnalyticsService.ItemEvent, "Archived",
+    //                (item ?? SelectedItem).IsArchived.ToString());
 
-//            SelectedItem = null;
-//            RefreshItems();
-//        }
-//    }
+    //            SelectedItem = null;
+    //            RefreshItems();
+    //        }
+    //    }
 
-//    [RelayCommand]
-//    public async Task Delete(ItemViewModel? item = null)
-//    {
-//        if (item is not { } && SelectedItem is not { })
-//        {
-//            return;
-//        }
+    //    [RelayCommand]
+    //    public async Task Delete(ItemViewModel? item = null)
+    //    {
+    //        if (item is not { } && SelectedItem is not { })
+    //        {
+    //            return;
+    //        }
 
-//        var result = await _dialog.ShowAsync(
-//            _localizer["DeleteDialogTitle"],
-//            _localizer["DeleteDialogDescription"],
-//            _localizer["Delete"]);
+    //        var result = await _dialog.ShowAsync(
+    //            _localizer["DeleteDialogTitle"],
+    //            _localizer["DeleteDialogDescription"],
+    //            _localizer["Delete"]);
 
-//        if (result == ContentDialogResult.Primary)
-//        {
-//            _itemService.DeleteItem(item ?? SelectedItem);
+    //        if (result == ContentDialogResult.Primary)
+    //        {
+    //            _itemService.DeleteItem(item ?? SelectedItem);
 
-//            AnalyticsService.TrackEvent(AnalyticsService.ItemEvent, "Deleted", "True");
+    //            AnalyticsService.TrackEvent(AnalyticsService.ItemEvent, "Deleted", "True");
 
-//            SelectedItem = null;
-//            RefreshItems();
-//        }
-//    }
+    //            SelectedItem = null;
+    //            RefreshItems();
+    //        }
+    //    }
 
     [RelayCommand]
     private void OpenSettings()
-    => //_navigation.NavigateCategory(_navigation.Categories.FirstOrDefault(category => category.Id == 5)
-    //            ??
-                throw new($"Settings category wasn't found in the Categories list on {this}.");//);
+        => _navigation.NavigateViewModelAsync<SettingsViewModel>(this);
 }

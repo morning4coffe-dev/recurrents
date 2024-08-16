@@ -24,13 +24,18 @@
     <PackageVersion Include="LiveChartsCore.SkiaSharpView.Uno.WinUI" Version="2.0.0-rc2" />
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageVersion Include="CommunityToolkit.WinUI.Notifications" Version="7.1.2" />
-    <PackageVersion Include="CommunityToolkit.WinUI.Converters" Version="8.0.240109" />
-    <PackageVersion Include="CommunityToolkit.WinUI.Animations" Version="8.0.240109" />
-    <PackageVersion Include="CommunityToolkit.WinUI.Triggers" Version="8.0.240109" />
-    <PackageVersion Include="CommunityToolkit.WinUI.Controls.Segmented" Version="8.0.240109" />
-    <PackageVersion Include="CommunityToolkit.WinUI.Controls.SettingsControls" Version="8.0.240109" />
+    <PackageVersion Include="CommunityToolkit.WinUI.Converters" Version="8.1.240606-rc" />
+    <PackageVersion Include="CommunityToolkit.WinUI.Animations" Version="8.1.240606-rc" />
+    <PackageVersion Include="CommunityToolkit.WinUI.Triggers" Version="8.1.240606-rc" />
+    <PackageVersion Include="CommunityToolkit.WinUI.Controls.Segmented" Version="8.1.240606-rc" />
+    <PackageVersion Include="CommunityToolkit.WinUI.Controls.SettingsControls" Version="8.1.240606-rc" />
     <PackageVersion Include="Microsoft.AppCenter" Version="5.0.3" />
     <PackageVersion Include="Microsoft.AppCenter.Analytics" Version="5.0.3" />
     <PackageVersion Include="Microsoft.AppCenter.Crashes" Version="5.0.3" />
+    
+    <!--<PackageVersion Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.19041.0" />
+    <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.6.240807006-preview1" />-->
+
+    <!--<WinAppSdkBuildToolsVersion>10.0.19041.0</WinAppSdkBuildToolsVersion>-->
   </ItemGroup>
 </Project>
