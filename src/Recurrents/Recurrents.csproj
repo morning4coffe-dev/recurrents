@@ -48,7 +48,9 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Assets\Icons\icon_foreground.svg" />
+    <None Remove="Presentation\HomePage.xaml" />
     <None Remove="Presentation\LoginPage.xaml" />
+    <None Remove="Presentation\SettingsPage.xaml" />
   </ItemGroup>
 
   <ItemGroup>

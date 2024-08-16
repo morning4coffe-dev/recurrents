@@ -99,9 +99,10 @@ public partial class App : Application
     {
         views.Register(
             new ViewMap(ViewModel: typeof(ShellViewModel)),
-            //new ViewMap<MainPage, MainViewModel>(),
             new DataViewMap<MainPage, MainViewModel, User>(),
             new ViewMap<LoginPage, LoginViewModel>(),
+            new ViewMap<HomePage, HomeViewModel>(),
+            new ViewMap<SettingsPage, SettingsViewModel>(),
             new DataViewMap<SecondPage, SecondViewModel, Entity>()
         );
 
@@ -113,7 +114,9 @@ public partial class App : Application
                     new ("Login", View: views.FindByViewModel<LoginViewModel>(), IsDefault: true,
                         Nested:
                         [
-                            new ("Second", View: views.FindByViewModel<SecondViewModel>())
+                            new ("Second", View: views.FindByViewModel<SecondViewModel>()),
+                            new ("Home", View: views.FindByViewModel<HomeViewModel>()),
+                            new ("Settings", View: views.FindByViewModel<SettingsViewModel>())
                         ]
                     ),
                 ]

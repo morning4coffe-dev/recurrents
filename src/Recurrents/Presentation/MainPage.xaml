@@ -6,50 +6,130 @@
       xmlns:uen="using:Uno.Extensions.Navigation.UI"
       xmlns:models="using:Recurrents.Models"
       xmlns:utu="using:Uno.Toolkit.UI"
+      xmlns:toolkit="using:CommunityToolkit.WinUI"
       NavigationCacheMode="Required"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-  <NavigationView x:Name="navigation"
-                  Grid.Row="1"
-                  IsBackButtonVisible="Collapsed"
-                  IsPaneToggleButtonVisible="True"
-                  IsSettingsVisible="False"
-                  IsPaneVisible="True"
-                 
-                  > <!--MenuItemsSource="{x:Bind ViewModel.Categories}" SelectedItem="{x:Bind ViewModel.SelectedCategory, Mode=TwoWay}"-->
+  <Grid uen:Region.Attached="True">
+    <VisualStateManager.VisualStateGroups>
 
-    <NavigationView.MenuItems>
+      <!--AdaptiveTriggers-->
+      <VisualStateGroup>
+        <VisualState x:Name="SmallScreen">
+          <VisualState.StateTriggers>
+            <AdaptiveTrigger MinWindowWidth="0" />
+          </VisualState.StateTriggers>
 
-      <NavigationViewItem uen:Region.Name="Second"
-                               Content="Page Navigation">
-        <NavigationViewItem.Icon>
-          <SymbolIcon Symbol="Page" />
-        </NavigationViewItem.Icon>
-      </NavigationViewItem>
+          <VisualState.Setters>
+            <Setter Target="navigation.IsPaneToggleButtonVisible"
+                    Value="False" />
+            <Setter Target="navigationBar.Visibility"
+                    Value="Visible" />
+          </VisualState.Setters>
+        </VisualState>
 
-      <NavigationViewItem uen:Region.Name="Second"
-                               Content="Request Value">
-        <NavigationViewItem.Icon>
-          <SymbolIcon Symbol="Remote" />
-        </NavigationViewItem.Icon>
-      </NavigationViewItem>
-      
-    </NavigationView.MenuItems>
+        <VisualState x:Name="LargeScreen">
+          <VisualState.StateTriggers>
+            <AdaptiveTrigger MinWindowWidth="640" />
+          </VisualState.StateTriggers>
+        </VisualState>
+      </VisualStateGroup>
 
-    <NavigationView.Resources>
-      <ResourceDictionary>
-        <ResourceDictionary.ThemeDictionaries>
-          <ResourceDictionary x:Key="Default">
-            <SolidColorBrush x:Key="NavigationViewContentBackground"
-                             Color="Transparent" />
-            <SolidColorBrush x:Key="NavigationViewContentGridBorderBrush"
-                             Color="Transparent" />
-          </ResourceDictionary>
-        </ResourceDictionary.ThemeDictionaries>
-      </ResourceDictionary>
-    </NavigationView.Resources>
+      <!--Navigation flexibility-->
+      <VisualStateGroup>
+        <VisualState>
+          <VisualState.StateTriggers>
+            <toolkit:IsEqualStateTrigger Value="{Binding IsPaneOpen, ElementName=navigation, Mode=OneWay}"
+                                         To="True" />
+          </VisualState.StateTriggers>
+          <VisualState.Setters>
+            <Setter Target="userButton.Visibility"
+                    Value="Visible" />
+          </VisualState.Setters>
+        </VisualState>
+        <VisualState>
+          <VisualState.StateTriggers>
+            <toolkit:IsEqualStateTrigger Value="{Binding IsPaneOpen, ElementName=navigation, Mode=OneWay}"
+                                         To="False" />
+          </VisualState.StateTriggers>
+          <VisualState.Setters>
+            <Setter Target="userButton.Visibility"
+                    Value="Collapsed" />
+          </VisualState.Setters>
+        </VisualState>
+      </VisualStateGroup>
 
-    <!--<NavigationView.PaneCustomContent>
+      <!--Network-->
+      <VisualStateGroup>
+        <VisualState>
+          <VisualState.StateTriggers>
+            <toolkit:NetworkConnectionStateTrigger ConnectionState="Connected" />
+          </VisualState.StateTriggers>
+          <VisualState.Setters>
+            <Setter Target="disconnectAlert.Visibility"
+                    Value="Collapsed" />
+          </VisualState.Setters>
+        </VisualState>
+        <VisualState>
+          <VisualState.StateTriggers>
+            <toolkit:NetworkConnectionStateTrigger ConnectionState="Disconnected" />
+          </VisualState.StateTriggers>
+          <VisualState.Setters>
+            <Setter Target="disconnectAlert.Visibility"
+                    Value="Visible" />
+          </VisualState.Setters>
+        </VisualState>
+      </VisualStateGroup>
+
+    </VisualStateManager.VisualStateGroups>
+    
+    <NavigationView x:Name="navigation"
+                    uen:Region.Attached="True"
+                    IsBackButtonVisible="Collapsed"
+                    IsPaneToggleButtonVisible="True"
+                    IsPaneVisible="True">
+
+      <NavigationView.MenuItems>
+
+        <NavigationViewItem uen:Region.Name="Home"
+                            Content="Home">
+          <NavigationViewItem.Icon>
+            <SymbolIcon Symbol="Home" />
+          </NavigationViewItem.Icon>
+        </NavigationViewItem>
+
+        <NavigationViewItem uen:Region.Name="Second"
+                            Content="Request Value">
+          <NavigationViewItem.Icon>
+            <SymbolIcon Symbol="Remote" />
+          </NavigationViewItem.Icon>
+        </NavigationViewItem>
+
+      </NavigationView.MenuItems>
+
+      <NavigationView.FooterMenuItems>
+        <NavigationViewItem uen:Region.Name="Settings"
+                            Content="Settings">
+          <NavigationViewItem.Icon>
+            <SymbolIcon Symbol="Setting" />
+          </NavigationViewItem.Icon>
+        </NavigationViewItem>
+      </NavigationView.FooterMenuItems>
+
+      <NavigationView.Resources>
+        <ResourceDictionary>
+          <ResourceDictionary.ThemeDictionaries>
+            <ResourceDictionary x:Key="Default">
+              <SolidColorBrush x:Key="NavigationViewContentBackground"
+                               Color="Transparent" />
+              <SolidColorBrush x:Key="NavigationViewContentGridBorderBrush"
+                               Color="Transparent" />
+            </ResourceDictionary>
+          </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+      </NavigationView.Resources>
+
+      <!--<NavigationView.PaneCustomContent>
       <Button x:Name="userButton"
               Background="Transparent"
               BorderThickness="0"
@@ -76,7 +156,7 @@
       </Button>
     </NavigationView.PaneCustomContent>-->
 
-    <!--<NavigationView.MenuItemTemplate>
+      <!--<NavigationView.MenuItemTemplate>
       <DataTemplate x:DataType="models:NavigationCategory">
         <NavigationViewItem Content="{x:Bind Text}"
                             Padding="0,12"
@@ -88,86 +168,107 @@
       </DataTemplate>
     </NavigationView.MenuItemTemplate>-->
 
-    <Grid>
-      <Grid.RowDefinitions>
-        <RowDefinition Height="*" />
-        <RowDefinition Height="Auto" />
-      </Grid.RowDefinitions>
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="*" />
+          <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-      <!-- Main Loading Indicator -->
-      <ProgressBar IsIndeterminate="{x:Bind ViewModel.IndicateLoading, Mode=OneWay}"
-                   Visibility="{x:Bind ViewModel.IndicateLoading, Mode=OneWay}"
-                   VerticalAlignment="Top"
-                   Margin="5" />
+        <!-- Main Loading Indicator -->
+        <ProgressBar IsIndeterminate="{x:Bind ViewModel.IndicateLoading, Mode=OneWay}"
+                     Visibility="{x:Bind ViewModel.IndicateLoading, Mode=OneWay}"
+                     VerticalAlignment="Top"
+                     Margin="5" />
 
-      <!-- Category Frame View -->
-      <ContentControl x:Name="Frame"
-                      uen:Region.Attached="True"
-                      uen:Region.Navigator="Visibility"
-                      x:FieldModifier="public" />
+        <!-- Category Frame View -->
+        <ContentControl uen:Region.Attached="True" />
 
-      <!-- Network Status Info -->
-      <InfoBar x:Name="disconnectAlert"
-               Title="{cme:Localize Name=OfflineAlertText}"
-               Severity="Error"
-               IsClosable="False"
-               VerticalAlignment="Bottom"
-               HorizontalAlignment="Center"
-               Margin="0,0,0,12"
-               CornerRadius="28"
-               IsOpen="True">
-        <InfoBar.IconSource>
-          <FontIconSource Glyph="&#xF384;" />
-        </InfoBar.IconSource>
-      </InfoBar>
+        <!-- Network Status Info -->
+        <InfoBar x:Name="disconnectAlert"
+                 Title="{cme:Localize Name=OfflineAlertText}"
+                 Severity="Error"
+                 IsClosable="False"
+                 VerticalAlignment="Bottom"
+                 HorizontalAlignment="Center"
+                 Margin="0,0,0,12"
+                 CornerRadius="28"
+                 IsOpen="True">
+          <InfoBar.IconSource>
+            <FontIconSource Glyph="&#xF384;" />
+          </InfoBar.IconSource>
+        </InfoBar>
 
-      <!-- Mobile Navigation -->
-      <utu:TabBar x:Name="navigationBar"
-                  x:FieldModifier="public"
-                  ItemsSource="{x:Bind ViewModel.Categories}"
-                  SelectedItem="{x:Bind ViewModel.SelectedCategory, Mode=TwoWay}"
-                  Background="{ThemeResource CardBackground}"
-                  BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                  Visibility="Collapsed"
-                  SelectionIndicatorTransitionMode="Slide"
-                  MinHeight="62"
-                  MaxHeight="62"
-                  CornerRadius="0"
-                  Grid.Row="1">
-        <utu:TabBar.ItemTemplate>
-          <DataTemplate x:DataType="models:NavigationCategory">
-            <StackPanel Spacing="4">
-              <FontIcon Glyph="{x:Bind Glyph}"
-                        Margin="0,0,0,5"
-                        FontSize="19" />
-            </StackPanel>
-          </DataTemplate>
-        </utu:TabBar.ItemTemplate>
-        <utu:TabBar.SelectionIndicatorContentTemplate>
-          <DataTemplate>
-            <Border Background="{ThemeResource AccentAAFillColorDefaultBrush}"
-                    Height="5"
-                    Margin="40, 10"
-                    CornerRadius="3.5"
-                    VerticalAlignment="Bottom" />
-          </DataTemplate>
-        </utu:TabBar.SelectionIndicatorContentTemplate>
-        <utu:TabBar.Resources>
-          <ResourceDictionary>
-            <ResourceDictionary.ThemeDictionaries>
-              <ResourceDictionary x:Key="Default">
-                <SolidColorBrush x:Key="TabBarItemBackgroundSelected"
-                                 Color="Transparent" />
-                <SolidColorBrush x:Key="TabBarItemBackgroundSelectedPointerOver"
-                                 Color="Transparent" />
-                <SolidColorBrush x:Key="TabBarItemForegroundSelectedPressed"
-                                 Color="Transparent" />
-              </ResourceDictionary>
-            </ResourceDictionary.ThemeDictionaries>
-          </ResourceDictionary>
-        </utu:TabBar.Resources>
-      </utu:TabBar>
-    </Grid>
-  </NavigationView>
+        <!-- Mobile Navigation -->
+        <utu:TabBar x:Name="navigationBar"
+                    uen:Region.Attached="True"
+                    Background="{ThemeResource CardBackground}"
+                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                    Visibility="Collapsed"
+                    SelectionIndicatorTransitionMode="Slide"
+                    MinHeight="62"
+                    MaxHeight="62"
+                    CornerRadius="0"
+                    Grid.Row="1">
+          <!--<utu:TabBar.ItemTemplate>
+            <DataTemplate x:DataType="models:NavigationCategory">
+              <StackPanel Spacing="4">
+                <FontIcon Glyph="{x:Bind Glyph}"
+                          Margin="0,0,0,5"
+                          FontSize="19" />
+              </StackPanel>
+            </DataTemplate>
+          </utu:TabBar.ItemTemplate>-->
+          <utu:TabBar.Items>
+
+            <utu:TabBarItem uen:Region.Name="Home"
+                            Content="Home">
+              <utu:TabBarItem.Icon>
+                <SymbolIcon Symbol="Page" />
+              </utu:TabBarItem.Icon>
+            </utu:TabBarItem>
+
+            <utu:TabBarItem uen:Region.Name="Second"
+                                Content="Request Value">
+              <utu:TabBarItem.Icon>
+                <SymbolIcon Symbol="Remote" />
+              </utu:TabBarItem.Icon>
+            </utu:TabBarItem>
+
+            <utu:TabBarItem uen:Region.Name="Settings"
+                            Content="Request Value">
+              <utu:TabBarItem.Icon>
+                <SymbolIcon Symbol="Remote" />
+              </utu:TabBarItem.Icon>
+            </utu:TabBarItem>
+
+          </utu:TabBar.Items>
+          
+          <utu:TabBar.SelectionIndicatorContentTemplate>
+            <DataTemplate>
+              <Border Background="{ThemeResource AccentAAFillColorDefaultBrush}"
+                      Height="5"
+                      Margin="40, 10"
+                      CornerRadius="3.5"
+                      VerticalAlignment="Bottom" />
+            </DataTemplate>
+          </utu:TabBar.SelectionIndicatorContentTemplate>
+          <utu:TabBar.Resources>
+            <ResourceDictionary>
+              <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Default">
+                  <SolidColorBrush x:Key="TabBarItemBackgroundSelected"
+                                   Color="Transparent" />
+                  <SolidColorBrush x:Key="TabBarItemBackgroundSelectedPointerOver"
+                                   Color="Transparent" />
+                  <SolidColorBrush x:Key="TabBarItemForegroundSelectedPressed"
+                                   Color="Transparent" />
+                </ResourceDictionary>
+              </ResourceDictionary.ThemeDictionaries>
+            </ResourceDictionary>
+          </utu:TabBar.Resources>
+        </utu:TabBar>
+      </Grid>
+    </NavigationView>
+  </Grid>
 
 </Page>
