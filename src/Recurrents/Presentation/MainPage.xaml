@@ -60,7 +60,7 @@
       </VisualStateGroup>
 
       <!--Network-->
-      <VisualStateGroup>
+      <!--<VisualStateGroup>
         <VisualState>
           <VisualState.StateTriggers>
             <toolkit:NetworkConnectionStateTrigger ConnectionState="Connected" />
@@ -79,7 +79,7 @@
                     Value="Visible" />
           </VisualState.Setters>
         </VisualState>
-      </VisualStateGroup>
+      </VisualStateGroup>-->
 
     </VisualStateManager.VisualStateGroups>
 
@@ -87,33 +87,27 @@
                     uen:Region.Attached="True"
                     IsBackButtonVisible="Collapsed"
                     IsPaneToggleButtonVisible="True"
+                    IsSettingsVisible="False"
                     IsPaneVisible="True">
 
       <NavigationView.MenuItems>
 
         <NavigationViewItem uen:Region.Name="Home"
-                            Content="Home">
-          <NavigationViewItem.Icon>
-            <SymbolIcon Symbol="Home" />
-          </NavigationViewItem.Icon>
-        </NavigationViewItem>
-
+                            Content="Home"
+                            Icon="{toolkit:FontIcon Glyph=&#xE80F;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
         <NavigationViewItem uen:Region.Name="Second"
-                            Content="Request Value">
-          <NavigationViewItem.Icon>
-            <SymbolIcon Symbol="Remote" />
-          </NavigationViewItem.Icon>
-        </NavigationViewItem>
+                            Content="Test"
+                            Icon="{toolkit:FontIcon Glyph=&#xE80F;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
+        <NavigationViewItem uen:Region.Name="Second"
+                            Content="Test"
+                            Icon="{toolkit:FontIcon Glyph=&#xE80F;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
 
       </NavigationView.MenuItems>
 
       <NavigationView.FooterMenuItems>
         <NavigationViewItem uen:Region.Name="Settings"
-                            Content="Settings">
-          <NavigationViewItem.Icon>
-            <SymbolIcon Symbol="Setting" />
-          </NavigationViewItem.Icon>
-        </NavigationViewItem>
+                            Content="Settings"
+                            Icon="{toolkit:FontIcon Glyph=&#xE713;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
       </NavigationView.FooterMenuItems>
 
       <NavigationView.Resources>
@@ -194,7 +188,7 @@
                  HorizontalAlignment="Center"
                  Margin="0,0,0,12"
                  CornerRadius="28"
-                 IsOpen="True">
+                 IsOpen="False">
           <InfoBar.IconSource>
             <FontIconSource Glyph="&#xF384;" />
           </InfoBar.IconSource>
@@ -223,25 +217,13 @@
           <utu:TabBar.Items>
 
             <utu:TabBarItem uen:Region.Name="Home"
-                            Content="Home">
-              <utu:TabBarItem.Icon>
-                <SymbolIcon Symbol="Page" />
-              </utu:TabBarItem.Icon>
-            </utu:TabBarItem>
-
+                            Icon="{toolkit:FontIcon Glyph=&#xE80F;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
             <utu:TabBarItem uen:Region.Name="Second"
-                            Content="Request Value">
-              <utu:TabBarItem.Icon>
-                <SymbolIcon Symbol="Remote" />
-              </utu:TabBarItem.Icon>
-            </utu:TabBarItem>
-
+                            Icon="{toolkit:FontIcon Glyph=&#xE8C7;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
+            <utu:TabBarItem uen:Region.Name="Second"
+                            Icon="{toolkit:FontIcon Glyph=&#xE8C7;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
             <utu:TabBarItem uen:Region.Name="Settings"
-                            Content="Request Value">
-              <utu:TabBarItem.Icon>
-                <SymbolIcon Symbol="Remote" />
-              </utu:TabBarItem.Icon>
-            </utu:TabBarItem>
+                            Icon="{toolkit:FontIcon Glyph=&#xE713;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
 
           </utu:TabBar.Items>
 

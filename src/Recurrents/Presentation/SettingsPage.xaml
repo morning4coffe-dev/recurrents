@@ -4,7 +4,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:win="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:ui="using:CommunityToolkit.WinUI"
+      xmlns:toolkit="using:CommunityToolkit.WinUI"
       xmlns:controls="using:CommunityToolkit.WinUI.Controls"
       xmlns:helpers="using:Recurrents.Presentation.Helpers"
       xmlns:cme="using:Recurrents.Presentation.CustomMarkupExtensions"
@@ -41,12 +41,12 @@
       <StackPanel x:Name="settingsHolder"
                   Spacing="4"
                   Margin="48">
-        <!--<win:StackPanel.ChildrenTransitions>
+        <win:StackPanel.ChildrenTransitions>
             <TransitionCollection>
               <EntranceThemeTransition FromVerticalOffset="-100"
                                        IsStaggeringEnabled="True" />
             </TransitionCollection>
-          </win:StackPanel.ChildrenTransitions>-->
+          </win:StackPanel.ChildrenTransitions>
 
         <TextBlock x:Name="desktopHeader"
                    Visibility="Visible"
@@ -77,12 +77,12 @@
 
         <InfoBar Title="{cme:Localize Name=NotLoggedIn}"
                  Message="{cme:Localize Name=NotLoggedInDescription}"
-                 Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay}"
+                 Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
                  IsOpen="True"
                  Severity="Warning"
-                 IsClosable="False"><!--, Converter={StaticResource FalseToVisibleConverter}-->
+                 IsClosable="False">
           <InfoBar.IconSource>
-            <FontIconSource Glyph="&#xE779;" />
+            <FontIconSource Glyph="&#xE779;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
           </InfoBar.IconSource>
           <InfoBar.ActionButton>
             <Button Content="{cme:Localize Name=Login}"
@@ -92,7 +92,7 @@
         </InfoBar>
 
         <controls:SettingsCard Header="{cme:Localize Name=DefaultCurrency}"
-                               HeaderIcon="{ui:FontIcon Glyph=&#xE8C7;}">
+                               HeaderIcon="{toolkit:FontIcon Glyph=&#xE8C7;, FontFamily={ThemeResource SymbolThemeFontFamily}}">
           <ComboBox VerticalAlignment="Bottom"
                     ItemsSource="{x:Bind ViewModel.Currencies, Mode=OneWay}"
                     SelectedItem="{x:Bind ViewModel.SelectedCurrency, Mode=TwoWay}"
@@ -100,8 +100,8 @@
         </controls:SettingsCard>
 
         <controls:SettingsCard Header="{cme:Localize Name=SystemLanguageAndRegion}"
-                               ActionIcon="{ui:FontIcon Glyph=&#xE8A7;}"
-                               HeaderIcon="{ui:FontIcon Glyph=&#xF2B7;}"
+                               ActionIcon="{toolkit:FontIcon Glyph=&#xE8A7;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
+                               HeaderIcon="{toolkit:FontIcon Glyph=&#xF2B7;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
                                IsClickEnabled="True"
                                Command="{x:Bind ViewModel.LaunchLangSettingsCommand}" />
 
@@ -109,17 +109,16 @@
                    Margin="0,12,0,0"
                    Style="{StaticResource BaseTextBlockStyle}" />
 
-        <!--<win:Border>
-          --><!--TODO TimePicker is not yet supported on Uno targets--><!--
+        <Border>          
           <controls:SettingsCard Header="{cme:Localize Name=NotificationTime}"
-                                 HeaderIcon="{ui:FontIcon Glyph=&#xE823;}">
-            <TimePicker SelectedTime="{x:Bind ViewModel.NotificationTime, Mode=TwoWay, Converter={StaticResource TimeOnlyToTimeSpanConverter}}" />
+                                 HeaderIcon="{toolkit:FontIcon Glyph=&#xE823;, FontFamily={ThemeResource SymbolThemeFontFamily}}">
+            <TimePicker  /><!--SelectedTime="{x:Bind ViewModel.NotificationTime, Mode=TwoWay}", Converter={StaticResource TimeOnlyToTimeSpanConverter}-->
           </controls:SettingsCard>
-        </win:Border>-->
+        </Border>
 
         <controls:SettingsCard Header="{cme:Localize Name=SystemNotifications}"
-                               ActionIcon="{ui:FontIcon Glyph=&#xE8A7;}"
-                               HeaderIcon="{ui:FontIcon Glyph=&#xEA8F;}"
+                               ActionIcon="{toolkit:FontIcon Glyph=&#xE8A7;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
+                               HeaderIcon="{toolkit:FontIcon Glyph=&#xEA8F;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
                                IsClickEnabled="True"
                                Command="{x:Bind ViewModel.LaunchNotificationSettingsCommand}" />
 
@@ -164,7 +163,7 @@
 
           <controls:SettingsExpander.Items>
             <controls:SettingsCard Header="{cme:Localize Name=AboutDescription}"
-                                   HeaderIcon="{ui:FontIcon Glyph=&#xE909;}" />
+                                   HeaderIcon="{toolkit:FontIcon Glyph=&#xE909;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
 
             <controls:SettingsCard HorizontalContentAlignment="Left"
                                    ContentAlignment="Left">

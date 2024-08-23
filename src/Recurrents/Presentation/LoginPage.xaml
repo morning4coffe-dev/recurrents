@@ -9,8 +9,6 @@
       mc:Ignorable="d not_win"
       xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
       xmlns:utu="using:Uno.Toolkit.UI">
-  <!--xmlns:page="using:Recurrents.Presentation.Components"
-      -->
 
   <Grid>
     <Grid.ColumnDefinitions>
