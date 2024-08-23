@@ -1,14 +1,18 @@
 ﻿<Page x:Class="Recurrents.Presentation.MainPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:local="using:Recurrents.Presentation"
       xmlns:cme="using:Recurrents.Presentation.CustomMarkupExtensions"
       xmlns:uen="using:Uno.Extensions.Navigation.UI"
       xmlns:models="using:Recurrents.Models"
       xmlns:utu="using:Uno.Toolkit.UI"
       xmlns:toolkit="using:CommunityToolkit.WinUI"
+      xmlns:not_win="http://uno.ui/not_win"
       NavigationCacheMode="Required"
-      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+      mc:Ignorable="d not_win">
 
   <Grid uen:Region.Attached="True">
     <VisualStateManager.VisualStateGroups>
@@ -94,20 +98,20 @@
 
         <NavigationViewItem uen:Region.Name="Home"
                             Content="Home"
-                            Icon="{toolkit:FontIcon Glyph=&#xE80F;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
+                            not_win:Icon="{toolkit:FontIcon Glyph=&#xE80F;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
         <NavigationViewItem uen:Region.Name="Second"
                             Content="Test"
-                            Icon="{toolkit:FontIcon Glyph=&#xE80F;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
-        <NavigationViewItem uen:Region.Name="Second"
+                            not_win:Icon="{toolkit:FontIcon Glyph=&#xE80F;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
+        <NavigationViewItem uen:Region.Name="Items"
                             Content="Test"
-                            Icon="{toolkit:FontIcon Glyph=&#xE80F;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
+                            not_win:Icon="{toolkit:FontIcon Glyph=&#xE80F;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
 
       </NavigationView.MenuItems>
 
       <NavigationView.FooterMenuItems>
         <NavigationViewItem uen:Region.Name="Settings"
                             Content="Settings"
-                            Icon="{toolkit:FontIcon Glyph=&#xE713;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
+                            not_win:Icon="{toolkit:FontIcon Glyph=&#xE713;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
       </NavigationView.FooterMenuItems>
 
       <NavigationView.Resources>
@@ -217,13 +221,13 @@
           <utu:TabBar.Items>
 
             <utu:TabBarItem uen:Region.Name="Home"
-                            Icon="{toolkit:FontIcon Glyph=&#xE80F;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
+                            not_win:Icon="{toolkit:FontIcon Glyph=&#xE80F;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
             <utu:TabBarItem uen:Region.Name="Second"
-                            Icon="{toolkit:FontIcon Glyph=&#xE8C7;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
+                            not_win:Icon="{toolkit:FontIcon Glyph=&#xE8C7;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
             <utu:TabBarItem uen:Region.Name="Second"
-                            Icon="{toolkit:FontIcon Glyph=&#xE8C7;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
+                            not_win:Icon="{toolkit:FontIcon Glyph=&#xE8C7;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
             <utu:TabBarItem uen:Region.Name="Settings"
-                            Icon="{toolkit:FontIcon Glyph=&#xE713;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
+                            not_win:Icon="{toolkit:FontIcon Glyph=&#xE713;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
 
           </utu:TabBar.Items>
 

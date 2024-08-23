@@ -102,6 +102,7 @@ public partial class App : Application
             new DataViewMap<MainPage, MainViewModel, User>(),
             new ViewMap<LoginPage, LoginViewModel>(),
             new ViewMap<HomePage, HomeViewModel>(),
+            new ViewMap<ItemDetails, ItemDetailsViewModel>(),
             new ViewMap<SettingsPage, SettingsViewModel>(),
             new DataViewMap<SecondPage, SecondViewModel, Entity>()
         );
@@ -116,6 +117,7 @@ public partial class App : Application
                         [
                             new ("Second", View: views.FindByViewModel<SecondViewModel>()),
                             new ("Home", View: views.FindByViewModel<HomeViewModel>()),
+                            new ("Items", View: views.FindByViewModel<ItemDetailsViewModel>()),
                             new ("Settings", View: views.FindByViewModel<SettingsViewModel>())
                         ]
                     ),

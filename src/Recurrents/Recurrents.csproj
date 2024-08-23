@@ -48,7 +48,11 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Assets\Icons\icon_foreground.svg" />
+    <None Remove="Presentation\Components\DetailsBox.xaml" />
+    <None Remove="Presentation\Components\ItemDetails.xaml" />
     <None Remove="Presentation\HomePage.xaml" />
+    <None Remove="Presentation\ItemDetails.xaml" />
+    <None Remove="Presentation\ItemEdit.xaml" />
     <None Remove="Presentation\LoginPage.xaml" />
     <None Remove="Presentation\SettingsPage.xaml" />
   </ItemGroup>
@@ -75,5 +79,38 @@
     <IsUiAutomationMappingEnabled>True</IsUiAutomationMappingEnabled>
     <DefineConstants>$(DefineConstants);USE_UITESTS</DefineConstants>
   </PropertyGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Presentation\Components\DetailsBox.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Presentation\Components\ItemDetails.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Presentation\ItemDetails.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Remove="Presentation\ItemDetails.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="Presentation\ItemEdit.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="Presentation\ItemEdit.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SourceItemGroup>Page</SourceItemGroup>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </AdditionalFiles>
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Presentation\ItemEdit.xaml" />
+  </ItemGroup>
 
 </Project>
