@@ -8,31 +8,45 @@
       xmlns:utu="using:Uno.Toolkit.UI"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-  <Grid utu:SafeArea.Insets="VisibleBounds">
+  <Page.Resources>
+    <GridLength x:Key="ZeroWidth">0</GridLength>
+    <GridLength x:Key="StarWidth">*</GridLength>
+  </Page.Resources>
+
+  <Grid x:Name="ParentGrid">
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
       <RowDefinition />
     </Grid.RowDefinitions>
-    <utu:NavigationBar Content="Second Page">
-      <utu:NavigationBar.MainCommand>
-        <AppBarButton>
-          <AppBarButton.Icon>
-            <BitmapIcon UriSource="ms-appx:///Assets/Images/back.png" />
-          </AppBarButton.Icon>
-        </AppBarButton>
-      </utu:NavigationBar.MainCommand>
-    </utu:NavigationBar>
-    <StackPanel Grid.Row="1"
-                Background="Red"
-                Height="500"
-                Width="500"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center">
-      <TextBlock Text="{Binding Entity.Name}"
-                 HorizontalAlignment="Center"
-                 VerticalAlignment="Center"
-                 Margin="8" />
-    </StackPanel>
+    <utu:NavigationBar Content="Content Control Navigation" />
 
+    <Grid Grid.Row="1">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="{utu:Responsive Narrow={StaticResource ZeroWidth}, Wide={StaticResource StarWidth}}" />
+      </Grid.ColumnDefinitions>
+
+      <ListView Grid.Row="1"
+                uen:Region.Name="Home"
+                ItemsSource="{Binding Items}">
+        <ListView.ItemTemplate>
+          <DataTemplate>
+            <TextBlock FontSize="30"
+                       Text="{Binding Name}" />
+          </DataTemplate>
+        </ListView.ItemTemplate>
+      </ListView>
+
+      <Grid Grid.Column="1"
+            Background="DarkBlue"
+            Visibility="{utu:Responsive Narrow=Collapsed, Wide=Visible}">
+        <ContentControl HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        HorizontalContentAlignment="Stretch"
+                        VerticalContentAlignment="Stretch"
+                        uen:Region.Attached="{utu:Responsive Narrow=False, Wide=True}" />
+      </Grid>
+    </Grid>
   </Grid>
+  
 </Page>
