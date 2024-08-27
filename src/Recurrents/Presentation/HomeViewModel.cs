@@ -1,3 +1,4 @@
+using Uno.Extensions.Navigation;
 using Windows.UI.Core;
 
 namespace Recurrents.Presentation;
@@ -35,27 +36,6 @@ public partial class HomeViewModel : ObservableObject
     private bool _isLoggedIn;
 
     public bool IsEdit;
-
-    private ItemViewModel? _selectedItem;
-    public ItemViewModel? SelectedItem
-    {
-        get => _selectedItem;
-        set
-        {
-            IsPaneOpen = value is { };
-
-            if (_selectedItem == value)
-            {
-                return;
-            }
-
-            //WeakReferenceMessenger.Default.Send(new ItemSelectionChanged(value, IsEdit, (value?.Item is null)));
-            IsEdit = false;
-
-            _selectedItem = value;
-            OnPropertyChanged();
-        }
-    }
 
     public ObservableCollection<ItemViewModel> Items { get; } = [];
 

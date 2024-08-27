@@ -14,57 +14,22 @@
       xmlns:helpers="using:Recurrents.Presentation.Helpers"
       xmlns:cme="using:Recurrents.Presentation.CustomMarkupExtensions"
       xmlns:local="using:Recurrents.Presentation"
+      xmlns:utu="using:Uno.Toolkit.UI"
+      Background="{ThemeResource ApplicationBackground}"
       mc:Ignorable="d not_win android">
-  <!--xmlns:viewModels="using:Recurrents.Business.ViewModels"
-      xmlns:comp="using:Recurrents.Presentation.Components"-->
 
-  <win:Page.Resources>
-    <ResourceDictionary>
-      <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="ms-appx:///CommunityToolkit.WinUI.Controls.Segmented/Segmented/Segmented.xaml" />
-      </ResourceDictionary.MergedDictionaries>
-    </ResourceDictionary>
-  </win:Page.Resources>
+  <Page.Resources>
+    <GridLength x:Key="ZeroWidth">0</GridLength>
+    <GridLength x:Key="StarWidth">*</GridLength>
+  </Page.Resources>
 
-  <Grid HorizontalAlignment="Stretch"
-        VerticalAlignment="Stretch">
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="{utu:Responsive Narrow={StaticResource ZeroWidth}, Wide={StaticResource StarWidth}}" />
+    </Grid.ColumnDefinitions>
 
     <VisualStateManager.VisualStateGroups>
-
-      <!--Pane Opening DetailsPane-->
-      <!--<VisualStateGroup>
-        <VisualState>
-          <VisualState.StateTriggers>
-            <triggers:IsEqualStateTrigger Value="{x:Bind ViewModel.IsPaneOpen, Mode=OneWay}"
-                                          To="False" />
-          </VisualState.StateTriggers>
-          <VisualState.Setters>
-            -->
-      <!--<Setter Target="pane2Holder.Visibility"
-                    Value="Collapsed" />-->
-      <!--
-            <Setter Target="RootPanel.PanePriority"
-                    Value="Pane1" />
-            <Setter Target="RootPanel.Pane2Length"
-                    Value="0" />
-          </VisualState.Setters>
-        </VisualState>
-      </VisualStateGroup>-->
-
-      <!--Pane1 Empty Image-->
-      <!--<VisualStateGroup>
-        <VisualState />
-        <VisualState>
-          <VisualState.StateTriggers>
-            <triggers:IsNullOrEmptyStateTrigger Value="{x:Bind ViewModel.Items, Mode=OneWay}" />
-          </VisualState.StateTriggers>
-          <VisualState.Setters>
-            <Setter Target="itemsEmptyImage.Visibility"
-                    Value="Visible" />
-          </VisualState.Setters>
-        </VisualState>
-      </VisualStateGroup>-->
-
       <!--AdaptiveTriggers-->
       <VisualStateGroup>
         <VisualState>
@@ -140,48 +105,18 @@
           </Grid>
 
           <Button x:Name="desktopAdd"
+                  uen:Navigation.Request="ItemEdit"
                   Visibility="Visible"
                   Grid.Row="1"
                   Content="{cme:Localize Name=NewItem}" />
-          <!--Command="{x:Bind ViewModel.AddNewCommand}"-->
 
-          <!--<comp:StatsBanner Visibility="{x:Bind ViewModel.IsStatsVisible, Mode=OneWay}"
-                                Grid.Row="2" />-->
+          <ListView ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                         ScrollViewer.VerticalScrollMode="Disabled"
+                         ItemsSource="{x:Bind ViewModel.Items, Mode=OneWay}"
+                         uen:Navigation.Request="ItemDetails"
+                         Grid.Row="4">
 
-          <win:ScrollViewer HorizontalScrollMode="Auto"
-                            HorizontalScrollBarVisibility="Auto"
-                            VerticalScrollMode="Disabled"
-                            VerticalScrollBarVisibility="Hidden"
-                            Grid.Row="3"
-                            Margin="0,-12"
-                            Padding="0,16">
-            <controls:Segmented Style="{StaticResource ButtonSegmentedStyle}">
-              <!--ItemsSource="{x:Bind ViewModel.FilterCategories}"
-                                    SelectedItem="{x:Bind ViewModel.SelectedFilter, Mode=TwoWay}"-->
-              <controls:Segmented.ItemTemplate>
-                <DataTemplate x:DataType="models:Tag">
-                  <TextBlock Text="{x:Bind Name}"
-                             Margin="5,-3" />
-                </DataTemplate>
-              </controls:Segmented.ItemTemplate>
-
-              <controls:Segmented.ItemsPanel>
-                <ItemsPanelTemplate>
-                  <StackPanel Spacing="8"
-                              Orientation="Horizontal" />
-                </ItemsPanelTemplate>
-              </controls:Segmented.ItemsPanel>
-
-            </controls:Segmented>
-          </win:ScrollViewer>
-
-          <ItemsRepeater ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                    ScrollViewer.VerticalScrollMode="Disabled"
-                    ItemsSource="{x:Bind ViewModel.Items, Mode=OneWay}"
-                    
-                    Grid.Row="4"><!--SelectedItem="{x:Bind ViewModel.SelectedItem, Mode=TwoWay}"-->
-
-            <ItemsRepeater.Resources>
+            <ListView.Resources>
               <FontIconSource x:Key="EditIcon"
                               Glyph="&#xE70F;" />
               <FontIconSource x:Key="ArchiveIcon"
@@ -205,69 +140,60 @@
                            Background="{ThemeResource SystemFillColorCriticalBrush}"
                            Invoked="ArchiveItem_Invoked" />
               </SwipeItems>
-            </ItemsRepeater.Resources>
+            </ListView.Resources>
 
-            <!--<ItemsRepeater.ItemsPanel>
-              <ItemsPanelTemplate>
-                <StackPanel Orientation="Vertical"
-                            Spacing="4" />
-              </ItemsPanelTemplate>
-            </ItemsRepeater.ItemsPanel>-->
-
-            <ItemsRepeater.Layout>
+            <!--<ItemsRepeater.Layout>
               <StackLayout Orientation="Vertical"
                            Spacing="8" />
-            </ItemsRepeater.Layout>
+            </ItemsRepeater.Layout>-->
 
-            <ItemsRepeater.ItemTemplate>
+            <ListView.ItemTemplate>
               <DataTemplate x:DataType="local:ItemViewModel">
-                <SwipeControl LeftItems="{StaticResource Left}"
+                <!--<SwipeControl LeftItems="{StaticResource Left}"
                               RightItems="{StaticResource Right}"
                               Background="Transparent"
                               not_win:CornerRadius="20"
-                              win:CornerRadius="8">
+                              win:CornerRadius="8">-->
 
-                  <Border not_win:Background="{ThemeResource CardBackgroundFillColorDefault}"
-                          not_win:CornerRadius="20">
+                  <Grid not_win:Background="{ThemeResource CardBackgroundFillColorDefault}"
+                        not_win:CornerRadius="20"
+                        Padding="20">
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="*" />
+                      <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-                    <Grid Padding="20">
-                      <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                      </Grid.ColumnDefinitions>
+                    <!-- Left Column -->
+                    <StackPanel Spacing="6"
+                                VerticalAlignment="Center">
+                      <Rectangle Fill="{x:Bind DisplayTag.Color, Mode=OneWay, Converter={StaticResource ColorToBrushConverter}}"
+                                 Height="6"
+                                 Width="80"
+                                 RadiusY="3"
+                                 RadiusX="3"
+                                 HorizontalAlignment="Left" />
+                      <TextBlock Text="{x:Bind Item.Name, Mode=OneWay}"
+                                 VerticalAlignment="Center"
+                                 Style="{StaticResource SubtitleTextBlockStyle}" />
+                    </StackPanel>
 
-                      <!-- Left Column -->
-                      <StackPanel Spacing="6"
-                                  VerticalAlignment="Center">
-                        <Rectangle Fill="{x:Bind DisplayTag.Color, Mode=OneWay, Converter={StaticResource ColorToBrushConverter}}"
-                                   Height="6"
-                                   Width="80"
-                                   RadiusY="3"
-                                   RadiusX="3"
-                                   HorizontalAlignment="Left" />
-                        <TextBlock Text="{x:Bind Item.Name, Mode=OneWay}"
-                                   VerticalAlignment="Center"
-                                   Style="{StaticResource SubtitleTextBlockStyle}" />
-                      </StackPanel>
-
-                      <!-- Right Column -->
-                      <StackPanel Grid.Column="1"
-                                  Spacing="8"
-                                  HorizontalAlignment="Right"
-                                  VerticalAlignment="Center">
-                        <TextBlock Style="{StaticResource SubtitleTextBlockStyle}"
-                                   HorizontalAlignment="Right"
-                                   Text="{x:Bind FormattedPrice, Mode=OneWay}" />
-                        <TextBlock Text="{x:Bind FormattedPaymentDate, Mode=OneWay}"
-                                   HorizontalAlignment="Right"
-                                   Opacity="0.75" />
-                      </StackPanel>
-                    </Grid>
-                  </Border>
-                </SwipeControl>
+                    <!-- Right Column -->
+                    <StackPanel Grid.Column="1"
+                                Spacing="8"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center">
+                      <TextBlock Style="{StaticResource SubtitleTextBlockStyle}"
+                                 HorizontalAlignment="Right"
+                                 Text="{x:Bind FormattedPrice, Mode=OneWay}" />
+                      <TextBlock Text="{x:Bind FormattedPaymentDate, Mode=OneWay}"
+                                 HorizontalAlignment="Right"
+                                 Opacity="0.75" />
+                    </StackPanel>
+                  </Grid>
+                <!--</SwipeControl>-->
               </DataTemplate>
-            </ItemsRepeater.ItemTemplate>
-          </ItemsRepeater>
+            </ListView.ItemTemplate>
+          </ListView>
 
           <StackPanel x:Name="itemsEmptyImage"
                       Spacing="12"
@@ -295,48 +221,42 @@
             <Button Content="{cme:Localize Name=NewItem}"
                     HorizontalAlignment="Center"
                     Padding="20, 8" />
-            <!--Command="{x:Bind ViewModel.AddNewCommand}"-->
 
           </StackPanel>
         </StackPanel>
       </ScrollViewer>
 
-      <StackPanel x:Name="mobileAddButton"
-                  VerticalAlignment="Bottom"
-                  Grid.Row="4"
-                  Visibility="Collapsed">
+      <Button x:Name="mobileAddButton"
+              uen:Navigation.Request="ItemEdit"
+              CornerRadius="22"
+              Height="65"
+              VerticalAlignment="Bottom"
+              HorizontalAlignment="Right"
+              AutomationProperties.Name="{cme:Localize Name=NewItem}"
+              Style="{StaticResource AccentButtonStyle}"
+              Margin="20"
+              Padding="22,0"
+              Grid.Row="4"
+              Visibility="Collapsed">
 
-        <Button CornerRadius="22"
-                Height="65"
-                VerticalAlignment="Bottom"
-                HorizontalAlignment="Right"
-                AutomationProperties.Name="{cme:Localize Name=NewItem}"
-                Style="{StaticResource AccentButtonStyle}"
-                Margin="20"
-                Padding="22,0">
-          <!--Command="{x:Bind ViewModel.AddNewCommand}"-->
+        <!--TODO Rotate this icon - previous project Easter Egg-->
+        <StackPanel Orientation="Horizontal">
+          <SymbolIcon x:Name="fabIcon"
+                      Symbol="Add" />
 
-          <!--TODO Rotate this icon - previous project Easter Egg-->
-          <StackPanel Orientation="Horizontal">
-            <SymbolIcon x:Name="fabIcon"
-                        Symbol="Add" />
-
-            <TextBlock Text="{cme:Localize Name=NewItem}"
-                       Grid.Column="1"
-                       Margin="12,0,0,0" />
-          </StackPanel>
-        </Button>
-
-      </StackPanel>
+          <TextBlock Text="{cme:Localize Name=NewItem}"
+                     Grid.Column="1"
+                     Margin="12,0,0,0" />
+        </StackPanel>
+      </Button>
 
     </Grid>
 
-    <Grid x:Name="pane2Holder"
-          Visibility="Visible">
-
-      <!--<comp:ItemDetails />-->
-
-    </Grid>
-
+    <ContentControl x:Name="pane2Holder"
+                    uen:Region.Attached="{utu:Responsive Narrow=False, Wide=True}"
+                    Visibility="{utu:Responsive Narrow=Collapsed, Wide=Visible}"
+                    HorizontalContentAlignment="Stretch"
+                    VerticalContentAlignment="Stretch"
+                    Grid.Column="2" />
   </Grid>
 </Page>

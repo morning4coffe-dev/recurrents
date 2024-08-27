@@ -80,37 +80,4 @@
     <DefineConstants>$(DefineConstants);USE_UITESTS</DefineConstants>
   </PropertyGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Presentation\Components\DetailsBox.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Presentation\Components\ItemDetails.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Presentation\ItemDetails.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <AdditionalFiles Remove="Presentation\ItemDetails.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Page Remove="Presentation\ItemEdit.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <AdditionalFiles Include="Presentation\ItemEdit.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SourceItemGroup>Page</SourceItemGroup>
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </AdditionalFiles>
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Presentation\ItemEdit.xaml" />
-  </ItemGroup>
-
 </Project>

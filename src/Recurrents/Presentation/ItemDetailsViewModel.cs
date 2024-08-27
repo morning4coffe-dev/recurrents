@@ -14,56 +14,24 @@ public partial class ItemDetailsViewModel : ObservableObject
     private ItemViewModel? _selectedItem;
 
     [ObservableProperty]
-    private Item? _editItem;
-
-    [ObservableProperty]
     private string _itemName = "";
 
     [ObservableProperty]
     private bool _isEditing = false;
 
-    //public int TagId
-    //{
-    //    set
-    //    {
-    //        if (EditItem != null)
-    //        {
-    //            EditItem.TagId = Tags.ElementAtOrDefault(value)?.Id ?? 0;
-    //        }
-    //    }
-    //    get => EditItem != null ? Tags.IndexOf(Tags.First(x => x.Id == EditItem.TagId)) : 0;
-    //}
-
     public ObservableCollection<Tag> Tags { get; } = [];
     public ObservableCollection<string> Currencies { get; } = [];
     public ObservableCollection<string> FuturePayments { get; } = [];
-    public ObservableCollection<string> PaymentMethods { get; }
     public List<KeyValuePair<Period, string>> PaymentPeriods { get; }
 
     public ItemDetailsViewModel(
+        ItemViewModel? item,
         IStringLocalizer localizer
-        //ITagService tagService,
-        //IItemFilterService filterService,
-        //ICurrencyCache currencyCache,
-        //IDialogService dialog
         )
     {
         _localizer = localizer;
-        //_tagService = tagService;
-        //_filterService = filterService;
-        //_currencyCache = currencyCache;
-        //_dialog = dialog;
 
-        PaymentMethods =
-        [
-            _localizer["CreditCard"],
-            _localizer["DebitCard"],
-            _localizer["DigitalWallet"],
-            _localizer["BankTransfer"],
-            _localizer["Cryptocurrency"],
-            _localizer["Invoice"],
-            _localizer["Cash"]
-        ];
+        _selectedItem = item;
 
         PaymentPeriods = new Dictionary<Period, string>
         {
@@ -77,42 +45,7 @@ public partial class ItemDetailsViewModel : ObservableObject
 
     public async void Load()
     {
-        //Tags.AddRange(_tagService.Tags.ToObservableCollection());
 
-        //WeakReferenceMessenger.Default.Register<ItemSelectionChanged>(this, (r, m) =>
-//        {
-//            if (m.SelectedItem is { } item)
-//            {
-//                ItemName = item.Item?.Name ?? "";
-
-//                SelectedItem = item;
-//                OnPropertyChanged(nameof(SelectedItem));
-
-//                if (m.IsEdit)
-//                {
-//                    EnableEditing();
-//                }
-//                else
-//                {
-//                    IsEditing = m.IsEdit;
-//                }
-
-//                var localizedDateStrings
-//                    = item.GetFuturePayments()
-//                          .Select(date => date.ToString(CultureInfo.CurrentCulture))
-//                          .ToList();
-
-//                FuturePayments.Clear();
-//                FuturePayments.AddRange(localizedDateStrings);
-//            }
-//        });
-
-//        var currency = await _currencyCache.GetCurrency(CancellationToken.None);
-
-//        if (currency?.Rates.Count > 0)
-//        {
-//            Currencies.AddRange(currency.Rates.Keys);
-//        }
     }
 
     [RelayCommand]
@@ -144,18 +77,6 @@ public partial class ItemDetailsViewModel : ObservableObject
         }
 
         return result == ContentDialogResult.Primary;
-    }
-
-    [RelayCommand]
-    private void Save()
-    {
-        //if (EditItem is not { } item || SelectedItem is not { })
-        //{
-        //    return;
-        //}
-
-        //SelectedItem.Item = item;
-        //WeakReferenceMessenger.Default.Send(new ItemUpdated(SelectedItem, ToSave: true));
     }
 
     [RelayCommand]

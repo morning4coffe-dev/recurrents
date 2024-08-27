@@ -102,7 +102,8 @@ public partial class App : Application
             new DataViewMap<MainPage, MainViewModel, User>(),
             new ViewMap<LoginPage, LoginViewModel>(),
             new ViewMap<HomePage, HomeViewModel>(),
-            new ViewMap<ItemDetails, ItemDetailsViewModel>(),
+            new DataViewMap<ItemDetails, ItemDetailsViewModel, ItemViewModel>(),
+            new DataViewMap<ItemEdit, ItemEditViewModel, ItemViewModel>(),
             new ViewMap<SettingsPage, SettingsViewModel>(),
             new DataViewMap<SecondPage, SecondViewModel, Entity>()
         );
@@ -111,13 +112,20 @@ public partial class App : Application
             new RouteMap("", View: views.FindByViewModel<ShellViewModel>(),
                 Nested:
                 [
-                    new ("Main", View: views.FindByViewModel<MainViewModel>()),
-                    new ("Login", View: views.FindByViewModel<LoginViewModel>(), IsDefault: true,
+                    new ("Main", View: views.FindByViewModel<MainViewModel>(), IsDefault: true),
+                    new ("Login", View: views.FindByViewModel<LoginViewModel>(),
                         Nested:
                         [
                             new ("Second", View: views.FindByViewModel<SecondViewModel>()),
-                            new ("Home", View: views.FindByViewModel<HomeViewModel>()),
-                            new ("Items", View: views.FindByViewModel<ItemDetailsViewModel>()),
+                            new ("ItemDetails", View: views.FindByViewModel<ItemDetailsViewModel>(), DependsOn:"Home" ),
+                            new ("ItemEdit", View: views.FindByViewModel<ItemEditViewModel>(), DependsOn:"Home"),
+                            new ("Home", View: views.FindByViewModel<HomeViewModel>()
+                                //Nested:
+                                //[
+                                //    new ("ItemDetails", View: views.FindByViewModel<ItemDetailsViewModel>()),
+                                //    new ("ItemEdit", View: views.FindByViewModel<ItemEditViewModel>()),
+                                //]
+                            ),
                             new ("Settings", View: views.FindByViewModel<SettingsViewModel>())
                         ]
                     ),

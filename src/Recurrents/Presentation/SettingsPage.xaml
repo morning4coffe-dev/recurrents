@@ -9,9 +9,10 @@
       xmlns:controls="using:CommunityToolkit.WinUI.Controls"
       xmlns:helpers="using:Recurrents.Presentation.Helpers"
       xmlns:cme="using:Recurrents.Presentation.CustomMarkupExtensions"
+      Style="{ThemeResource ApplicationBackground}"
       mc:Ignorable="d not_win">
 
-  <Grid Style="{ThemeResource PageBackground}">
+  <Grid>
 
     <VisualStateManager.VisualStateGroups>
       <!--AdaptiveTriggers-->
