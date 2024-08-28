@@ -16,6 +16,8 @@ public partial class ItemEditViewModel : ObservableObject
     {
         _localizer = localizer;
 
+        EditItem = itemViewModel.Item;
+
         PaymentMethods =
         [
             _localizer["CreditCard"],

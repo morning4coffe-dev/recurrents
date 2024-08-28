@@ -9,7 +9,7 @@
       xmlns:controls="using:CommunityToolkit.WinUI.Controls"
       xmlns:helpers="using:Recurrents.Presentation.Helpers"
       xmlns:cme="using:Recurrents.Presentation.CustomMarkupExtensions"
-      Style="{ThemeResource ApplicationBackground}"
+      Background="{ThemeResource ApplicationBackground}"
       mc:Ignorable="d not_win">
 
   <Grid>
@@ -147,7 +147,7 @@
                    Margin="0,12,0,0"
                    Style="{StaticResource BaseTextBlockStyle}" />
 
-        <controls:SettingsExpander IsExpanded="True">
+        <!--<controls:SettingsExpander IsExpanded="True">
           <controls:SettingsExpander.Header>
             <StackPanel Orientation="Horizontal"
                         Margin="6"
@@ -167,6 +167,7 @@
           </controls:SettingsExpander.Header>
 
           <controls:SettingsExpander.Items>
+            
             <controls:SettingsCard Header="{cme:Localize Name=AboutDescription}"
                                    not_win:HeaderIcon="{toolkit:FontIcon Glyph=&#xE909;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
 
@@ -192,7 +193,7 @@
                      Opacity="0.75"
                      IsTextSelectionEnabled="True"
                      Style="{StaticResource CaptionTextBlockStyle}" />
-        </controls:SettingsExpander>
+        </controls:SettingsExpander>-->
 
       </StackPanel>
     </ScrollViewer>

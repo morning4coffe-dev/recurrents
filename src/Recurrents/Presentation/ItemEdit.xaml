@@ -16,7 +16,7 @@
       <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
 
-    <utu:NavigationBar Content="Edit Page">
+    <utu:NavigationBar Content="{x:Bind ViewModel.EditItem.Name, Mode=OneWay}">
       <utu:NavigationBar.MainCommand>
         <AppBarButton>
           <AppBarButton.Icon>

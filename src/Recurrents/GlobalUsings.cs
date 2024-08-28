@@ -14,3 +14,5 @@ global using Recurrents.Presentation;
 global using Recurrents.Services.Caching;
 global using Recurrents.Services.Endpoints;
 global using ApplicationExecutionState = Windows.ApplicationModel.Activation.ApplicationExecutionState;
+
+global using Recurrents.Services.Billing;

@@ -25,7 +25,7 @@
       <RowDefinition />
     </Grid.RowDefinitions>
 
-    <utu:NavigationBar Content="Second Page">
+    <utu:NavigationBar>
       <utu:NavigationBar.MainCommand>
         <AppBarButton>
           <AppBarButton.Icon>
@@ -33,11 +33,12 @@
           </AppBarButton.Icon>
         </AppBarButton>
       </utu:NavigationBar.MainCommand>
-      <utu:NavigationBar.SecondaryCommands>
+      <utu:NavigationBar.PrimaryCommands>
         <AppBarButton Icon="Edit"
-                      uen:Navigation.Request="ItemEdit" />
+                      uen:Navigation.Request="ItemEdit"
+                      uen:Navigation.Data="{x:Bind ViewModel.SelectedItem, Mode=OneWay}"/>
         <AppBarButton Icon="Delete" />
-      </utu:NavigationBar.SecondaryCommands>
+      </utu:NavigationBar.PrimaryCommands>
     </utu:NavigationBar>
 
     <ScrollViewer Grid.Row="1">
@@ -51,6 +52,9 @@
                                    IsStaggeringEnabled="False" />
         </TransitionCollection>
       </win:StackPanel.ChildrenTransitions>-->
+
+        <TextBlock Text="{x:Bind ViewModel.SelectedItem.Item.Name, Mode=OneWay}"
+                   Style="{StaticResource TitleTextBlockStyle}" />
 
         <Grid HorizontalAlignment="Left">
           <Rectangle Fill="{x:Bind ViewModel.SelectedItem.DisplayTag.Color, Mode=OneWay, Converter={StaticResource ColorToBrushConverter}}"

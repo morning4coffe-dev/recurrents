@@ -1,6 +1,5 @@
 using Uno.Resizetizer;
 
-
 #if WINDOWS
 using Microsoft.UI.Composition.SystemBackdrops;
 using WinUIEx;
@@ -46,14 +45,15 @@ public partial class App : Application
                 .UseLocalization()
                 .UseSerialization((context, services) => services
                     .AddContentSerializer(context)
-                    .AddJsonTypeInfo(WeatherForecastContext.Default.IImmutableListWeatherForecast))
+                    .AddJsonTypeInfo(CurrencyContext.Default.IImmutableListCurrency))
                 .UseHttp((context, services) => services
-                    .AddSingleton<IWeatherCache, WeatherCache>()
+                    .AddSingleton<ICurrencyCache, CurrencyCache>()
                     .AddRefitClient<IApiClient>(context))
                 .ConfigureServices((context, services) =>
                 {
                     // Register your services here
                     // services.AddSingleton<IMyService, MyService>();
+                    services.AddSingleton<IBillingService, BillingService>();
                 })
                 .UseNavigation(RegisterRoutes)
             );

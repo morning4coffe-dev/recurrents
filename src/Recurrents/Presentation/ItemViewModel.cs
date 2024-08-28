@@ -2,23 +2,23 @@ namespace Recurrents.Presentation;
 
 public partial class ItemViewModel : ObservableObject
 {
-    //private readonly IBillingService _billingService;
+    private readonly IBillingService _billingService;
     //private readonly INotificationService _notification;
     private readonly IStringLocalizer _localization;
     //private readonly ISettingsService _settingsService;
-    //private readonly ICurrencyCache _currencyCache;
+    private readonly ICurrencyCache _currencyCache;
 
     public ItemViewModel(Item? item)
     {
         _item = item;
 
-        //        _billingService = App.Services?.GetRequiredService<IBillingService>()!;
+                _billingService = App.Services?.GetRequiredService<IBillingService>()!;
         //#if !HAS_UNO || __ANDROID__
         //        _notification = App.Services?.GetRequiredService<INotificationService>()!;
         //#endif
         _localization = App.Services?.GetRequiredService<IStringLocalizer>()!;
         //        _settingsService = App.Services?.GetRequiredService<ISettingsService>()!;
-        //        _currencyCache = App.Services?.GetService<ICurrencyCache>()!;
+                _currencyCache = App.Services?.GetService<ICurrencyCache>()!;
 
         ScheduleBilling();
     }
@@ -43,7 +43,7 @@ public partial class ItemViewModel : ObservableObject
     {
         get
         {
-            return 0;//(GetFuturePayments(1).First().ToDateTime(new TimeOnly()) - DateTime.Today).Days;
+            return (GetFuturePayments(1).First().ToDateTime(new TimeOnly()) - DateTime.Today).Days;
         }
     }
 
@@ -74,21 +74,21 @@ public partial class ItemViewModel : ObservableObject
                 return 0M;
             }
 
-            //var dates = _billingService.GetLastPayments(billing.InitialDate, billing.PeriodType, billing.RecurEvery);
+            var dates = _billingService.GetLastPayments(billing.InitialDate, billing.PeriodType, billing.RecurEvery);
 
             //TODO Doesn't account for currency or the previous value of the currency
-            return 0M;//Enumerable.Count(dates) * billing.BasePrice;
+            return Enumerable.Count(dates) * billing.BasePrice;
         }
     }
 
-    public string FormattedTotalPrice => "";//TotalPrice.ToString("C", CurrencyCache.CurrencyCultures[Item?.Billing.CurrencyId ?? "EUR"]);
+    public string FormattedTotalPrice => TotalPrice.ToString("C", CurrencyCache.CurrencyCultures[Item?.Billing.CurrencyId ?? "EUR"]);
     public string FormattedPrice
         //var task = _currencyCache.ConvertToDefaultCurrency(
         //    Item?.Billing.BasePrice ?? 0,
         //    Item?.Billing.CurrencyId ?? "EUR",
         //    _settingsService.DefaultCurrency);
 
-        => ""; //$"{Item?.Billing.BasePrice.ToString("C", CurrencyCache.CurrencyCultures[Item?.Billing.CurrencyId ?? "EUR"])}";
+        => $"{Item?.Billing.BasePrice.ToString("C", CurrencyCache.CurrencyCultures[Item?.Billing.CurrencyId ?? "EUR"])}";
 
 
     private Status? GetLastStatus()
@@ -133,7 +133,7 @@ public partial class ItemViewModel : ObservableObject
             return [];
         }
 
-        return new List<DateOnly>();//_billingService.GetFuturePayments(billing.InitialDate, billing.PeriodType, billing.RecurEvery, numberOfPayments);
+        return _billingService.GetFuturePayments(billing.InitialDate, billing.PeriodType, billing.RecurEvery, numberOfPayments);
     }
 
     public IEnumerable<DateOnly> GetLastPayments()
@@ -143,7 +143,7 @@ public partial class ItemViewModel : ObservableObject
             return [];
         }
 
-        return new List<DateOnly>(); //_billingService.GetLastPayments(billing.InitialDate, billing.PeriodType, billing.RecurEvery);
+        return _billingService.GetLastPayments(billing.InitialDate, billing.PeriodType, billing.RecurEvery);
     }
 
     public void Updated()
@@ -189,51 +189,4 @@ public partial class ItemViewModel : ObservableObject
         await Task.WhenAll(tasks);
 #endif
     }
-
-    #region FEAT: feature/IndividualPayments
-    //[ObservableProperty]
-    //private bool _isPaid;
-
-    //public List<ItemLog> PaymentLogs { get; } = new();
-
-    //private async Task OnPay()
-    //{
-
-    //await Task.CompletedTask;
-
-    //if (IsPaid)
-    //{
-    //    //TODO Play sound or vibrate the device
-
-    //    await _billingService.NewPaymentLogAsync(Item);
-    //}
-    //else
-    //{
-    //    await _billingService.RemoveLastPaymentLogAsync(Item);
-    //}
-    //}
-
-    //private bool CalculateIsPaid(Item item, IEnumerable<ItemLog> logs)
-    //{
-    //    var itemLogs = _billingService.GetPaymentLogsForItem(item, logs);
-
-    //    if (!Enumerable.Any(logs))
-    //    {
-    //        return false;
-    //    }
-
-    //    var (lastPayment, nextPayment) = _billingService.GetBillingDates(item.Billing.InitialDate, item.Billing.PeriodType, item.Billing.RecurEvery);
-
-    //    if (itemLogs.LastOrDefault() is { } lastLog)
-    //    {
-    //        if (lastPayment > DateOnly.FromDateTime(DateTime.Today) ||
-    //            (lastLog.PaymentDate >= lastPayment && lastLog.PaymentDate < nextPayment))
-    //        {
-    //            return true;
-    //        }
-    //    }
-
-    //    return false;
-    //}
-    #endregion
 }

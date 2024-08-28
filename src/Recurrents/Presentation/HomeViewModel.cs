@@ -11,6 +11,7 @@ public partial class HomeViewModel : ObservableObject
     //private readonly IItemService _itemService;
     //private readonly IItemFilterService _filterService;
     private readonly INavigator _navigation;
+    private readonly ICurrencyCache _currencyCache;
     //private readonly IDialogService _dialog;
     #endregion
 
@@ -64,7 +65,8 @@ public partial class HomeViewModel : ObservableObject
         //IItemService itemService,
         //IItemFilterService filterService,
         IStringLocalizer localizer,
-        INavigator navigation
+        INavigator navigation,
+        ICurrencyCache currencyCache
         //IDialogService dialog
         )
     {
@@ -73,6 +75,7 @@ public partial class HomeViewModel : ObservableObject
         //_itemService = itemService;
         //_filterService = filterService;
         _navigation = navigation;
+        _currencyCache = currencyCache;
         //_dialog = dialog;
 
         //_userService.OnLoggedInChanged += (s, e) =>
@@ -94,10 +97,19 @@ public partial class HomeViewModel : ObservableObject
             >= 17 and < 20 => localizer["GoodEvening"],
             _ => localizer["GoodNight"]
         };
+
+        Load();
     }
 
     public async void Load()
     {
+        var currency = await _currencyCache.GetCurrency(CancellationToken.None);
+
+        if (currency?.Rates.Count == 0)
+        {
+            return;
+        }
+
         //User = await _userService.RetrieveUser();
         //DisplayName = User?.Name;
 

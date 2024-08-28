@@ -12,12 +12,12 @@ namespace Recurrents.DataContracts.Serialization;
 /// For more information on the JsonSerializerContext see:
 /// https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/source-generation?WT.mc_id=DT-MVP-5002924
 /// </remarks>
-[JsonSerializable(typeof(WeatherForecast))]
-[JsonSerializable(typeof(WeatherForecast[]))]
-[JsonSerializable(typeof(IEnumerable<WeatherForecast>))]
-[JsonSerializable(typeof(IImmutableList<WeatherForecast>))]
-[JsonSerializable(typeof(ImmutableList<WeatherForecast>))]
+[JsonSerializable(typeof(Currency))]
+[JsonSerializable(typeof(Currency[]))]
+[JsonSerializable(typeof(IEnumerable<Currency>))]
+[JsonSerializable(typeof(IImmutableList<Currency>))]
+[JsonSerializable(typeof(ImmutableList<Currency>))]
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
-public partial class WeatherForecastContext : JsonSerializerContext
+public partial class CurrencyContext : JsonSerializerContext
 {
 }
