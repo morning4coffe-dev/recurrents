@@ -4,253 +4,171 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:win="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:android="http://uno.ui/android"
       xmlns:not_win="http://uno.ui/not_win"
       xmlns:triggers="using:CommunityToolkit.WinUI"
-      xmlns:controls="using:CommunityToolkit.WinUI.Controls"
-      xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
-      xmlns:models="using:Recurrents.Models"
       xmlns:uen="using:Uno.Extensions.Navigation.UI"
-      xmlns:helpers="using:Recurrents.Presentation.Helpers"
       xmlns:cme="using:Recurrents.Presentation.CustomMarkupExtensions"
       xmlns:local="using:Recurrents.Presentation"
       xmlns:utu="using:Uno.Toolkit.UI"
       Background="{ThemeResource ApplicationBackground}"
-      mc:Ignorable="d not_win android">
+      mc:Ignorable="d not_win">
 
   <Page.Resources>
-    <GridLength x:Key="ZeroWidth">0</GridLength>
-    <GridLength x:Key="StarWidth">*</GridLength>
+    <GridLength x:Key="DesktopPane">350</GridLength>
+    <GridLength x:Key="MobilePane">0</GridLength>
   </Page.Resources>
 
-  <Grid>
+  <Grid Style="{ThemeResource PageBackground}">
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*" />
-      <ColumnDefinition Width="{utu:Responsive Narrow={StaticResource ZeroWidth}, Wide={StaticResource StarWidth}}" />
+      <ColumnDefinition Width="{utu:Responsive Narrow={StaticResource MobilePane}, Wide={StaticResource DesktopPane}}" />
     </Grid.ColumnDefinitions>
 
-    <VisualStateManager.VisualStateGroups>
-      <!--AdaptiveTriggers-->
+    <!--<VisualStateManager.VisualStateGroups>
       <VisualStateGroup>
+        <VisualState />
         <VisualState>
           <VisualState.StateTriggers>
-            <AdaptiveTrigger MinWindowWidth="0" />
+            <triggers:IsNullOrEmptyStateTrigger Value="{x:Bind ViewModel.Items, Mode=OneWay}" />
           </VisualState.StateTriggers>
-
           <VisualState.Setters>
-            <Setter Target="mobileAddButton.Visibility"
+            <Setter Target="itemsEmptyImage.Visibility"
                     Value="Visible" />
-            <Setter Target="desktopAdd.Visibility"
-                    Value="Collapsed" />
-            <Setter Target="mobileHeader.Visibility"
-                    Value="Visible" />
-            <Setter Target="desktopHeader.Visibility"
-                    Value="Collapsed" />
-            <Setter Target="contentHolder.Margin"
-                    Value="8,8,8,0" />
           </VisualState.Setters>
         </VisualState>
-
-        <VisualState>
-          <VisualState.StateTriggers>
-            <AdaptiveTrigger MinWindowWidth="640" />
-          </VisualState.StateTriggers>
-        </VisualState>
       </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>-->
 
-    </VisualStateManager.VisualStateGroups>
+    <ScrollViewer Grid.Row="1">
+      <StackPanel Spacing="12"
+                  Margin="{utu:Responsive Narrow={StaticResource MobileMargin}, Wide={StaticResource DesktopMargin}}">
 
-    <Grid Style="{ThemeResource PageBackground}">
-      <ScrollViewer>
-        <StackPanel x:Name="contentHolder"
-                    Spacing="12"
-                    Margin="48,48,48,0">
+        <utu:NavigationBar Content="{x:Bind ViewModel.WelcomeMessage}" />
 
-          <TextBlock x:Name="desktopHeader"
-                     Visibility="Visible"
-                     Style="{StaticResource TitleTextBlockStyle}" />
-          <!--Text="{x:Bind ViewModel.SelectedCategory.Text}"-->
+        <Button uen:Navigation.Request="ItemEdit"
+                Visibility="{utu:Responsive Narrow=Collapsed, Wide=Visible}"
+                Grid.Row="1"
+                Content="{cme:Localize Name=NewItem}" />
 
-          <Grid x:Name="mobileHeader"
-                Visibility="Collapsed"
-                ColumnSpacing="16">
-            <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="Auto" />
-              <ColumnDefinition />
-            </Grid.ColumnDefinitions>
+        <ListView ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                  ScrollViewer.VerticalScrollMode="Disabled"
+                  ItemsSource="{x:Bind ViewModel.Items, Mode=OneWay}"
+                  SelectedItem="{x:Bind ViewModel.SelectedItem, Mode=TwoWay}"
+                  uen:Navigation.Request="ItemDetails"
+                  Grid.Row="4">
 
-            <Button CornerRadius="30"
-                    Padding="0"
-                    BorderThickness="0"
-                    Background="Transparent"
-                    Command="{x:Bind ViewModel.OpenSettingsCommand}">
-              <PersonPicture ProfilePicture="{x:Bind ViewModel.User.Photo, Mode=OneWay}"
-                             DisplayName="{x:Bind ViewModel.User.Name, Mode=OneWay}"
-                             BorderThickness="0"
-                             Width="65" />
-            </Button>
+          <ListView.ItemsPanel>
+            <ItemsPanelTemplate>
+              <StackPanel Orientation="Vertical"
+                          Spacing="4" />
+            </ItemsPanelTemplate>
+          </ListView.ItemsPanel>
 
-            <StackPanel Grid.Column="1"
-                        VerticalAlignment="Center">
-              <TextBlock Text="{x:Bind ViewModel.WelcomeMessage}"
-                         TextWrapping="WrapWholeWords"
-                         Opacity="0.6"
-                         Style="{StaticResource SubtitleTextBlockStyle}" />
-
-              <TextBlock Text="{x:Bind ViewModel.User.Name, Mode=OneWay}"
-                         Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay, Converter={StaticResource TrueToVisibleConverter}}"
-                         TextWrapping="WrapWholeWords"
-                         Style="{StaticResource TitleTextBlockStyle}" />
-            </StackPanel>
-          </Grid>
-
-          <Button x:Name="desktopAdd"
-                  uen:Navigation.Request="ItemEdit"
-                  Visibility="Visible"
-                  Grid.Row="1"
-                  Content="{cme:Localize Name=NewItem}" />
-
-          <ListView ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                         ScrollViewer.VerticalScrollMode="Disabled"
-                         ItemsSource="{x:Bind ViewModel.Items, Mode=OneWay}"
-                         uen:Navigation.Request="ItemDetails"
-                         Grid.Row="4">
-
-            <ListView.Resources>
-              <FontIconSource x:Key="EditIcon"
-                              Glyph="&#xE70F;" />
-              <FontIconSource x:Key="ArchiveIcon"
-                              Glyph="&#xE7B8;" />
-              <FontIconSource x:Key="DeleteIcon"
-                              Glyph="&#xE74D;" />
-
-              <SwipeItems x:Key="Left"
-                          Mode="Execute">
-                <SwipeItem Text="{cme:Localize Name=Edit}"
-                           IconSource="{StaticResource EditIcon}"
-                           Foreground="{StaticResource TextOnAccentFillColorPrimaryBrush}"
-                           Background="{StaticResource SystemAccentColor}"
-                           Invoked="EditItem_Invoked" />
-              </SwipeItems>
-              <SwipeItems x:Key="Right"
-                          Mode="Execute">
-                <SwipeItem Text="{cme:Localize Name=ArchiveVerb}"
-                           IconSource="{StaticResource ArchiveIcon}"
-                           Foreground="{StaticResource TextOnAccentFillColorPrimaryBrush}"
-                           Background="{ThemeResource SystemFillColorCriticalBrush}"
-                           Invoked="ArchiveItem_Invoked" />
-              </SwipeItems>
-            </ListView.Resources>
-
-            <!--<ItemsRepeater.Layout>
+          <!--<ItemsRepeater.Layout>
               <StackLayout Orientation="Vertical"
                            Spacing="8" />
             </ItemsRepeater.Layout>-->
 
-            <ListView.ItemTemplate>
-              <DataTemplate x:DataType="local:ItemViewModel">
-                <!--<SwipeControl LeftItems="{StaticResource Left}"
+          <ListView.ItemTemplate>
+            <DataTemplate x:DataType="local:ItemViewModel">
+              <!--<SwipeControl LeftItems="{StaticResource Left}"
                               RightItems="{StaticResource Right}"
                               Background="Transparent"
                               not_win:CornerRadius="20"
                               win:CornerRadius="8">-->
 
-                  <Grid not_win:Background="{ThemeResource CardBackgroundFillColorDefault}"
-                        not_win:CornerRadius="20"
-                        Padding="20">
-                    <Grid.ColumnDefinitions>
-                      <ColumnDefinition Width="*" />
-                      <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+              <Grid not_win:Background="{ThemeResource CardBackgroundFillColorDefault}"
+                    not_win:CornerRadius="20"
+                    Padding="20">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*" />
+                  <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-                    <!-- Left Column -->
-                    <StackPanel Spacing="6"
-                                VerticalAlignment="Center">
-                      <Rectangle Fill="{x:Bind DisplayTag.Color, Mode=OneWay, Converter={StaticResource ColorToBrushConverter}}"
-                                 Height="6"
-                                 Width="80"
-                                 RadiusY="3"
-                                 RadiusX="3"
-                                 HorizontalAlignment="Left" />
-                      <TextBlock Text="{x:Bind Item.Name, Mode=OneWay}"
-                                 VerticalAlignment="Center"
-                                 Style="{StaticResource SubtitleTextBlockStyle}" />
-                    </StackPanel>
+                <!-- Left Column -->
+                <StackPanel Spacing="6"
+                            VerticalAlignment="Center">
+                  <!--<Rectangle Fill="{x:Bind DisplayTag.Color, Mode=OneWay, Converter={StaticResource ColorToBrushConverter}}"
+                               Height="6"
+                               Width="80"
+                               RadiusY="3"
+                               RadiusX="3"
+                               HorizontalAlignment="Left" />-->
+                  <TextBlock Text="{x:Bind Item.Name, Mode=OneWay}"
+                             VerticalAlignment="Center"
+                             Style="{StaticResource SubtitleTextBlockStyle}" />
+                </StackPanel>
 
-                    <!-- Right Column -->
-                    <StackPanel Grid.Column="1"
-                                Spacing="8"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Center">
-                      <TextBlock Style="{StaticResource SubtitleTextBlockStyle}"
-                                 HorizontalAlignment="Right"
-                                 Text="{x:Bind FormattedPrice, Mode=OneWay}" />
-                      <TextBlock Text="{x:Bind FormattedPaymentDate, Mode=OneWay}"
-                                 HorizontalAlignment="Right"
-                                 Opacity="0.75" />
-                    </StackPanel>
-                  </Grid>
-                <!--</SwipeControl>-->
-              </DataTemplate>
-            </ListView.ItemTemplate>
-          </ListView>
+                <!-- Right Column -->
+                <StackPanel Grid.Column="1"
+                            Spacing="8"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center">
+                  <TextBlock Style="{StaticResource SubtitleTextBlockStyle}"
+                             HorizontalAlignment="Right"
+                             Text="{x:Bind FormattedPrice, Mode=OneWay}" />
+                  <TextBlock Text="{x:Bind FormattedPaymentDate, Mode=OneWay}"
+                             HorizontalAlignment="Right"
+                             Opacity="0.75" />
+                </StackPanel>
+              </Grid>
+              <!--</SwipeControl>-->
+            </DataTemplate>
+          </ListView.ItemTemplate>
+        </ListView>
 
-          <StackPanel x:Name="itemsEmptyImage"
-                      Spacing="12"
-                      Grid.Row="4"
-                      VerticalAlignment="Center"
-                      Visibility="Collapsed"
-                      Margin="0,0,0,20">
+        <StackPanel x:Name="itemsEmptyImage"
+                    Spacing="12"
+                    Grid.Row="4"
+                    VerticalAlignment="Center"
+                    Visibility="Collapsed"
+                    Margin="0,0,0,20">
 
-            <Image Source="/Recurrents/Assets/Illustrations/items_empty_illustration.png"
-                   HorizontalAlignment="Center"
-                   MaxWidth="300"
-                   Margin="20" />
+          <Image Source="/Recurrents/Assets/Illustrations/items_empty_illustration.png"
+                 HorizontalAlignment="Center"
+                 MaxWidth="300"
+                 Margin="20" />
 
-            <TextBlock Text="{cme:Localize Name=ItemsEmptyTitle}"
-                       TextWrapping="WrapWholeWords"
-                       HorizontalAlignment="Center"
-                       Style="{StaticResource BaseTextBlockStyle}" />
+          <TextBlock Text="{cme:Localize Name=ItemsEmptyTitle}"
+                     TextWrapping="WrapWholeWords"
+                     HorizontalAlignment="Center"
+                     Style="{StaticResource BaseTextBlockStyle}" />
 
-            <TextBlock Text="{cme:Localize Name=ItemsEmptyDescription}"
-                       TextWrapping="WrapWholeWords"
-                       TextAlignment="Center"
-                       HorizontalAlignment="Center"
-                       Opacity="0.7" />
+          <TextBlock Text="{cme:Localize Name=ItemsEmptyDescription}"
+                     TextWrapping="WrapWholeWords"
+                     TextAlignment="Center"
+                     HorizontalAlignment="Center"
+                     Opacity="0.7" />
 
-            <Button Content="{cme:Localize Name=NewItem}"
-                    HorizontalAlignment="Center"
-                    Padding="20, 8" />
+          <Button Content="{cme:Localize Name=NewItem}"
+                  HorizontalAlignment="Center"
+                  Padding="20, 8" />
 
-          </StackPanel>
         </StackPanel>
-      </ScrollViewer>
+      </StackPanel>
+    </ScrollViewer>
 
-      <Button x:Name="mobileAddButton"
-              uen:Navigation.Request="ItemEdit"
-              CornerRadius="22"
-              Height="65"
-              VerticalAlignment="Bottom"
-              HorizontalAlignment="Right"
-              AutomationProperties.Name="{cme:Localize Name=NewItem}"
-              Style="{StaticResource AccentButtonStyle}"
-              Margin="20"
-              Padding="22,0"
-              Grid.Row="4"
-              Visibility="Collapsed">
+    <Button uen:Navigation.Request="ItemEdit"
+            CornerRadius="22"
+            Height="65"
+            VerticalAlignment="Bottom"
+            HorizontalAlignment="Right"
+            AutomationProperties.Name="{cme:Localize Name=NewItem}"
+            Style="{StaticResource AccentButtonStyle}"
+            Margin="20"
+            Padding="22,0"
+            Grid.Row="4"
+            Visibility="{utu:Responsive Narrow=Visible, Wide=Collapsed}">
 
-        <!--TODO Rotate this icon - previous project Easter Egg-->
-        <StackPanel Orientation="Horizontal">
-          <SymbolIcon x:Name="fabIcon"
-                      Symbol="Add" />
+      <StackPanel Orientation="Horizontal">
+        <SymbolIcon x:Name="fabIcon"
+                    Symbol="Add" />
 
-          <TextBlock Text="{cme:Localize Name=NewItem}"
-                     Grid.Column="1"
-                     Margin="12,0,0,0" />
-        </StackPanel>
-      </Button>
-
-    </Grid>
+        <TextBlock Text="{cme:Localize Name=NewItem}"
+                   Grid.Column="1"
+                   Margin="12,0,0,0" />
+      </StackPanel>
+    </Button>
 
     <ContentControl x:Name="pane2Holder"
                     uen:Region.Attached="{utu:Responsive Narrow=False, Wide=True}"

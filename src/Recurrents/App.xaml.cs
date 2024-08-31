@@ -1,5 +1,6 @@
 using Uno.Resizetizer;
 
+
 #if WINDOWS
 using Microsoft.UI.Composition.SystemBackdrops;
 using WinUIEx;
@@ -54,6 +55,9 @@ public partial class App : Application
                     // Register your services here
                     // services.AddSingleton<IMyService, MyService>();
                     services.AddSingleton<IBillingService, BillingService>();
+                    services.AddSingleton<IDataService, DataService>();
+                    services.AddSingleton<IStorageService, StorageService>();
+                    services.AddSingleton<IItemService, ItemService>();
                 })
                 .UseNavigation(RegisterRoutes)
             );
@@ -68,6 +72,10 @@ public partial class App : Application
         }
 
         MainWindow = builder.Window;
+
+#if HAS_UNO
+        //FeatureConfiguration.Frame.UseWinUIBehavior = true;
+#endif
 
 #if WINDOWS
         var manager = WindowManager.Get(builder.Window);
@@ -99,33 +107,27 @@ public partial class App : Application
     {
         views.Register(
             new ViewMap(ViewModel: typeof(ShellViewModel)),
-            new DataViewMap<MainPage, MainViewModel, User>(),
             new ViewMap<LoginPage, LoginViewModel>(),
+            new ViewMap<MainPage, MainViewModel>(),
             new ViewMap<HomePage, HomeViewModel>(),
             new DataViewMap<ItemDetails, ItemDetailsViewModel, ItemViewModel>(),
             new DataViewMap<ItemEdit, ItemEditViewModel, ItemViewModel>(),
-            new ViewMap<SettingsPage, SettingsViewModel>(),
-            new DataViewMap<SecondPage, SecondViewModel, Entity>()
+            new ViewMap<ArchivePage, ArchiveViewModel>(),
+            new ViewMap<SettingsPage, SettingsViewModel>()
         );
 
         routes.Register(
             new RouteMap("", View: views.FindByViewModel<ShellViewModel>(),
                 Nested:
                 [
-                    new ("Main", View: views.FindByViewModel<MainViewModel>(), IsDefault: true),
-                    new ("Login", View: views.FindByViewModel<LoginViewModel>(),
+                    new ("Login", View: views.FindByViewModel<LoginViewModel>()),
+                    new ("Main", View: views.FindByViewModel<MainViewModel>(), IsDefault: true,
                         Nested:
                         [
-                            new ("Second", View: views.FindByViewModel<SecondViewModel>()),
+                            new ("Home", View: views.FindByViewModel<HomeViewModel>()),
                             new ("ItemDetails", View: views.FindByViewModel<ItemDetailsViewModel>(), DependsOn:"Home" ),
                             new ("ItemEdit", View: views.FindByViewModel<ItemEditViewModel>(), DependsOn:"Home"),
-                            new ("Home", View: views.FindByViewModel<HomeViewModel>()
-                                //Nested:
-                                //[
-                                //    new ("ItemDetails", View: views.FindByViewModel<ItemDetailsViewModel>()),
-                                //    new ("ItemEdit", View: views.FindByViewModel<ItemEditViewModel>()),
-                                //]
-                            ),
+                            new ("Archive", View: views.FindByViewModel<ArchiveViewModel>()),
                             new ("Settings", View: views.FindByViewModel<SettingsViewModel>())
                         ]
                     ),

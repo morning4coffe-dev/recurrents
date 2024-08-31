@@ -152,7 +152,14 @@ public sealed class CurrencyCache(
         // or the file is younger than 3 days
         if (!IsConnected || (IsConnected && DateTimeOffset.Now.AddDays(-3) <= properties.DateModified))
         {
-            return await File.ReadAllTextAsync(file.Path);
+            try
+            {
+                return await File.ReadAllTextAsync(file.Path);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         return null;

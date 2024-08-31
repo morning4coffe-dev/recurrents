@@ -1,22 +1,42 @@
+using Uno.Extensions;
+
 namespace Recurrents.Presentation;
 
 public partial class ItemEditViewModel : ObservableObject
 {
     #region Services
     private readonly IStringLocalizer _localizer;
+    private readonly IItemService _itemService;
+    private readonly INavigator _navigator;
+    private readonly ICurrencyCache _currency;
     #endregion
 
     [ObservableProperty]
-    private Item? _editItem;
+    private ItemViewModel? _selectedItem;
 
     public ObservableCollection<string> Currencies { get; } = [];
     public ObservableCollection<string> PaymentMethods { get; }
 
-    public ItemEditViewModel(ItemViewModel itemViewModel, IStringLocalizer localizer)
+    public ItemEditViewModel(
+        ItemViewModel itemViewModel,
+        IStringLocalizer localizer,
+        IItemService itemService,
+        INavigator navigator,
+        ICurrencyCache currency)
     {
         _localizer = localizer;
+        _itemService = itemService;
+        _navigator = navigator;
+        _currency = currency;
 
-        EditItem = itemViewModel.Item;
+        if (itemViewModel is { } itemVM)
+        {
+            SelectedItem = itemVM;
+        }
+        else
+        {
+            SelectedItem = new ItemViewModel(new Item(new Guid().ToString(), ""));
+        }
 
         PaymentMethods =
         [
@@ -28,17 +48,53 @@ public partial class ItemEditViewModel : ObservableObject
             _localizer["Invoice"],
             _localizer["Cash"]
         ];
+
+        Load();
+    }
+
+    public async void Load()
+    {
+        try
+        {
+            var currency = await _currency.GetCurrency(CancellationToken.None);
+            Currencies.AddRange(currency!.Rates.Keys);
+        }
+        catch (Exception ex)
+        {
+
+        }
     }
 
     [RelayCommand]
-    private void Save()
+    private async Task Save()
     {
-        //if (EditItem is not { } item || SelectedItem is not { })
+        if (SelectedItem is not { })
+        {
+            throw new InvalidOperationException("No item selected!");
+        }
+
+        _itemService.AddOrUpdateItem(SelectedItem);
+        await _navigator.NavigateBackWithResultAsync(this, data: SelectedItem);
+    }
+
+    [RelayCommand]
+    private async Task<bool> Close()
+    {
+        ContentDialogResult result = ContentDialogResult.Primary;
+
+        //if (IsEditing)
         //{
-        //    return;
+        //    result = await _dialog.ShowAsync(
+        //        _localizer["CloseDialogTitle"],
+        //        _localizer["CloseDialogDescription"],
+        //        _localizer["Ok"]);
         //}
 
-        //SelectedItem.Item = item;
-        //WeakReferenceMessenger.Default.Send(new ItemUpdated(SelectedItem, ToSave: true));
+        if (result == ContentDialogResult.Primary)
+        {
+            //WeakReferenceMessenger.Default.Send(new ItemUpdated(SelectedItem, Canceled: true));
+        }
+
+        return result == ContentDialogResult.Primary;
     }
 }

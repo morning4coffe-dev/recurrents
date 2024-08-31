@@ -83,7 +83,7 @@ public partial class ItemViewModel : ObservableObject
 
     public string FormattedTotalPrice => TotalPrice.ToString("C", CurrencyCache.CurrencyCultures[Item?.Billing.CurrencyId ?? "EUR"]);
     public string FormattedPrice
-        //var task = _currencyCache.ConvertToDefaultCurrency(
+        //var task = _currency.ConvertToDefaultCurrency(
         //    Item?.Billing.BasePrice ?? 0,
         //    Item?.Billing.CurrencyId ?? "EUR",
         //    _settingsService.DefaultCurrency);

@@ -1,13 +1,13 @@
+using System.Globalization;
+
 namespace Recurrents.Presentation;
 
 public partial class ItemDetailsViewModel : ObservableObject
 {
     #region Services
     private readonly IStringLocalizer _localizer;
-    //private readonly ITagService _tagService;
-    //private readonly IItemFilterService _filterService;
-    //private readonly ICurrencyCache _currencyCache;
-    //private readonly IDialogService _dialog;
+    private readonly IItemService _itemService;
+    private readonly INavigator _navigator;
     #endregion
 
     [ObservableProperty]
@@ -26,10 +26,13 @@ public partial class ItemDetailsViewModel : ObservableObject
 
     public ItemDetailsViewModel(
         ItemViewModel? item,
-        IStringLocalizer localizer
-        )
+        IStringLocalizer localizer,
+        IItemService itemService,
+        INavigator navigator)
     {
         _localizer = localizer;
+        _itemService = itemService;
+        _navigator = navigator;
 
         _selectedItem = item;
 
@@ -41,6 +44,15 @@ public partial class ItemDetailsViewModel : ObservableObject
             { Period.Quarterly, _localizer["Quarterly"] },
             { Period.Annually, _localizer["Annually"] }
         }.ToList();
+
+        // _itemService.OnItemsChanged += OnItemsChanged; for after navigation from ItemEditViewModel
+
+        var localizedDateStrings = item.GetFuturePayments()
+                  .Select(date => date.ToString(CultureInfo.CurrentCulture))
+                  .ToList();
+
+        FuturePayments.Clear();
+        FuturePayments.AddRange(localizedDateStrings);
     }
 
     public async void Load()
@@ -49,55 +61,14 @@ public partial class ItemDetailsViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void EnableEditing()
+    private async Task Archive()
     {
-        //IsEditing = true;
-
-        //// take a copy of the item
-        //EditItem = SelectedItem?.Item with { };
-        //ItemName = _localizer[string.IsNullOrEmpty(SelectedItem?.Item.Name) ? "NewItem" : "Edit"];
-    }
-
-    [RelayCommand]
-    private async Task<bool> Close()
-    {
-        ContentDialogResult result = ContentDialogResult.Primary;
-
-        //if (IsEditing)
-        //{
-        //    result = await _dialog.ShowAsync(
-        //        _localizer["CloseDialogTitle"],
-        //        _localizer["CloseDialogDescription"],
-        //        _localizer["Ok"]);
-        //}
-
-        if (result == ContentDialogResult.Primary)
+        if (SelectedItem is not { })
         {
-            //WeakReferenceMessenger.Default.Send(new ItemUpdated(SelectedItem, Canceled: true));
+            throw new InvalidOperationException("No item selected!");
         }
 
-        return result == ContentDialogResult.Primary;
+        _itemService.ArchiveItem(SelectedItem);
+        await _navigator.NavigateBackAsync(this);
     }
-
-    [RelayCommand]
-    private void Archive()
-    {
-        //if (SelectedItem is not { })
-        //{
-        //    return;
-        //}
-
-        //WeakReferenceMessenger.Default.Send(new ItemArchived(SelectedItem));
-    }
-
-    //private async void System_BackRequested(object? sender, BackRequestedEventArgs e)
-    //{
-    //    e.Handled = true;
-    //    var close = await Close();
-
-    //    if (close)
-    //    {
-    //        SystemNavigationManager.GetForCurrentView().BackRequested -= System_BackRequested;
-    //    }
-    //}
 }

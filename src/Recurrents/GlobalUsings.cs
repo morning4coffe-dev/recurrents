@@ -16,3 +16,6 @@ global using Recurrents.Services.Endpoints;
 global using ApplicationExecutionState = Windows.ApplicationModel.Activation.ApplicationExecutionState;
 
 global using Recurrents.Services.Billing;
+global using Recurrents.Services.Storage;
+global using Recurrents.Services.Storage.Data;
+global using Recurrents.Services.Items;

@@ -10,144 +10,114 @@
       xmlns:helpers="using:Recurrents.Presentation.Helpers"
       xmlns:cme="using:Recurrents.Presentation.CustomMarkupExtensions"
       Background="{ThemeResource ApplicationBackground}"
+      xmlns:utu="using:Uno.Toolkit.UI"
       mc:Ignorable="d not_win">
 
-  <Grid>
+  <ScrollViewer Grid.Row="1">
 
-    <VisualStateManager.VisualStateGroups>
-      <!--AdaptiveTriggers-->
-      <VisualStateGroup>
-        <VisualState>
-          <VisualState.StateTriggers>
-            <AdaptiveTrigger MinWindowWidth="0" />
-          </VisualState.StateTriggers>
+    <StackPanel Spacing="4"
+                Margin="{utu:Responsive Narrow={StaticResource MobileMargin}, Wide={StaticResource DesktopMargin}}">
+      <win:StackPanel.ChildrenTransitions>
+        <TransitionCollection>
+          <EntranceThemeTransition FromVerticalOffset="-100"
+                                   IsStaggeringEnabled="True" />
+        </TransitionCollection>
+      </win:StackPanel.ChildrenTransitions>
+      
+      <utu:NavigationBar Content="{cme:Localize Name=Settings}" />
 
-          <VisualState.Setters>
-            <Setter Target="settingsHolder.Margin"
-                    Value="8" />
-            <Setter Target="desktopHeader.Visibility"
-                    Value="Collapsed" />
-          </VisualState.Setters>
-        </VisualState>
-
-        <VisualState>
-          <VisualState.StateTriggers>
-            <AdaptiveTrigger MinWindowWidth="640" />
-          </VisualState.StateTriggers>
-        </VisualState>
-      </VisualStateGroup>
-
-    </VisualStateManager.VisualStateGroups>
-
-    <ScrollViewer>
-      <StackPanel x:Name="settingsHolder"
-                  Spacing="4"
-                  Margin="48">
-        <win:StackPanel.ChildrenTransitions>
-          <TransitionCollection>
-            <EntranceThemeTransition FromVerticalOffset="-100"
-                                     IsStaggeringEnabled="True" />
-          </TransitionCollection>
-        </win:StackPanel.ChildrenTransitions>
-
-        <TextBlock x:Name="desktopHeader"
-                   Visibility="Visible"
-                   Text="{cme:Localize Name=Settings}"
-                   Margin="0,0,0,12"
-                   Style="{StaticResource TitleTextBlockStyle}" />
-
-        <controls:SettingsCard Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay}">
-          <!--, Converter={StaticResource TrueToVisibleConverter}-->
-          <controls:SettingsCard.Header>
-            <StackPanel Orientation="Horizontal"
-                        Margin="6"
-                        Spacing="20">
-              <PersonPicture ProfilePicture="{x:Bind ViewModel.User.Photo, Mode=OneWay}"
-                             DisplayName="{x:Bind ViewModel.User.Name, Mode=OneWay}"
-                             Width="80" />
-              <StackPanel VerticalAlignment="Center"
-                          Spacing="6">
-                <TextBlock Text="{x:Bind ViewModel.User.Name, Mode=OneWay}"
-                           Style="{StaticResource SubtitleTextBlockStyle}" />
-                <TextBlock Text="{x:Bind ViewModel.User.Email, Mode=OneWay}" />
-              </StackPanel>
+      <controls:SettingsCard Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay}">
+        <!--, Converter={StaticResource TrueToVisibleConverter}-->
+        <controls:SettingsCard.Header>
+          <StackPanel Orientation="Horizontal"
+                      Margin="6"
+                      Spacing="20">
+            <PersonPicture ProfilePicture="{x:Bind ViewModel.User.Photo, Mode=OneWay}"
+                           DisplayName="{x:Bind ViewModel.User.Name, Mode=OneWay}"
+                           Width="80" />
+            <StackPanel VerticalAlignment="Center"
+                        Spacing="6">
+              <TextBlock Text="{x:Bind ViewModel.User.Name, Mode=OneWay}"
+                         Style="{StaticResource SubtitleTextBlockStyle}" />
+              <TextBlock Text="{x:Bind ViewModel.User.Email, Mode=OneWay}" />
             </StackPanel>
-          </controls:SettingsCard.Header>
-          <Button Content="{cme:Localize Name=Logout}"
-                  Margin="6"
-                  Command="{x:Bind ViewModel.LogoutCommand}" />
+          </StackPanel>
+        </controls:SettingsCard.Header>
+        <Button Content="{cme:Localize Name=Logout}"
+                Margin="6"
+                Command="{x:Bind ViewModel.LogoutCommand}" />
+      </controls:SettingsCard>
+
+      <InfoBar Title="{cme:Localize Name=NotLoggedIn}"
+               Message="{cme:Localize Name=NotLoggedInDescription}"
+               Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
+               IsOpen="True"
+               Severity="Warning"
+               IsClosable="False">
+        <InfoBar.IconSource>
+          <FontIconSource Glyph="&#xE779;"
+                          FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+        </InfoBar.IconSource>
+        <InfoBar.ActionButton>
+          <Button Content="{cme:Localize Name=Login}"
+                  HorizontalAlignment="Right"
+                  Command="{x:Bind ViewModel.LoginCommand}" />
+        </InfoBar.ActionButton>
+      </InfoBar>
+
+      <controls:SettingsCard Header="{cme:Localize Name=DefaultCurrency}"
+                             not_win:HeaderIcon="{toolkit:FontIcon Glyph=&#xE8C7;, FontFamily={ThemeResource SymbolThemeFontFamily}}">
+        <ComboBox VerticalAlignment="Bottom"
+                  ItemsSource="{x:Bind ViewModel.Currencies, Mode=OneWay}"
+                  SelectedItem="{x:Bind ViewModel.SelectedCurrency, Mode=TwoWay}"
+                  Grid.Column="1" />
+      </controls:SettingsCard>
+
+      <controls:SettingsCard Header="{cme:Localize Name=SystemLanguageAndRegion}"
+                             not_win:ActionIcon="{toolkit:FontIcon Glyph=&#xE8A7;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
+                             not_win:HeaderIcon="{toolkit:FontIcon Glyph=&#xF2B7;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
+                             IsClickEnabled="True"
+                             Command="{x:Bind ViewModel.LaunchLangSettingsCommand}" />
+
+      <TextBlock Text="{cme:Localize Name=Notifications}"
+                 Margin="0,12,0,0"
+                 Style="{StaticResource BaseTextBlockStyle}" />
+
+      <Border>
+        <controls:SettingsCard Header="{cme:Localize Name=NotificationTime}"
+                               not_win:HeaderIcon="{toolkit:FontIcon Glyph=&#xE823;, FontFamily={ThemeResource SymbolThemeFontFamily}}">
+          <TimePicker />
+          <!--SelectedTime="{x:Bind ViewModel.NotificationTime, Mode=TwoWay}", Converter={StaticResource TimeOnlyToTimeSpanConverter}-->
         </controls:SettingsCard>
+      </Border>
 
-        <InfoBar Title="{cme:Localize Name=NotLoggedIn}"
-                 Message="{cme:Localize Name=NotLoggedInDescription}"
-                 Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
-                 IsOpen="True"
-                 Severity="Warning"
-                 IsClosable="False">
-          <InfoBar.IconSource>
-            <FontIconSource Glyph="&#xE779;"
-                            FontFamily="{ThemeResource SymbolThemeFontFamily}" />
-          </InfoBar.IconSource>
-          <InfoBar.ActionButton>
-            <Button Content="{cme:Localize Name=Login}"
-                    HorizontalAlignment="Right"
-                    Command="{x:Bind ViewModel.LoginCommand}" />
-          </InfoBar.ActionButton>
-        </InfoBar>
+      <controls:SettingsCard Header="{cme:Localize Name=SystemNotifications}"
+                             not_win:ActionIcon="{toolkit:FontIcon Glyph=&#xE8A7;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
+                             not_win:HeaderIcon="{toolkit:FontIcon Glyph=&#xEA8F;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
+                             IsClickEnabled="True"
+                             Command="{x:Bind ViewModel.LaunchNotificationSettingsCommand}" />
 
-        <controls:SettingsCard Header="{cme:Localize Name=DefaultCurrency}"
-                               not_win:HeaderIcon="{toolkit:FontIcon Glyph=&#xE8C7;, FontFamily={ThemeResource SymbolThemeFontFamily}}">
-          <ComboBox VerticalAlignment="Bottom"
-                    ItemsSource="{x:Bind ViewModel.Currencies, Mode=OneWay}"
-                    SelectedItem="{x:Bind ViewModel.SelectedCurrency, Mode=TwoWay}"
-                    Grid.Column="1" />
-        </controls:SettingsCard>
+      <InfoBar Title="{cme:Localize Name=NotificationsDisabled}"
+               Message="{cme:Localize Name=NotificationsDisabledDescription}"
+               Visibility="{x:Bind ViewModel.IsNotificationsEnabled, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
+               IsOpen="True"
+               Severity="Warning"
+               IsClosable="False">
+        <InfoBar.IconSource>
+          <FontIconSource Glyph="&#xEE79;" />
+        </InfoBar.IconSource>
+        <InfoBar.ActionButton>
+          <Button Content="{cme:Localize Name=GoToSettings}"
+                  HorizontalAlignment="Right"
+                  Command="{x:Bind ViewModel.LaunchNotificationSettingsCommand}" />
+        </InfoBar.ActionButton>
+      </InfoBar>
 
-        <controls:SettingsCard Header="{cme:Localize Name=SystemLanguageAndRegion}"
-                               not_win:ActionIcon="{toolkit:FontIcon Glyph=&#xE8A7;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
-                               not_win:HeaderIcon="{toolkit:FontIcon Glyph=&#xF2B7;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
-                               IsClickEnabled="True"
-                               Command="{x:Bind ViewModel.LaunchLangSettingsCommand}" />
+      <TextBlock Text="{cme:Localize Name=About}"
+                 Margin="0,12,0,0"
+                 Style="{StaticResource BaseTextBlockStyle}" />
 
-        <TextBlock Text="{cme:Localize Name=Notifications}"
-                   Margin="0,12,0,0"
-                   Style="{StaticResource BaseTextBlockStyle}" />
-
-        <Border>
-          <controls:SettingsCard Header="{cme:Localize Name=NotificationTime}"
-                                 not_win:HeaderIcon="{toolkit:FontIcon Glyph=&#xE823;, FontFamily={ThemeResource SymbolThemeFontFamily}}">
-            <TimePicker />
-            <!--SelectedTime="{x:Bind ViewModel.NotificationTime, Mode=TwoWay}", Converter={StaticResource TimeOnlyToTimeSpanConverter}-->
-          </controls:SettingsCard>
-        </Border>
-
-        <controls:SettingsCard Header="{cme:Localize Name=SystemNotifications}"
-                               not_win:ActionIcon="{toolkit:FontIcon Glyph=&#xE8A7;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
-                               not_win:HeaderIcon="{toolkit:FontIcon Glyph=&#xEA8F;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
-                               IsClickEnabled="True"
-                               Command="{x:Bind ViewModel.LaunchNotificationSettingsCommand}" />
-
-        <InfoBar Title="{cme:Localize Name=NotificationsDisabled}"
-                 Message="{cme:Localize Name=NotificationsDisabledDescription}"
-                 Visibility="{x:Bind ViewModel.IsNotificationsEnabled, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
-                 IsOpen="True"
-                 Severity="Warning"
-                 IsClosable="False">
-          <InfoBar.IconSource>
-            <FontIconSource Glyph="&#xEE79;" />
-          </InfoBar.IconSource>
-          <InfoBar.ActionButton>
-            <Button Content="{cme:Localize Name=GoToSettings}"
-                    HorizontalAlignment="Right"
-                    Command="{x:Bind ViewModel.LaunchNotificationSettingsCommand}" />
-          </InfoBar.ActionButton>
-        </InfoBar>
-
-        <TextBlock Text="{cme:Localize Name=About}"
-                   Margin="0,12,0,0"
-                   Style="{StaticResource BaseTextBlockStyle}" />
-
-        <!--<controls:SettingsExpander IsExpanded="True">
+      <!--<controls:SettingsExpander IsExpanded="True">
           <controls:SettingsExpander.Header>
             <StackPanel Orientation="Horizontal"
                         Margin="6"
@@ -195,7 +165,6 @@
                      Style="{StaticResource CaptionTextBlockStyle}" />
         </controls:SettingsExpander>-->
 
-      </StackPanel>
-    </ScrollViewer>
-  </Grid>
+    </StackPanel>
+  </ScrollViewer>
 </Page>

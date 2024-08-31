@@ -5,9 +5,12 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:cme="using:Recurrents.Presentation.CustomMarkupExtensions"
+      xmlns:models="using:Recurrents.Models"
+      xmlns:toolkit="using:CommunityToolkit.WinUI"
+      xmlns:not_win="http://uno.ui/not_win"
       xmlns:utu="using:Uno.Toolkit.UI"
       Background="{ThemeResource ApplicationBackground}"
-      mc:Ignorable="d">
+      mc:Ignorable="d not_win">
 
   <Grid RowSpacing="12">
     <Grid.RowDefinitions>
@@ -16,7 +19,7 @@
       <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
 
-    <utu:NavigationBar Content="{x:Bind ViewModel.EditItem.Name, Mode=OneWay}">
+    <utu:NavigationBar Content="{x:Bind ViewModel.SelectedItem.Item.Name, Mode=OneWay}">
       <utu:NavigationBar.MainCommand>
         <AppBarButton>
           <AppBarButton.Icon>
@@ -24,14 +27,18 @@
           </AppBarButton.Icon>
         </AppBarButton>
       </utu:NavigationBar.MainCommand>
+      <utu:NavigationBar.PrimaryCommands>
+        <AppBarButton not_win:Icon="{toolkit:FontIcon Glyph=&#xE73E;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
+                      Command="{x:Bind ViewModel.SaveCommand}" />
+      </utu:NavigationBar.PrimaryCommands>
     </utu:NavigationBar>
 
     <ScrollViewer Grid.Row="1">
-      <StackPanel Spacing="12">
-        <!--Style="{StaticResource ContentStack}"-->
+      <StackPanel Spacing="12"
+                  Style="{StaticResource ContentStack}">
 
         <TextBox Header="{cme:Localize Name=Name}"
-                 Text="{x:Bind ViewModel.EditItem.Name, Mode=TwoWay}"
+                 Text="{x:Bind ViewModel.SelectedItem.Item.Name, Mode=TwoWay}"
                  MaxLength="80" />
 
         <Grid ColumnSpacing="8">
@@ -41,20 +48,20 @@
           </Grid.ColumnDefinitions>
 
           <NumberBox Header="{cme:Localize Name=Price}"
-                     Value="{x:Bind ViewModel.EditItem.Billing.BasePrice, Mode=TwoWay, Converter={StaticResource DecimalToDoubleConverter}}"
+                     Value="{x:Bind ViewModel.SelectedItem.Item.Billing.BasePrice, Mode=TwoWay, Converter={StaticResource DecimalToDoubleConverter}}"
                      SpinButtonPlacementMode="Inline"
                      AcceptsExpression="True"
                      Maximum="9999999999"
                      Minimum="-9999999999" />
           <ComboBox VerticalAlignment="Bottom"
                     ItemsSource="{x:Bind ViewModel.Currencies, Mode=OneWay}"
-                    SelectedItem="{x:Bind ViewModel.EditItem.Billing.CurrencyId, Mode=TwoWay}"
+                    SelectedItem="{x:Bind ViewModel.SelectedItem.Item.Billing.CurrencyId, Mode=TwoWay}"
                     MinWidth="80"
                     Grid.Column="1" />
         </Grid>
 
         <CalendarDatePicker Header="{cme:Localize Name=PayingSince}"
-                            Date="{x:Bind ViewModel.EditItem.Billing.InitialDate, Mode=TwoWay, Converter={StaticResource DateOnlyToDateTimeOffsetConverter}}"
+                            Date="{x:Bind ViewModel.SelectedItem.Item.Billing.InitialDate, Mode=TwoWay, Converter={StaticResource DateOnlyToDateTimeOffsetConverter}}"
                             IsTodayHighlighted="True"
                             HorizontalAlignment="Stretch" />
 
@@ -64,31 +71,33 @@
             <ColumnDefinition Width="Auto" />
           </Grid.ColumnDefinitions>
 
-          <NumberBox Header="{cme:Localize Name=BillingCycle}"
-                     Value="{x:Bind ViewModel.EditItem.Billing.RecurEvery, Mode=TwoWay}"
-                     SpinButtonPlacementMode="Inline"
-                     AcceptsExpression="True"
-                     Maximum="999"
-                     Minimum="1" />
-
-          <!--<ComboBox VerticalAlignment="Bottom"
+          <ComboBox Header="{cme:Localize Name=BillingCycle}"
                     ItemsSource="{toolkit:EnumValues Type=models:Period}"
-                    SelectedItem="{x:Bind ViewModel.EditItem.Billing.PeriodType, Mode=TwoWay}"
-                    MinWidth="120"
-                    Grid.Column="1">
+                    SelectedItem="{x:Bind ViewModel.SelectedItem.Item.Billing.PeriodType, Mode=TwoWay}"
+                    HorizontalAlignment="Stretch">
             <ComboBox.ItemTemplate>
               <DataTemplate x:DataType="models:Period">
-                <TextBlock Text="{x:Bind Converter={StaticResource PaymentPeriodToLocalizedStringConverter}}" />
+                <TextBlock Text="{x:Bind Converter={StaticResource PaymentPeriodToLocalizedString}}" />
               </DataTemplate>
             </ComboBox.ItemTemplate>
-          </ComboBox>-->
+          </ComboBox>
+          
+          <NumberBox Value="{x:Bind ViewModel.SelectedItem.Item.Billing.RecurEvery, Mode=TwoWay}"
+                     SpinButtonPlacementMode="Inline"
+                     VerticalAlignment="Bottom"
+                     AcceptsExpression="True"
+                     Maximum="999"
+                     Minimum="1"
+                     MinWidth="180"
+                     Grid.Column="1" />
+
         </Grid>
 
         <Grid>
           <!--TODO Add changing icon here-->
           <CheckBox Content="{cme:Localize Name=GetNotified}"
-                    IsChecked="{x:Bind ViewModel.EditItem.IsNotify, Mode=TwoWay}" />
-          <!--<local:ToggleIcon IsChecked="{x:Bind ViewModel.EditItem.IsNotify, Mode=OneWay}"
+                    IsChecked="{x:Bind ViewModel.SelectedItem.Item.IsNotify, Mode=TwoWay}" />
+          <!--<local:ToggleIcon IsChecked="{x:Bind ViewModel.SelectedItem.Item.IsNotify, Mode=OneWay}"
                             HorizontalAlignment="Right"
                             TrueIcon="{toolkit:FontIcon Glyph=&#xEA8F;}"
                             FalseIcon="{toolkit:FontIcon Glyph=&#xE7ED;}" />-->
@@ -124,7 +133,7 @@
         </ComboBox>-->
 
         <ComboBox ItemsSource="{x:Bind ViewModel.PaymentMethods}"
-                  SelectedValue="{x:Bind ViewModel.EditItem.Billing.PaymentMethod, Mode=TwoWay}"
+                  SelectedValue="{x:Bind ViewModel.SelectedItem.Item.Billing.PaymentMethod, Mode=TwoWay}"
                   HorizontalAlignment="Stretch"
                   IsEditable="True">
           <ComboBox.Header>
@@ -137,8 +146,8 @@
           </ComboBox.Header>
         </ComboBox>
 
-        <TextBox Text="{x:Bind ViewModel.EditItem.Description, Mode=TwoWay}"
-                 PlaceholderText="{cme:Localize Name=.DescriptionPlaceholder}"
+        <TextBox Text="{x:Bind ViewModel.SelectedItem.Item.Description, Mode=TwoWay}"
+                 PlaceholderText="{cme:Localize Name=DescriptionPlaceholder}"
                  Height="120"
                  TextWrapping="Wrap"
                  AcceptsReturn="True"

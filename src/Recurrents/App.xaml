@@ -59,6 +59,9 @@
       <Color x:Key="SystemAccentColorDark2">#115214</Color>
       <Color x:Key="SystemAccentColorDark3">#061f07</Color>
 
+      <Thickness x:Key="DesktopMargin">48,48,48,0</Thickness>
+      <Thickness x:Key="MobileMargin">8,8,8,0</Thickness>
+
       <Style x:Key="PageBackground"
              TargetType="Grid">
         <Setter Target="CornerRadius"
@@ -68,6 +71,11 @@
                 win:Value="{ThemeResource LayerFillColorDefaultBrush}" />
       </Style>
 
+        <Style x:Key="ContentStack"
+               TargetType="StackPanel">
+          <Setter Property="Padding"
+                  Value="12, 12" />
+        </Style>
 
       <converters:EmptyObjectToObjectConverter x:Key="EmptyToFalseConverter"
                                                EmptyValue="False"
@@ -90,6 +98,7 @@
       <localConverters:TimeOnlyToTimeSpanConverter x:Key="TimeOnlyToTimeSpanConverter" />
       <localConverters:DecimalToDoubleConverter x:Key="DecimalToDoubleConverter" />
       <localConverters:DateOnlyToDateTimeOffsetConverter x:Key="DateOnlyToDateTimeOffsetConverter" />
+      <localConverters:PaymentPeriodToLocalizedStringConverter x:Key="PaymentPeriodToLocalizedString" />
       <localConverters:ColorToBrushConverter x:Key="ColorToBrushConverter" />
       <converters:StringFormatConverter x:Key="StringFormatConverter" />
       <converters:BoolNegationConverter x:Key="BoolNegationConverter" />

@@ -48,6 +48,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Assets\Icons\icon_foreground.svg" />
+    <None Remove="Presentation\ArchivePage.xaml" />
     <None Remove="Presentation\Components\DetailsBox.xaml" />
     <None Remove="Presentation\Components\ItemDetails.xaml" />
     <None Remove="Presentation\HomePage.xaml" />
@@ -70,9 +71,9 @@
     <PackageReference Include="CommunityToolkit.WinUI.Triggers" />
     <PackageReference Include="CommunityToolkit.WinUI.Controls.Segmented" />
     <PackageReference Include="CommunityToolkit.WinUI.Controls.SettingsControls" />
-    <PackageReference Include="Microsoft.AppCenter" />
+    <!--<PackageReference Include="Microsoft.AppCenter" />
     <PackageReference Include="Microsoft.AppCenter.Analytics" />
-    <PackageReference Include="Microsoft.AppCenter.Crashes" />
+    <PackageReference Include="Microsoft.AppCenter.Crashes" />-->
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Debug' or '$(IsUiAutomationMappingEnabled)'=='True'">

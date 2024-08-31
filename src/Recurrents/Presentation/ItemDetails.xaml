@@ -6,18 +6,12 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:cme="using:Recurrents.Presentation.CustomMarkupExtensions"
+      xmlns:toolkit="using:CommunityToolkit.WinUI"
       xmlns:uen="using:Uno.Extensions.Navigation.UI"
+      xmlns:not_win="http://uno.ui/not_win"
       xmlns:utu="using:Uno.Toolkit.UI"
       Background="{ThemeResource ApplicationBackground}"
-      mc:Ignorable="d">
-
-  <Page.Resources>
-    <Style x:Key="ContentStack"
-           TargetType="StackPanel">
-      <Setter Property="Padding"
-              Value="12, 12" />
-    </Style>
-  </Page.Resources>
+      mc:Ignorable="d not_win">
 
   <Grid>
     <Grid.RowDefinitions>
@@ -37,7 +31,8 @@
         <AppBarButton Icon="Edit"
                       uen:Navigation.Request="ItemEdit"
                       uen:Navigation.Data="{x:Bind ViewModel.SelectedItem, Mode=OneWay}"/>
-        <AppBarButton Icon="Delete" />
+        <AppBarButton not_win:Icon="{toolkit:FontIcon Glyph=&#xE7B8;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
+                      Command="{x:Bind ViewModel.ArchiveCommand}"/>
       </utu:NavigationBar.PrimaryCommands>
     </utu:NavigationBar>
 
@@ -97,8 +92,8 @@
         <comp:DetailsBox HeaderText="{cme:Localize Name=PayingSince}"
                          Text="{x:Bind ViewModel.SelectedItem.Item.Billing.InitialDate, Mode=OneWay}" />
 
-        <comp:DetailsBox HeaderText="{cme:Localize Name=Other}">
-          <!--<comp:DetailsBox.Content>
+        <!--<comp:DetailsBox HeaderText="{cme:Localize Name=Other}">
+          <comp:DetailsBox.Content>
           <StackPanel Orientation="Horizontal"
                       Spacing="12">
             <local:ToggleIcon ToolTipService.ToolTip="{cme:Localize Name=GetNotified}"
@@ -106,8 +101,8 @@
                               TrueIcon="{toolkit:FontIcon Glyph=&#xEA8F;}"
                               FalseIcon="{toolkit:FontIcon Glyph=&#xE7ED;}" />
           </StackPanel>
-        </comp:DetailsBox.Content>-->
-        </comp:DetailsBox>
+        </comp:DetailsBox.Content>
+        </comp:DetailsBox>-->
 
         <comp:DetailsBox HeaderText="{cme:Localize Name=Description}"
                          Visibility="{x:Bind ViewModel.SelectedItem.Item.Description, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}"

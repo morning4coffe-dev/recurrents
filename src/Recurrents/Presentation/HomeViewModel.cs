@@ -1,6 +1,3 @@
-using Uno.Extensions.Navigation;
-using Windows.UI.Core;
-
 namespace Recurrents.Presentation;
 
 public partial class HomeViewModel : ObservableObject
@@ -8,10 +5,11 @@ public partial class HomeViewModel : ObservableObject
     #region Services
     private readonly IStringLocalizer _localizer;
     //private readonly IUserService _userService;
-    //private readonly IItemService _itemService;
+    private readonly IItemService _itemService;
     //private readonly IItemFilterService _filterService;
     private readonly INavigator _navigation;
-    private readonly ICurrencyCache _currencyCache;
+    private readonly ICurrencyCache _currency;
+    private readonly IDispatcher _dispatcher;
     //private readonly IDialogService _dialog;
     #endregion
 
@@ -36,9 +34,11 @@ public partial class HomeViewModel : ObservableObject
     [ObservableProperty]
     private bool _isLoggedIn;
 
-    public bool IsEdit;
+    [ObservableProperty]
+    public ItemViewModel? _selectedItem;
 
     public ObservableCollection<ItemViewModel> Items { get; } = [];
+
 
     //public List<Tag> FilterCategories => _filterService.Categories;
 
@@ -62,21 +62,21 @@ public partial class HomeViewModel : ObservableObject
 
     public HomeViewModel(
         //IUserService userService,
-        //IItemService itemService,
+        IItemService itemService,
         //IItemFilterService filterService,
         IStringLocalizer localizer,
         INavigator navigation,
-        ICurrencyCache currencyCache
-        //IDialogService dialog
+        ICurrencyCache currency,
+        IDispatcher dispatcher
         )
     {
         _localizer = localizer;
         //_userService = userService;
-        //_itemService = itemService;
+        _itemService = itemService;
         //_filterService = filterService;
         _navigation = navigation;
-        _currencyCache = currencyCache;
-        //_dialog = dialog;
+        _currency = currency;
+        _dispatcher = dispatcher;
 
         //_userService.OnLoggedInChanged += (s, e) =>
         //{
@@ -84,11 +84,6 @@ public partial class HomeViewModel : ObservableObject
         //    IsLoggedIn = e is not null;
         //    DisplayName = User?.Name;
         //};
-
-        for (int i = 0; i < 60; i++)
-        {
-            Items.Add(new ItemViewModel(new Item(null, $"Test {i}")));
-        }
 
         WelcomeMessage = DateTime.Now.Hour switch
         {
@@ -103,117 +98,73 @@ public partial class HomeViewModel : ObservableObject
 
     public async void Load()
     {
-        var currency = await _currencyCache.GetCurrency(CancellationToken.None);
-
-        if (currency?.Rates.Count == 0)
+        try
         {
-            return;
+            var currency = await _currency.GetCurrency(CancellationToken.None);
         }
+        catch (Exception ex)
+        {
+
+        }
+
+        _ = _itemService.InitializeAsync();
 
         //User = await _userService.RetrieveUser();
         //DisplayName = User?.Name;
 
-        //_itemService.OnItemsInitialized += (s, e) =>
-        //{
-        //    _ = RefreshItems();
-        //};
+        SelectedItem = null;
+
+        _itemService.OnItemsInitialized += (s, e) =>
+        {
+            _ = RefreshItems();
+
+            _itemService.OnItemsChanged += OnItemsChanged;
+        };
         //Currently does this twice only on startup, doesn't impact performance much as the list is null here
-        //_ = RefreshItems();
+        _ = RefreshItems();
 
         //IsStatsVisible = _navigation.SelectedCategory.Id == 0;
 
-        //WeakReferenceMessenger.Default.Register<ItemUpdated>(this, (r, m) =>
-        //{
-        //    if (m.Canceled)
-        //    {
-        //        SelectedItem = null;
-        //        return;
-        //    }
+#if HAS_UNO
+        //There is a difference in how Navigation and NavigationCacheMode is handled across platforms, 
+        //FeatureConfiguration.Frame.UseWinUIBehavior could fix it, but doesn't seem to work with extensions navigation
 
-        //    ItemViewModel? item = null;
-
-        //    if (_selectedItem is not null)
-        //    {
-        //        item = Items.FirstOrDefault(i => i.Item.Id == _selectedItem.Item?.Id);
-        //    }
-
-        //    if (m.ToSave)
-        //    {
-        //        if (item is null)
-        //        {
-        //            _itemService.NewItem(m.Item.Item);
-        //        }
-        //        else
-        //        {
-        //            _itemService.UpdateItem(item);
-        //        }
-        //    }
-
-        //    SelectedItem = null;
-
-        //    var items = RefreshItems();
-
-        //    Sum = items.Sum(i => i.Item.Billing.BasePrice);
-        //});
-
-        //WeakReferenceMessenger.Default.Register<ItemArchived>(this, (r, m) =>
-        //{
-        //    _ = Archive(m.Item);
-        //});
+        //_itemService.OnItemsChanged -= OnItemsChanged
+#endif
     }
 
-    //    public override void Unload()
-    //    {
-    //        WeakReferenceMessenger.Default.UnregisterAll(this);
+    public void Unload()
+    {
+        _itemService.OnItemsChanged -= OnItemsChanged;
+    }
 
-    //#if HAS_UNO
-    //        SystemNavigationManager.GetForCurrentView().BackRequested -= System_BackRequested;
-    //#endif
-    //    }
+    private void OnItemsChanged(object? sender, IEnumerable<ItemViewModel> e)
+    {
+        SelectedItem = null;
 
-    //    private IEnumerable<ItemViewModel> RefreshItems()
-    //    {
-    //        IEnumerable<ItemViewModel> items;
+        //var items =
+        RefreshItems(e);
 
-    //        //TODO Must add a listener for when the category changes
+        //Sum = items.Sum(i => i.Item.Billing.BasePrice);
+    }
 
-    //        if (SelectedCategory is not { } category)
-    //        {
-    //            return new List<ItemViewModel>();
-    //        }
+    private IEnumerable<ItemViewModel> RefreshItems(IEnumerable<ItemViewModel>? items = default)
+    {
+        var effectiveItems = items ?? _itemService.GetItems(item => !item.IsArchived)
+                                                   .OrderBy(i => i.PaymentDate);
 
-    //        //If ArchivePage is selected, show archived items
-    //        if (category.Page == typeof(ArchivePage))
-    //        {
-    //            items = _itemService.GetItems(item => item.IsArchived)
-    //            .OrderBy(i => i.PaymentDate);
-    //        }
-    //        else
-    //        {
-    //            // Check for sentry value of -1 = None tag
-    //            if (SelectedFilter.Id == -1)
-    //            {
-    //                items = _itemService.GetItems(item => !item.IsArchived)
-    //                .OrderBy(i => i.PaymentDate);
-    //            }
-    //            else
-    //            {
-    //                items = _itemService.GetItems(item => !item.IsArchived && item.Item?.TagId == SelectedFilter.Id)
-    //                .OrderBy(i => i.PaymentDate);
-    //            }
-    //        }
+        var filteredAndSortedItems = effectiveItems.Where(item => !item.IsArchived)
+                                                   .OrderBy(i => i.PaymentDate)
+                                                   .ToList();
 
-    //        Items.Clear();
-    //        Items.AddRange(items);
+        _dispatcher.TryEnqueue(() =>
+        {
+            Items.Clear();
+            Items.AddRange(filteredAndSortedItems);
+        });
 
-    //        return items;
-    //    }
-
-    //    private void System_BackRequested(object? sender, BackRequestedEventArgs e)
-    //    {
-    //        e.Handled = true;
-    //        SystemNavigationManager.GetForCurrentView().BackRequested -= System_BackRequested;
-    //    }
+        return filteredAndSortedItems;
+    }
 
     //    [RelayCommand]
     //    private void AddNew()

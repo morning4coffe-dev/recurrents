@@ -4,7 +4,7 @@ namespace Recurrents.Presentation;
 
 public partial class SettingsViewModel : ObservableObject
 {
-    //private readonly ICurrencyCache _currencyCache;
+    //private readonly ICurrencyCache _currency;
     //private readonly ISettingsService _settingsService;
     //private readonly IItemService _itemService;
     //private readonly IUserService _userService;
@@ -74,7 +74,7 @@ public partial class SettingsViewModel : ObservableObject
     )
     {
         //_userService = userService;
-        //_currencyCache = currencyCache;
+        //_currency = currencyCache;
         //_itemService = itemService;
         //_settingsService = settingsService;
         //_navigation = navigation;
@@ -99,7 +99,7 @@ public partial class SettingsViewModel : ObservableObject
         //User = await _userService.RetrieveUser();
         //IsLoggedIn = User is { };
 
-        //var currency = await _currencyCache.GetCurrency(CancellationToken.None);
+        //var currency = await _currency.GetCurrency(CancellationToken.None);
 
         //if (currency?.Rates.Count == 0)
         //{

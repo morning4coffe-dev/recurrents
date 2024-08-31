@@ -2,14 +2,26 @@ namespace Recurrents.Presentation;
 
 public sealed partial class HomePage : Page
 {
-    public HomeViewModel ViewModel => (HomeViewModel)DataContext;
+    public HomeViewModel ViewModel { get; private set; }
 
     public HomePage()
     {
         InitializeComponent();
-        
-        Loaded += Page_Loaded;
-        Unloaded += Page_Unloaded;
+
+        //Current Uno differences in DataContext handling
+        ViewModel = (HomeViewModel)DataContext;
+
+        DataContextChanged += (s, e) =>
+        {
+            if (e.NewValue is HomeViewModel viewModel)
+            {
+                ViewModel = viewModel;
+
+                Loaded += Page_Loaded;
+                Unloaded += Page_Unloaded;
+            }
+        };
+
     }
 
     private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -19,16 +31,6 @@ public sealed partial class HomePage : Page
 
     private void Page_Unloaded(object sender, RoutedEventArgs e)
     {
-        //ViewModel.Unload();
-    }
-
-    private async void ArchiveItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
-    {
-        //await ViewModel.Archive(args.SwipeControl.DataContext as ItemViewModel);
-    }
-    private void EditItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
-    {
-        ViewModel.IsEdit = true;
-        //ViewModel.SelectedItem = (ItemViewModel)args.SwipeControl.DataContext;
+        ViewModel.Unload();
     }
 }
