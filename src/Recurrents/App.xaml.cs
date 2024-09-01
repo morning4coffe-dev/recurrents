@@ -124,7 +124,7 @@ public partial class App : Application
                     new ("Main", View: views.FindByViewModel<MainViewModel>(), IsDefault: true,
                         Nested:
                         [
-                            new ("Home", View: views.FindByViewModel<HomeViewModel>()),
+                            new ("Home", View: views.FindByViewModel<HomeViewModel>(), IsDefault: true),
                             new ("ItemDetails", View: views.FindByViewModel<ItemDetailsViewModel>(), DependsOn:"Home" ),
                             new ("ItemEdit", View: views.FindByViewModel<ItemEditViewModel>(), DependsOn:"Home"),
                             new ("Archive", View: views.FindByViewModel<ArchiveViewModel>()),

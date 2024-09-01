@@ -45,8 +45,6 @@ public partial class ItemDetailsViewModel : ObservableObject
             { Period.Annually, _localizer["Annually"] }
         }.ToList();
 
-        // _itemService.OnItemsChanged += OnItemsChanged; for after navigation from ItemEditViewModel
-
         var localizedDateStrings = item.GetFuturePayments()
                   .Select(date => date.ToString(CultureInfo.CurrentCulture))
                   .ToList();
@@ -55,9 +53,9 @@ public partial class ItemDetailsViewModel : ObservableObject
         FuturePayments.AddRange(localizedDateStrings);
     }
 
-    public async void Load()
+    public void Unload()
     {
-
+        //_itemService.OnItemsChanged -= OnItemsChanged;
     }
 
     [RelayCommand]

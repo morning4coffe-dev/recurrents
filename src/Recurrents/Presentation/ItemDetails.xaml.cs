@@ -7,5 +7,11 @@ public sealed partial class ItemDetails : Page
     public ItemDetails()
     {
         this.InitializeComponent();
+        this.Unloaded += ItemDetails_Unloaded;
+    }
+
+    private void ItemDetails_Unloaded(object sender, RoutedEventArgs e)
+    {
+        ViewModel.Unload();
     }
 }

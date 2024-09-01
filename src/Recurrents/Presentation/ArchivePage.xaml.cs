@@ -21,9 +21,4 @@ public sealed partial class ArchivePage : Page
     {
         //ViewModel.Unload();
     }
-
-    private void ListView_ItemClick(object sender, ItemClickEventArgs e)
-    {
-        //_ = ViewModel.Archive(e.ClickedItem as ItemViewModel);
-    }
 }

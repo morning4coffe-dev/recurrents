@@ -18,7 +18,7 @@
         <DataTemplate>
           <Grid>
             <Grid.RowDefinitions>
-              <RowDefinition Height="2*" />
+              <RowDefinition Height="3*" />
               <RowDefinition />
             </Grid.RowDefinitions>
 
@@ -26,8 +26,8 @@
                   Grid.Row="1"
                   VerticalAlignment="Center"
                   HorizontalAlignment="Center"
-                  Height="100"
-                  Width="100" />
+                  Height="60"
+                  Width="60" />
           </Grid>
         </DataTemplate>
       </utu:ExtendedSplashScreen.LoadingContentTemplate>

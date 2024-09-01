@@ -29,22 +29,16 @@ public partial class ArchiveViewModel : ObservableObject
     }
 
 
-    private IEnumerable<ItemViewModel> RefreshItems(IEnumerable<ItemViewModel>? items = default)
+    private void RefreshItems()
     {
-        var effectiveItems = items ?? _itemService.GetItems(item => !item.IsArchived)
-                                                   .OrderBy(i => i.PaymentDate);
-
-        var filteredAndSortedItems = effectiveItems.Where(item => !item.IsArchived)
-                                                   .OrderBy(i => i.PaymentDate)
-                                                   .ToList();
-
+        var effectiveItems = _itemService.GetItems(item => item.IsArchived)
+                                         .OrderBy(i => i.PaymentDate)
+                                         .ToList();
         _dispatcher.TryEnqueue(() =>
         {
             Items.Clear();
-            Items.AddRange(filteredAndSortedItems);
+            Items.AddRange(effectiveItems);
         });
-
-        return filteredAndSortedItems;
     }
 
     //    [RelayCommand]

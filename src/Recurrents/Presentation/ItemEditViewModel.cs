@@ -68,11 +68,14 @@ public partial class ItemEditViewModel : ObservableObject
     [RelayCommand]
     private async Task Save()
     {
+        //TODO Item Name doesn't get updated
+
         if (SelectedItem is not { })
         {
             throw new InvalidOperationException("No item selected!");
         }
 
+        //doesnt seem to update the SelectedItem in the ItemDetails, it isn't passed to the ctor
         _itemService.AddOrUpdateItem(SelectedItem);
         await _navigator.NavigateBackWithResultAsync(this, data: SelectedItem);
     }

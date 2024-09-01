@@ -51,8 +51,8 @@
                      Value="{x:Bind ViewModel.SelectedItem.Item.Billing.BasePrice, Mode=TwoWay, Converter={StaticResource DecimalToDoubleConverter}}"
                      SpinButtonPlacementMode="Inline"
                      AcceptsExpression="True"
-                     Maximum="9999999999"
-                     Minimum="-9999999999" />
+                     Maximum="999999"
+                     Minimum="-99999" />
           <ComboBox VerticalAlignment="Bottom"
                     ItemsSource="{x:Bind ViewModel.Currencies, Mode=OneWay}"
                     SelectedItem="{x:Bind ViewModel.SelectedItem.Item.Billing.CurrencyId, Mode=TwoWay}"
@@ -151,7 +151,7 @@
                  Height="120"
                  TextWrapping="Wrap"
                  AcceptsReturn="True"
-                 MaxLength="9999">
+                 MaxLength="999">
           <TextBox.Header>
             <StackPanel Orientation="Horizontal"
                         Spacing="4">
