@@ -75,11 +75,11 @@
                     ItemsSource="{toolkit:EnumValues Type=models:Period}"
                     SelectedItem="{x:Bind ViewModel.SelectedItem.Item.Billing.PeriodType, Mode=TwoWay}"
                     HorizontalAlignment="Stretch">
-            <ComboBox.ItemTemplate>
+            <!--TODO PaymentPeriodToLocalizedString fails when added to resources<ComboBox.ItemTemplate>
               <DataTemplate x:DataType="models:Period">
                 <TextBlock Text="{x:Bind Converter={StaticResource PaymentPeriodToLocalizedString}}" />
               </DataTemplate>
-            </ComboBox.ItemTemplate>
+            </ComboBox.ItemTemplate>-->
           </ComboBox>
           
           <NumberBox Value="{x:Bind ViewModel.SelectedItem.Item.Billing.RecurEvery, Mode=TwoWay}"
