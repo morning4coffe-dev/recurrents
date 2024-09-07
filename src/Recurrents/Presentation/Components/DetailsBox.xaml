@@ -6,7 +6,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d">
 
-  <Border CornerRadius="4"
+  <Border CornerRadius="{StaticResource ControlCornerRadius}"
           Padding="16"
           Background="{ThemeResource CardBackground}"
           BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
@@ -19,6 +19,7 @@
 
       <TextBlock Text="{x:Bind HeaderText}"
                  Opacity="0.7"
+                 Visibility="{x:Bind HeaderText, Converter={StaticResource StringToVisibilityConverter}}"
                  TextWrapping="WrapWholeWords" />
 
       <TextBlock Text="{x:Bind Text, Mode=OneWay}"

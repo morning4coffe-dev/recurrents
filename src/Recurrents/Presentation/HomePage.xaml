@@ -50,35 +50,23 @@
                 Grid.Row="1"
                 Content="{cme:Localize Name=NewItem}" />
 
-        <ListView ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                  ScrollViewer.VerticalScrollMode="Disabled"
-                  ItemsSource="{x:Bind ViewModel.Items, Mode=OneWay}"
-                  SelectedItem="{x:Bind ViewModel.SelectedItem, Mode=TwoWay}"
-                  uen:Navigation.Request="ItemDetails"
-                  Grid.Row="4">
+        <ItemsRepeater ItemsSource="{x:Bind ViewModel.Items, Mode=OneWay}"
+                       HorizontalAlignment="Stretch"
+                       uen:Navigation.Request="ItemDetails"
+                       ScrollViewer.VerticalScrollMode="Disabled"
+                       Margin="-4,0"
+                       Grid.Row="2">
+          <ItemsRepeater.Layout>
+            <StackLayout Orientation="Vertical"
+                         Spacing="8" />
+          </ItemsRepeater.Layout>
 
-          <ListView.ItemsPanel>
-            <ItemsPanelTemplate>
-              <StackPanel Orientation="Vertical"
-                          Spacing="4" />
-            </ItemsPanelTemplate>
-          </ListView.ItemsPanel>
-
-          <!--<ItemsRepeater.Layout>
-              <StackLayout Orientation="Vertical"
-                           Spacing="8" />
-            </ItemsRepeater.Layout>-->
-
-          <ListView.ItemTemplate>
+          <ItemsRepeater.ItemTemplate>
             <DataTemplate x:DataType="local:ItemViewModel">
-              <!--<SwipeControl LeftItems="{StaticResource Left}"
-                              RightItems="{StaticResource Right}"
-                              Background="Transparent"
-                              not_win:CornerRadius="20"
-                              win:CornerRadius="8">-->
-
-              <Grid not_win:Background="{ThemeResource CardBackgroundFillColorDefault}"
-                    not_win:CornerRadius="20"
+              <Grid BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    BorderThickness="1.2"
+                    CornerRadius="{StaticResource ControlCornerRadius}"
                     Padding="20">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="*" />
@@ -89,17 +77,18 @@
                 <StackPanel Spacing="6"
                             VerticalAlignment="Center">
                   <!--<Rectangle Fill="{x:Bind DisplayTag.Color, Mode=OneWay, Converter={StaticResource ColorToBrushConverter}}"
-                               Height="6"
-                               Width="80"
-                               RadiusY="3"
-                               RadiusX="3"
-                               HorizontalAlignment="Left" />-->
+                             Height="6"
+                             Width="80"
+                             RadiusY="3"
+                             RadiusX="3"
+                             HorizontalAlignment="Left" />-->
+
                   <TextBlock Text="{x:Bind Item.Name, Mode=OneWay}"
                              VerticalAlignment="Center"
                              Style="{StaticResource SubtitleTextBlockStyle}" />
                 </StackPanel>
 
-                <!-- Right Column -->
+                <!--Right Column-->
                 <StackPanel Grid.Column="1"
                             Spacing="8"
                             HorizontalAlignment="Right"
@@ -112,10 +101,9 @@
                              Opacity="0.75" />
                 </StackPanel>
               </Grid>
-              <!--</SwipeControl>-->
             </DataTemplate>
-          </ListView.ItemTemplate>
-        </ListView>
+          </ItemsRepeater.ItemTemplate>
+        </ItemsRepeater>
 
         <StackPanel x:Name="itemsEmptyImage"
                     Spacing="12"

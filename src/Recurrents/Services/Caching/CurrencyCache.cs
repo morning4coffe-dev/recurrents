@@ -54,16 +54,12 @@ public sealed class CurrencyCache(
     {
         get
         {
-            try
-            {
-                var networkProfile = NetworkInformation.GetInternetConnectionProfile();
+            var networkProfile = NetworkInformation.GetInternetConnectionProfile();
 
-                if (networkProfile is not null)
-                {
-                    return networkProfile.GetNetworkConnectivityLevel() == NetworkConnectivityLevel.InternetAccess;
-                }
+            if (networkProfile is not null)
+            {
+                return networkProfile.GetNetworkConnectivityLevel() == NetworkConnectivityLevel.InternetAccess;
             }
-            catch { }
 
             return false;
         }

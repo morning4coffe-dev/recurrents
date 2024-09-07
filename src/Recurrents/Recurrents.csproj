@@ -49,6 +49,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Plugin.StoreReview" />
     <PackageReference Include="WinUIEx" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" />
     <PackageReference Include="Uno.WinUI.MSAL" />
     <PackageReference Include="Microsoft.Graph" />
@@ -70,5 +71,19 @@
     <IsUiAutomationMappingEnabled>True</IsUiAutomationMappingEnabled>
     <DefineConstants>$(DefineConstants);USE_UITESTS</DefineConstants>
   </PropertyGroup>
+
+  <ItemGroup>
+    <UnoImage Include="Assets\Icons\recurrents_icon.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Assets\Icons\recurrents-icon.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <UnoImage Update="Assets\recurrents-icon.svg" Link="Assets\Icons\recurrents-icon.svg" />
+  </ItemGroup>
 
 </Project>

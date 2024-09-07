@@ -45,13 +45,13 @@
                     AutomationProperties.PositionInSet="1"
                     AutomationProperties.SizeOfSet="2"
                     IsEnabled="{x:Bind ViewModel.SelectedItem, Mode=OneWay, Converter={StaticResource EmptyToFalseConverter}}"
-                     /><!--Command="{x:Bind ViewModel.ArchiveCommand}"-->
+                    Command="{x:Bind ViewModel.ArchiveCommand}" />
 
             <Button Content="{cme:Localize Name=Delete}"
                     AutomationProperties.PositionInSet="2"
                     AutomationProperties.SizeOfSet="2"
                     IsEnabled="{x:Bind ViewModel.SelectedItem, Mode=OneWay, Converter={StaticResource EmptyToFalseConverter}}"
-                     /><!--Command="{x:Bind ViewModel.DeleteCommand}"-->
+                    Command="{x:Bind ViewModel.DeleteCommand}" />
           </StackPanel>
 
           <ListView ItemsSource="{x:Bind ViewModel.Items}"

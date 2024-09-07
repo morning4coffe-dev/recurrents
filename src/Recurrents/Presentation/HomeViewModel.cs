@@ -55,30 +55,29 @@ public partial class HomeViewModel : ObservableObject
 
         _ = _itemService.InitializeAsync();
 
-        SelectedItem = null;
-
         _itemService.OnItemsInitialized += (s, e) =>
         {
             _ = RefreshItems();
-
-            _itemService.OnItemsChanged += OnItemsChanged;
         };
+
+        _itemService.OnItemsChanged += OnItemsChanged;
         //Currently does this twice only on startup, doesn't impact performance much as the list is null here
-        _ = RefreshItems();
+        await RefreshItems();
     }
 
     public void Unload()
     {
+        _itemService.OnItemsChanged -= OnItemsChanged;
     }
 
-    private void OnItemsChanged(object? sender, IEnumerable<ItemViewModel> e)
+    private async void OnItemsChanged(object? sender, IEnumerable<ItemViewModel> e)
     {
         SelectedItem = null;
 
-        RefreshItems(e);
+        await RefreshItems(e);
     }
 
-    private List<ItemViewModel> RefreshItems(IEnumerable<ItemViewModel>? items = null)
+    private async Task<List<ItemViewModel>> RefreshItems(IEnumerable<ItemViewModel>? items = null)
     {
         IEnumerable<ItemViewModel> effectiveItems;
 
@@ -94,7 +93,7 @@ public partial class HomeViewModel : ObservableObject
         var orderedItems = effectiveItems.OrderBy(i => i.PaymentDate)
                                           .ToList();
 
-        _dispatcher.TryEnqueue(() =>
+        await _dispatcher.ExecuteAsync(() =>
         {
             Items.Clear();
             Items.AddRange(orderedItems);

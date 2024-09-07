@@ -19,7 +19,8 @@ public class ItemService(IDataService dataService) : IItemService
 
         foreach (var item in items)
         {
-            AddNewItem(item);
+            var itemVM = new ItemViewModel(item);
+            _items.Add(itemVM);
         }
 
         RaiseItemsInitialized();
@@ -36,7 +37,7 @@ public class ItemService(IDataService dataService) : IItemService
         _isInitialized = false;
     }
 
-    public void AddNewItem(Item item, List<ItemLog>? logs = null)
+    public void AddNewItem(Item item)
     {
         var itemVM = new ItemViewModel(item);
         _items.Add(itemVM);
@@ -83,7 +84,7 @@ public class ItemService(IDataService dataService) : IItemService
 
         if (itemsList is { })
         {
-            await _dataService.SaveDataAsync(itemsList);
+            await _dataService.SaveDataAsync(itemsList!);
         }
 
         RaiseItemsChanged();

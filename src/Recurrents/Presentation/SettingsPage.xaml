@@ -9,9 +9,49 @@
       xmlns:controls="using:CommunityToolkit.WinUI.Controls"
       xmlns:helpers="using:Recurrents.Presentation.Helpers"
       xmlns:cme="using:Recurrents.Presentation.CustomMarkupExtensions"
+      xmlns:comp="using:Recurrents.Presentation.Components"
       Background="{ThemeResource ApplicationBackground}"
       xmlns:utu="using:Uno.Toolkit.UI"
       mc:Ignorable="d not_win">
+
+  <Page.Resources>
+    <Style x:Key="IconButtonStyle"
+           TargetType="Button">
+      <Setter Property="Width"
+              Value="70" />
+      <Setter Property="Height"
+              Value="70" />
+      <Setter Property="HorizontalAlignment"
+              Value="Center" />
+      <Setter Property="VerticalAlignment"
+              Value="Center" />
+      <Setter Property="Background"
+              Value="{ThemeResource CardBackgroundFillColorDefault}" />
+      <Setter Property="BorderBrush"
+              Value="{ThemeResource CardStrokeColorDefault}" />
+      <Setter Property="BorderThickness"
+              Value="{ThemeResource ButtonBorderThemeThickness}" />
+      <Setter Property="CornerRadius"
+              Value="{StaticResource ControlCornerRadius}" />
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Grid>
+              <Border Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}"
+                      CornerRadius="{TemplateBinding CornerRadius}">
+                <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  Content="{TemplateBinding Content}"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}" />
+              </Border>
+            </Grid>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+  </Page.Resources>
 
   <ScrollViewer Grid.Row="1">
 
@@ -23,11 +63,11 @@
                                    IsStaggeringEnabled="True" />
         </TransitionCollection>
       </win:StackPanel.ChildrenTransitions>
-      
+
       <utu:NavigationBar Content="{cme:Localize Name=Settings}" />
 
-      <controls:SettingsCard Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay}">
-        <!--, Converter={StaticResource TrueToVisibleConverter}-->
+      <!--, Converter={StaticResource TrueToVisibleConverter}-->
+      <!--<controls:SettingsCard Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay}">
         <controls:SettingsCard.Header>
           <StackPanel Orientation="Horizontal"
                       Margin="6"
@@ -46,9 +86,9 @@
         <Button Content="{cme:Localize Name=Logout}"
                 Margin="6"
                 Command="{x:Bind ViewModel.LogoutCommand}" />
-      </controls:SettingsCard>
+      </controls:SettingsCard>-->
 
-      <InfoBar Title="{cme:Localize Name=NotLoggedIn}"
+      <!--<InfoBar Title="{cme:Localize Name=NotLoggedIn}"
                Message="{cme:Localize Name=NotLoggedInDescription}"
                Visibility="{x:Bind ViewModel.IsLoggedIn, Mode=OneWay, Converter={StaticResource FalseToVisibleConverter}}"
                IsOpen="True"
@@ -63,13 +103,14 @@
                   HorizontalAlignment="Right"
                   Command="{x:Bind ViewModel.LoginCommand}" />
         </InfoBar.ActionButton>
-      </InfoBar>
+      </InfoBar>-->
 
       <controls:SettingsCard Header="{cme:Localize Name=DefaultCurrency}"
                              not_win:HeaderIcon="{toolkit:FontIcon Glyph=&#xE8C7;, FontFamily={ThemeResource SymbolThemeFontFamily}}">
         <ComboBox VerticalAlignment="Bottom"
                   ItemsSource="{x:Bind ViewModel.Currencies, Mode=OneWay}"
                   SelectedItem="{x:Bind ViewModel.SelectedCurrency, Mode=TwoWay}"
+                  HorizontalAlignment="{utu:Responsive Narrow=Stretch, Wide=Left}"
                   Grid.Column="1" />
       </controls:SettingsCard>
 
@@ -83,19 +124,18 @@
                  Margin="0,12,0,0"
                  Style="{StaticResource BaseTextBlockStyle}" />
 
-      <Border>
-        <controls:SettingsCard Header="{cme:Localize Name=NotificationTime}"
-                               not_win:HeaderIcon="{toolkit:FontIcon Glyph=&#xE823;, FontFamily={ThemeResource SymbolThemeFontFamily}}">
-          <TimePicker />
-          <!--SelectedTime="{x:Bind ViewModel.NotificationTime, Mode=TwoWay}", Converter={StaticResource TimeOnlyToTimeSpanConverter}-->
-        </controls:SettingsCard>
-      </Border>
-
       <controls:SettingsCard Header="{cme:Localize Name=SystemNotifications}"
                              not_win:ActionIcon="{toolkit:FontIcon Glyph=&#xE8A7;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
                              not_win:HeaderIcon="{toolkit:FontIcon Glyph=&#xEA8F;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
                              IsClickEnabled="True"
                              Command="{x:Bind ViewModel.LaunchNotificationSettingsCommand}" />
+
+      <!--<Border>
+        <controls:SettingsCard Header="{cme:Localize Name=NotificationTime}"
+                               not_win:HeaderIcon="{toolkit:FontIcon Glyph=&#xE823;, FontFamily={ThemeResource SymbolThemeFontFamily}}">
+          <TimePicker SelectedTime="{x:Bind ViewModel.NotificationTime, Mode=TwoWay}", Converter={StaticResource TimeOnlyToTimeSpanConverter} />
+        </controls:SettingsCard>
+      </Border>
 
       <InfoBar Title="{cme:Localize Name=NotificationsDisabled}"
                Message="{cme:Localize Name=NotificationsDisabledDescription}"
@@ -111,11 +151,60 @@
                   HorizontalAlignment="Right"
                   Command="{x:Bind ViewModel.LaunchNotificationSettingsCommand}" />
         </InfoBar.ActionButton>
-      </InfoBar>
+      </InfoBar>-->
 
       <TextBlock Text="{cme:Localize Name=About}"
                  Margin="0,12,0,0"
                  Style="{StaticResource BaseTextBlockStyle}" />
+
+      <comp:DetailsBox>
+        <comp:DetailsBox.Content>
+          <StackPanel Orientation="Horizontal"
+                      Margin="6"
+                      Spacing="20">
+
+            <Image Source="Assets/Icons/recurrents_icon.png"
+                   Width="36" />
+
+            <StackPanel VerticalAlignment="Center"
+                        Spacing="4">
+              <TextBlock Text="{cme:Localize Name=ApplicationName}" />
+              <TextBlock Text="Morning4coffe ©️ 2024"
+                         Opacity="0.75"
+                         Style="{StaticResource CaptionTextBlockStyle}" />
+              <TextBlock Text="{x:Bind ViewModel.AppVersion}"
+                         Opacity="0.75"
+                         IsTextSelectionEnabled="True"
+                         Style="{StaticResource CaptionTextBlockStyle}" />
+            </StackPanel>
+          </StackPanel>
+        </comp:DetailsBox.Content>
+      </comp:DetailsBox>
+
+      <StackPanel Orientation="Horizontal"
+                  Spacing="4">
+
+        <Button Command="{x:Bind ViewModel.OpenRateAndReviewCommand}"
+                ToolTipService.ToolTip="{cme:Localize Name=RateAndReview}"
+                not_win:Content="{toolkit:FontIcon Glyph=&#xEB51;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
+                Style="{StaticResource IconButtonStyle}" />
+
+        <Button Command="{x:Bind ViewModel.OpenGithubCommand}"
+                ToolTipService.ToolTip="{cme:Localize Name=GitHub}"
+                not_win:Content="{toolkit:FontIcon Glyph=&#xE8D5;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
+                Style="{StaticResource IconButtonStyle}" />
+
+        <Button Command="{x:Bind ViewModel.OpenPrivacyPolicyCommand}"
+                ToolTipService.ToolTip="{cme:Localize Name=PrivacyPolicy}"
+                not_win:Content="{toolkit:FontIcon Glyph=&#xE8FD;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
+                Style="{StaticResource IconButtonStyle}" />
+
+        <Button Command="{x:Bind ViewModel.OpenGithubIssuesCommand}"
+                ToolTipService.ToolTip="{cme:Localize Name=ReportABug}"
+                not_win:Content="{toolkit:FontIcon Glyph=&#xEBE8;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
+                Style="{StaticResource IconButtonStyle}" />
+
+      </StackPanel>
 
       <!--<controls:SettingsExpander IsExpanded="True">
           <controls:SettingsExpander.Header>

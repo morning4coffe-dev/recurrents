@@ -8,6 +8,7 @@ public partial class ItemDetailsViewModel : ObservableObject
     private readonly IStringLocalizer _localizer;
     private readonly IItemService _itemService;
     private readonly INavigator _navigator;
+    private readonly IDialogService _dialog;
     #endregion
 
     [ObservableProperty]
@@ -28,11 +29,13 @@ public partial class ItemDetailsViewModel : ObservableObject
         ItemViewModel? item,
         IStringLocalizer localizer,
         IItemService itemService,
-        INavigator navigator)
+        INavigator navigator,
+        IDialogService dialog)
     {
         _localizer = localizer;
         _itemService = itemService;
         _navigator = navigator;
+        _dialog = dialog;
 
         _selectedItem = item;
 
@@ -66,7 +69,15 @@ public partial class ItemDetailsViewModel : ObservableObject
             throw new InvalidOperationException("No item selected!");
         }
 
-        _itemService.ArchiveItem(SelectedItem);
-        await _navigator.NavigateBackAsync(this);
+        var result = await _dialog.ShowAsync(
+            _localizer["ArchiveDialogTitle"],
+            _localizer["ArchiveDialogDescription"],
+            _localizer["ArchiveVerb"]);
+
+        if (result == ContentDialogResult.Primary)
+        {
+            _itemService.ArchiveItem(SelectedItem);
+            await _navigator.NavigateBackAsync(this);
+        }
     }
 }

@@ -2,8 +2,9 @@ namespace Recurrents.Models;
 
 public record BillingDetails
 {
-    public BillingDetails(decimal basePrice, DateOnly initialDate,
-        string currencyId = "EUR",
+    public BillingDetails(
+        decimal basePrice, DateOnly initialDate,
+        string currencyId = "",
         Period periodType = Period.Monthly, short recurEvery = 1,
         string paymentMethod = "")
     {

@@ -4,8 +4,8 @@ namespace Recurrents.Presentation;
 
 public partial class SettingsViewModel : ObservableObject
 {
-    //private readonly ICurrencyCache _currency;
-    //private readonly ISettingsService _settingsService;
+    private readonly ICurrencyCache _currency;
+    private readonly ISettingsService _settingsService;
     //private readonly IItemService _itemService;
     //private readonly IUserService _userService;
     //private readonly INavigation _navigation;
@@ -34,7 +34,7 @@ public partial class SettingsViewModel : ObservableObject
             }
 
             _selectedCurrency = value;
-            //_settingsService.DefaultCurrency = value;
+            _settingsService.DefaultCurrency = value;
 
             OnPropertyChanged();
         }
@@ -63,9 +63,9 @@ public partial class SettingsViewModel : ObservableObject
     public ObservableCollection<string> Currencies { get; } = [];
 
     public SettingsViewModel(
-        IStringLocalizer localizer//,
-        //ICurrencyCache currencyCache,
-        //ISettingsService settingsService,
+        IStringLocalizer localizer,
+        ICurrencyCache currencyCache,
+        ISettingsService settingsService//,
         //INavigation navigation,
         //INotificationService notificationService,
         //IItemService itemService,
@@ -74,9 +74,9 @@ public partial class SettingsViewModel : ObservableObject
     )
     {
         //_userService = userService;
-        //_currency = currencyCache;
+        _currency = currencyCache;
+        _settingsService = settingsService;
         //_itemService = itemService;
-        //_settingsService = settingsService;
         //_navigation = navigation;
         //_interopService = interopService;
 
@@ -92,6 +92,8 @@ public partial class SettingsViewModel : ObservableObject
         PackageId packageId = package.Id;
         PackageVersion version = packageId.Version;
         AppVersion = string.Format("{0}: {1}.{2}.{3}.{4}", localizer["Version"], version.Major, version.Minor, version.Build, version.Revision);
+
+        Load();
     }
 
     public async void Load()
@@ -99,16 +101,18 @@ public partial class SettingsViewModel : ObservableObject
         //User = await _userService.RetrieveUser();
         //IsLoggedIn = User is { };
 
-        //var currency = await _currency.GetCurrency(CancellationToken.None);
+        try
+        {
+            var currency = await _currency.GetCurrency(CancellationToken.None);
+            
+            Currencies.AddRange(currency?.Rates.Keys);
+        }
+        catch
+        {
+        
+        }        
 
-        //if (currency?.Rates.Count == 0)
-        //{
-        //    return;
-        //}
-
-        //Currencies.AddRange(currency?.Rates.Keys);
-
-        //SelectedCurrency = _settingsService.DefaultCurrency;
+        SelectedCurrency = _settingsService.DefaultCurrency;
         //NotificationTime = _settingsService.NotificationTime;
     }
 
@@ -139,7 +143,7 @@ public partial class SettingsViewModel : ObservableObject
 
     [RelayCommand]
     private async Task OpenRateAndReview() =>
-       throw new Exception();// await _interopService.OpenStoreReviewUrlAsync();
+       await InteropService.OpenStoreReviewUrlAsync();
 
     [RelayCommand]
     private async Task OpenPrivacyPolicy() =>

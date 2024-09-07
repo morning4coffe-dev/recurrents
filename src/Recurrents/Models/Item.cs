@@ -3,12 +3,12 @@ namespace Recurrents.Models;
 public partial record Item
 {
     public Item(
-        string? id, 
-        string name, 
-        BillingDetails? billing = default, 
-        int tagId = default, 
+        string? id,
+        string name,
+        BillingDetails? billing = default,
+        int tagId = default,
         bool isNotify = true,
-        string description = "", 
+        string description = "",
         DateTime creationDate = default,
         List<Status>? status = default)
     {
@@ -23,6 +23,7 @@ public partial record Item
     }
 
     public string Id { get; }
+
     public string Name { get; set; }
     public BillingDetails Billing { get; }
     public int TagId { get; set; }

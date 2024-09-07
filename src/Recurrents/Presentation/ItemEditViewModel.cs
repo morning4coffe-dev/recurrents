@@ -1,5 +1,3 @@
-using Uno.Extensions;
-
 namespace Recurrents.Presentation;
 
 public partial class ItemEditViewModel : ObservableObject
@@ -8,6 +6,7 @@ public partial class ItemEditViewModel : ObservableObject
     private readonly IStringLocalizer _localizer;
     private readonly IItemService _itemService;
     private readonly INavigator _navigator;
+    private readonly IDialogService _dialog;
     private readonly ICurrencyCache _currency;
     #endregion
 
@@ -22,11 +21,13 @@ public partial class ItemEditViewModel : ObservableObject
         IStringLocalizer localizer,
         IItemService itemService,
         INavigator navigator,
+        IDialogService dialog,
         ICurrencyCache currency)
     {
         _localizer = localizer;
         _itemService = itemService;
         _navigator = navigator;
+        _dialog = dialog;
         _currency = currency;
 
         if (itemViewModel is { } itemVM)
@@ -96,6 +97,23 @@ public partial class ItemEditViewModel : ObservableObject
         if (result == ContentDialogResult.Primary)
         {
             //WeakReferenceMessenger.Default.Send(new ItemUpdated(SelectedItem, Canceled: true));
+        }
+
+        return result == ContentDialogResult.Primary;
+    }
+
+    public async Task<bool> RequestClose() 
+    {
+        //TODO If no changes found, don't ask, close right away
+
+        var result = await _dialog.ShowAsync(
+            _localizer["CloseDialogTitle"],
+            _localizer["CloseDialogDescription"],
+            _localizer["Ok"]);
+
+        if (result == ContentDialogResult.Primary)
+        {
+            await Save();
         }
 
         return result == ContentDialogResult.Primary;

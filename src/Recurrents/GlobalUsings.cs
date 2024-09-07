@@ -19,3 +19,6 @@ global using Recurrents.Services.Billing;
 global using Recurrents.Services.Storage;
 global using Recurrents.Services.Storage.Data;
 global using Recurrents.Services.Items;
+global using Recurrents.Services.Interop;
+global using Recurrents.Services.Dialogs;
+global using Recurrents.Services.Settings;

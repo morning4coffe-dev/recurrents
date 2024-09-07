@@ -12,7 +12,8 @@
       Background="{ThemeResource ApplicationBackground}"
       mc:Ignorable="d not_win">
 
-  <Grid RowSpacing="12">
+  <Grid RowSpacing="12"
+        utu:SafeArea.Insets="SoftInput">
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
       <RowDefinition />
@@ -27,10 +28,11 @@
           </AppBarButton.Icon>
         </AppBarButton>
       </utu:NavigationBar.MainCommand>
-      <utu:NavigationBar.PrimaryCommands>
+      <!-- This doesn't seem to properly update the Item -->
+      <!--<utu:NavigationBar.PrimaryCommands>
         <AppBarButton not_win:Icon="{toolkit:FontIcon Glyph=&#xE73E;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
                       Command="{x:Bind ViewModel.SaveCommand}" />
-      </utu:NavigationBar.PrimaryCommands>
+      </utu:NavigationBar.PrimaryCommands>-->
     </utu:NavigationBar>
 
     <ScrollViewer Grid.Row="1">
@@ -81,7 +83,7 @@
               </DataTemplate>
             </ComboBox.ItemTemplate>-->
           </ComboBox>
-          
+
           <NumberBox Value="{x:Bind ViewModel.SelectedItem.Item.Billing.RecurEvery, Mode=TwoWay}"
                      SpinButtonPlacementMode="Inline"
                      VerticalAlignment="Bottom"
@@ -148,6 +150,7 @@
 
         <TextBox Text="{x:Bind ViewModel.SelectedItem.Item.Description, Mode=TwoWay}"
                  PlaceholderText="{cme:Localize Name=DescriptionPlaceholder}"
+                 utu:InputExtensions.AutoDismiss="True"
                  Height="120"
                  TextWrapping="Wrap"
                  AcceptsReturn="True"

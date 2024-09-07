@@ -5,26 +5,31 @@ public partial class ItemViewModel : ObservableObject
     private readonly IBillingService _billingService;
     //private readonly INotificationService _notification;
     private readonly IStringLocalizer _localization;
-    //private readonly ISettingsService _settingsService;
-    private readonly ICurrencyCache _currencyCache;
+    private readonly ISettingsService _settingsService;
+    private readonly ICurrencyCache _currency;
 
-    public ItemViewModel(Item? item)
+    public ItemViewModel(Item item)
     {
         _item = item;
 
-                _billingService = App.Services?.GetRequiredService<IBillingService>()!;
+        _billingService = App.Services?.GetRequiredService<IBillingService>()!;
         //#if !HAS_UNO || __ANDROID__
         //        _notification = App.Services?.GetRequiredService<INotificationService>()!;
         //#endif
         _localization = App.Services?.GetRequiredService<IStringLocalizer>()!;
-        //        _settingsService = App.Services?.GetRequiredService<ISettingsService>()!;
-                _currencyCache = App.Services?.GetService<ICurrencyCache>()!;
+        _settingsService = App.Services?.GetRequiredService<ISettingsService>()!;
+        _currency = App.Services?.GetService<ICurrencyCache>()!;
+
+        if (item?.Billing is { } billing && string.IsNullOrEmpty(billing.CurrencyId))
+        {
+            billing.CurrencyId = _settingsService.DefaultCurrency;
+        }
 
         ScheduleBilling();
     }
 
     [ObservableProperty]
-    private Item? _item;
+    private Item _item;
 
     public Tag? DisplayTag
     {
@@ -81,14 +86,15 @@ public partial class ItemViewModel : ObservableObject
         }
     }
 
-    public string FormattedTotalPrice => TotalPrice.ToString("C", CurrencyCache.CurrencyCultures[Item?.Billing.CurrencyId ?? "EUR"]);
-    public string FormattedPrice
+    public string FormattedTotalPrice =>
+        TotalPrice.ToString("C", CurrencyCache.CurrencyCultures[Item?.Billing.CurrencyId ?? "EUR"]);
+
+    public string FormattedPrice =>
+        $"{Item?.Billing.BasePrice.ToString("C", CurrencyCache.CurrencyCultures[Item?.Billing.CurrencyId ?? "EUR"])}";
         //var task = _currency.ConvertToDefaultCurrency(
         //    Item?.Billing.BasePrice ?? 0,
         //    Item?.Billing.CurrencyId ?? "EUR",
         //    _settingsService.DefaultCurrency);
-
-        => $"{Item?.Billing.BasePrice.ToString("C", CurrencyCache.CurrencyCultures[Item?.Billing.CurrencyId ?? "EUR"])}";
 
 
     private Status? GetLastStatus()

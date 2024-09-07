@@ -6,6 +6,7 @@ public partial class ArchiveViewModel : ObservableObject
     private readonly IStringLocalizer _localizer;
     private readonly IItemService _itemService;
     private readonly INavigator _navigation;
+    private readonly IDialogService _dialog;
     private readonly IDispatcher _dispatcher;
     #endregion
 
@@ -18,11 +19,13 @@ public partial class ArchiveViewModel : ObservableObject
         IItemService itemService,
         IStringLocalizer localizer,
         INavigator navigation,
+        IDialogService dialog,
         IDispatcher dispatcher)
     {
         _localizer = localizer;
         _itemService = itemService;
         _navigation = navigation;
+        _dialog = dialog;
         _dispatcher = dispatcher;
 
         RefreshItems();
@@ -41,63 +44,46 @@ public partial class ArchiveViewModel : ObservableObject
         });
     }
 
-    //    [RelayCommand]
-    //    public async Task Archive(ItemViewModel? item = null)
-    //    {
-    //        if (item is not { } && SelectedItem is not { })
-    //        {
-    //            return;
-    //        }
+    [RelayCommand]
+    public async Task Archive(ItemViewModel? item = null)
+    {
+        if (item is not { } && SelectedItem is not { })
+        {
+            return;
+        }
 
-    //        ContentDialogResult result;
+        _itemService.ArchiveItem(item ?? SelectedItem);
 
-    //        if (!(item ?? SelectedItem).IsArchived)
-    //        {
-    //            result = await _dialog.ShowAsync(
-    //                _localizer["ArchiveDialogTitle"],
-    //                _localizer["ArchiveDialogDescription"],
-    //                _localizer["ArchiveVerb"]);
-    //        }
-    //        else
-    //        {
-    //            result = ContentDialogResult.Primary;
-    //        }
+        //AnalyticsService.TrackEvent(AnalyticsService.ItemEvent, "Archived",
+        //    (item ?? SelectedItem).IsArchived.ToString());
 
-    //        if (result == ContentDialogResult.Primary)
-    //        {
-    //            _itemService.ArchiveItem(item ?? SelectedItem);
+        SelectedItem = null;
+        RefreshItems();
+    }
 
-    //            AnalyticsService.TrackEvent(AnalyticsService.ItemEvent, "Archived",
-    //                (item ?? SelectedItem).IsArchived.ToString());
+    [RelayCommand]
+    public async Task Delete(ItemViewModel? item = null)
+    {
+        if (item is not { } && SelectedItem is not { })
+        {
+            return;
+        }
 
-    //            SelectedItem = null;
-    //            RefreshItems();
-    //        }
-    //    }
+        var result = await _dialog.ShowAsync(
+            _localizer["DeleteDialogTitle"],
+            _localizer["DeleteDialogDescription"],
+            _localizer["Delete"]);
 
-    //    [RelayCommand]
-    //    public async Task Delete(ItemViewModel? item = null)
-    //    {
-    //        if (item is not { } && SelectedItem is not { })
-    //        {
-    //            return;
-    //        }
+        if (result == ContentDialogResult.Primary)
+        {
+            _itemService.DeleteItem(item ?? SelectedItem);
 
-    //        var result = await _dialog.ShowAsync(
-    //            _localizer["DeleteDialogTitle"],
-    //            _localizer["DeleteDialogDescription"],
-    //            _localizer["Delete"]);
+            //AnalyticsService.TrackEvent(AnalyticsService.ItemEvent, "Deleted", "True");
 
-    //        if (result == ContentDialogResult.Primary)
-    //        {
-    //            _itemService.DeleteItem(item ?? SelectedItem);
-
-    //            AnalyticsService.TrackEvent(AnalyticsService.ItemEvent, "Deleted", "True");
-
-    //            SelectedItem = null;
-    //            RefreshItems();
-    //        }
-    //    }
+            SelectedItem = null;
+            RefreshItems();
+        }
+    }
 
     [RelayCommand]
     private void OpenSettings()

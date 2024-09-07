@@ -21,6 +21,8 @@ public partial class App : Application
     protected Window? MainWindow { get; private set; }
     protected IHost? Host { get; private set; }
 
+    internal XamlRoot? XamlRoot { get; private set; }
+
     public static IServiceProvider? Services => (Current as App)!.Host?.Services;
 
     protected async override void OnLaunched(LaunchActivatedEventArgs args)
@@ -58,6 +60,8 @@ public partial class App : Application
                     services.AddSingleton<IDataService, DataService>();
                     services.AddSingleton<IStorageService, StorageService>();
                     services.AddSingleton<IItemService, ItemService>();
+                    services.AddSingleton<IDialogService, DialogService>();
+                    services.AddSingleton<ISettingsService, SettingsService>();
                 })
                 .UseNavigation(RegisterRoutes)
             );
@@ -100,6 +104,8 @@ public partial class App : Application
         MainWindow.SetWindowIcon();
 
         await builder.NavigateAsync<Shell>();
+
+        XamlRoot = MainWindow.Content?.XamlRoot;
     }
 
 

@@ -98,6 +98,7 @@
       <localConverters:TimeOnlyToTimeSpanConverter x:Key="TimeOnlyToTimeSpanConverter" />
       <localConverters:DecimalToDoubleConverter x:Key="DecimalToDoubleConverter" />
       <localConverters:DateOnlyToDateTimeOffsetConverter x:Key="DateOnlyToDateTimeOffsetConverter" />
+      <!--<localConverters:PaymentPeriodToLocalizedStringConverter x:Key="PaymentPeriodToLocalizedString" />-->
       <localConverters:ColorToBrushConverter x:Key="ColorToBrushConverter" />
       <converters:StringFormatConverter x:Key="StringFormatConverter" />
       <converters:BoolNegationConverter x:Key="BoolNegationConverter" />
