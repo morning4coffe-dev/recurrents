@@ -37,8 +37,8 @@
     </utu:NavigationBar>
 
     <ScrollViewer Grid.Row="1">
-      <StackPanel Spacing="4"
-                  Style="{StaticResource ContentStack}">
+      <StackPanel Spacing="{StaticResource ListItemsSpacing}"
+                  Margin="{StaticResource MobileMargin}">
 
         <!--<win:StackPanel.ChildrenTransitions>
         <TransitionCollection>
@@ -49,7 +49,8 @@
       </win:StackPanel.ChildrenTransitions>-->
 
         <TextBlock Text="{x:Bind ViewModel.SelectedItem.Item.Name, Mode=OneWay}"
-                   Style="{StaticResource TitleTextBlockStyle}" />
+                   Margin="8,0,0,0"
+                   Style="{StaticResource SubtitleTextBlockStyle}" />
 
         <Grid HorizontalAlignment="Left">
           <Rectangle Fill="{x:Bind ViewModel.SelectedItem.DisplayTag.Color, Mode=OneWay, Converter={StaticResource ColorToBrushConverter}}"

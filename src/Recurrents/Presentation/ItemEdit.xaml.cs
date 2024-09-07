@@ -1,6 +1,3 @@
-
-using Windows.UI.Core;
-
 namespace Recurrents.Presentation;
 
 public sealed partial class ItemEdit : Page

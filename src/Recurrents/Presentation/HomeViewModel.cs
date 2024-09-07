@@ -8,13 +8,38 @@ public partial class HomeViewModel : ObservableObject
     private readonly INavigator _navigation;
     private readonly ICurrencyCache _currency;
     private readonly IDispatcher _dispatcher;
+    private readonly ISettingsService _settings;
     #endregion
 
     [ObservableProperty]
     private string _welcomeMessage;
 
     [ObservableProperty]
-    public ItemViewModel? _selectedItem;
+    private string _bannerHeader;
+
+    [ObservableProperty]
+    private string _sum = "0";
+
+    private ItemViewModel? _selectedItem;
+    public ItemViewModel? SelectedItem
+    {
+        get => _selectedItem;
+        set
+        {
+            if (_selectedItem == value)
+            {
+                return;
+            }
+
+            _selectedItem = value;
+            OnPropertyChanged();
+
+            if (value is { })
+            {
+                _navigation.NavigateViewModelAsync<ItemDetailsViewModel>(this, data: value);
+            }
+        }
+    }
 
     public ObservableCollection<ItemViewModel> Items { get; } = [];
 
@@ -23,13 +48,17 @@ public partial class HomeViewModel : ObservableObject
         IStringLocalizer localizer,
         INavigator navigation,
         ICurrencyCache currency,
-        IDispatcher dispatcher)
+        IDispatcher dispatcher,
+        ISettingsService settings)
     {
         _localizer = localizer;
         _itemService = itemService;
         _navigation = navigation;
         _currency = currency;
         _dispatcher = dispatcher;
+        _settings = settings;
+
+        BannerHeader = string.Format(localizer["LastDays"], DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
 
         WelcomeMessage = DateTime.Now.Hour switch
         {
@@ -57,12 +86,12 @@ public partial class HomeViewModel : ObservableObject
 
         _itemService.OnItemsInitialized += (s, e) =>
         {
-            _ = RefreshItems();
+            RefreshItems();
         };
 
         _itemService.OnItemsChanged += OnItemsChanged;
         //Currently does this twice only on startup, doesn't impact performance much as the list is null here
-        await RefreshItems();
+        RefreshItems();
     }
 
     public void Unload()
@@ -70,14 +99,14 @@ public partial class HomeViewModel : ObservableObject
         _itemService.OnItemsChanged -= OnItemsChanged;
     }
 
-    private async void OnItemsChanged(object? sender, IEnumerable<ItemViewModel> e)
+    private void OnItemsChanged(object? sender, IEnumerable<ItemViewModel> e)
     {
         SelectedItem = null;
 
-        await RefreshItems(e);
+        RefreshItems(e);
     }
 
-    private async Task<List<ItemViewModel>> RefreshItems(IEnumerable<ItemViewModel>? items = null)
+    private async void RefreshItems(IEnumerable<ItemViewModel>? items = null)
     {
         IEnumerable<ItemViewModel> effectiveItems;
 
@@ -99,6 +128,24 @@ public partial class HomeViewModel : ObservableObject
             Items.AddRange(orderedItems);
         });
 
-        return orderedItems;
+        RefreshSum(orderedItems);
+    }
+
+    private async void RefreshSum(IEnumerable<ItemViewModel> items)
+    {
+        var days = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+
+        var tasks = items.Select(async item => await _currency.ConvertToDefaultCurrency(
+            item.Item?.Billing.BasePrice * item.GetPaymentsInPeriod(days) ?? 0,
+            item?.Item?.Billing?.CurrencyId ?? _settings.DefaultCurrency,
+            _settings.DefaultCurrency));
+
+        var values = await Task.WhenAll(tasks);
+        var sum = values.Sum();
+
+        await _dispatcher.ExecuteAsync(() =>
+        {
+            Sum = $"≈ {Math.Round(sum, 2).ToString("C", CurrencyCache.CurrencyCultures[_settings.DefaultCurrency])}";
+        });
     }
 }

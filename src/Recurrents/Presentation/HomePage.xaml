@@ -6,6 +6,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:not_win="http://uno.ui/not_win"
       xmlns:triggers="using:CommunityToolkit.WinUI"
+      xmlns:comp="using:Recurrents.Presentation.Components"
       xmlns:uen="using:Uno.Extensions.Navigation.UI"
       xmlns:cme="using:Recurrents.Presentation.CustomMarkupExtensions"
       xmlns:local="using:Recurrents.Presentation"
@@ -50,24 +51,27 @@
                 Grid.Row="1"
                 Content="{cme:Localize Name=NewItem}" />
 
+        <comp:DetailsBox HeaderText="{x:Bind ViewModel.BannerHeader}"
+                         Text="{x:Bind ViewModel.Sum, Mode=OneWay}" />
+
         <ItemsRepeater ItemsSource="{x:Bind ViewModel.Items, Mode=OneWay}"
-                       HorizontalAlignment="Stretch"
-                       uen:Navigation.Request="ItemDetails"
+                       utu:ItemsRepeaterExtensions.SelectionMode="Single"
+                       utu:ItemsRepeaterExtensions.SelectedItem="{x:Bind ViewModel.SelectedItem, Mode=TwoWay}"
                        ScrollViewer.VerticalScrollMode="Disabled"
-                       Margin="-4,0"
                        Grid.Row="2">
+          <!--uen:Navigation.Request="ItemDetails"-->
           <ItemsRepeater.Layout>
             <StackLayout Orientation="Vertical"
-                         Spacing="8" />
+                         Spacing="{StaticResource ListItemsSpacing}" />
           </ItemsRepeater.Layout>
 
           <ItemsRepeater.ItemTemplate>
             <DataTemplate x:DataType="local:ItemViewModel">
               <Grid BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
                     Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                    BorderThickness="1.2"
+                    BorderThickness="{StaticResource ControlBorderThickness}"
                     CornerRadius="{StaticResource ControlCornerRadius}"
-                    Padding="20">
+                    Padding="{StaticResource ListItemsPadding}">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="*" />
                   <ColumnDefinition Width="*" />
@@ -128,7 +132,8 @@
                      HorizontalAlignment="Center"
                      Opacity="0.7" />
 
-          <Button Content="{cme:Localize Name=NewItem}"
+          <Button uen:Navigation.Request="ItemEdit"
+                  Content="{cme:Localize Name=NewItem}"
                   HorizontalAlignment="Center"
                   Padding="20, 8" />
 

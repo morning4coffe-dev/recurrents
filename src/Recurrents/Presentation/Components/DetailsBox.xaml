@@ -7,27 +7,25 @@
              mc:Ignorable="d">
 
   <Border CornerRadius="{StaticResource ControlCornerRadius}"
-          Padding="16"
+          Padding="{StaticResource ListItemsPadding}"
           Background="{ThemeResource CardBackground}"
           BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-          BorderThickness="1">
-    <Grid RowSpacing="8">
-      <Grid.RowDefinitions>
-        <RowDefinition Height="Auto" />
-        <RowDefinition Height="Auto" />
-      </Grid.RowDefinitions>
+          BorderThickness="{StaticResource ControlBorderThickness}">
+    
+    <StackPanel Spacing="8">
 
-      <TextBlock Text="{x:Bind HeaderText}"
+      <TextBlock Text="{x:Bind HeaderText, Mode=OneWay}"
+                 Visibility="{x:Bind HeaderText, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}"
                  Opacity="0.7"
-                 Visibility="{x:Bind HeaderText, Converter={StaticResource StringToVisibilityConverter}}"
                  TextWrapping="WrapWholeWords" />
 
       <TextBlock Text="{x:Bind Text, Mode=OneWay}"
-                 TextWrapping="WrapWholeWords"
-                 Grid.Row="1" />
+                 Visibility="{x:Bind Text, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}"
+                 TextWrapping="WrapWholeWords" />
 
       <ContentPresenter Content="{x:Bind Content}"
-                        Grid.Row="1" />
-    </Grid>
+                        Visibility="{x:Bind Content, Converter={StaticResource EmptyToVisibilityConverter}}" />
+      
+    </StackPanel>
   </Border>
 </UserControl>

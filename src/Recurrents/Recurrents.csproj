@@ -10,9 +10,9 @@
     <!-- App Identifier -->
     <ApplicationId>com.morning4coffe.Recurrents</ApplicationId>
     <!-- Versions -->
-    <PackageVersion>1.0.1</PackageVersion>
-    <ApplicationDisplayVersion>1.0.1</ApplicationDisplayVersion>
-    <ApplicationVersion>2</ApplicationVersion>
+    <PackageVersion>1.0.3</PackageVersion>
+    <ApplicationDisplayVersion>1.0.3</ApplicationDisplayVersion>
+    <ApplicationVersion>4</ApplicationVersion>
     <!-- Package Publisher -->
     <ApplicationPublisher>Morning4coffe</ApplicationPublisher>
     <!-- Package Description -->
@@ -47,6 +47,9 @@
       ThemeService;
     </UnoFeatures>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Assets\Icons\recurrents_icon.svg" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Plugin.StoreReview" />

@@ -17,7 +17,8 @@
       mc:Ignorable="d not_win">
 
   <Grid uen:Region.Attached="True"
-        utu:SafeArea.Insets="VisibleBounds">
+        utu:SafeArea.Insets="VisibleBounds"
+        utu:SafeArea.Mode="Margin">
     <VisualStateManager.VisualStateGroups>
 
       <!--AdaptiveTriggers-->

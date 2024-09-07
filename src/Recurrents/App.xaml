@@ -25,7 +25,7 @@
 
         <ResourceDictionary x:Key="Default">
           <not_win:SolidColorBrush x:Key="ApplicationBackground"
-                                   Color="#121212" />
+                                   Color="#101010" />
           <win:SolidColorBrush x:Key="ApplicationBackground"
                                Color="Transparent" />
 
@@ -59,6 +59,12 @@
       <Color x:Key="SystemAccentColorDark2">#115214</Color>
       <Color x:Key="SystemAccentColorDark3">#061f07</Color>
 
+      <CornerRadius x:Key="ControlCornerRadius">12</CornerRadius>
+      <Thickness x:Key="ControlBorderThickness">1.2</Thickness>
+
+      <x:Double x:Key="ListItemsSpacing">4</x:Double>
+      <Thickness x:Key="ListItemsPadding">26</Thickness>
+
       <Thickness x:Key="DesktopMargin">48,48,48,0</Thickness>
       <Thickness x:Key="MobileMargin">8,8,8,0</Thickness>
 
@@ -70,12 +76,6 @@
                 not_win:Value="{ThemeResource ApplicationBackground}"
                 win:Value="{ThemeResource LayerFillColorDefaultBrush}" />
       </Style>
-
-        <Style x:Key="ContentStack"
-               TargetType="StackPanel">
-          <Setter Property="Padding"
-                  Value="12, 12" />
-        </Style>
 
       <converters:EmptyObjectToObjectConverter x:Key="EmptyToFalseConverter"
                                                EmptyValue="False"

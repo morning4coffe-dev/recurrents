@@ -1,3 +1,4 @@
+
 namespace Recurrents.Presentation;
 
 public sealed partial class HomePage : Page
@@ -21,7 +22,13 @@ public sealed partial class HomePage : Page
                 Unloaded += Page_Unloaded;
             }
         };
+    }
 
+    protected override void OnNavigatedTo(NavigationEventArgs e)
+    {
+        base.OnNavigatedTo(e);
+
+        ViewModel.SelectedItem = null;
     }
 
     private void Page_Loaded(object sender, RoutedEventArgs e)

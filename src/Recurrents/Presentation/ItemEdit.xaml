@@ -37,7 +37,7 @@
 
     <ScrollViewer Grid.Row="1">
       <StackPanel Spacing="12"
-                  Style="{StaticResource ContentStack}">
+                  Margin="{StaticResource MobileMargin}">
 
         <TextBox Header="{cme:Localize Name=Name}"
                  Text="{x:Bind ViewModel.SelectedItem.Item.Name, Mode=TwoWay}"
