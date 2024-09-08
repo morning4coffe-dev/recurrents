@@ -7,8 +7,7 @@ public class ItemService(IDataService dataService) : IItemService
 
     private readonly List<ItemViewModel> _items = [];
 
-    public event EventHandler<IEnumerable<ItemViewModel>>? OnItemsInitialized;
-    public event EventHandler<IEnumerable<ItemViewModel>>? OnItemsChanged;
+    public event EventHandler<ItemViewModel>? OnItemChanged;
 
     public async Task InitializeAsync()
     {
@@ -23,7 +22,6 @@ public class ItemService(IDataService dataService) : IItemService
             _items.Add(itemVM);
         }
 
-        RaiseItemsInitialized();
         _isInitialized = true;
     }
 
@@ -33,16 +31,7 @@ public class ItemService(IDataService dataService) : IItemService
     public void ClearItems()
     {
         _items.Clear();
-        RaiseItemsChanged();
         _isInitialized = false;
-    }
-
-    public void AddNewItem(Item item)
-    {
-        var itemVM = new ItemViewModel(item);
-        _items.Add(itemVM);
-
-        SaveDataAsync().ConfigureAwait(false);
     }
 
     public void AddOrUpdateItem(ItemViewModel item)
@@ -57,7 +46,7 @@ public class ItemService(IDataService dataService) : IItemService
             _items.Add(item);
         }
 
-        SaveDataAsync().ConfigureAwait(false);
+        SaveDataAsync(item).ConfigureAwait(false);
         item.Updated();
     }
 
@@ -67,18 +56,18 @@ public class ItemService(IDataService dataService) : IItemService
             return;
 
         i.Status.Add(new(item.IsArchived ? State.Active : State.Archived, DateTime.Now));
-        SaveDataAsync().ConfigureAwait(false);
+        SaveDataAsync(item).ConfigureAwait(false);
         item.Updated();
     }
 
     public void DeleteItem(ItemViewModel item)
     {
         _items.Remove(item);
-        SaveDataAsync().ConfigureAwait(false);
+        SaveDataAsync(item).ConfigureAwait(false);
         item.Updated();
     }
 
-    private async Task SaveDataAsync()
+    private async Task SaveDataAsync(ItemViewModel item)
     {
         var itemsList = _items.Select(itemViewModel => itemViewModel.Item).ToList();
 
@@ -87,10 +76,8 @@ public class ItemService(IDataService dataService) : IItemService
             await _dataService.SaveDataAsync(itemsList!);
         }
 
-        RaiseItemsChanged();
+        RaiseItemChanged(item);
     }
 
-    private void RaiseItemsInitialized() => OnItemsInitialized?.Invoke(this, _items);
-
-    private void RaiseItemsChanged() => OnItemsChanged?.Invoke(this, _items);
+    private void RaiseItemChanged(ItemViewModel item) => OnItemChanged?.Invoke(this, item);
 }

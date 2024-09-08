@@ -71,6 +71,12 @@ public partial class HomeViewModel : ObservableObject
         Load();
     }
 
+    private List<ItemViewModel> GetItems
+        => _itemService
+            .GetItems(item => !item.IsArchived)
+            .OrderBy(i => i.PaymentDate)
+            .ToList();
+
     public async void Load()
     {
         try
@@ -82,70 +88,76 @@ public partial class HomeViewModel : ObservableObject
 
         }
 
-        _ = _itemService.InitializeAsync();
+        await _itemService.InitializeAsync();
 
-        _itemService.OnItemsInitialized += (s, e) =>
+        if (GetItems is { } items && items.Count > 0)
         {
-            RefreshItems();
-        };
+            foreach (var item in items)
+            {
+                await _dispatcher.ExecuteAsync(() =>
+                {
+                    Items.Add(item);
+                });
+            }
+        }
 
-        _itemService.OnItemsChanged += OnItemsChanged;
-        //Currently does this twice only on startup, doesn't impact performance much as the list is null here
-        RefreshItems();
+        RefreshSum(Items);
+
+        _itemService.OnItemChanged += OnItemChanged;
     }
 
     public void Unload()
     {
-        _itemService.OnItemsChanged -= OnItemsChanged;
+        _itemService.OnItemChanged -= OnItemChanged;
     }
 
-    private void OnItemsChanged(object? sender, IEnumerable<ItemViewModel> e)
+    private void OnItemChanged(object? sender, ItemViewModel e)
     {
-        SelectedItem = null;
+        var items = _itemService.GetItems().ToList();
 
-        RefreshItems(e);
-    }
-
-    private async void RefreshItems(IEnumerable<ItemViewModel>? items = null)
-    {
-        IEnumerable<ItemViewModel> effectiveItems;
-
-        if (items is { })
+        if (items is not { })
         {
-            effectiveItems = items.Where(item => !item.IsArchived);
-        }
-        else
-        {
-            effectiveItems = _itemService.GetItems(item => !item.IsArchived);
+            return;
         }
 
-        var orderedItems = effectiveItems.OrderBy(i => i.PaymentDate)
-                                          .ToList();
-
-        await _dispatcher.ExecuteAsync(() =>
+        for (int i = 0; i < items.Count; i++)
         {
-            Items.Clear();
-            Items.AddRange(orderedItems);
-        });
+            if (items[i].Item.Id == e.Item.Id)
+            {
+                //if (!items[i].Equals(e)) //Equals doesn't work on all properties
+                Items[i] = e;
+                return;
+            }
+        }
 
-        RefreshSum(orderedItems);
+        Items.Add(e);
+
+        RefreshSum(Items);
     }
 
     private async void RefreshSum(IEnumerable<ItemViewModel> items)
     {
-        var days = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
-
-        var tasks = items.Select(async item => await _currency.ConvertToDefaultCurrency(
-            item.Item?.Billing.BasePrice * item.GetPaymentsInPeriod(days) ?? 0,
-            item?.Item?.Billing?.CurrencyId ?? _settings.DefaultCurrency,
-            _settings.DefaultCurrency));
-
-        var values = await Task.WhenAll(tasks);
-        var sum = values.Sum();
-
-        await _dispatcher.ExecuteAsync(() =>
+        try
         {
-            Sum = $"≈ {Math.Round(sum, 2).ToString("C", CurrencyCache.CurrencyCultures[_settings.DefaultCurrency])}";
-        });
+            var days = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+
+            var tasks = items.Select(async item => await _currency.ConvertToDefaultCurrency(
+                item.Item?.Billing.BasePrice * item.GetPaymentsInPeriod(days) ?? 0,
+                item?.Item?.Billing?.CurrencyId ?? _settings.DefaultCurrency,
+                _settings.DefaultCurrency));
+
+            var values = await Task.WhenAll(tasks);
+            var sum = values.Sum();
+
+            await _dispatcher.ExecuteAsync(() =>
+            {
+                Sum = $"≈ {Math.Round(sum, 2).ToString("C", CurrencyCache.CurrencyCultures[_settings.DefaultCurrency])}";
+            });
+        }
+        catch
+        {
+            //TODO: Make show Error more user friendly
+            Sum = "Connection error.";
+        }
     }
 }
