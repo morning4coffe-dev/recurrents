@@ -37,7 +37,7 @@ public partial class ItemDetailsViewModel : ObservableObject
         _navigator = navigator;
         _dialog = dialog;
 
-        _selectedItem = item;
+        SelectedItem = item;
 
         PaymentPeriods = new Dictionary<Period, string>
         {
@@ -58,7 +58,7 @@ public partial class ItemDetailsViewModel : ObservableObject
 
     public void Unload()
     {
-        //_itemService.OnItemsChanged -= OnItemsChanged;
+        //_itemService.OnItemChanged -= OnItemChanged;
     }
 
     [RelayCommand]

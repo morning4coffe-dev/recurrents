@@ -1,6 +1,6 @@
 namespace Recurrents.Models;
 
-public partial record Item
+public partial class Item : ObservableObject
 {
     public Item(
         string? id,
@@ -24,11 +24,22 @@ public partial record Item
 
     public string Id { get; }
 
-    public string Name { get; set; }
-    public BillingDetails Billing { get; }
-    public int TagId { get; set; }
-    public string? Description { get; set; }
-    public bool IsNotify { get; set; }
-    public DateTime CreationDate { get; set; }
+    [ObservableProperty]
+    private string _name;
+
+    [ObservableProperty]
+    private BillingDetails _billing;
+
+    [ObservableProperty]
+    private int tagId;
+
+    [ObservableProperty]
+    private string? _description;
+
+    [ObservableProperty]
+    private bool _isNotify;
+
+    [ObservableProperty]
+    private DateTime _creationDate;
     public List<Status> Status { get; }
 }

@@ -74,7 +74,6 @@
                          Text="{x:Bind ViewModel.SelectedItem.PaymentMethod, Mode=OneWay}" />
 
         <comp:DetailsBox HeaderText="{cme:Localize Name=NextPayments}">
-          <comp:DetailsBox.Content>
             <ScrollViewer HorizontalScrollMode="Enabled"
                           HorizontalScrollBarVisibility="Auto"
                           Margin="-16"
@@ -87,7 +86,6 @@
                 </ItemsRepeater.Layout>
               </ItemsRepeater>
             </ScrollViewer>
-          </comp:DetailsBox.Content>
         </comp:DetailsBox>
 
         <comp:DetailsBox HeaderText="{cme:Localize Name=PayingSince}"

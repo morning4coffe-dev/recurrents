@@ -158,27 +158,25 @@
                  Style="{StaticResource BaseTextBlockStyle}" />
 
       <comp:DetailsBox>
-        <comp:DetailsBox.Content>
-          <StackPanel Orientation="Horizontal"
-                      Margin="6"
-                      Spacing="20">
+        <StackPanel Orientation="Horizontal"
+                    Margin="6"
+                    Spacing="20">
 
-            <Image Source="Assets/Icons/recurrents_icon.png"
-                   Width="36" />
+          <Image Source="Assets/Icons/recurrents_icon.png"
+                 Width="36" />
 
-            <StackPanel VerticalAlignment="Center"
-                        Spacing="4">
-              <TextBlock Text="{cme:Localize Name=ApplicationName}" />
-              <TextBlock Text="Morning4coffe ©️ 2024"
-                         Opacity="0.75"
-                         Style="{StaticResource CaptionTextBlockStyle}" />
-              <TextBlock Text="{x:Bind ViewModel.AppVersion}"
-                         Opacity="0.75"
-                         IsTextSelectionEnabled="True"
-                         Style="{StaticResource CaptionTextBlockStyle}" />
-            </StackPanel>
+          <StackPanel VerticalAlignment="Center"
+                      Spacing="4">
+            <TextBlock Text="{cme:Localize Name=ApplicationName}" />
+            <TextBlock Text="Morning4coffe ©️ 2024"
+                       Opacity="0.75"
+                       Style="{StaticResource CaptionTextBlockStyle}" />
+            <TextBlock Text="{x:Bind ViewModel.AppVersion}"
+                       Opacity="0.75"
+                       IsTextSelectionEnabled="True"
+                       Style="{StaticResource CaptionTextBlockStyle}" />
           </StackPanel>
-        </comp:DetailsBox.Content>
+        </StackPanel>
       </comp:DetailsBox>
 
       <StackPanel Orientation="Horizontal"

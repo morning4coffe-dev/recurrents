@@ -51,8 +51,10 @@
                 Grid.Row="1"
                 Content="{cme:Localize Name=NewItem}" />
 
-        <comp:DetailsBox HeaderText="{x:Bind ViewModel.BannerHeader}"
-                         Text="{x:Bind ViewModel.Sum, Mode=OneWay}" />
+        <comp:DetailsBox HeaderText="{x:Bind ViewModel.BannerHeader}">
+          <TextBlock Text="{x:Bind ViewModel.Sum, Mode=OneWay}"
+                     Style="{StaticResource SubtitleTextBlockStyle}" />
+        </comp:DetailsBox>
 
         <ItemsRepeater ItemsSource="{x:Bind ViewModel.Items, Mode=OneWay}"
                        utu:ItemsRepeaterExtensions.SelectionMode="Single"

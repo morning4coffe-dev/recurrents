@@ -11,7 +11,7 @@
           Background="{ThemeResource CardBackground}"
           BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
           BorderThickness="{StaticResource ControlBorderThickness}">
-    
+
     <StackPanel Spacing="8">
 
       <TextBlock Text="{x:Bind HeaderText, Mode=OneWay}"
@@ -25,7 +25,7 @@
 
       <ContentPresenter Content="{x:Bind Content}"
                         Visibility="{x:Bind Content, Converter={StaticResource EmptyToVisibilityConverter}}" />
-      
+
     </StackPanel>
   </Border>
 </UserControl>

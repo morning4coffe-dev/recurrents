@@ -1,6 +1,6 @@
 namespace Recurrents.Models;
 
-public record BillingDetails
+public partial class BillingDetails : ObservableObject
 {
     public BillingDetails(
         decimal basePrice, DateOnly initialDate,
@@ -17,15 +17,21 @@ public record BillingDetails
         PaymentMethod = paymentMethod;
     }
 
-    public decimal BasePrice { get; set; }
+    [ObservableProperty]
+    private decimal _basePrice;
 
-    public DateOnly InitialDate { get; set; }
+    [ObservableProperty]
+    private DateOnly _initialDate;
 
-    public string CurrencyId { get; set; }
+    [ObservableProperty]
+    private string _currencyId;
 
-    public Period PeriodType { get; set; }
+    [ObservableProperty]
+    private Period _periodType;
 
-    public short RecurEvery { get; set; }
+    [ObservableProperty]
+    private short _recurEvery;
 
-    public string PaymentMethod { get; set; }
+    [ObservableProperty]
+    private string _paymentMethod;
 }

@@ -10,9 +10,9 @@
     <!-- App Identifier -->
     <ApplicationId>com.morning4coffe.Recurrents</ApplicationId>
     <!-- Versions -->
-    <PackageVersion>1.0.3</PackageVersion>
-    <ApplicationDisplayVersion>1.0.3</ApplicationDisplayVersion>
-    <ApplicationVersion>4</ApplicationVersion>
+    <PackageVersion>1.0.4</PackageVersion>
+    <ApplicationDisplayVersion>1.0.4</ApplicationDisplayVersion>
+    <ApplicationVersion>5</ApplicationVersion>
     <!-- Package Publisher -->
     <ApplicationPublisher>Morning4coffe</ApplicationPublisher>
     <!-- Package Description -->

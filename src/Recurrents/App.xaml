@@ -63,7 +63,7 @@
       <Thickness x:Key="ControlBorderThickness">1.2</Thickness>
 
       <x:Double x:Key="ListItemsSpacing">4</x:Double>
-      <Thickness x:Key="ListItemsPadding">26</Thickness>
+      <Thickness x:Key="ListItemsPadding">22,20</Thickness>
 
       <Thickness x:Key="DesktopMargin">48,48,48,0</Thickness>
       <Thickness x:Key="MobileMargin">8,8,8,0</Thickness>
