@@ -18,6 +18,13 @@ public static class InteropService
 #else
         var current = Plugin.StoreReview.CrossStoreReview.Current;
         var status = await current.RequestReview(false);
+
+        if (status == Plugin.StoreReview.ReviewStatus.Error)
+        {
+#if ANDROID
+            current.OpenStoreReviewPage(Android.App.Application.Context.PackageName);
+#endif
+        }
 #endif
     }
 

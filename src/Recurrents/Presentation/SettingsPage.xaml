@@ -163,7 +163,7 @@
                     Spacing="20">
 
           <Image Source="Assets/Icons/recurrents_icon.png"
-                 Width="36" />
+                 Width="48" />
 
           <StackPanel VerticalAlignment="Center"
                       Spacing="4">

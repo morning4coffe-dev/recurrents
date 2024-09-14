@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35208.52
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recurrents", "Recurrents\Recurrents.csproj", "{DEB0C82B-6D73-4C25-82A0-B3CC9D0F1222}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Recurrents", "Recurrents\Recurrents.csproj", "{DEB0C82B-6D73-4C25-82A0-B3CC9D0F1222}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{67E1132D-4046-4A11-B507-330BB2E6E341}"
 EndProject
@@ -49,6 +49,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{DEB0C82B-6D73-4C25-82A0-B3CC9D0F1222} = {67E1132D-4046-4A11-B507-330BB2E6E341}
 		{60F70EB0-EF1F-4E2E-A34A-56DB8C27D761} = {67E1132D-4046-4A11-B507-330BB2E6E341}
 		{3D839F5B-C96F-4661-BEB7-AD6DCF055C63} = {67E1132D-4046-4A11-B507-330BB2E6E341}
 	EndGlobalSection

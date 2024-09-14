@@ -90,6 +90,11 @@ public partial class HomeViewModel : ObservableObject
 
         await _itemService.InitializeAsync();
 
+        if (Items.Count > 0)
+        {
+            Items.Clear();
+        }
+
         if (GetItems is { } items && items.Count > 0)
         {
             foreach (var item in items)

@@ -14,15 +14,10 @@
       Background="{ThemeResource ApplicationBackground}"
       mc:Ignorable="d not_win">
 
-  <Page.Resources>
-    <GridLength x:Key="DesktopPane">350</GridLength>
-    <GridLength x:Key="MobilePane">0</GridLength>
-  </Page.Resources>
-
   <Grid Style="{ThemeResource PageBackground}">
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*" />
-      <ColumnDefinition Width="{utu:Responsive Narrow={StaticResource MobilePane}, Wide={StaticResource DesktopPane}}" />
+      <ColumnDefinition Width="Auto" />
     </Grid.ColumnDefinitions>
 
     <VisualStateManager.VisualStateGroups>
@@ -164,12 +159,13 @@
                    Margin="12,0,0,0" />
       </StackPanel>
     </Button>
-
-    <ContentControl x:Name="pane2Holder"
-                    uen:Region.Attached="{utu:Responsive Narrow=False, Wide=True}"
-                    Visibility="{utu:Responsive Narrow=Collapsed, Wide=Visible}"
-                    HorizontalContentAlignment="Stretch"
-                    VerticalContentAlignment="Stretch"
-                    Grid.Column="2" />
+<!--Visibility="{x:Bind ViewModel.SelectedItem, Mode=OneWay, Converter={StaticResource EmptyToVisibilityConverter}}"-->
+    <Border Grid.Column="2">
+      <ContentControl uen:Region.Attached="{utu:Responsive Narrow=False, Wide=True}"
+                      Visibility="{utu:Responsive Narrow=Collapsed, Wide=Visible}"
+                      HorizontalContentAlignment="Stretch"
+                      VerticalContentAlignment="Stretch"
+                      Width="350" />
+    </Border>
   </Grid>
 </Page>

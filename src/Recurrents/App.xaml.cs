@@ -96,6 +96,8 @@ public partial class App : Application
         {
             MainWindow.SystemBackdrop = new MicaBackdrop() { Kind = MicaKind.Base };
         }
+
+        MainWindow.ExtendsContentIntoTitleBar = true;
 #endif
 
 #if DEBUG
