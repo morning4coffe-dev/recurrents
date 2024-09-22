@@ -132,6 +132,7 @@
           <Button uen:Navigation.Request="ItemEdit"
                   Content="{cme:Localize Name=NewItem}"
                   HorizontalAlignment="Center"
+                  Visibility="{utu:Responsive Narrow=Collapsed, Wide=Visible}"
                   Padding="20, 8" />
 
         </StackPanel>
@@ -144,7 +145,7 @@
             VerticalAlignment="Bottom"
             HorizontalAlignment="Right"
             AutomationProperties.Name="{cme:Localize Name=NewItem}"
-            Style="{StaticResource AccentButtonStyle}"
+            Style="{ThemeResource AccentButtonStyle}"
             Margin="20"
             Padding="22,0"
             Grid.Row="4"

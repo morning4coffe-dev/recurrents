@@ -96,17 +96,17 @@
         <NavigationViewItem uen:Region.Name="Home"
                             Content="Home"
                             IsSelected="True"
-                            not_win:Icon="{toolkit:FontIcon Glyph=&#xE80F;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
+                            Icon="{toolkit:FontIcon Glyph=&#xE80F;, FontFamily={StaticResource SymbolThemeFontFamily}}" />
         <NavigationViewItem uen:Region.Name="Archive"
                             Content="Archive"
-                            not_win:Icon="{toolkit:FontIcon Glyph=&#xE7B8;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
+                            Icon="{toolkit:FontIcon Glyph=&#xE7B8;, FontFamily={StaticResource SymbolThemeFontFamily}}" />
 
       </NavigationView.MenuItems>
 
       <NavigationView.FooterMenuItems>
         <NavigationViewItem uen:Region.Name="Settings"
                             Content="Settings"
-                            not_win:Icon="{toolkit:FontIcon Glyph=&#xE713;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
+                            Icon="{toolkit:FontIcon Glyph=&#xE713;, FontFamily={StaticResource SymbolThemeFontFamily}}" />
       </NavigationView.FooterMenuItems>
 
       <NavigationView.Resources>
@@ -170,13 +170,13 @@
 
             <utu:TabBarItem uen:Region.Name="Home"
                             IsSelected="True"
-                            not_win:Icon="{toolkit:FontIcon Glyph=&#xE80F;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
+                            Icon="{toolkit:FontIcon Glyph=&#xE80F;, FontFamily={StaticResource SymbolThemeFontFamily}}"
                              /><!--win:Icon="{toolkit:FontIcon Glyph=&#xE80F;}"-->
             <utu:TabBarItem uen:Region.Name="Archive"
-                            not_win:Icon="{toolkit:FontIcon Glyph=&#xE7B8;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
+                            Icon="{toolkit:FontIcon Glyph=&#xE7B8;, FontFamily={StaticResource SymbolThemeFontFamily}}" />
                             <!--win:Icon="{toolkit:FontIcon Glyph=&#xE7B8;}"-->
             <utu:TabBarItem uen:Region.Name="Settings"
-                            not_win:Icon="{toolkit:FontIcon Glyph=&#xE713;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
+                            Icon="{toolkit:FontIcon Glyph=&#xE713;, FontFamily={StaticResource SymbolThemeFontFamily}}" />
                             <!--win:Icon="{toolkit:FontIcon Glyph=&#xE713;}"-->
 
           </utu:TabBar.Items>

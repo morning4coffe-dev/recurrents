@@ -10,11 +10,10 @@
       xmlns:utu="using:Uno.Toolkit.UI"
       mc:Ignorable="d">
 
-  <Grid>
+  <Grid Style="{ThemeResource PageBackground}">
 
     <VisualStateManager.VisualStateGroups>
 
-      <!--Pane1 Empty Image-->
       <VisualStateGroup>
         <VisualState />
         <VisualState>
@@ -27,90 +26,129 @@
           </VisualState.Setters>
         </VisualState>
       </VisualStateGroup>
-
     </VisualStateManager.VisualStateGroups>
 
-    <Grid Style="{ThemeResource PageBackground}">
+    <ScrollViewer>
+      <StackPanel Spacing="8"
+                  Margin="{utu:Responsive Narrow={StaticResource MobileMargin}, Wide={StaticResource DesktopMargin}}">
 
-      <ScrollViewer>
-        <StackPanel Spacing="8"
-                    Margin="{utu:Responsive Narrow={StaticResource MobileMargin}, Wide={StaticResource DesktopMargin}}">
+        <utu:NavigationBar Content="{cme:Localize Name=Archive}" />
 
-          <utu:NavigationBar Content="{cme:Localize Name=Archive}" />
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="1"
+                    Spacing="8"
+                    Visibility="{utu:Responsive Narrow=Collapsed, Wide=Visible}">
+          <Button Content="{cme:Localize Name=Unarchive}"
+                  AutomationProperties.PositionInSet="1"
+                  AutomationProperties.SizeOfSet="2"
+                  IsEnabled="{x:Bind ViewModel.SelectedItem, Mode=OneWay, Converter={StaticResource EmptyToFalseConverter}}"
+                  Command="{x:Bind ViewModel.ArchiveCommand}" />
 
-          <StackPanel Orientation="Horizontal"
-                      Grid.Row="1"
-                      Spacing="8">
-            <Button Content="{cme:Localize Name=Unarchive}"
-                    AutomationProperties.PositionInSet="1"
-                    AutomationProperties.SizeOfSet="2"
-                    IsEnabled="{x:Bind ViewModel.SelectedItem, Mode=OneWay, Converter={StaticResource EmptyToFalseConverter}}"
-                    Command="{x:Bind ViewModel.ArchiveCommand}" />
+          <Button Content="{cme:Localize Name=Delete}"
+                  AutomationProperties.PositionInSet="2"
+                  AutomationProperties.SizeOfSet="2"
+                  IsEnabled="{x:Bind ViewModel.SelectedItem, Mode=OneWay, Converter={StaticResource EmptyToFalseConverter}}"
+                  Command="{x:Bind ViewModel.DeleteCommand}" />
+        </StackPanel>
 
-            <Button Content="{cme:Localize Name=Delete}"
-                    AutomationProperties.PositionInSet="2"
-                    AutomationProperties.SizeOfSet="2"
-                    IsEnabled="{x:Bind ViewModel.SelectedItem, Mode=OneWay, Converter={StaticResource EmptyToFalseConverter}}"
-                    Command="{x:Bind ViewModel.DeleteCommand}" />
-          </StackPanel>
+        <ListView ItemsSource="{x:Bind ViewModel.Items}"
+                  SelectedItem="{x:Bind ViewModel.SelectedItem, Mode=TwoWay}"
+                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                  ScrollViewer.VerticalScrollMode="Disabled"
+                  Grid.Row="2"
+                  Margin="-4,0">
 
-          <ListView ItemsSource="{x:Bind ViewModel.Items}"
-                    SelectedItem="{x:Bind ViewModel.SelectedItem, Mode=TwoWay}"
-                    ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                    ScrollViewer.VerticalScrollMode="Disabled"
-                    Grid.Row="2"
-                    Margin="-4,0">
+          <ListView.ItemTemplate>
+            <DataTemplate x:DataType="local:ItemViewModel">
 
-            <ListView.ItemTemplate>
-              <DataTemplate x:DataType="local:ItemViewModel">
+              <Grid ColumnSpacing="12">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition />
+                  <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
 
-                <Grid ColumnSpacing="12">
-                  <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="Auto" />
-                  </Grid.ColumnDefinitions>
+                <TextBlock Text="{x:Bind Item.Name, Mode=OneWay}"
+                           Style="{StaticResource SubtitleTextBlockStyle}"
+                           FontSize="16"
+                           Padding="0,14" />
 
-                  <TextBlock Text="{x:Bind Item.Name, Mode=OneWay}"
-                             Style="{StaticResource SubtitleTextBlockStyle}"
-                             FontSize="16"
-                             Padding="0,14" />
+                <TextBlock Text="{x:Bind ArchiveDate, Mode=OneWay}"
+                           Opacity="0.7"
+                           VerticalAlignment="Center"
+                           Grid.Column="1" />
+              </Grid>
 
-                  <TextBlock Text="{x:Bind ArchiveDate, Mode=OneWay}"
-                             Opacity="0.7"
-                             VerticalAlignment="Center"
-                             Grid.Column="1" />
-                </Grid>
+            </DataTemplate>
+          </ListView.ItemTemplate>
+        </ListView>
 
-              </DataTemplate>
-            </ListView.ItemTemplate>
-          </ListView>
+        <StackPanel x:Name="itemsEmptyImage"
+                    Grid.Row="3"
+                    VerticalAlignment="Center"
+                    Visibility="Collapsed"
+                    Margin="0,0,0,20">
 
-          <StackPanel x:Name="itemsEmptyImage"
-                      Grid.Row="3"
-                      VerticalAlignment="Center"
-                      Visibility="Collapsed"
-                      Margin="0,0,0,20">
+          <Image Source="/Recurrents/Assets/Illustrations/archive_empty_illustration.png"
+                 HorizontalAlignment="Center"
+                 MaxWidth="300"
+                 Margin="20" />
 
-            <Image Source="/Recurrents/Assets/Illustrations/archive_empty_illustration.png"
-                   HorizontalAlignment="Center"
-                   MaxWidth="300"
-                   Margin="20" />
+          <TextBlock Text="{cme:Localize Name=ItemsEmptyTitle}"
+                     TextWrapping="WrapWholeWords"
+                     HorizontalAlignment="Center"
+                     FontWeight="Bold" />
 
-            <TextBlock Text="{cme:Localize Name=ItemsEmptyTitle}"
-                       TextWrapping="WrapWholeWords"
-                       HorizontalAlignment="Center"
-                       FontWeight="Bold" />
-
-            <TextBlock Text="{cme:Localize Name=ArchiveEmptyDescription}"
-                       TextWrapping="WrapWholeWords"
-                       TextAlignment="Center"
-                       Opacity="0.7"
-                       HorizontalAlignment="Center" />
-
-          </StackPanel>
+          <TextBlock Text="{cme:Localize Name=ArchiveEmptyDescription}"
+                     TextWrapping="WrapWholeWords"
+                     TextAlignment="Center"
+                     Opacity="0.7"
+                     HorizontalAlignment="Center" />
 
         </StackPanel>
-      </ScrollViewer>
-    </Grid>
+
+      </StackPanel>
+    </ScrollViewer>
+
+    <StackPanel Orientation="Vertical"
+                Margin="20"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Right"
+                Spacing="12"
+                Visibility="{utu:Responsive Narrow=Visible, Wide=Collapsed}">
+
+      <Button AutomationProperties.Name="{cme:Localize Name=Delete}"
+              AutomationProperties.PositionInSet="2"
+              AutomationProperties.SizeOfSet="2"
+              IsEnabled="{x:Bind ViewModel.SelectedItem, Mode=OneWay, Converter={StaticResource EmptyToFalseConverter}}"
+              Style="{ThemeResource AccentButtonStyle}"
+              HorizontalAlignment="Right"
+              Padding="22,0"
+              Height="65"
+              Command="{x:Bind ViewModel.DeleteCommand}">
+        <FontIcon Glyph="&#xE74D;"
+                  FontFamily="{StaticResource SymbolThemeFontFamily}" />
+      </Button>
+
+      <Button AutomationProperties.Name="{cme:Localize Name=Unarchive}"
+              AutomationProperties.PositionInSet="1"
+              AutomationProperties.SizeOfSet="2"
+              IsEnabled="{x:Bind ViewModel.SelectedItem, Mode=OneWay, Converter={StaticResource EmptyToFalseConverter}}"
+              Style="{ThemeResource AccentButtonStyle}"
+              Padding="22,0"
+              Height="65"
+              Command="{x:Bind ViewModel.ArchiveCommand}">
+
+        <StackPanel Orientation="Horizontal">
+          <FontIcon Glyph="&#xF133;"
+                    FontFamily="{StaticResource SymbolThemeFontFamily}" />
+
+          <TextBlock Text="{cme:Localize Name=Unarchive}"
+                     Grid.Column="1"
+                     Margin="12,0,0,0" />
+        </StackPanel>
+      </Button>
+
+    </StackPanel>
   </Grid>
+
 </Page>

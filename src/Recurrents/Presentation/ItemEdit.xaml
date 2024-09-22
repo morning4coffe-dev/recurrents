@@ -30,7 +30,7 @@
       </utu:NavigationBar.MainCommand>
       <!-- This doesn't seem to properly update the Item -->
       <!--<utu:NavigationBar.PrimaryCommands>
-        <AppBarButton not_win:Icon="{toolkit:FontIcon Glyph=&#xE73E;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
+        <AppBarButton Icon="{toolkit:FontIcon Glyph=&#xE73E;, FontFamily={StaticResource SymbolThemeFontFamily}}"
                       Command="{x:Bind ViewModel.SaveCommand}" />
       </utu:NavigationBar.PrimaryCommands>-->
     </utu:NavigationBar>

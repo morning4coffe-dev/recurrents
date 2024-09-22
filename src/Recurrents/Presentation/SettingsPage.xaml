@@ -96,7 +96,7 @@
                IsClosable="False">
         <InfoBar.IconSource>
           <FontIconSource Glyph="&#xE779;"
-                          FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+                          FontFamily="{StaticResource SymbolThemeFontFamily}" />
         </InfoBar.IconSource>
         <InfoBar.ActionButton>
           <Button Content="{cme:Localize Name=Login}"
@@ -106,7 +106,7 @@
       </InfoBar>-->
 
       <controls:SettingsCard Header="{cme:Localize Name=DefaultCurrency}"
-                             not_win:HeaderIcon="{toolkit:FontIcon Glyph=&#xE8C7;, FontFamily={ThemeResource SymbolThemeFontFamily}}">
+                             HeaderIcon="{toolkit:FontIcon Glyph=&#xE8C7;, FontFamily={StaticResource SymbolThemeFontFamily}}">
         <ComboBox VerticalAlignment="Bottom"
                   ItemsSource="{x:Bind ViewModel.Currencies, Mode=OneWay}"
                   SelectedItem="{x:Bind ViewModel.SelectedCurrency, Mode=TwoWay}"
@@ -115,8 +115,8 @@
       </controls:SettingsCard>
 
       <controls:SettingsCard Header="{cme:Localize Name=SystemLanguageAndRegion}"
-                             not_win:ActionIcon="{toolkit:FontIcon Glyph=&#xE8A7;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
-                             not_win:HeaderIcon="{toolkit:FontIcon Glyph=&#xF2B7;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
+                             ActionIcon="{toolkit:FontIcon Glyph=&#xE8A7;, FontFamily={StaticResource SymbolThemeFontFamily}}"
+                             HeaderIcon="{toolkit:FontIcon Glyph=&#xF2B7;, FontFamily={StaticResource SymbolThemeFontFamily}}"
                              IsClickEnabled="True"
                              Command="{x:Bind ViewModel.LaunchLangSettingsCommand}" />
 
@@ -125,14 +125,14 @@
                  Style="{StaticResource BaseTextBlockStyle}" />
 
       <controls:SettingsCard Header="{cme:Localize Name=SystemNotifications}"
-                             not_win:ActionIcon="{toolkit:FontIcon Glyph=&#xE8A7;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
-                             not_win:HeaderIcon="{toolkit:FontIcon Glyph=&#xEA8F;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
+                             ActionIcon="{toolkit:FontIcon Glyph=&#xE8A7;, FontFamily={StaticResource SymbolThemeFontFamily}}"
+                             HeaderIcon="{toolkit:FontIcon Glyph=&#xEA8F;, FontFamily={StaticResource SymbolThemeFontFamily}}"
                              IsClickEnabled="True"
                              Command="{x:Bind ViewModel.LaunchNotificationSettingsCommand}" />
 
       <!--<Border>
         <controls:SettingsCard Header="{cme:Localize Name=NotificationTime}"
-                               not_win:HeaderIcon="{toolkit:FontIcon Glyph=&#xE823;, FontFamily={ThemeResource SymbolThemeFontFamily}}">
+                               HeaderIcon="{toolkit:FontIcon Glyph=&#xE823;, FontFamily={StaticResource SymbolThemeFontFamily}}">
           <TimePicker SelectedTime="{x:Bind ViewModel.NotificationTime, Mode=TwoWay}", Converter={StaticResource TimeOnlyToTimeSpanConverter} />
         </controls:SettingsCard>
       </Border>
@@ -184,22 +184,22 @@
 
         <Button Command="{x:Bind ViewModel.OpenRateAndReviewCommand}"
                 ToolTipService.ToolTip="{cme:Localize Name=RateAndReview}"
-                not_win:Content="{toolkit:FontIcon Glyph=&#xEB51;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
+                Content="{toolkit:FontIcon Glyph=&#xEB51;, FontFamily={StaticResource SymbolThemeFontFamily}}"
                 Style="{StaticResource IconButtonStyle}" />
 
         <Button Command="{x:Bind ViewModel.OpenGithubCommand}"
                 ToolTipService.ToolTip="{cme:Localize Name=GitHub}"
-                not_win:Content="{toolkit:FontIcon Glyph=&#xE8D5;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
+                Content="{toolkit:FontIcon Glyph=&#xE8D5;, FontFamily={StaticResource SymbolThemeFontFamily}}"
                 Style="{StaticResource IconButtonStyle}" />
 
         <Button Command="{x:Bind ViewModel.OpenPrivacyPolicyCommand}"
                 ToolTipService.ToolTip="{cme:Localize Name=PrivacyPolicy}"
-                not_win:Content="{toolkit:FontIcon Glyph=&#xE8FD;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
+                Content="{toolkit:FontIcon Glyph=&#xE8FD;, FontFamily={StaticResource SymbolThemeFontFamily}}"
                 Style="{StaticResource IconButtonStyle}" />
 
         <Button Command="{x:Bind ViewModel.OpenGithubIssuesCommand}"
                 ToolTipService.ToolTip="{cme:Localize Name=ReportABug}"
-                not_win:Content="{toolkit:FontIcon Glyph=&#xEBE8;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
+                Content="{toolkit:FontIcon Glyph=&#xEBE8;, FontFamily={StaticResource SymbolThemeFontFamily}}"
                 Style="{StaticResource IconButtonStyle}" />
 
       </StackPanel>
@@ -226,7 +226,7 @@
           <controls:SettingsExpander.Items>
             
             <controls:SettingsCard Header="{cme:Localize Name=AboutDescription}"
-                                   not_win:HeaderIcon="{toolkit:FontIcon Glyph=&#xE909;, FontFamily={ThemeResource SymbolThemeFontFamily}}" />
+                                   HeaderIcon="{toolkit:FontIcon Glyph=&#xE909;, FontFamily={StaticResource SymbolThemeFontFamily}}" />
 
             <controls:SettingsCard HorizontalContentAlignment="Left"
                                    ContentAlignment="Left">

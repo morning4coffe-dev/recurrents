@@ -75,6 +75,10 @@
     <DefineConstants>$(DefineConstants);USE_UITESTS</DefineConstants>
   </PropertyGroup>
 
+  <!--<PropertyGroup>
+    <WindowsSdkPackageVersion>10.0.22621.38</WindowsSdkPackageVersion>
+  </PropertyGroup>-->
+
   <ItemGroup>
     <UnoImage Include="Assets\Icons\recurrents_icon.svg" />
   </ItemGroup>

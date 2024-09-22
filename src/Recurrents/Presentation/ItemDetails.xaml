@@ -31,7 +31,7 @@
         <AppBarButton Icon="Edit"
                       uen:Navigation.Request="ItemEdit"
                       uen:Navigation.Data="{x:Bind ViewModel.SelectedItem, Mode=OneWay}"/>
-        <AppBarButton not_win:Icon="{toolkit:FontIcon Glyph=&#xE7B8;, FontFamily={ThemeResource SymbolThemeFontFamily}}"
+        <AppBarButton Icon="{toolkit:FontIcon Glyph=&#xE7B8;, FontFamily={StaticResource SymbolThemeFontFamily}}"
                       Command="{x:Bind ViewModel.ArchiveCommand}"/>
       </utu:NavigationBar.PrimaryCommands>
     </utu:NavigationBar>
