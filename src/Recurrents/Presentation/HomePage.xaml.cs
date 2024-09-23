@@ -3,17 +3,17 @@ namespace Recurrents.Presentation;
 
 public sealed partial class HomePage : Page
 {
-#if WINDOWS
+//#if WINDOWS
     public HomeViewModel ViewModel { get; private set; }
-#else
-    public HomeViewModel ViewModel => (HomeViewModel)DataContext;
-#endif
+//#else
+//    public HomeViewModel ViewModel => (HomeViewModel)DataContext;
+//#endif
 
     public HomePage()
     {
         InitializeComponent();
 
-#if WINDOWS
+//#if WINDOWS
         //Current Uno differences in DataContext handling
         ViewModel = (HomeViewModel)DataContext;
 
@@ -27,7 +27,7 @@ public sealed partial class HomePage : Page
                 Unloaded += Page_Unloaded;
             }
         };
-#endif
+//#endif
     }
 
     protected override void OnNavigatedTo(NavigationEventArgs e)

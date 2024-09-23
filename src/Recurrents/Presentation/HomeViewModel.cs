@@ -72,10 +72,9 @@ public partial class HomeViewModel : ObservableObject
     }
 
     private List<ItemViewModel> GetItems
-        => _itemService
+        => [.. _itemService
             .GetItems(item => !item.IsArchived)
-            .OrderBy(i => i.PaymentDate)
-            .ToList();
+            .OrderBy(i => i.PaymentDate)];
 
     public async void Load()
     {
